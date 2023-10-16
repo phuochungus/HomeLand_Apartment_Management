@@ -7,6 +7,9 @@ import { Button, Form, Modal, Offcanvas } from "react-bootstrap";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CustomModal } from "./customModal/customModal";
+import styled from 'styled-components'
+import { DrawerButton } from "./drawerButton/drawerButton";
+
 const CustomHeader = (): JSX.Element => {
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -14,6 +17,7 @@ const CustomHeader = (): JSX.Element => {
   const handleRoute = (href: string) => {
     router.push(href);
   };
+
   return (
     <>
       <Offcanvas show={show} onHide={() => setShow(!show)} placement="start">
@@ -21,7 +25,7 @@ const CustomHeader = (): JSX.Element => {
           <Offcanvas.Title className={style.drawer}>HomeLand</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Button className={style.drawerItemButton}></Button>
+          <DrawerButton/>
         </Offcanvas.Body>
       </Offcanvas>
       <CustomModal show={showModal} onHide={() => setShowModal(false)}/>
