@@ -25,7 +25,7 @@ export default function RootLayout({
   const ringgift_font = ringift;
   const pathName = usePathname();
   const router = useRouter();
-  function handleRouting(route: string): void {
+  function  handleRouting(route: string): void {
     router.push(route);
   }
   const [showDrawer, setShowDrawer] = useState(false);
