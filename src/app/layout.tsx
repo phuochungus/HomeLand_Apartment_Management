@@ -11,7 +11,7 @@ import { ringift } from '../../public/fonts/Ringift';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
