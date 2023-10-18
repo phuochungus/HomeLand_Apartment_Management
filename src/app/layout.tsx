@@ -13,6 +13,8 @@ import { Images } from "../../public/images";
 import { futuna } from "../../public/fonts/futura";
 import { sidebarInfo } from "@/constraints/sidebarRoutes";
 import { useRouter, usePathname } from "next/navigation";
+import CustomHeader from "@/components/customHeader/customHeader";
+import { FaList } from "react-icons/fa";
 
 export default function RootLayout({
   children,
@@ -31,34 +33,15 @@ export default function RootLayout({
   const [showDrawer, setShowDrawer] = useState(false);
   return (
     <html lang="en">
-      <body className={ringgift_font.className}>
-        <Button className={styles.drawerButton}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="50"
-            height="50"
-            fill="black"
-            className="bi bi-person-circle"
-            viewBox="0 0 16 16"
-            onClick={() => setShowDrawer(true)}
-          >
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-            <path
-              fill-rule="evenodd"
-              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-            />
-          </svg>
-        </Button>
-        <Sidebar
+      <body className={ringgift_font.className} style={{ display: "flex" }}>
+        {true? <Sidebar
           className={styles.sidebar}
           visibilityMode="hide"
           show={showDrawer}
-          onClose={() => setShowDrawer(false)}
+          onClose={() => setShowDrawer(false)} 
           drawerClass={styles.drawer}
           header={
-            <div
-              className={styles.header}
-            >
+            <div className={styles.header}>
               <Image
                 src={Images.Logo}
                 alt="logo"
@@ -97,8 +80,24 @@ export default function RootLayout({
               </Button>
             ))}
           </div>
-        </Sidebar>
-        {children}
+        </Sidebar>:<></>}
+        <div
+          style={{
+            height: "130px",
+            display: "flex",
+            alignContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Button className={styles.drawerButton} onClick={() => setShowDrawer(true)}>
+            <FaList color={"#000000"}></FaList>
+          </Button>
+        </div>
+
+        <div style={{ width: "100%" }}>
+          <CustomHeader/>
+          {children}
+        </div>
       </body>
     </html>
   );
