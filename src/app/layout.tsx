@@ -13,6 +13,8 @@ import { Images } from "../../public/images";
 import { futuna } from "../../public/fonts/futura";
 import { sidebarInfo } from "@/constraints/sidebarRoutes";
 import { useRouter, usePathname } from "next/navigation";
+import clsx from "clsx";
+import { Stint_Ultra_Condensed } from "next/font/google";
 
 export default function RootLayout({
   children
@@ -25,7 +27,9 @@ export default function RootLayout({
   const ringgift_font = ringift;
   const pathName = usePathname();
   const router = useRouter();
-  function  handleRouting(route: string): void {
+  const [active, setActive] = useState(-1);
+  function  handleRouting(route: string, index: number): void {
+    setActive(index);
     router.push(route);
   }
   const [showDrawer, setShowDrawer] = useState(false);
@@ -74,7 +78,6 @@ export default function RootLayout({
                   height: "fit-content",
                 }}
               >
-                {" "}
                 HomeLand
               </p>
             </div>
@@ -84,12 +87,15 @@ export default function RootLayout({
             {sidebarInfo.map((value, index) => (
               <Button
                 key={index}
-                className={`${
-                  pathName == "/" + value.title.toLowerCase()
-                    ? styles.current
-                    : ""
-                } ${styles.sidebarButton} `}
-                onClick={() => handleRouting("/" + value.title.toLowerCase())}
+                className={clsx(styles.sidebarButton,{
+                  [`${styles.current}`]: index === active
+                })}
+                // className={`${
+                //   pathName == "/" + value.title.toLowerCase()   
+                //     ? styles.current
+                //     : ""
+                // } ${styles.sidebarButton} `}
+                onClick={() => handleRouting("/" + value.title.toLowerCase(), index)}
                 style={futuna.style}
               >
                 {value.svg}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ReactElement } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import styles from "./ButtonComponent.module.scss";
@@ -16,7 +16,7 @@ const ButtonComponent = ({
   onClick?: Function;
   target?: String;
   children: React.ReactNode;
-  preIcon?: React.ReactNode;
+  preIcon?: JSX.Element;
   sufIcon?: React.ReactNode;
   className?: String;
 }) :JSX.Element => {
@@ -24,20 +24,22 @@ const ButtonComponent = ({
   let props: any = { onClick, ...prop };
   if (href) {
     Comp = Link;
+    props.href = href;
   }
   if (target) {
     props.target = target;
   }
 
   return (
-    <Comp
+    <Comp 
       className={clsx(styles.wrapper, {
         [`${className}`]: className,
       })}
+      {...props}
     >
-      {preIcon && { preIcon }}
+      {preIcon && <span className = {clsx(styles.preIcon)}>{preIcon}</span> }
       {children}
-      {sufIcon && { sufIcon }}
+      {sufIcon && <span className={clsx(styles.sufIcon)}>{sufIcon}</span>  }
     </Comp>
   );
 };
