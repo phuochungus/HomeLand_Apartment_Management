@@ -5,8 +5,36 @@ import styles from "./page.module.css";
 import { futuna } from "../../../public/fonts/futura";
 import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
+import axios from "axios";
 export default function Login() {
   const router = useRouter();
+  const handleSignIn = async () => {
+    const email = (document.getElementById("email")! as HTMLInputElement).value;
+    const password = (document.getElementById("password")! as HTMLInputElement)
+      .value;
+    const data = JSON.stringify({
+      email: email,
+      password: password,
+    });
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "/api/login",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((res) => {
+        router.push("/home?auth=true");
+      })
+      .catch((err) => {
+        console.log(err)
+        alert("Không đăng nhập được");
+      });
+  };
   return (
     <main className={styles.container}>
       <div className={styles.headerSmall}>
@@ -29,7 +57,13 @@ export default function Login() {
         </p>
       </div>
       <div className={styles.formContainer}>
-        <form className={styles.form}>
+        <form
+          className={styles.form}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await handleSignIn();
+          }}
+        >
           <div className={styles.header}>
             <Image
               src={Images.Logo}
@@ -87,8 +121,10 @@ export default function Login() {
               <input
                 type="checkbox"
                 style={{ verticalAlign: "center", marginRight: "5px" }}
+                id="rememberMe"
+                aria-label="rememberMe"
               ></input>
-              <label>{"Remember me"}</label>
+              <label form="rememberMe">{"Remember me"}</label>
             </div>
             <div>
               <a onClick={() => router.push("/forgotPassword")}>
@@ -103,7 +139,10 @@ export default function Login() {
               marginTop: "20px",
             }}
           >
-            <Button className={`${styles.button} ${styles.current}`}>
+            <Button
+              type="submit"
+              className={`${styles.button} ${styles.current}`}
+            >
               {" "}
               Login
             </Button>

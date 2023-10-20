@@ -4,6 +4,7 @@
     align-content: center;
     padding-left: 10px;
     margin-bottom: 0.2rem;
+    width: 100%;
 }
 .dropdownItem:hover{
     background-color: #2864FF;

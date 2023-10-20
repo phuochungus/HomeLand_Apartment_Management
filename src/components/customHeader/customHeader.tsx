@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CustomModal } from "./customModal/customModal";
 import { InfoButton } from "../infoButton/InfoButton";
-const CustomHeader = (): JSX.Element => {
+const CustomHeader = ({auth}:{auth:boolean}): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const handleRoute = (href: string) => {
@@ -27,7 +27,7 @@ const CustomHeader = (): JSX.Element => {
         <div className={style.logoContainer}>
           <div className={style.brandLabel}>HomeLand</div>
         </div>
-        {false ? (
+        {!auth ? (
           <div className={style.menuContainer}>
             <HeaderButton
               title={"Home"}
@@ -50,11 +50,11 @@ const CustomHeader = (): JSX.Element => {
         ) : (
           <></>
         )}
-        {true ? (
+        {auth ? (
           <InfoButton></InfoButton>
         ) : (
           <div className={style.loginContainer}>
-            <LoginButton onClick={() => setShowModal(true)}></LoginButton>
+            <LoginButton onClick={() => {router.push("/login")}}></LoginButton>
           </div>
         )}
       </header>

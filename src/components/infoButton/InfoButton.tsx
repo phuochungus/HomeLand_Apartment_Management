@@ -13,12 +13,15 @@ import {
   DropdownToggle,
 } from "react-bootstrap";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export const InfoButton = ({
   buttonBody,
 }: {
   buttonBody?: JSX.Element[] | never[] | JSX.Element;
 }) => {
+  const router = useRouter();
   const [showDropDown, setShowDropDown] = useState(false);
   const dropdownButton = React.forwardRef(() => (
     <div
@@ -70,8 +73,21 @@ export const InfoButton = ({
     {
       title: "Edit profile",
       icon: <FaAddressBook />,
+      onClick: () => {},
     },
-    { title: "Log out", icon: <FaSignOutAlt /> },
+    {
+      title: "Log out",
+      icon: <FaSignOutAlt />,
+      onClick: () => {
+        axios
+          .get("/api/logout")
+          .then((res) => router.push("/"))
+          .catch((err) => {
+            console.log(err);
+            alert("Something went wrong");
+          });
+      },
+    },
   ];
   return (
     <Dropdown
@@ -90,18 +106,17 @@ export const InfoButton = ({
       >
         <div
           style={{
-            width: "fit-content",
-            marginRight: "100px",
+            width: "100%",
             height: "fit-content",
           }}
           className={futuna.className}
         >
           {dropdownInfo.map((value, index) => (
-            <div key={index} className={styles.dropdownItem}>
+            <button key={index} className={styles.dropdownItem} onClick={() => value.onClick()}>
               <div style={{ margin: "auto 0" }}>{value.icon}</div>
               <div style={{ width: "10px", height: "100%" }} />
               <div style={{ fontSize: "1.3rem" }}> {value.title}</div>
-            </div>
+            </button>
           ))}
         </div>
       </DropdownMenu>
