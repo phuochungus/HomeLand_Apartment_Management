@@ -48,7 +48,7 @@
 }
 
 .sidebarButton:hover {
-    width: 110%;
+    /* width: 110%; */
     color: white;
     background-color: #2864FF;
     padding-left: 2.5rem;
