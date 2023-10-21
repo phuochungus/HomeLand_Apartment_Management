@@ -18,10 +18,21 @@ export const sidebarInfo = [
         />
       </svg>
     ),
+    menu: [],
   },
   {
     title: "Properties",
-    svg: <Image src={Images.Properties} alt="ico" width={30} height={30}/>,
+    svg: <Image src={Images.Properties} alt="ico" width={30} height={30} />,
+    menu: [
+      {
+        title: "List apartments",
+        href: "",
+      },
+      {
+        title: "Add apartments",
+        href: "/home/properties/add",
+      },
+    ],
   },
   {
     title: "Service",
@@ -39,6 +50,7 @@ export const sidebarInfo = [
         />
       </svg>
     ),
+    menu: [],
   },
   {
     title: "Residents",
@@ -60,5 +72,6 @@ export const sidebarInfo = [
         />
       </svg>
     ),
+    menu: [],
   },
 ];

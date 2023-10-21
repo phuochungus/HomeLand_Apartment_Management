@@ -67,21 +67,32 @@ export default function RootLayout({
           >
             <div className={styles.sidebarBody}>
               {sidebarInfo.map((value, index) => (
-                <Button
-                  key={index}
-                  className={`${
-                    pathName == "/home/" + value.title.toLowerCase() 
-                      ? styles.current
-                      : ""
-                  } ${styles.sidebarButton} `}
-                  onClick={() =>
-                    handleRouting("/home/" + value.title.toLowerCase() + "?auth=true")
-                  }
-                  style={futuna.style}
-                >
-                  {value.svg}
-                  <span style={{ margin: "auto 0" }}>{value.title}</span>
-                </Button>
+                <div key={index} style={{marginBottom: "3rem"}}>
+                  {" "}
+                  <Button
+                    className={`${
+                      pathName == "/home/" + value.title.toLowerCase()
+                        ? styles.current
+                        : ""
+                    } ${styles.sidebarButton} `}
+                    onClick={() =>
+                      handleRouting(
+                        "/home/" + value.title.toLowerCase() + "?auth=true"
+                      )
+                    }
+                    style={futuna.style}
+                  >
+                    {value.svg}
+                    <span style={{ margin: "auto 0" }}>{value.title}</span>
+                  </Button>
+                  <div className={`${styles.sidebarButtonMenu} ${futuna.className}`}>
+                    {value.menu?.map((value, index) => (
+                      <a href={value.href} key={index}>
+                        {value.title}
+                      </a>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </Sidebar>
@@ -104,7 +115,13 @@ export default function RootLayout({
           </Button>
         </div>
 
-        <div style={{ width: "100%", backgroundColor: '#E8EAEC', height: "fit-content" }}>
+        <div
+          style={{
+            width: "100%",
+            backgroundColor: "#E8EAEC",
+            height: "fit-content",
+          }}
+        >
           <CustomHeader auth={searchParam.get("auth") == null ? false : true} />
           {children}
         </div>

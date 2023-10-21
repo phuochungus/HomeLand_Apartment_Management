@@ -1,18 +1,16 @@
 import axios from "axios";
-import { cookies } from "next/headers";
 import { endpoint } from "@/constraints/endpoints";
-export async function validateToken(token:string | undefined):Promise<boolean> {
-    let config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: endpoint.login,
-        headers: {
+export async function validateToken(token: string | undefined): Promise<boolean> {
+    if(!token)
+        return false;
+    const result = await fetch(endpoint.tokenValidate, {
+        method: "get", headers: {
             'Authorization': 'Bearer ' + token,
+            'accept': "application/json",
             'Content-Type': 'application/json'
         },
-    };
-
-    return await axios.request(config)
+    })
     .then(res => true)
-    .catch(err => false)
+    .catch(err => { console.log(err); return false })
+    return result;
 }
