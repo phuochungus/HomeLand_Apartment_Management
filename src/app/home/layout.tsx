@@ -104,7 +104,7 @@ export default function RootLayout({
           </Button>
         </div>
 
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", backgroundColor: '#E8EAEC', height: "fit-content" }}>
           <CustomHeader auth={searchParam.get("auth") == null ? false : true} />
           {children}
         </div>
