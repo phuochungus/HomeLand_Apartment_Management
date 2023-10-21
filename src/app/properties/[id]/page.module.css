@@ -1,0 +1,16 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.furniture {
+  height: 100px;
+  border-radius: 10px;
+  border: 1px grey solid;
+  margin-top: 20px;
+  align-items: center;
+}

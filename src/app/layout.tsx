@@ -13,6 +13,7 @@ import { Images } from "../../public/images";
 import { futuna } from "../../public/fonts/futura";
 import { sidebarInfo } from "@/constraints/sidebarRoutes";
 import { useRouter, usePathname } from "next/navigation";
+import "./i18next";
 
 export default function RootLayout({
   children,
@@ -26,9 +27,14 @@ export default function RootLayout({
   const pathName = usePathname();
   const router = useRouter();
   function handleRouting(route: string): void {
-    router.push(route);
+    if (route == "/" + sidebarInfo[1].title.toLowerCase()) {
+      router.push("/properties/1");
+    } else {
+      router.push(route);
+    }
   }
   const [showDrawer, setShowDrawer] = useState(false);
+
   return (
     <html lang="en">
       <body className={ringgift_font.className}>
@@ -56,9 +62,7 @@ export default function RootLayout({
           onClose={() => setShowDrawer(false)}
           drawerClass={styles.drawer}
           header={
-            <div
-              className={styles.header}
-            >
+            <div className={styles.header}>
               <Image
                 src={Images.Logo}
                 alt="logo"
