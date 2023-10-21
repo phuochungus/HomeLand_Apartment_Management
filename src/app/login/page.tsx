@@ -6,6 +6,7 @@ import { futuna } from "../../../public/fonts/futura";
 import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 export default function Login() {
   const router = useRouter();
   const handleSignIn = async () => {
@@ -28,10 +29,10 @@ export default function Login() {
     axios
       .request(config)
       .then((res) => {
-        router.push("/home?auth=true");
+        router.replace("/home?auth=true");
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         alert("Không đăng nhập được");
       });
   };
@@ -94,6 +95,7 @@ export default function Login() {
           <label form="email" style={{ marginTop: "10px" }}>
             Email
           </label>
+
           <input
             type="email"
             id="email"
@@ -104,12 +106,44 @@ export default function Login() {
           <label form="password" style={{ marginTop: "20px" }}>
             Password
           </label>
-          <input
-            id="password"
-            aria-label="password"
-            type="password"
-            className={styles.input}
-          />
+          <div style={{ position: "relative" }}>
+            <input
+              id="password"
+              aria-label="password"
+              type="password"
+              className={styles.input}
+              style={{ width: "100%" }}
+            />
+            <button
+              type="button"
+              id="passwordButton"
+              className={`${styles.passwordButton} ${styles.hidden}`}
+              style={{ position: "absolute", right: "10px", height: "100%" }}
+              onClick={() => {
+                var temp = document.getElementById(
+                  "password"
+                ) as HTMLInputElement;
+                if (temp.type == "text") {
+                  temp.type = "password";
+                  document.getElementById(
+                    "passwordButton"
+                  )!.className = `${styles.passwordButton} ${styles.hidden}`;
+                } else {
+                  temp.type = "text";
+                  document.getElementById(
+                    "passwordButton"
+                  )!.className = `${styles.passwordButton} ${styles.show}`;
+                }
+              }}
+            >
+              <div className={styles.hidden}>
+                <FaEyeSlash />
+              </div>
+              <div className={styles.show}>
+                <FaEye />
+              </div>
+            </button>
+          </div>
           <div
             style={{
               display: "flex",
@@ -146,7 +180,6 @@ export default function Login() {
               {" "}
               Login
             </Button>
-            <Button className={styles.button}> Sign up</Button>
           </div>
         </form>
         <div className={styles.bannerContainer}>
