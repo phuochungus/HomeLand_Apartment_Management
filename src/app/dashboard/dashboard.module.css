@@ -1,0 +1,125 @@
+.headingXl {
+        font-size: 3.6rem;
+        color: black;
+}
+
+.headingLg {
+        font-size: 2.4rem;
+        color: black;
+}
+
+.headingMd {
+        background-color: var(--primary);
+}
+
+.wrapper {
+        width: 90%;
+}
+
+.header {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+}
+
+.perPage {
+        display: flex;
+        margin: 0 8px;
+}
+
+
+.dashboardBackground {
+        background-color: aliceblue;
+}
+
+.search {
+        background-color: aliceblue;
+        padding: 2px;
+        margin-left: -29px;
+        border-radius: 8px;
+        color: black;
+        height: 30px;
+        width: 250px;
+        position: relative;
+}
+
+.search-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 0;
+}
+
+.searchbutton {
+        color: black;
+        border: none;
+        padding: 10px 30px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+
+}
+
+.modalADE {
+        color: black;
+}
+
+.rowcss {
+        border-color: black;
+}
+
+.addBtn {
+        background-color: var(--primary);
+        color: var(--white);
+        padding: var(--default-padding-vertical) var(--default-padding-horizontal);
+        border-radius: 8px;
+        margin-left: 300px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        background-color: #0744e1;
+
+
+}
+
+.profile-stat {
+        display: block;
+        margin-bottom: 10px;
+}
+
+.text-center {
+        text-align: center;
+}
+
+.birth,
+.address,
+.phonenumber,
+.address {
+        text-align: right;
+        margin-bottom: 10px;
+}
+.card {
+        transition: transform 0.3s, z-index 0.3s;
+}
+
+
+.card:hover {
+        transform: scale(1.025);
+        z-index: 1;
+}
+
+.card:not(:hover) {
+        transform: scale(0.9);
+}
+
+
+.hoveredCard:hover {
+        transform: scale(1.1);
+        z-index: 1;
+}
+.main{
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: normal;
+}

@@ -1,0 +1,65 @@
+.headingXl {
+        font-size: 3.6rem;
+        font-family: var(--font-mono);
+
+}
+
+.headingLg {
+        font-size: 2.4rem;
+        font-family: var(--font-mono);
+}
+
+.headingMd {
+        background-color: var(--primary);
+        font-family: var(--font-mono);
+}
+
+.headingXl {
+        color: black;
+        font-family: var(--font-mono);
+}
+
+.form {
+        color: black;
+        font-family: var(--font-mono);
+}
+
+.creatBtn1 {
+        color: white;
+        border: 1px solid black;
+        width: 200px;
+        background-color: blue;
+        border-radius: 8px;
+        height: 30px;
+        margin-left: 125px;
+        font-family: var(--font-mono);
+}
+
+.dropzone {
+        color: black;
+        border: 1px solid black;
+}
+
+.img {
+        width: 100%;
+        height: 160px;
+}
+
+.label {
+        color: black;
+}
+.roundImageWrapper {
+        width: 120px;    
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        margin-top: 20px;
+}
+
+.roundImage {
+        display: block;
+        width: 100%;
+        height: auto;
+     
+}
