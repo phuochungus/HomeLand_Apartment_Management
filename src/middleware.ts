@@ -4,8 +4,6 @@ import { validateToken } from './libs/utils'
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-  if (request.url.split("/")[1] == "api")
-    return 
   const token = request.cookies.get("token")?.value;
   const auth = request.url.split("?")[1]
   if (request.url.includes("?") && auth && token) 
