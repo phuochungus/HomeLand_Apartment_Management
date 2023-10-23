@@ -101,7 +101,7 @@ export default function Page({ params }: { params: { id: string } }) {
     <main className={styles.main} style={futuna.style}>
       <div>
         <Container className="p-lg-5">
-          <Row className="justify-content-md-center">
+          <Row>
             <Col>
               <h3>
                 <b>St. Crytal</b>
@@ -112,7 +112,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <p className="">Edit</p>
             </Col>
           </Row>
-          <Row>
+          <Row style={{ marginTop: "20px" }}>
             <Carousel>
               <Carousel.Item style={{ height: "500px" }}>
                 <Image
@@ -155,7 +155,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <h3 style={{ marginTop: "20px" }}>
               <b>About this apartment</b>
             </h3>
-            <p>
+            <p style={{ marginTop: "20px" }}>
               Pellentesque sollicitudin, arcu a lacinia congue, nunc lectus
               ultricies leo, eget rutrum libero diam et enim. Morbi vestibulum
               dictum neque, eu hendrerit sapien sollicitudin quis. Quisque vitae
@@ -174,9 +174,10 @@ export default function Page({ params }: { params: { id: string } }) {
           <Row
             style={{
               backgroundColor: "rgba(40, 100, 255, 0.1)",
-              padding: "20px 30px",
               border: "1px black solid",
               borderRadius: "20px",
+              margin: "20px 0px",
+              paddingTop: "20px ",
             }}
           >
             {residentInfo.map((value, index) => (

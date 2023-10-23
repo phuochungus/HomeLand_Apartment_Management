@@ -1,7 +1,3 @@
-"use client";
-
-import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
-
 import "./globals.css";
 import { useEffect, useState } from "react";
 import { ringift } from "../../public/fonts/Ringift";

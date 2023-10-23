@@ -7,10 +7,10 @@ export interface IResidentProps {
 
 export default function Resident(props: IResidentProps) {
   return (
-    <Container>
+    <Container style={{ marginBottom: "20px" }}>
       <Row className="align-items-center">
         <Col md="auto">
-          <div style={{ width: "100px" }}>{props.img}</div>
+          <div style={{ width: "80px" }}>{props.img}</div>
         </Col>
         <Col>
           <h4>Manh Ho Dinh</h4>

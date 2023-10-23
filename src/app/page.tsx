@@ -1,11 +1,8 @@
-import Image from 'next/image'
-import CustomHeader from '@/components/customHeader/customHeader'
-import styles from './page.module.css'
+"use client";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      this is the homepage
-    </main>
-  )
+export default function Page() {
+  const router = useRouter();
+  router.push("/home");
+  return <main>This is start</main>;
 }
