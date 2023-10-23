@@ -3,7 +3,7 @@ import { Apartment } from "@/models/apartment";
 import styles from "./page.module.css";
 import { Carousel, Col, Container, Image, Row } from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
-import { futuna } from "../../../../public/fonts/futura";
+import { futuna } from "../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
 import { useState } from "react";
 
