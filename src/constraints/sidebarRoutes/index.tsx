@@ -26,7 +26,7 @@ export const sidebarInfo = [
     menu: [
       {
         title: "List apartments",
-        href: "",
+        href: "/home/properties",
       },
       {
         title: "Add apartments",

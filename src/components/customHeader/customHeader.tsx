@@ -32,7 +32,7 @@ const CustomHeader = ({auth}:{auth:boolean}): JSX.Element => {
             <HeaderButton
               title={"Home"}
               hideIcon={true}
-              onClick={() => handleRoute("/")}
+              onClick={() => handleRoute("/home")}
             />
             <HeaderButton
               title={"Apartments"}
