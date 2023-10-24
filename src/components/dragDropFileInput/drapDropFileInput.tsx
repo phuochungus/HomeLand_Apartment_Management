@@ -94,7 +94,7 @@ export default function DragDropFileInput({
             flexDirection: "column",
           }}
         >
-          <p style={{ textAlign: "center" }}>Drag and drop your file here</p>
+          <p style={{ textAlign: "center" }}>Click to upload your file here</p>
           <button
             type="button"
             className={`upload-button ${styles.dragDrop}`}

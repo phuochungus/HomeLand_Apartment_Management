@@ -4,13 +4,14 @@ import { endpoint } from '@/constraints/endpoints';
 import { cookies } from 'next/headers';
 import { Apartment } from '@/models/apartment';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   let body = await request.json()
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
     url: endpoint.login,
     headers: {
+      'Authorization': "Bearer " + request.cookies.get("token")?.value,
       'Content-Type': 'application/json',
     },
     data: body
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
     maxBodyLength: Infinity,
     url: endpoint.apartment + (page != null ? "?page=" + page : ""),
     headers: {
+      'Authorization': "Bearer " + request.cookies.get("token")?.value,
       'Content-Type': 'application/json',
     },
   };

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Apartment } from "@/models/apartment";
 import axios from "axios";
 import { useQuery } from "react-query";
+import SearchBar from "@/components/searchBar/searchBar";
 
 export default function Apartments() {
   const apartmentList  :Apartment[] = [];
@@ -72,31 +73,7 @@ export default function Apartments() {
             padding: "10px 0",
           }}
         >
-          <div className={styles.searchBar}>
-            <form
-              className={futuna.className}
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "100%",
-                padding: "0 1rem",
-              }}
-            >
-              <input
-                type="search"
-                id="search"
-                style={{
-                  height: "100%",
-                  borderStyle: "none",
-                  flexGrow: "1",
-                  padding: "0 10px",
-                }}
-              ></input>
-              <button style={{ width: "fit-content" }}>
-                <FaSearch></FaSearch>
-              </button>
-            </form>
-          </div>
+          <SearchBar className={styles.searchBar}></SearchBar>
         </div>
         {apartmentSortOption.map((value, index) => (
           <div
