@@ -1,13 +1,11 @@
-import { json } from "stream/consumers";
-
-export class Apartment{
-    apartment_id!: string ;
-    name!:string;
-    address!:string;
-    images!:string[];
-    bedroom!:number;
-    bathRooms!:number;
-    width!:number;
-    length!:number;
-    squareStatus!:string;  
+export interface Apartment {
+  apartment_id: string | null;
+  name: string | null;
+  address: string | null;
+  images: string[] | null;
+  bedroom: number | null;
+  bathRooms: number | null;
+  width: number | null;
+  length: number | null;
+  squareStatus: string | null;
 }

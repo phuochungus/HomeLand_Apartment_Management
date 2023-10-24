@@ -5,12 +5,49 @@ import { Carousel, Col, Container, Image, Row } from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { endpoint } from "@/constraints/endpoints";
+
+async function getData(id: string) {
+  const res = await fetch(endpoint.apartment + "/" + id);
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+}
 
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(apartment);
   const [imageLoaded, setImageLoaded] = useState(true); // Set it to true by default
+
+  const initApartment: Apartment = {
+    apartment_id: params.id,
+    name: "",
+    address: "",
+    bedroom: 0,
+    bathRooms: 0,
+    images: [],
+    width: 0,
+    length: 0,
+    squareStatus: "",
+  };
+  const [apartment, setApartment] = useState<Apartment>(initApartment);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(endpoint.apartment + "/" + params.id);
+      const data = await response.json();
+      setApartment(data);
+    };
+
+    fetchData();
+  }, []);
 
   const furnitureInfo = [
     {
@@ -104,9 +141,9 @@ export default function Page({ params }: { params: { id: string } }) {
           <Row>
             <Col>
               <h3>
-                <b>St. Crytal</b>
+                <b>{apartment.name}</b>
               </h3>
-              <p className="">floor 6, D6,Vinhome, Binh Duong, Viet Nam</p>
+              <p className="">{apartment.address}</p>
             </Col>
             <Col className="text-end">
               <p className="">Edit</p>
