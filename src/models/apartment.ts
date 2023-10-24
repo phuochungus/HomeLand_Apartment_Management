@@ -1,11 +1,16 @@
-export interface Apartment {
-  apartment_id: string | null;
-  name: string | null;
-  address: string | null;
-  images: string[] | null;
-  bedroom: number | null;
-  bathRooms: number | null;
-  width: number | null;
-  length: number | null;
-  squareStatus: string | null;
+
+export type Apartment = {
+    apartment_id: string ;
+    name:string;
+    rent: string;
+    address:string;
+    images:string[];
+    bedroom:number;
+    bathRooms:number;
+    width:number;
+    length:number;
+    status:string; 
+    description: string;
+    floorId: string;
+    buildingId: string;
 }
