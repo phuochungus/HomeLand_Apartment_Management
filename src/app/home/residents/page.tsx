@@ -1,4 +1,13 @@
+"use client"
+import { useTranslation } from "react-i18next";
 import styles from "../page.module.css";
 export default function Residents() {
-    return <main className={styles.main}>This is the resident page</main>;
+  const [t, i18n] = useTranslation();
+
+  return (
+    <main className={styles.main}>
+      {" "}
+      <div>{t("home.body")}</div>
+    </main>
+  );
 }
