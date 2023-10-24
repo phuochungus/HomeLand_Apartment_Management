@@ -22,7 +22,6 @@ export async function POST(request: Request) {
         headers: { 'Set-Cookie': `token=${response.data.access_token}` },
       });
     }
-
-  }).catch((error) =>{ console.log(error); return NextResponse.json(error.response.data.message, { status: error.response.status, statusText: error.response.statusText })})
+  }).catch((error) =>{return NextResponse.json(error.response.data.message, { status: error.response.status, statusText: error.response.statusText })})
   return response;
 }

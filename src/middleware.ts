@@ -11,6 +11,11 @@ export async function middleware(request: NextRequest) {
   const validated = await validateToken(token);
   if (validated)
     return NextResponse.redirect(request.url + "?auth=true")
+  else
+    if(!request.url.includes("home"))
+      return NextResponse.redirect("https://" + request.nextUrl.pathname + "/home");
+    else
+      return
 }
 
 // See "Matching Paths" below to learn more

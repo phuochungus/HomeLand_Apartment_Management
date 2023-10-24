@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 export default function Login() {
   const router = useRouter();
   const handleSignIn = async () => {
@@ -26,14 +27,15 @@ export default function Login() {
       },
       data: data,
     };
+    loadingFiler(document, document.getElementsByTagName("main")[0]);
     axios
       .request(config)
       .then((res) => {
         router.replace("/home?auth=true");
       })
       .catch((err) => {
-        console.log(err);
-        alert("Không đăng nhập được");
+        removeLoadingFilter(document.getElementsByTagName("main")[0]);
+        alert(err.response.data);
       });
   };
   return (
