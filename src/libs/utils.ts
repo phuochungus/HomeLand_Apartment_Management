@@ -16,6 +16,8 @@ export async function validateToken(token: string | undefined): Promise<boolean>
 }
 
 export function loadingFiler(document: Document, container: HTMLElement) {
+    //document: The current HTMl, usage: Create new HTML => Loading Div with spinner
+    //container: The HTML element to put the loading inside,
     var div = document.createElement("div");
     div.className = "loadingFilter";
     div.style.backgroundColor = "black";
