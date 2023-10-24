@@ -67,13 +67,37 @@
 
 .gridItem {
     box-shadow: inset 0px 0px 0px 1px;
-    transition: transform 0.14s ease-in, text-shadow 0.1s ease-in;
-	will-change: transform;
+    transition: box-shadow 0.14s ease-in, text-shadow 0.1s ease-in;
+	will-change: box-shadow;
 	cursor: pointer;
 }
 
 .gridItem:hover {
-    box-shadow: 0 10px 24px 0px rgba(0, 0, 0, 0.04), 0 8px 20px -2px rgba(0, 0, 0, 0.04), 0 6px 10px -6px rgba(0, 0, 0, 0.10);
-    transform: translate3d(0, -40px, 0);
+    box-shadow: 0 10px 24px 0px rgba(0, 0, 0, 0.12), 0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 6px 10px -6px rgba(0, 0, 0, 0.25);
     opacity: 1;
 }
+/* mixin for multiline */
+.blockWithText {
+    overflow: hidden;
+    position: relative;
+    line-height: 1.4em;
+    max-height: 9.8em;
+    text-align: justify;
+    /* margin-right: 1em; */
+    padding-right: 1em;
+  }
+  .blockWithText:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  .blockWithText:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+  }
