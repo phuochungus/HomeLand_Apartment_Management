@@ -37,7 +37,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.bedroom??'0').toString(),
+      value: (data?.bedroom ?? "0").toString(),
     },
     {
       title: "Bathrooms",
@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.bathRooms??'0').toString(),
+      value: (data?.bathRooms ?? "0").toString(),
     },
     {
       title: "Square Area",
@@ -77,7 +77,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value:(data?.bedroom??'0').toString()+ "6 x 2 (m2)",
+      value: (data?.bedroom ?? "0").toString() + "6 x 2 (m2)",
     },
     {
       title: "Status",
@@ -95,7 +95,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.status??'').toString(),
+      value: (data?.status ?? "").toString(),
     },
   ];
   const residentInfo = [
@@ -124,11 +124,13 @@ export default function Page({ params }: { params: { id: string } }) {
             <Row style={{ marginTop: "20px" }}>
               <Carousel>
                 {data.images.map((value, index) => (
-                  <Carousel.Item style={{ height: "500px" }}>
+                  <Carousel.Item  key={index}
+                  style={{ height: "500px" }}>
                     <Image
                       loading="lazy"
                       className=" img-fluid h-100 w-100"
                       src={value}
+                      alt="images"
                       rounded
                     ></Image>
                   </Carousel.Item>
@@ -140,7 +142,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <Col key={index} className="text-center">
                   <Furniture
                     title={e.title}
-                    value={e.value??''}
+                    value={e.value ?? ""}
                     svg={e.svg}
                   ></Furniture>
                 </Col>
