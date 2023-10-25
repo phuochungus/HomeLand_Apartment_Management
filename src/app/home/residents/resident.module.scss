@@ -12,6 +12,8 @@
 .addBtn {
     background-color: var(--primary);
     color: var(--white);
+    font-size: 1.6rem;
+    text-decoration: none;
     padding: var(--default-padding-vertical) var(--default-padding-horizontal);
     border-radius: 8px;
     &:hover {
@@ -22,8 +24,17 @@
 //per page
 .perPage {
     display: flex;
+    font-size: 1.6rem;
+    align-items: center;
     span {
         margin: 0 8px;
+        select {
+            font-size: 1.6rem;
+            option {
+            font-size: 1.6rem;
+                
+            }
+        }
     }
 
 }
@@ -39,6 +50,7 @@
     + .cudBtn {
         margin-left: 8px;
     }
+    text-decoration: none;
 }
 .editBtn {
     background-color: var(--yellow);

@@ -91,7 +91,7 @@ export default function Residents() {
         <div className={clsx(residentStyles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>Danh sách cư dân</h1>
           <ButtonComponent
-            href="/home/residents/addResident"
+            href="/home/residents/addResident?auth=true"
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
@@ -100,7 +100,7 @@ export default function Residents() {
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
           <div className={clsx(residentStyles.perPage)}>
-            <p>Show</p>
+            <span>Show</span>
             <span>
               <Form.Select aria-label="Default select example">
                 {listOptions.map(
@@ -112,7 +112,7 @@ export default function Residents() {
                 )}
               </Form.Select>
             </span>
-            <p>Entries</p>
+            <span>Entries</span>
           </div>
           <SearchLayout placeHolder="tìm dân cư..." />
         </div>
@@ -154,7 +154,7 @@ export default function Residents() {
                             residentStyles.cudBtn,
                             residentStyles.editBtn
                           )}
-                          href={`/residents/updateResident/${resident.id}`}
+                          href={`/residents/updateResident/${resident.id}/?auth=true`}
                         >
                           Sửa
                         </ButtonComponent>

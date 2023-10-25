@@ -55,7 +55,7 @@ const AddResident = () => {
 
     }
     catch (error){
-      console.log('sai rồi')
+      console.log('error')
     }
    
 
