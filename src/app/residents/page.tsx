@@ -17,7 +17,7 @@ import { useState, useEffect, ReactNode } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { residentService } from "@/apiServices/residentService";
 import { useRouter } from "next/navigation";
-import { futuna } from "../../../../public/fonts/futura";
+import { futuna } from "../../../public/fonts/futura";
 import { GetStaticProps } from "next";
 import { format } from "date-fns";
 export interface Person {
@@ -91,7 +91,7 @@ export default function Residents({allResidents}: {allResidents: Person[]}) {
         <div className={clsx(residentStyles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>Danh sách cư dân</h1>
           <ButtonComponent
-            href="/home/residents/addResident"
+            href="/residents/addResident"
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
