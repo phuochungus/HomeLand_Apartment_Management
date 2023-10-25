@@ -36,9 +36,9 @@ export interface Person {
   created_at: Date;
 }
 
-export default function Residents({allResidents}: {allResidents: Person[]}) {
+export default function Residents() {
   const [showModal, setShowModal] = useState(false);
-  const [residents, setResidents] = useState<Person[]>([]);
+  const [residents, setResidents] = useState<Array<Person>>([]);
   const listOptions = [
     {
       value: 10,

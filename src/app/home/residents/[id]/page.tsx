@@ -8,7 +8,7 @@ import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { residentService } from "@/apiServices/residentService";
-import { Person } from "../../page";
+import { Person } from "../page";
 import { format } from "date-fns";
 import { futuna } from "../../../../../public/fonts/futura";
 import clsx from "clsx";
