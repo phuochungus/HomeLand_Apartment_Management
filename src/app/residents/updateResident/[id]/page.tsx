@@ -1,22 +1,24 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import styles from "./AddResident.module.scss";
-import mainStyles from "../../page.module.css";
+import React, { useEffect, useState } from "react";
+import styles from "./UpdateResident.module.scss";
+import mainStyles from "@/app/page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
-import { useDropzone } from "react-dropzone";
 import Form from "react-bootstrap/Form";
-import clsx from "clsx";
-import { FormGroup } from "react-bootstrap";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
-import { FaFontAwesome } from "react-icons/fa";
 import { residentService } from "@/apiServices/residentService";
-import { futuna } from "../../../../public/fonts/futura";
+import { Person } from "../../page";
+import { format } from "date-fns";
+import { futuna } from "../../../../../public/fonts/futura";
+import clsx from "clsx";
+import { ringift } from "../../../../../public/fonts/Ringift";
+
 interface File {
   preview: string;
 }
-const AddResident = () => {
+const UpdateResident = ({ params }: { params: { id: string } }) => {
+  const [data, setData] = useState<Person>();
   const [name, setName] = useState("");
   const [cccd, setCccd] = useState("");
   const [gender, setGender] = useState("");
@@ -36,35 +38,44 @@ const AddResident = () => {
     file.preview = URL.createObjectURL(file);
     setBackImg(file);
   };
-  const createHandle = async() => {
+  useEffect(() => {
+    const fetchApi = async () => {
+      const resident: Person = await residentService.getResidentById(params.id);
+      setData(resident);
+      console.log(resident);
+      setName(resident.name);
+      setGender(resident.gender);
+      setEmail(resident.email);
+      setPhone(resident.phone_number);
+      const date = format(new Date(resident.date_of_birth), "yyyy-MM-dd");
+      setDayOfBirth(date);
+    };
+    fetchApi();
+  }, [params.id]);
+  const updateHandle = async () => {
     const data = {
-      role:'resident',
+      role: "resident",
       gender,
       name,
-      dayOfBirth : new Date(dayOfBirth),
+      dayOfBirth: new Date(dayOfBirth),
       phone,
       email,
       cccd,
       frontImg: "fdfd",
-      backImg:"fdfs"
-    }
+      backImg: "fdfs",
+    };
 
     try {
-      await residentService.createResident(data)
-    console.log(data)
-
+      await residentService.updateResident(data, params.id); 
+    } catch (error) {
+      console.log("error");
     }
-    catch (error){
-      console.log('sai rồi')
-    }
-   
-
   };
   return (
     <main className={mainStyles.main}>
-      <div className={styles.wapper}>
-        <p className={utilStyles.headingXl}>Tạo cư dân</p>
-        <Form method="post" className={clsx(styles.form, futuna.className) }>
+      <div className={ styles.wapper}>
+        <p className={utilStyles.headingXl}>Chỉnh sửa thông tin cư dân</p>
+        <Form method="post" className={clsx(styles.form, ringift.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label className={styles.label}>Họ và tên</Form.Label>
             <Form.Control
@@ -89,6 +100,7 @@ const AddResident = () => {
 
             <div key={`inline-radio`} className="mb-3">
               <Form.Check
+                checked={gender === "male"}
                 inline
                 label="Nam"
                 name="group1"
@@ -100,6 +112,7 @@ const AddResident = () => {
               <Form.Check
                 inline
                 label="Nữ"
+                checked={gender === "female"}
                 name="group1"
                 type="radio"
                 onChange={(e) => setGender(e.target.value)}
@@ -188,14 +201,13 @@ const AddResident = () => {
             </Form.Group>
           </div>
           <ToastComponent type="success" />
-       
         </Form>
-        <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-            Tạo
-          </ButtonComponent>
+        <ButtonComponent onClick={updateHandle} className={styles.creatBtn}>
+          Cập nhật
+        </ButtonComponent>
       </div>
     </main>
   );
 };
 
-export default AddResident;
+export default UpdateResident;
