@@ -92,7 +92,9 @@ export default function AddApartment() {
                       borderColor: "#e8eaec",
                       borderRightStyle: "hidden",
                       paddingLeft: "10px",
-                      borderRadius: "7px",
+                      borderTopLeftRadius: "7px",
+                      borderBottomLeftRadius: "7px",
+                      borderWidth: "3px",
                     }}
                     size={"20px"}
                   />
@@ -122,7 +124,9 @@ export default function AddApartment() {
                       borderColor: "#e8eaec",
                       borderRightStyle: "hidden",
                       paddingLeft: "10px",
-                      borderRadius: "7px",
+                      borderTopLeftRadius: "7px",
+                      borderBottomLeftRadius: "7px",
+                      borderWidth: "3px",
                     }}
                     size={"20px"}
                   />
@@ -213,7 +217,9 @@ export default function AddApartment() {
                       borderRightStyle: "hidden",
                       paddingLeft: "10px",
                       zIndex: "10",
-                      borderRadius: "7px",
+                      borderTopLeftRadius: "7px",
+                      borderBottomLeftRadius: "7px",
+                      borderWidth: "3px",
                     }}
                     size={"20px"}
                   />
