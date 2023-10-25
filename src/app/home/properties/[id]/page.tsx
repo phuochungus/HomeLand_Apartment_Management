@@ -17,7 +17,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const { isLoading, isError, data } = useQuery("apartment", () =>
     axios
-      .get("/api/apartment/" + params.id + "?id=" + params.id)
+      .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)
   );
   const furnitureInfo = [

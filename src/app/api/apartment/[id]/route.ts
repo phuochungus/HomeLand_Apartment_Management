@@ -3,13 +3,14 @@ import { Apartment } from "@/models/apartment";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("id");
-
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.apartment + "/" + id,
+    url: endpoint.apartment + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
     },
