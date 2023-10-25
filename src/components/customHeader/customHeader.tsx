@@ -47,15 +47,6 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
         </div>
         <div style={{ alignItems: "center" }}>
           <Row className="align-items-center">
-            <Col md="auto">
-              <Form.Select
-                defaultValue="vi"
-                onChange={(e) => ChangeLanguage(e.target.value)}
-              >
-                <option value="vi">Vi</option>
-                <option value="en">En</option>
-              </Form.Select>
-            </Col>
             <Col>
               {!auth ? (
                 <div className={style.menuContainer}>
@@ -76,23 +67,26 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
                     title={"Services"}
                     onClick={() => handleRoute("services")}
                   />
+                  <div className={style.loginContainer}>
+                    <LoginButton
+                      onClick={() => {
+                        router.push("/login");
+                      }}
+                    ></LoginButton>
+                  </div>
                 </div>
               ) : (
-                <></>
+                <InfoButton></InfoButton>
               )}
-              {auth ? (
-                <div>
-                  <InfoButton></InfoButton>
-                </div>
-              ) : (
-                <div className={style.loginContainer}>
-                  <LoginButton
-                    onClick={() => {
-                      router.push("/login");
-                    }}
-                  ></LoginButton>
-                </div>
-              )}
+            </Col>
+            <Col md="auto">
+              <Form.Select
+                defaultValue="vi"
+                onChange={(e) => ChangeLanguage(e.target.value)}
+              >
+                <option value="vi">Vi</option>
+                <option value="en">En</option>
+              </Form.Select>
             </Col>
           </Row>
         </div>
