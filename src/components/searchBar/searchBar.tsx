@@ -5,9 +5,11 @@ import { ReactNode } from "react";
 export default function SearchBar({
   className,
   style,
+  onChange,
 }: {
   className?: string;
   style?: React.CSSProperties;
+  onChange?: (params: string) => void;
 }): ReactNode {
   return (
     <div className={className} style={style}>
@@ -28,6 +30,10 @@ export default function SearchBar({
             borderStyle: "none",
             flexGrow: "1",
             padding: "0 10px",
+          }}
+          onChange={(e) => {
+            e.preventDefault();
+            if (onChange) onChange(e.currentTarget.value);
           }}
         ></input>
         <button style={{ width: "fit-content" }}>

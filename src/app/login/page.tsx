@@ -27,7 +27,7 @@ export default function Login() {
       },
       data: data,
     };
-    loadingFiler(document, document.getElementsByTagName("main")[0]);
+    loadingFiler(document.getElementsByTagName("main")[0]);
     axios
       .request(config)
       .then((res) => {

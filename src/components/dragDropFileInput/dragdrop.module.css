@@ -26,3 +26,6 @@
         grid-template-columns: 1fr 1fr 1fr  1fr;
     }
 }
+.normal{
+    border-color: #cbd5e1 !important;
+}

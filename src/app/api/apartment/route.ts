@@ -1,27 +1,38 @@
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 import { endpoint } from '@/constraints/endpoints';
-import { cookies } from 'next/headers';
 import { Apartment } from '@/models/apartment';
 
 export async function POST(request: NextRequest) {
-  let body = await request.json()
+  let body = await request.formData()
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: endpoint.login,
+    url: endpoint.apartment,
     headers: {
       'Authorization': "Bearer " + request.cookies.get("token")?.value,
-      'Content-Type': 'application/json',
     },
     data: body
   };
   const response = await axios.request(config).then((response) => {
     if (response.status == 201) {
-      cookies().set("token", response.data)
-      return NextResponse.json(response.data.role, {
-        status: 200,
-        headers: { 'Set-Cookie': `token=${response.data.access_token}` },
+      const element = response.data
+      const temp = {
+        apartment_id: element.apartment_id,
+        width: element.width,
+        length: element.length,
+        name: element.name,
+        rent: element.rent,
+        bathRooms: element.number_of_bedroom,
+        bedroom: element.number_of_bedroom,
+        images: element.imageURLs,
+        status: element.status,
+        description: element.description,
+        floorId: element.floor_id,
+        buildingId: element.building_id
+      } as Apartment
+      return NextResponse.json(temp, {
+        status: 201,
       });
     }
 

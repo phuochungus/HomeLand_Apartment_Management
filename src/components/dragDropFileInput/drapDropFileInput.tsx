@@ -43,6 +43,9 @@ export default function DragDropFileInput({
   };
   function handleFiles(files: FileList) {
     setFileLists(files);
+    document.getElementById("label-file-upload")!.className = document
+      .getElementById("label-file-upload")!
+      .className.split("missing")[0];
   }
   // triggers the input when the button is clicked
   const onButtonClick = () => {
@@ -68,7 +71,11 @@ export default function DragDropFileInput({
         ></Image>
       );
     }
-    return <div className={styles.imageGrid}>{result}</div>;
+    return (
+      <div className={styles.imageGrid} id={"imageBlobGrid"}>
+        {result}
+      </div>
+    );
   }
   return (
     <>
