@@ -1,17 +1,25 @@
 "use client";
 import { Apartment } from "@/models/apartment";
 import styles from "./page.module.css";
-import { Carousel, Col, Container, Image, Row } from "react-bootstrap";
+import { Button, Carousel, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { endpoint } from "@/constraints/endpoints";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(apartment);
   const [imageLoaded, setImageLoaded] = useState(true); // Set it to true by default
 
+  const { isLoading, data ,isError} = useQuery("apartment", () =>
+    axios
+      .get("/api/apartment/" + params.id)
+      .then((res) => res.data as Apartment)
+  );
   const furnitureInfo = [
     {
       title: "Bedrooms",
@@ -29,7 +37,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: "6",
+      value: (data?.bedroom ?? "0").toString(),
     },
     {
       title: "Bathrooms",
@@ -51,7 +59,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: "4",
+      value: (data?.bathRooms ?? "0").toString(),
     },
     {
       title: "Square Area",
@@ -69,7 +77,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: "6 x 2 (m2)",
+      value: (data?.width ?? "0").toString() + " x "+ (data?.length ?? "0").toString()+" (m2)",
     },
     {
       title: "Status",
@@ -87,7 +95,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: "Active",
+      value: (data?.status ?? "").toString(),
     },
   ];
   const residentInfo = [
@@ -97,133 +105,154 @@ export default function Page({ params }: { params: { id: string } }) {
     { img: "image", name: "Manh Ho Dinh", id: "21522327" },
   ];
 
-  return (
-    <main className={styles.main} style={futuna.style}>
-      <div>
-        <Container className="p-lg-5">
-          <Row>
-            <Col>
-              <h3>
-                <b>St. Crytal</b>
-              </h3>
-              <p className="">floor 6, D6,Vinhome, Binh Duong, Viet Nam</p>
-            </Col>
-            <Col className="text-end">
-              <p className="">Edit</p>
-            </Col>
-          </Row>
-          <Row style={{ marginTop: "20px" }}>
-            <Carousel>
-              <Carousel.Item style={{ height: "500px" }}>
-                <Image
-                  loading="lazy"
-                  className=" img-fluid h-100 w-100"
-                  src="https://media.self.com/photos/630635c30b7f36ce816f374a/4:3/w_1920,c_limit/DAB03919-10470989.jpg"
-                  rounded
-                ></Image>
-              </Carousel.Item>
-              <Carousel.Item style={{ height: "500px" }}>
-                <Image
-                  loading="lazy"
-                  className=" img-fluid h-100 w-100"
-                  src="https://media.self.com/photos/630635c30b7f36ce816f374a/4:3/w_1920,c_limit/DAB03919-10470989.jpg"
-                  rounded
-                ></Image>
-              </Carousel.Item>
-              <Carousel.Item style={{ height: "500px" }}>
-                <Image
-                  loading="lazy"
-                  className=" img-fluid h-100 w-100"
-                  src="https://media.self.com/photos/630635c30b7f36ce816f374a/4:3/w_1920,c_limit/DAB03919-10470989.jpg"
-                  rounded
-                ></Image>
-              </Carousel.Item>
-            </Carousel>
-          </Row>
-          <Row className={styles.furniture}>
-            {furnitureInfo.map((e, index) => (
-              <Col key={index} className="text-center">
-                <Furniture
-                  title={e.title}
-                  value={e.value}
-                  svg={e.svg}
-                ></Furniture>
+  if (data != null) {
+    return (
+      <main className={styles.main} style={futuna.style}>
+        <div>
+          <Container className="p-lg-5">
+            <Row>
+              <Col>
+                <h3>
+                  <b>{data.name}</b>
+                </h3>
+                <p className="">{data.address}</p>
               </Col>
-            ))}
-          </Row>
-          <Row>
-            <h3 style={{ marginTop: "20px" }}>
-              <b>About this apartment</b>
-            </h3>
-            <p style={{ marginTop: "20px" }}>
-              Pellentesque sollicitudin, arcu a lacinia congue, nunc lectus
-              ultricies leo, eget rutrum libero diam et enim. Morbi vestibulum
-              dictum neque, eu hendrerit sapien sollicitudin quis. Quisque vitae
-              nisl mollis, suscipit neque nec, dapibus leo. Fusce in
-              pellentesque lacus, ac efficitur eros. Integer rhoncus ipsum nec
-              laoreet gravida. Integer luctus tellus ut sapien eleifend commodo.
-              Proin porta nisl sagittis eros{" "}
-            </p>
-          </Row>
-          <Row>
-            <h3 style={{ marginTop: "20px" }}>
-              <b>List by apartment resident</b>
-            </h3>
-          </Row>
-
-          <Row
-            style={{
-              backgroundColor: "rgba(40, 100, 255, 0.1)",
-              border: "1px black solid",
-              borderRadius: "20px",
-              margin: "20px 0px",
-              paddingTop: "20px ",
-            }}
-          >
-            {residentInfo.map((value, index) => (
-              <>
-                {index % 2 == 0 ? <Row></Row> : <></>}
-                <Col>
-                  {" "}
-                  <Resident
-                    img={
-                      imageLoaded ? (
-                        <Image
-                          loading="lazy"
-                          src="/path/to/your/image.jpg" // Replace with your image link
-                          alt="Description of the image"
-                          width={300}
-                          height={200}
-                          onErrorCapture={() => setImageLoaded(false)}
-                          onError={() => setImageLoaded(false)}
-                        />
-                      ) : (
-                        <svg
-                          width="48"
-                          height="42"
-                          viewBox="0 0 48 42"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M24 0.9328C10.752 0.9328 0 10.007 0 21.1877C0 32.3685 10.752 41.4427 24 41.4427C37.248 41.4427 48 32.3685 48 21.1877C48 10.007 37.248 0.9328 24 0.9328ZM12.168 33.9078C13.2 32.0849 19.488 30.3025 24 30.3025C28.512 30.3025 34.824 32.0849 35.832 33.9078C32.568 36.0954 28.464 37.3917 24 37.3917C19.536 37.3917 15.432 36.0954 12.168 33.9078ZM39.264 30.9709C35.832 27.4465 27.504 26.2515 24 26.2515C20.496 26.2515 12.168 27.4465 8.736 30.9709C6.288 28.2567 4.8 24.8741 4.8 21.1877C4.8 12.2553 13.416 4.98379 24 4.98379C34.584 4.98379 43.2 12.2553 43.2 21.1877C43.2 24.8741 41.712 28.2567 39.264 30.9709ZM24 9.03478C19.344 9.03478 15.6 12.1945 15.6 16.124C15.6 20.0535 19.344 23.2132 24 23.2132C28.656 23.2132 32.4 20.0535 32.4 16.124C32.4 12.1945 28.656 9.03478 24 9.03478ZM24 19.1622C22.008 19.1622 20.4 17.8052 20.4 16.124C20.4 14.4428 22.008 13.0858 24 13.0858C25.992 13.0858 27.6 14.4428 27.6 16.124C27.6 17.8052 25.992 19.1622 24 19.1622Z"
-                            fill="black"
-                          />
-                        </svg>
-                      )
-                    }
-                  ></Resident>
+              <Col className="text-end">
+              <Button variant="warning">Edit</Button>{' '}
+              
+              </Col>
+            </Row>
+            <Row style={{ marginTop: "20px" }}>
+              <Carousel>
+                {data.images.map((value, index) => (
+                  <Carousel.Item  key={index}
+                  style={{ height: "500px" }}>
+                    <Image
+                      loading="lazy"
+                      className=" img-fluid h-100 w-100"
+                      src={value}
+                      alt="images"
+                      rounded
+                    ></Image>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            </Row>
+            <Row className={styles.furniture}>
+              {furnitureInfo.map((e, index) => (
+                <Col key={index} className="text-center">
+                  <Furniture
+                    title={e.title}
+                    value={e.value ?? ""}
+                    svg={e.svg}
+                  ></Furniture>
                 </Col>
-                {index == residentInfo.length - 1 && index % 2 == 0 ? (
-                  <Col></Col>
-                ) : (
-                  <></>
-                )}
-              </>
-            ))}
-          </Row>
-        </Container>
+              ))}
+            </Row>
+            <Row>
+              <h3 style={{ marginTop: "20px" }}>
+                <b>About this apartment</b>
+              </h3>
+              <p style={{ marginTop: "20px" }}>{data.description}</p>
+            </Row>
+            <Row>
+              <h3 style={{ marginTop: "20px" }}>
+                <b>List by apartment resident</b>
+              </h3>
+            </Row>
+
+            <Row
+              style={{
+                backgroundColor: "rgba(40, 100, 255, 0.1)",
+                border: "1px black solid",
+                borderRadius: "20px",
+                margin: "20px 0px",
+                paddingTop: "20px ",
+              }}
+            >
+              {residentInfo.map((value, index) => (
+                <>
+                  {index % 2 == 0 ? <Row></Row> : <></>}
+                  <Col>
+                    {" "}
+                    <Resident
+                      img={
+                        imageLoaded ? (
+                          <Image
+                            loading="lazy"
+                            src="/path/to/your/image.jpg" // Replace with your image link
+                            alt="Description of the image"
+                            width={300}
+                            height={200}
+                            onErrorCapture={() => setImageLoaded(false)}
+                            onError={() => setImageLoaded(false)}
+                          />
+                        ) : (
+                          <svg
+                            width="48"
+                            height="42"
+                            viewBox="0 0 48 42"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M24 0.9328C10.752 0.9328 0 10.007 0 21.1877C0 32.3685 10.752 41.4427 24 41.4427C37.248 41.4427 48 32.3685 48 21.1877C48 10.007 37.248 0.9328 24 0.9328ZM12.168 33.9078C13.2 32.0849 19.488 30.3025 24 30.3025C28.512 30.3025 34.824 32.0849 35.832 33.9078C32.568 36.0954 28.464 37.3917 24 37.3917C19.536 37.3917 15.432 36.0954 12.168 33.9078ZM39.264 30.9709C35.832 27.4465 27.504 26.2515 24 26.2515C20.496 26.2515 12.168 27.4465 8.736 30.9709C6.288 28.2567 4.8 24.8741 4.8 21.1877C4.8 12.2553 13.416 4.98379 24 4.98379C34.584 4.98379 43.2 12.2553 43.2 21.1877C43.2 24.8741 41.712 28.2567 39.264 30.9709ZM24 9.03478C19.344 9.03478 15.6 12.1945 15.6 16.124C15.6 20.0535 19.344 23.2132 24 23.2132C28.656 23.2132 32.4 20.0535 32.4 16.124C32.4 12.1945 28.656 9.03478 24 9.03478ZM24 19.1622C22.008 19.1622 20.4 17.8052 20.4 16.124C20.4 14.4428 22.008 13.0858 24 13.0858C25.992 13.0858 27.6 14.4428 27.6 16.124C27.6 17.8052 25.992 19.1622 24 19.1622Z"
+                              fill="black"
+                            />
+                          </svg>
+                        )
+                      }
+                    ></Resident>
+                  </Col>
+                  {index == residentInfo.length - 1 && index % 2 == 0 ? (
+                    <Col></Col>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ))}
+            </Row>
+          </Container>
+        </div>
+      </main>
+    );
+  }
+  
+  if (isLoading)
+    return (
+      <main className={styles.main} style={futuna.style}>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          margin: "50px 0px",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Spinner></Spinner>
       </div>
     </main>
-  );
+      
+    );
+  if (isError)
+    return (
+      <main className={styles.main} style={futuna.style}>
+      
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        Co loi
+      </div>
+      </main>
+    );
+  return <div></div>;
 }
