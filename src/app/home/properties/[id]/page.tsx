@@ -1,7 +1,7 @@
 "use client";
 import { Apartment } from "@/models/apartment";
 import styles from "./page.module.css";
-import { Carousel, Col, Container, Image, Row } from "react-bootstrap";
+import { Button, Carousel, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
@@ -15,7 +15,7 @@ export default function Page({ params }: { params: { id: string } }) {
   //console.log(apartment);
   const [imageLoaded, setImageLoaded] = useState(true); // Set it to true by default
 
-  const { isLoading, isError, data } = useQuery("apartment", () =>
+  const { isLoading, data ,isError} = useQuery("apartment", () =>
     axios
       .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)
@@ -77,7 +77,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.bedroom ?? "0").toString() + "6 x 2 (m2)",
+      value: (data?.width ?? "0").toString() + " x "+ (data?.length ?? "0").toString()+" (m2)",
     },
     {
       title: "Status",
@@ -118,7 +118,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 <p className="">{data.address}</p>
               </Col>
               <Col className="text-end">
-                <p className="">Edit</p>
+              <Button variant="warning">Edit</Button>{' '}
+              
               </Col>
             </Row>
             <Row style={{ marginTop: "20px" }}>
@@ -216,5 +217,42 @@ export default function Page({ params }: { params: { id: string } }) {
       </main>
     );
   }
+  
+  if (isLoading)
+    return (
+      <main className={styles.main} style={futuna.style}>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          margin: "50px 0px",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Spinner></Spinner>
+      </div>
+    </main>
+      
+    );
+  if (isError)
+    return (
+      <main className={styles.main} style={futuna.style}>
+      
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        Co loi
+      </div>
+      </main>
+    );
   return <div></div>;
 }
