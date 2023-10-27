@@ -7,8 +7,10 @@ import {
   FaPersonBooth,
   FaShower,
   FaSquare,
-  FaSquareRootAlt,
+  FaTrash,
+  FaUpload,
 } from "react-icons/fa";
+import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
 export default function AddApartment() {
   const residentLists = [
     {
@@ -25,7 +27,22 @@ export default function AddApartment() {
           placeholder="Aparment name..."
           style={{ width: "30%" }}
         ></Form.Control>
-        <Form.Control type="file"></Form.Control>
+        <div style={{ width: "100%", height: "20px" }}></div>
+        <DragDropFileInput>
+          <div
+            className={styles.uploadIcon}
+            style={{
+              width: "100%",
+              height: "200px",
+              display: "flex",
+              flexWrap: "wrap",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FaUpload size={"3rem"}></FaUpload>
+          </div>
+        </DragDropFileInput>
         <FormGroup className={styles.typeSelectContainer}>
           <FormGroup
             style={{
@@ -173,6 +190,7 @@ export default function AddApartment() {
               justifyContent: "space-between",
               alignContent: "center",
               flexWrap: "wrap",
+              marginBottom: "10px",
             }}
           >
             <Form.Label
@@ -199,7 +217,6 @@ export default function AddApartment() {
               +
             </Button>
           </div>
-
           {residentLists.length == 0 ? (
             <p
               style={{ textAlign: "center" }}
@@ -207,28 +224,9 @@ export default function AddApartment() {
           ) : (
             <div className={styles.residentListsContainer}>
               {" "}
-              {residentLists.map((value, index) => (
-                <div key={index} className={styles.residentListsItem}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      flexWrap: "wrap",
-                      marginRight: "20px",
-                    }}
-                  >
-                    <FaPersonBooth></FaPersonBooth>
-                  </div>
-                  <div>
-                    <div>{value.name}</div>
-                    <div>{value.id}</div>
-                  </div>
-                  <div className={styles.getMoreInfoButton}>
-                    <div> Get more info</div>
-                  </div>
-                  <div className={styles.removeButton}>x</div>
-                </div>
-              ))}{" "}
+              {residentLists.map((value, index) =>
+                ResidentItem(value, index)
+              )}{" "}
             </div>
           )}
         </FormGroup>
@@ -236,3 +234,37 @@ export default function AddApartment() {
     </div>
   );
 }
+
+const ResidentItem = (
+  value: { avatar: string; name: string; id: string },
+  index: number
+) => {
+  return (
+    <div key={index} className={styles.residentListsItem}>
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            display: "flex",
+            alignContent: "center",
+            flexWrap: "wrap",
+            marginRight: "20px",
+          }}
+        >
+          <FaPersonBooth></FaPersonBooth>
+        </div>
+        <div>
+          <div>{value.name}</div>
+          <div>{value.id}</div>
+        </div>
+      </div>
+      <div style={{ display: "flex" }}>
+        <div className={styles.getMoreInfoButton}>
+          <div> Get more info</div>
+        </div>
+        <button className={styles.removeButton} onClick={() => {}}>
+          <FaTrash></FaTrash>
+        </button>
+      </div>
+    </div>
+  );
+};

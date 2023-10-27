@@ -34,7 +34,7 @@
 }
 
 .residentListsContainer {
-    width: "100%";
+    width: 100%;
     border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.50);
     background: rgba(40, 100, 255, 0.10);
@@ -44,10 +44,11 @@
 }
 
 .residentListsItem {
-    width: "fit-content";
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     align-content: center;
+    justify-content: space-between;
 }
 
 .getMoreInfoButton {
@@ -60,11 +61,20 @@
     display: flex;
     align-content: center;
     flex-wrap: wrap;
+    margin-right: 20px;
 }
 
 .removeButton {
-    width: 72px;
-    height: 72px;
+    width: 47px;
+    height: 47px;
     border-radius: 20px;
     background: #FF4747;
+    font-size: 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+.uploadIcon:hover{
+    opacity: 0.5;
 }

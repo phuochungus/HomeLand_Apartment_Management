@@ -6,15 +6,17 @@ import { ChangeEvent, ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CustomModal } from "./customModal/customModal";
 import { InfoButton } from "../infoButton/InfoButton";
-import {
-  Col,
-  Form,
-  Row,
-} from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { changeLanguage } from "i18next";
 import { useTranslation } from "react-i18next";
 import { stringify } from "querystring";
-const CustomHeader = ({ auth, drawerButton }: { auth: boolean, drawerButton?:ReactNode }): JSX.Element => {
+const CustomHeader = ({
+  auth,
+  drawerButton,
+}: {
+  auth: boolean;
+  drawerButton?: ReactNode;
+}): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const handleRoute = (href: string) => {
@@ -44,16 +46,7 @@ const CustomHeader = ({ auth, drawerButton }: { auth: boolean, drawerButton?:Rea
           <div className={styles.brandLabel}>HomeLand</div>
         </div>
         <div style={{ alignItems: "center" }}>
-          <Row className="align-items-center">
-            <Col md="auto">
-              <Form.Select
-                defaultValue="vi"
-                onChange={(e) => ChangeLanguage(e.target.value)}
-              >
-                <option value="vi">Vi</option>
-                <option value="en">En</option>
-              </Form.Select>
-            </Col>
+          <Row>
             <Col>
               {!auth ? (
                 <div className={styles.menuContainer}>
@@ -78,11 +71,32 @@ const CustomHeader = ({ auth, drawerButton }: { auth: boolean, drawerButton?:Rea
               ) : (
                 <></>
               )}
-              {auth ? (
-                <div className={styles.infoButton}>
+            </Col>
+            {auth ? (
+              <Row>
+                <Col>
                   <InfoButton></InfoButton>
-                </div>
-              ) : (
+                </Col>
+
+                <Col
+                  md="auto"
+                  style={{
+                    alignSelf: "center",
+                    display: "flex",
+                    height: "fit-content",
+                  }}
+                >
+                  <Form.Select
+                    defaultValue="vi"
+                    onChange={(e) => ChangeLanguage(e.target.value)}
+                  >
+                    <option value="vi">Vi</option>
+                    <option value="en">En</option>
+                  </Form.Select>
+                </Col>
+              </Row>
+            ) : (
+              <>
                 <div className={styles.loginContainer}>
                   <LoginButton
                     onClick={() => {
@@ -90,8 +104,25 @@ const CustomHeader = ({ auth, drawerButton }: { auth: boolean, drawerButton?:Rea
                     }}
                   ></LoginButton>
                 </div>
-              )}
-            </Col>
+
+                <Col
+                  md="auto"
+                  style={{
+                    alignSelf: "center",
+                    display: "flex",
+                    height: "fit-content",
+                  }}
+                >
+                  <Form.Select
+                    defaultValue="vi"
+                    onChange={(e) => ChangeLanguage(e.target.value)}
+                  >
+                    <option value="vi">Vi</option>
+                    <option value="en">En</option>
+                  </Form.Select>
+                </Col>
+              </>
+            )}
           </Row>
         </div>
       </header>

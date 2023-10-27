@@ -14,6 +14,7 @@ import { sidebarInfo } from "@/constraints/sidebarRoutes";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import CustomHeader from "@/components/customHeader/customHeader";
 import { FaList } from "react-icons/fa";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function RootLayout({
   children,
@@ -30,99 +31,108 @@ export default function RootLayout({
   function handleRouting(route: string): void {
     router.push(route);
   }
-
+  const queryClient = new QueryClient()
   const [showDrawer, setShowDrawer] = useState(false);
   return (
-    <html lang="en">
-      <body className={ringgift_font.className} style={{ display: "flex" }}>
-        <Sidebar
-          className={styles.sidebar}
-          visibilityMode="hide"
-          show={showDrawer}
-          onClose={() => setShowDrawer(false)}
-          drawerClass={styles.drawer}
-          header={
-            <div className={styles.header}>
-              <Image
-                src={Images.Logo}
-                alt="logo"
-                width={50}
-                height={50}
-                style={{ marginRight: "0.5rem" }}
-              />
-              <p
-                style={{
-                  textAlign: "center",
-                  fontSize: "1.7rem",
-                  height: "fit-content",
-                }}
-              >
-                {" "}
-                HomeLand
-              </p>
-            </div>
-          }
-        >
-          <div className={styles.sidebarBody}>
-            {sidebarInfo.map((value, index) => (
-              <div key={index} style={{ marginBottom: "3rem" }}>
-                {" "}
-                <Button
-                  className={`${
-                    pathName == "/home/" + value.title.toLowerCase()
-                      ? styles.current
-                      : ""
-                  } ${styles.sidebarButton} `}
-                  onClick={() =>
-                    handleRouting(
-                      "/home/" + value.title.toLowerCase() + "?auth=true"
-                    )
-                  }
-                  style={futuna.style}
-                >
-                  {value.svg}
-                  <span style={{ margin: "auto 0" }}>{value.title}</span>
-                </Button>
-                <div
-                  className={`${styles.sidebarButtonMenu} ${futuna.className}`}
-                >
-                  {value.menu?.map((value, index) => (
-                    <a href={value.href} key={index}>
-                      {value.title}
-                    </a>
-                  ))}
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <body className={ringgift_font.className} style={{ display: "flex" }}>
+          {searchParam.get("auth") != null ? (
+            <Sidebar
+              className={styles.sidebar}
+              visibilityMode="hide"
+              show={showDrawer}
+              onClose={() => setShowDrawer(false)}
+              drawerClass={styles.drawer}
+              header={
+                <div className={styles.header}>
+                  <Image
+                    src={Images.Logo}
+                    alt="logo"
+                    width={50}
+                    height={50}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  <p
+                    style={{
+                      textAlign: "center",
+                      margin: "auto 0",
+                      fontSize: "1.7rem",
+                      height: "fit-content",
+                    }}
+                  >
+                    {" "}
+                    HomeLand
+                  </p>
                 </div>
+              }
+            >
+              <div className={styles.sidebarBody}>
+                {sidebarInfo.map((value, index) => (
+                  <div key={index} style={{ marginBottom: "3rem" }}>
+                    {" "}
+                    <Button
+                      className={`${
+                        pathName == "/home/" + value.title.toLowerCase()
+                          ? styles.current
+                          : ""
+                      } ${styles.sidebarButton} `}
+                      onClick={() =>
+                        handleRouting(
+                          "/home/" + value.title.toLowerCase() + "?auth=true"
+                        )
+                      }
+                      style={futuna.style}
+                    >
+                      {value.svg}
+                      <span style={{ margin: "auto 0" }}>{value.title}</span>
+                    </Button>
+                    <div
+                      className={`${styles.sidebarButtonMenu} ${futuna.className}`}
+                    >
+                      {value.menu?.map((value, index) => (
+                        <a href={value.href} key={index}>
+                          {value.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </Sidebar>
-        
-        <div
-          style={{
-            width: "100%",
-            backgroundColor: "#E8EAEC",
-            height: "fit-content",
-          }}
-        >
-          <CustomHeader auth={searchParam.get("auth") == null ? false : true} drawerButton = {<div
-          style={{
-            height: "130px",
-            display: "flex",
-            alignContent: "center",
-            flexWrap: "wrap",
-            backgroundColor: "#e8eaec",
-          }}
-        >
-          <Button
-            className={styles.drawerButton}
-            onClick={() => setShowDrawer(true)}
+            </Sidebar>
+          ) : (
+            <></>
+          )}
+          <div
+            style={{
+              height: "130px",
+              display: "flex",
+              alignContent: "center",
+              flexWrap: "wrap",
+            }}
           >
-            <FaList color={"#000000"}></FaList>
-          </Button>
-        </div>}/>
-          {children}
-        </div>
-      </body>
-    </html>
+            <Button
+              className={styles.drawerButton}
+              onClick={() => setShowDrawer(true)}
+            >
+              <FaList color={"#000000"}></FaList>
+            </Button>
+          </div>
+
+          <div
+            style={{
+              width: "100%",
+              backgroundColor: "#E8EAEC",
+              height: "fit-content",
+            }}
+          >
+            <CustomHeader
+              auth={searchParam.get("auth") == null ? false : true}
+            />
+            {children}
+          </div>
+        </body>
+      </html>
+    </QueryClientProvider>
   );
 }
