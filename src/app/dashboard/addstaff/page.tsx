@@ -26,7 +26,19 @@ interface File {
 //                 </div>
 //         );
 // };  
-
+export interface Person{
+        role: string;
+        id: string;
+        name: string;
+        date_of_birth: Date;
+        gender: string;
+        phone_number: string;
+        activated_at?: Date;
+        email: string;
+        deleted_at?: Date;
+        stay_at?: string;
+        created_at: Date;
+}
 const addstaff = () => {
         const router = useRouter();
         const handleClose = () => {
