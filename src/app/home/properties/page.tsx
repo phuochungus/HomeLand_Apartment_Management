@@ -8,11 +8,21 @@ import { Apartment } from "@/models/apartment";
 import axios from "axios";
 import { useQuery } from "react-query";
 import SearchBar from "@/components/searchBar/searchBar";
-
+import { useEffect, useMemo, useState } from "react";
 export default function Apartments() {
-  const apartmentList  :Apartment[] = [];
+  const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
+  var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
+  var page: any = useMemo(() => {
+    if (loadingMore == undefined) return 1;
+    if (loadingMore) return page + 1;
+    return page;
+  }, [loadingMore]);
   const { isLoading, isError, data } = useQuery("apartment", () =>
-    axios.get("/api/apartment?page=1").then((res) => res.data as Apartment[])
+    axios
+      .get("/api/apartment?page=" + page)
+      .then((res) =>
+        setApartmentList([...apartmentList, ...(res.data as Apartment[])])
+      )
   );
   const apartmentSortOption = [
     {
@@ -31,6 +41,38 @@ export default function Apartments() {
       onChange: () => {},
     },
   ];
+  function handleScrollEnd() {
+    if (!loadingMore) {
+      console.log("isBottom");
+      loadingMore = true;
+      axios
+        .get("/api/apartment?page=" + page)
+        .then((res) =>
+          setApartmentList([...apartmentList, ...(res.data as Apartment[])])
+        );
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("scroll", (e) => {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom >= docHeight) {
+        handleScrollEnd();
+      }
+    });
+  }, []);
   if (isLoading)
     return (
       <div
@@ -86,10 +128,23 @@ export default function Apartments() {
         ))}
       </div>
       <div className={styles.grid}>
-        {data!.map((value, index) =>
-          ApartmentCard(value)
-        )}
+        {apartmentList.map((value, index) => ApartmentCard(value))}
       </div>
+      {loadingMore ? (
+        <div
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          Loading
+        </div>
+      ) : (
+        <></>
+      )}
     </main>
   );
 }
@@ -123,7 +178,7 @@ const FilterButton = ({
   );
 };
 
-const ApartmentCard = (value:Apartment): React.ReactNode => {
+const ApartmentCard = (value: Apartment): React.ReactNode => {
   const router = useRouter();
 
   function handleRouting(route: string): void {
@@ -132,21 +187,26 @@ const ApartmentCard = (value:Apartment): React.ReactNode => {
   return (
     <Card
       onClick={() =>
-        handleRouting("/home/" + "properties/" + value.apartment_id + "?auth=true")
+        handleRouting(
+          "/home/" + "properties/" + value.apartment_id + "?auth=true"
+        )
       }
       className={`${futuna.className} ${styles.gridItem}`}
-      style={{ borderRadius: "10px" , overflow: "hidden",}}
+      style={{ borderRadius: "10px", overflow: "hidden" }}
     >
-      <Card.Img
-        variant="top"
-        src={value.images[0]}
-      />
-      <Card.Body style={{ display: "flex", flexDirection: "column", justifyContent: "start" }}>
-        <Card.Title style={{ alignSelf: "start" }}>{value.rent}</Card.Title>
+      <Card.Img variant="top" src={value.images[0]} />
+      <Card.Body
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "start",
+        }}
+      >
+        <Card.Title style={{ alignSelf: "start" }}>
+          {value.rent}
+          <span style={{ color: "grey" }}>{" /month"}</span>
+        </Card.Title>
         <Card.Text>{value.name}</Card.Text>
-        <Card.Text className={styles.blockWithText}>
-          {value.description}
-        </Card.Text>
       </Card.Body>
     </Card>
   );
