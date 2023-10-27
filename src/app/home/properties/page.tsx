@@ -12,17 +12,18 @@ import { useEffect, useMemo, useState } from "react";
 export default function Apartments() {
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
   var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
-  var page: any = useMemo(() => {
-    if (loadingMore == undefined) return 1;
-    if (loadingMore) return page + 1;
-    return page;
-  }, [loadingMore]);
-  const { isLoading, isError, data } = useQuery("apartment", () =>
-    axios
-      .get("/api/apartment?page=" + page)
-      .then((res) =>
-        setApartmentList([...apartmentList, ...(res.data as Apartment[])])
-      )
+  var page = useMemo(() => {
+    return Math.floor(apartmentList.length / 30) + 1;
+  }, [apartmentList]);
+  const { isLoading, isError, data, refetch } = useQuery(
+    "apartment",
+    () =>
+      axios.get("/api/apartment?page=" + page).then((res) => {
+        setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
   const apartmentSortOption = [
     {
@@ -41,15 +42,11 @@ export default function Apartments() {
       onChange: () => {},
     },
   ];
-  function handleScrollEnd() {
+  async function handleScrollEnd() {
     if (!loadingMore) {
-      console.log("isBottom");
       loadingMore = true;
-      axios
-        .get("/api/apartment?page=" + page)
-        .then((res) =>
-          setApartmentList([...apartmentList, ...(res.data as Apartment[])])
-        );
+      await refetch();
+      loadingMore = false;
     }
   }
   useEffect(() => {
@@ -68,7 +65,7 @@ export default function Apartments() {
         html.offsetHeight
       );
       const windowBottom = windowHeight + window.pageYOffset;
-      if (windowBottom >= docHeight) {
+      if (windowBottom + 50 >= docHeight) {
         handleScrollEnd();
       }
     });
@@ -140,7 +137,7 @@ export default function Apartments() {
             marginTop: "20px",
           }}
         >
-          Loading
+          <Spinner></Spinner>
         </div>
       ) : (
         <></>
