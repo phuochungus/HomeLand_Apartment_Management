@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import style from ".@//headerButton.module.css";
+import style from "./headerButton.module.css";
 export const HeaderButton = ({
   title,
   icon,

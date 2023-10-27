@@ -1,29 +1,23 @@
 "use client";
 import { useRouter } from "next/navigation";
-import mainStyles from '../../page.module.css'
+// import mainStyles from '../../page.module.css'
 import styles from "./detail_staff.module.css";
 import Form from 'react-bootstrap/Form';
 import React, { useState } from "react";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
-const detail_staff = () => {
-        const router = useRouter()
-        const handBtn = () => {
-                router.push("/dashboard");
-
-        }
-        const [image, setImage] = useState(null);
+const DetailStaff = () => {
         const whiteBackground = {
                 backgroundColor: "white",
         };
 
         return (
-                <main className={mainStyles.main} style={whiteBackground}>
+                <main className={styles.main} style={whiteBackground}>
                         
                         <div className={styles.wapper}>
                                 <p className={styles.headingXl}>Chi tiết nhân viên</p>
 
                                 <Form className={styles.form}>
-                                        <img alt="Profile" src="/images/logos/Logo.png" height="250" className={styles.profileImage} />
+                                        <img  alt="Profile" src="/images/logos/Logo.png" height="250" className={styles.profileImage} />
                                         <ButtonComponent className={styles.creatBtn1}>Xóa</ButtonComponent>
                                         <ButtonComponent className={styles.creatBtn2}>Sửa</ButtonComponent>
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -60,4 +54,4 @@ const detail_staff = () => {
                 </main>
         );
 };
-export default detail_staff;
+export default DetailStaff;

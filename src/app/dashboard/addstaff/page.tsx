@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import mainStyles from '../../page.module.css'
+// import mainStyles from '../../page.module.css'
 import styles from "./addstaff.module.css";
 import Form from 'react-bootstrap/Form';
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
@@ -39,11 +39,7 @@ export interface Person{
         stay_at?: string;
         created_at: Date;
 }
-const addstaff = () => {
-        const router = useRouter();
-        const handleClose = () => {
-                router.push('/dashboard');
-        };
+const AddStaff = () => {
         const handleFileUpload = (file: any) => {
                 setImage(file);
         };
@@ -60,7 +56,7 @@ const addstaff = () => {
         }
 
         return (
-                <main className={mainStyles.main} style={whiteBackground}>
+                <main className={styles.main} style={whiteBackground}>
                         <div className={styles.wapper}>
                                 <p className={styles.headingXl}>Thêm nhân viên</p>
                                 {image && (
@@ -159,4 +155,4 @@ const addstaff = () => {
                 </main >
         );
 };
-export default addstaff;
+export default AddStaff;

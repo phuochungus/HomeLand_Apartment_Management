@@ -1,7 +1,7 @@
 "use client";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import dashboardStyles from "./dashboard.module.css";
-import styles from "../page.module.css";
+// import styles from "../page.module.css";
 import Link from "next/link";
 import Form from 'react-bootstrap/Form';
 import classNames from 'classnames';
@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   const handleClose = () => setShowDialog(false);
   const handleShow = () => setShowDialog(true);
-  return <main className={styles.main} style={whiteBackground}>
+  return <main className={dashboardStyles.main} style={whiteBackground}>
      
     <div className={classNames(dashboardStyles.wrapper, dashboardStyles.dashboardBackground)}>
       <h1 className={classNames(dashboardStyles.headingXl)}>Quản lí nhân viên</h1>
@@ -58,7 +58,7 @@ export default function Dashboard() {
                 
                  onMouseEnter={() => setHoveredCard(idx)}
                  onMouseLeave={() => setHoveredCard(null)}
-                 className={idx === hoveredCard ? styles.hoveredCard : styles.card}
+                 className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
                   onClick={() => setShowDialog(true)} >
                   <CardImg
                     alt="..."
