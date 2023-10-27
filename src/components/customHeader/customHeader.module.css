@@ -1,24 +1,27 @@
 @media screen and (min-width: 1400px) {
 
-    .logoContainer{
+    .logoContainer {
+        position:absolute;
         width: fit-content;
         height: 100%;
-        justify-content: center;
+        justify-content: start;
         align-content: center;
         display: flex;
         flex-wrap: wrap;
         font-weight: bolder;
         overflow: hidden;
     }
-    .brandLabel{
+
+    .brandLabel {
         width: fit-content;
         display: flex;
         flex-wrap: wrap;
         font-size: 3.4rem;
         width: fit-content;
-        cursor:default;
+        cursor: default;
     }
-    .menuContainer{
+
+    .menuContainer {
         width: fit-content;
         height: 100%;
         justify-content: end;
@@ -28,14 +31,16 @@
         font-weight: 700;
         margin-left: 5rem;
     }
-    .loginContainer{
-        width:10%;
+
+    .loginContainer {
+        width: 10%;
         height: 100%;
         display: flex;
         align-content: center;
         justify-content: end;
         flex-wrap: wrap;
     }
+
     .modalContainer {
         background-color: transparent;
         margin: 0 0;
@@ -43,9 +48,9 @@
     }
 }
 
-@media screen and (max-width: 1400px ) {
-    .logoContainer{
-        width: 100%;
+@media screen and (max-width: 1400px) {
+    .logoContainer {
+        width: fit-content  ;
         height: 100%;
         justify-content: center;
         align-content: center;
@@ -53,23 +58,26 @@
         font-weight: bolder;
         flex-wrap: wrap;
     }
-    .brandLabel{
+
+    .brandLabel {
         width: fit-content;
         display: flex;
         flex-wrap: wrap;
         font-size: 3.4rem;
     }
-    .menuContainer{
+
+    .menuContainer {
         width: fit-content;
         height: 100%;
         justify-content: center;
         align-content: center;
         display: flex;
         flex-wrap: wrap;
-        visibility:hidden;
+        visibility: hidden;
     }
-    .loginContainer{
-        width:20%;
+
+    .loginContainer {
+        width: 20%;
         height: 100%;
         display: flex;
         align-content: center;
@@ -77,13 +85,15 @@
         flex-wrap: wrap;
         visibility: hidden;
     }
-    .drawerButtonContainer{
+
+    .drawerButtonContainer {
         display: flex;
         flex-wrap: wrap;
         align-content: center;
-        
+
     }
-    .drawerButton{
+
+    .drawerButton {
         height: fit-content;
         display: flex;
         flex-wrap: wrap;
@@ -93,4 +103,15 @@
     }
 
 }
+@media screen and (max-width: 900px) {
+    .infoButton{
+        display: none;
+        visibility: hidden;
+    }
+}
+@media screen and (max-width: 400px) {
+    .brandLabel {
+        font-size: 2rem;
+    }
 
+}

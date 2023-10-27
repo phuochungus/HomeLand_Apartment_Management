@@ -3,7 +3,6 @@ import { FaSearch } from "react-icons/fa";
 import styles from "./properties.module.css";
 import { futuna } from "../../../../public/fonts/futura";
 import { Button, Card } from "react-bootstrap";
-import { Images } from "../../../../public/images";
 import { useRouter } from "next/navigation";
 
 export default function Apartments() {
@@ -103,7 +102,7 @@ const FilterButton = ({
             ))}
           </select>
         ) : (
-          <p style={{ fontSize: "0.8rem" }}>Nothing to filter</p>
+          <p>Nothing to filter</p>
         )}
       </div>
     </div>

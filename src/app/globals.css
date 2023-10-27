@@ -22,10 +22,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
-.offcanvas.show {
-  width: 80%;
-  padding-top: 0.5rem;
-  padding-right: 2rem;
+.offcanvas {
+  max-width: 80% !important;
 }
 @media (prefers-color-scheme: dark) {
   html {

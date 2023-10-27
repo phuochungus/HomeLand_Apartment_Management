@@ -1,23 +1,20 @@
 "use client";
 import { HeaderButton } from "./headerButton/headerButton";
-import style from "./customHeader.module.css";
+import styles from "./customHeader.module.css";
 import { LoginButton } from "./loginButton/loginButton";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CustomModal } from "./customModal/customModal";
 import { InfoButton } from "../infoButton/InfoButton";
 import {
   Col,
-  Container,
-  Dropdown,
-  DropdownButton,
   Form,
   Row,
 } from "react-bootstrap";
 import { changeLanguage } from "i18next";
 import { useTranslation } from "react-i18next";
 import { stringify } from "querystring";
-const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
+const CustomHeader = ({ auth, drawerButton }: { auth: boolean, drawerButton?:ReactNode }): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const handleRoute = (href: string) => {
@@ -37,13 +34,14 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
           width: "100%",
           height: "130px",
           display: "flex",
-          padding: "0 2rem",
+          padding: "0 3%",
           justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <div className={style.logoContainer}>
-          <div className={style.brandLabel}>HomeLand</div>
+        {drawerButton}
+        <div className={styles.logoContainer}>
+          <div className={styles.brandLabel}>HomeLand</div>
         </div>
         <div style={{ alignItems: "center" }}>
           <Row className="align-items-center">
@@ -58,7 +56,7 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
             </Col>
             <Col>
               {!auth ? (
-                <div className={style.menuContainer}>
+                <div className={styles.menuContainer}>
                   <HeaderButton
                     title={"Home"}
                     hideIcon={true}
@@ -81,11 +79,11 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
                 <></>
               )}
               {auth ? (
-                <div>
+                <div className={styles.infoButton}>
                   <InfoButton></InfoButton>
                 </div>
               ) : (
-                <div className={style.loginContainer}>
+                <div className={styles.loginContainer}>
                   <LoginButton
                     onClick={() => {
                       router.push("/login");

@@ -23,13 +23,11 @@ export const Sidebar = ({
     throw SyntaxError(
       "When visibilyMode is set to hide, You has to define show and onClose parameter"
     );
+  console.log(show);
   return (
     <>
       {visibilityMode == "hide" ? (
-        <Offcanvas
-          show={show}
-          onHide={() => onClose!()}
-        >
+        <Offcanvas show={show} onHide={() => onClose!()}>
           <Offcanvas.Header closeButton>{header}</Offcanvas.Header>
           <Offcanvas.Body className={`${drawerClass ?? ""}`}>
             {children}
