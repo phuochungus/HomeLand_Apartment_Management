@@ -26,7 +26,7 @@ interface File {
 //                 </div>
 //         );
 // };  
-export interface Person{
+export interface Person {
         role: string;
         id: string;
         name: string;
@@ -68,7 +68,7 @@ const AddStaff = () => {
                                 )}
                                 {/* <FileUploader onFileUpload={handleFileUpload} /> */}
                                 <div className="d-flex justify-content-around">
-                                        <Form.Group className="mb-3">
+                                        <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Ảnh đại diện</Form.Label>
                                                 <Form.Control
                                                         size="lg"
@@ -80,8 +80,8 @@ const AddStaff = () => {
                                                         <div className={styles.roundImageWrapper}>
                                                                 <Image
                                                                         onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-                                                                        className={styles.roundImage} 
-                                                                        width={120} 
+                                                                        className={styles.roundImage}
+                                                                        width={120}
                                                                         height={120}
                                                                         alt=""
                                                                         src={Img.preview}
@@ -95,25 +95,26 @@ const AddStaff = () => {
 
 
                                 <Form className={styles.form}>
-                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                        <Form.Group className={styles.box} controlId="exampleForm.ControlInput1">
                                                 <Form.Label className={styles.label}>Họ và tên</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" />
                                         </Form.Group>
-                                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Group className={styles.box} controlId="exampleForm.ControlTextarea1">
                                                 <Form.Label className={styles.label}>Số CCCD</Form.Label>
                                                 <Form.Control size="lg" type="text" />
                                         </Form.Group>
 
-                                        <Form.Group>
 
-                                                <Form.Group className="mb-3">
-                                                        <Form.Label className={styles.label}>Ngày sinh</Form.Label>
-                                                        <Form.Control size="lg" type="date" placeholder="" />
-                                                </Form.Group>
+
+                                        <Form.Group className={styles.box} controlId="exampleForm.ControlTextarea1">
+                                                <Form.Label className={styles.label}>Ngày sinh</Form.Label>
+                                                <Form.Control size="lg" type="date" placeholder="" />
                                         </Form.Group>
-                                        <Form.Label className={styles.label}>Giới tính</Form.Label>
-
-                                        <div key={`inline-radio`} className="mb-3">
+                                        <Form.Group className={styles.box}>
+                                                <Form.Label className={styles.label}>Giới tính</Form.Label>
+                                                <Form.Control size="lg" type="date" placeholder="" />
+                                        </Form.Group>
+                                        <div key={`inline-radio`} className={styles.box}>
 
                                                 <Form.Check
                                                         inline
@@ -132,24 +133,25 @@ const AddStaff = () => {
 
                                         </div>
 
-                                        <Form.Group className="mb-3">
+                                        <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Số điện thoại</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" />
                                         </Form.Group>
-                                        <Form.Group className="mb-3">
+                                        <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Công việc</Form.Label>
                                                 <Form.Control size="lg" type="email" placeholder="" />
                                         </Form.Group>
 
-                                        <ButtonComponent className={styles.creatBtn1}>Tạo</ButtonComponent>
 
 
 
 
-
+                                        <div className={styles.button_wrapper}>
+                                                <ButtonComponent className={`${styles.creatBtn1} centered-button`}>Tạo</ButtonComponent>
+                                        </div>
 
                                 </Form>
-                        </div>
+                        </div >
 
 
                 </main >
