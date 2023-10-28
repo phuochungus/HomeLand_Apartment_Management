@@ -99,7 +99,7 @@ export const InfoButton = ({
         style={{
           position: "absolute",
           inset: "0px 0px auto auto",
-          transform: "translate3d(-10px, 94px, 0px)",
+          transform: "translate3d(-10px, 55px, 0px)",
         }}
       >
         <div
