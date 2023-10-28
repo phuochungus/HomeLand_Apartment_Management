@@ -3,6 +3,7 @@ export type Apartment = {
     apartment_id: string ;
     name:string;
     rent: string;
+    address:string;
     images:string[];
     bedroom:number;
     bathRooms:number;
