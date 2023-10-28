@@ -3,5 +3,6 @@ export const endpoint = {
     login: baseUrl + "/auth/signin",
     profile: baseUrl + "/me",
     tokenValidate: baseUrl + "/token/validate",
-    apartment: baseUrl + "/apartment"
+    apartment: baseUrl + "/apartment",
+    person: baseUrl + "/person"
 }
