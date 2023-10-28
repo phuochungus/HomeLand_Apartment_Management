@@ -6,9 +6,7 @@ import {
 import { futuna } from "../../../public/fonts/futura";
 import styles from "./infoButton.module.css";
 import {
-  Button,
   Dropdown,
-  DropdownButton,
   DropdownMenu,
   DropdownToggle,
 } from "react-bootstrap";

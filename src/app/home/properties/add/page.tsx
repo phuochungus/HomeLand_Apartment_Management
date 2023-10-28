@@ -26,7 +26,6 @@ import { useEffect, useState } from "react";
 import SearchBar from "@/components/searchBar/searchBar";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
@@ -102,7 +101,7 @@ export default function AddApartment() {
   );
 
   async function handleSubmit() {
-    loadingFiler(document.getElementsByTagName("form")[0]);
+    loadingFiler(document.body!);
     if (!validateData()) {
       return;
     }
@@ -156,6 +155,7 @@ export default function AddApartment() {
           alert(err.response.data);
         });
     });
+    removeLoadingFilter(document.body!)
   }
   function searchtest(params: string) {
     setResidentLists(search(data!, "name", params));
@@ -212,7 +212,6 @@ export default function AddApartment() {
           className={futuna.className}
           onSubmit={(e) => {
             e.preventDefault();
-            console.log(e)
             handleSubmit();
           }}
         >
