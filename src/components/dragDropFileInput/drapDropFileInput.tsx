@@ -1,6 +1,13 @@
-import { ChangeEvent, ReactNode, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  MouseEventHandler,
+  ReactNode,
+  useRef,
+  useState,
+} from "react";
 import styles from "./dragdrop.module.css";
-import { Image } from "react-bootstrap";
+import { Image, Stack } from "react-bootstrap";
+import { FaTrash } from "react-icons/fa";
 
 export default function DragDropFileInput({
   children,
@@ -10,7 +17,7 @@ export default function DragDropFileInput({
   // drag drop file component
   // drag state
   const [dragActive, setDragActive] = useState(false);
-  const [fileLists, setFileLists] = useState<FileList | undefined>(undefined);
+  const [fileLists, setFileLists] = useState<File[]>([]);
   // ref
   const inputRef = useRef<HTMLInputElement>(null);
   // handle drag events
@@ -42,7 +49,18 @@ export default function DragDropFileInput({
     }
   };
   function handleFiles(files: FileList) {
-    setFileLists(files);
+    if (fileLists.length > 0) {
+      const tempList = [...Array.from(files)];
+      const uniqueFile: File[] = [];
+      tempList.forEach((element) => {
+        for (let index = 0; index < fileLists.length; index++) {
+          const element1 = fileLists[index];
+          if (element.name == element1.name) break;
+          uniqueFile.push(element);
+        }
+      });
+      setFileLists([...fileLists, ...uniqueFile]);
+    } else setFileLists(Array.from(files));
     document.getElementById("label-file-upload")!.className = document
       .getElementById("label-file-upload")!
       .className.split("missing")[0];
@@ -55,20 +73,32 @@ export default function DragDropFileInput({
     if (!fileLists || fileLists.length == 0) return children;
 
     const result: ReactNode[] = [];
-    console.log(fileLists);
     for (let index = 0; index < fileLists.length; index++) {
-      const element = fileLists.item(index);
+      const element = fileLists[index];
       result.push(
-        <Image
-          src={URL.createObjectURL(element as Blob)}
-          alt="image"
-          style={{
-            width: "auto-fit",
-            borderStyle: "solid",
-            borderColor: "grey",
-            borderWidth: "1px",
-          }}
-        ></Image>
+        <Stack style={{ position: "relative" }}>
+          <Image
+            src={URL.createObjectURL(element as Blob)}
+            alt="image"
+            style={{
+              width: "auto-fit",
+              borderStyle: "solid",
+              borderColor: "grey",
+              borderWidth: "1px",
+            }}
+          ></Image>
+          <button
+            type="button"
+            className={styles.deleteImageButton}
+            onClick={() => {
+              const temp = [...fileLists];
+              temp.splice(index, 1);
+              setFileLists(temp);
+            }}
+          >
+            <FaTrash></FaTrash>
+          </button>
+        </Stack>
       );
     }
     return (
@@ -88,9 +118,8 @@ export default function DragDropFileInput({
         onChange={handleChange}
         style={{ display: "none", visibility: "hidden" }}
       />
-      <label
+      <div
         id="label-file-upload"
-        htmlFor="input-file-upload"
         className={dragActive ? "drag-active" : ""}
       >
         <div
@@ -101,16 +130,39 @@ export default function DragDropFileInput({
             flexDirection: "column",
           }}
         >
-          <p style={{ textAlign: "center" }}>Click to upload your file here</p>
-          <button
-            type="button"
-            className={`upload-button ${styles.dragDrop}`}
-            onClick={onButtonClick}
-          >
-            {ImageGrid()}
-          </button>
+          {fileLists.length > 0 ? (
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  cursor: "pointer",
+                  marginTop: "5px",
+                }}
+                className={styles.activeText}
+                onClick={onButtonClick}
+              >
+                Click to upload more file here
+              </p>
+              <div
+                className={`${styles.dragDrop}`}
+              >
+                {ImageGrid()}
+              </div>
+            </>
+          ) : (
+            <>
+              <p style={{ textAlign: "center" }}>Click to upload file here</p>
+              <button
+                type="button"
+                className={`upload-button ${styles.dragDrop}`}
+                onClick={onButtonClick}
+              >
+                {ImageGrid()}
+              </button>
+            </>
+          )}
         </div>
-      </label>
+      </div>
       {dragActive && (
         <div
           id="drag-file-element"

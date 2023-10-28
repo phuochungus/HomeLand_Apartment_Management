@@ -14,6 +14,22 @@
 .imageGrid img{
     width: 100%
 }
+.deleteImageButton{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    opacity: 0.2;
+}
+.deleteImageButton:hover {
+    opacity: 0.8;
+}
+.activeText:hover{
+    color:blue;
+    text-decoration: underline;
+}
 @media screen and (min-width: 1400px) {
     .imageGrid{
         grid-template-columns: 1fr 1fr  1fr 1fr 1fr  1fr;

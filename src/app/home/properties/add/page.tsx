@@ -212,6 +212,7 @@ export default function AddApartment() {
           className={futuna.className}
           onSubmit={(e) => {
             e.preventDefault();
+            console.log(e)
             handleSubmit();
           }}
         >
