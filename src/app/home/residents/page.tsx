@@ -18,23 +18,8 @@ import ModalComponent from "@/components/Modal/Modal";
 import { residentService } from "@/apiServices/residentService";
 import { useRouter } from "next/navigation";
 import { futuna } from "../../../../public/fonts/futura";
-import { GetStaticProps } from "next";
 import { format } from "date-fns";
-export interface Person {
-  role: string;
-  id: string;
-  name: string;
-  date_of_birth: Date;
-  gender: string;
-  front_identify_card_photo_URL: string;
-  back_identify_card_photo_URL: string;
-  phone_number: string;
-  activated_at?: Date;
-  email: string;
-  deleted_at?: Date;
-  stay_at?: string;
-  created_at: Date;
-}
+import { Person } from "@/models/person";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
@@ -67,6 +52,7 @@ export default function Residents() {
   useEffect(() => {
     const fetchApi = async () => {
       const data = await residentService.getAllResident();
+     
       setResidents(data);
     };
 
@@ -95,7 +81,7 @@ export default function Residents() {
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
-            tạo cư dân
+            Tạo cư dân
           </ButtonComponent>
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
@@ -143,7 +129,7 @@ export default function Residents() {
                     <td>{resident.id}</td>
                     <td>{resident.name}</td>
                     <td>{resident.gender}</td>
-                    <td>{resident.stay_at}</td>
+                    <td>{resident.stay_at && resident.stay_at.name}</td>
                     <td>{resident.phone_number}</td>
                     <td>{createAt}</td>
                     <td style={{ width: 20 }}>
@@ -154,7 +140,7 @@ export default function Residents() {
                             residentStyles.cudBtn,
                             residentStyles.editBtn
                           )}
-                          href={`/residents/updateResident/${resident.id}/?auth=true`}
+                          href={`/home/residents/updateResident/${resident.id}/?auth=true`}
                         >
                           Sửa
                         </ButtonComponent>

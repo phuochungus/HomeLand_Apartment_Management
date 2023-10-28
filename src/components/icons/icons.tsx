@@ -171,3 +171,25 @@ export const WarnIcon = ({
 
   );
 };
+export const BuildingIcon = ({
+  width,
+  height,
+  className,
+}: {
+  width: any;
+  height: any;
+  className?: any;
+}): JSX.Element => {
+  return (
+    <svg width={width} height={height} viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+<rect width="44" height="44" fill="url(#pattern432)"/>
+<defs>
+<pattern id="pattern432" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlinkHref="#image0_759_693" transform="scale(0.0104167)"/>
+</pattern>
+<image id="image0_759_693" width="96" height="96" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAABUElEQVR4nO2UwQnEMBDE3H/Tuh5iOHltCeYZCBrPrhUREREREfF/kPM8VIALFVABo+Hx6PB4dHg8OjweHR6PDo9Hh8ejw+M5jt0fZvj3OrYAKmC2QFrAqoAd7BdIC5gtkE7QqoAd7BdIC7g7x2MLogJ8SbQAXxSdoDtzPLYgKsCXRAvwRdEJ+nZDGf69ji2ACpgtkBawKmAH+wXSAmYLpBO0KmAH+wXSAu7O8diCqABfEi3AF0Un6M4cjy2ICvAl0QJ8UXSCvt1Qhn+vYwugAmYLpAWsCtjBfoG0gNkC6QStCtjBfoG0gLtzPLYgKsCXRAvwRdEJujPHYwuiAnxJtABfFJ2gbzeU4d/r2AKogNkCaQGrAnawXyAtYLZAOkGrAnawXyAt4O4cjy2ICvAl0QJ8UXSC7szx2IKoAF8SLcAXxasnKCIiIiIiIiIi1pH8AIN9c0RlQ7dnAAAAAElFTkSuQmCC"/>
+</defs>
+</svg>
+
+  );
+};

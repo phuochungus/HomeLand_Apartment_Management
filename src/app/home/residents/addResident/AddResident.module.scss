@@ -1,5 +1,6 @@
 .wapper {
     width: 80%;
+    font-size: 1.6rem;
 }
 .form {
     width: 100%;
@@ -32,4 +33,8 @@
 .img {
     width: 100%;
     height: 160px;
+}
+.error {
+  color: var(--red);
+  
 }

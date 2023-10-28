@@ -1,47 +1,52 @@
-import { Person } from "@/app/residents/page";
+import { Person } from "@/models/person";
 import { request } from "@/utils/request";
 import { json } from "stream/consumers";
 import axios from "axios";
+import { toast } from "react-toastify";
 export const residentService = {
   //get all resident
   getAllResident: async () => {
     const res = await request.get("person");
+    console.log(res.data);
     return res.data;
   },
 
   //create resident
-  createResident: async (data: {
-    role: string;
-    gender: string;
-    name: string;
-    dayOfBirth: Date;
-    phone: string;
-    email: string;
-    cccd: string;
-    frontImg: string;
-    backImg: string;
-  }) => {
-    const person = {
-      role: data.role,
-      gender: data.gender,
-      date_of_birth: data.dayOfBirth,
-      name: data.name,
-      phone_number: data.phone,
-      email: data.email,
-      front_identify_card_photo_URL: data.frontImg,
-      back_identify_card_photo_URL: data.backImg,
-    };
+  createResident: async (data: FormData) => {
     try {
-      const res = await request.post("person", person);
+      const res = await request.post("person", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Create successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (e) {
-      console.log('error')
+      console.log(e);
+      toast.error("Create faily!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   },
   // get resident by id
   getResidentById: async (id: string) => {
     try {
-    
-      const res = await request.get(`person/${id}`)
+      const res = await request.get(`person/${id}`);
       return res.data;
     } catch (err) {
       console.log(err);
@@ -49,31 +54,49 @@ export const residentService = {
   },
   //update resident
 
-  updateResident: async (data: {
-    role: string;
-    gender: string;
-    name: string;
-    dayOfBirth: Date;
-    phone: string;
-    email: string;
-    cccd: string;
-    frontImg: string;
-    backImg: string;
-  }, id:string) => {
+  updateResident: async (
+    data: {
+      email: string;
+      phone_number: string;
+    },
+    id: string
+  ) => {
     const person = {
-      role: data.role,
-      gender: data.gender,
-      date_of_birth: data.dayOfBirth,
-      name: data.name,
-      phone_number: data.phone,
       email: data.email,
-      front_identify_card_photo_URL: data.frontImg,
-      back_identify_card_photo_URL: data.backImg,
+      phone_number: data.phone_number,
     };
     try {
-      const res = await request.patch(`person/${id}/account`, person);
+      const res = await request.patch(
+        `person/${id}/person`,
+        JSON.stringify(person),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success("Update successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (e) {
-      console.log('error')
+      console.log(e);
+      toast.error("Update faily!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   },
 };

@@ -10,8 +10,8 @@ export async function POST(request: Request) {
     maxBodyLength: Infinity,
     url: endpoint.login,
     headers: {
-      'Content-Type': 'application/json',
-    },  
+        'Content-Type': 'multipart/form-data'
+    },
     data: body
   };
   const response = await axios.request(config).then((response) => {
@@ -22,8 +22,6 @@ export async function POST(request: Request) {
         headers: { 'Set-Cookie': `token=${response.data.access_token}` },
       });
     }
-
-  }).catch((error) =>{ console.log(error); return NextResponse.json(error.response.data.message, { status: error.response.status, statusText: error.response.statusText })})
+  }).catch((error) =>{return NextResponse.json(error.response.data.message, { status: error.response.status, statusText: error.response.statusText })})
   return response;
 }
-export async function GET(request: Request) {}
