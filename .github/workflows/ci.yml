@@ -13,7 +13,6 @@ jobs:
         run: |
           curl --location 'https://api.render.com/v1/services/srv-ckhqk9i12bvs738r5ud0/deploys' \
           --header 'accept: application/json' \
-          --header "authorization: Bearer rnd_K3CdfZGN031DoGjdbotuT4ZDhGxh" \
           --header 'content-type: application/json' \
           --data '{
               "clearCache": "clear"
