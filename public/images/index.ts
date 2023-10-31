@@ -16,3 +16,4 @@ export const Images = {
     ApartmentCard,
     uploadImg: uploadImg,
     uploadAvatar: uploadAvatar
+}
