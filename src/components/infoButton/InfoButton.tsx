@@ -6,9 +6,7 @@ import {
 import { futuna } from "../../../public/fonts/futura";
 import styles from "./infoButton.module.css";
 import {
-  Button,
   Dropdown,
-  DropdownButton,
   DropdownMenu,
   DropdownToggle,
 } from "react-bootstrap";
@@ -101,7 +99,7 @@ export const InfoButton = ({
         style={{
           position: "absolute",
           inset: "0px 0px auto auto",
-          transform: "translate3d(-10px, 94px, 0px)",
+          transform: "translate3d(-10px, 55px, 0px)",
         }}
       >
         <div
