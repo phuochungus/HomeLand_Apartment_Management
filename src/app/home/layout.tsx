@@ -67,11 +67,11 @@ export default function RootLayout({
           >
             <div className={styles.sidebarBody}>
               {sidebarInfo.map((value, index) => (
-                <div key={index} style={{marginBottom: "3rem"}}>
+                <div key={index} style={{ marginBottom: "3rem" }}>
                   {" "}
                   <Button
                     className={`${
-                      pathName == "/home/" + value.title.toLowerCase()
+                      pathName.includes("/home/" + value.title.toLowerCase())
                         ? styles.current
                         : ""
                     } ${styles.sidebarButton} `}
@@ -85,9 +85,20 @@ export default function RootLayout({
                     {value.svg}
                     <span style={{ margin: "auto 0" }}>{value.title}</span>
                   </Button>
-                  <div className={`${styles.sidebarButtonMenu} ${futuna.className}`}>
+                  <div
+                    className={`${styles.sidebarButtonMenu} ${futuna.className}`}
+                  >
                     {value.menu?.map((value, index) => (
-                      <a href={value.href} key={index}>
+                      <a
+                        href={value.href}
+                        key={index}
+                        className={`${
+                          pathName == value.href
+                            ? styles.currentItemMenu
+                            : ""
+                        }`}
+                        
+                      >
                         {value.title}
                       </a>
                     ))}
