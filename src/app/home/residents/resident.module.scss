@@ -12,7 +12,7 @@
 .addBtn {
     background-color: var(--primary);
     color: var(--white);
-    font-size: 1.6rem;
+    font-size:1rem;
     text-decoration: none;
     padding: var(--default-padding-vertical) var(--default-padding-horizontal);
     border-radius: 8px;
@@ -24,14 +24,14 @@
 //per page
 .perPage {
     display: flex;
-    font-size: 1.6rem;
+    font-size:1rem;
     align-items: center;
     span {
         margin: 0 8px;
         select {
-            font-size: 1.6rem;
+            font-size:1rem;
             option {
-            font-size: 1.6rem;
+            font-size:1rem;
                 
             }
         }
@@ -44,7 +44,7 @@
 }
 .cudBtn {
     color: white;
-    font-size: 1.6rem;
+    font-size:1rem;
     padding: 4px 10px;
     border-radius: 8px;
     + .cudBtn {

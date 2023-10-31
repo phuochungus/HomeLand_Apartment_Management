@@ -228,6 +228,7 @@ const AddResident = () => {
                 <Form.Check
                   inline
                   label="Nam"
+                  style={{fontSize:'1rem'}}
                   name="gender"
                   type="radio"
                   value="male"
@@ -236,6 +237,7 @@ const AddResident = () => {
                 />
                 <Form.Check
                   inline
+                  style={{fontSize:'1rem'}}
                   label="Nữ"
                   name="gender"
                   type="radio"

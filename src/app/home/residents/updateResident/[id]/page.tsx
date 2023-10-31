@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback, useMemo } from "react";
 import styles from "./UpdateResident.module.scss";
-import mainStyles from "@/app/page.module.css";
+import mainStyles from '../../../page.module.css'
 import utilStyles from "@/styles/utils.module.scss";
 import Form from "react-bootstrap/Form";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
@@ -165,7 +165,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   return (
     <main className={mainStyles.main}>
       <div className={styles.wapper}>
-        <p className={utilStyles.headingXl}>Chỉnh sửa thông tin cư dân</p>
+        <p className={clsx(utilStyles.headingXl, styles.title)}>Chỉnh sửa thông tin cư dân</p>
         <div className="d-inline-flex justify-content-between">
           <div className={styles.avatarLayout}>
             {AvatarImage}
@@ -195,6 +195,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 checked={resident && resident.profile.gender === "male"}
                 inline
                 label="Nam"
+                style={{fontSize: "1rem"}}
                 name="group1"
                 type="radio"
                 value="male"
@@ -205,6 +206,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 inline
                 label="Nữ"
                 disabled
+                style={{fontSize: "1rem"}}
                 checked={resident && resident.profile.gender === "female"}
                 name="group1"
                 type="radio"
@@ -308,12 +310,13 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               />
             </Form.Group>
           </div>
+          <ButtonComponent onClick={updateHandle} className={styles.creatBtn}>
+          Cập nhật
+        </ButtonComponent>
         </Form>
           </div>
   
-        <ButtonComponent onClick={updateHandle} className={styles.creatBtn}>
-          Cập nhật
-        </ButtonComponent>
+       
       </div>
     </main>
   );
