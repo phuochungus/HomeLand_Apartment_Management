@@ -18,11 +18,12 @@ export async function validateToken(token: string | undefined): Promise<boolean>
 export function loadingFiler(container: HTMLElement) {
     //document: The current HTMl, usage: Create new HTML => Loading Div with spinner
     //container: The HTML element to put the loading inside,
+    window.scroll({top: 0})
     var div = document.createElement("div");
     div.className = "loadingFilter";
     div.style.backgroundColor = "black";
     div.style.width = "100%";
-    div.style.height = "100%";
+    div.style.height = "100vh";
     div.style.opacity = "0.2";
     div.style.position = "absolute";
     div.style.display = "flex";

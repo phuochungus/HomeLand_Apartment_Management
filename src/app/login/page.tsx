@@ -31,7 +31,7 @@ export default function Login() {
     axios
       .request(config)
       .then((res) => {
-        router.replace("/home?auth=true");
+        router.replace("/home/dashboard?auth=true");
       })
       .catch((err) => {
         removeLoadingFilter(document.getElementsByTagName("main")[0]);
