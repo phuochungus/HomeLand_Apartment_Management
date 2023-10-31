@@ -2,11 +2,29 @@
 import { FaSearch } from "react-icons/fa";
 import styles from "./properties.module.css";
 import { futuna } from "../../../../public/fonts/futura";
-import { Button, Card } from "react-bootstrap";
-import { Images } from "../../../../public/images";
+import { Card, Spinner } from "react-bootstrap";
 import { useRouter } from "next/navigation";
-
+import { Apartment } from "@/models/apartment";
+import axios from "axios";
+import { useQuery } from "react-query";
+import SearchBar from "@/components/searchBar/searchBar";
+import { useEffect, useMemo, useState } from "react";
 export default function Apartments() {
+  const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
+  var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
+  var page = useMemo(() => {
+    return Math.floor(apartmentList.length / 30) + 1;
+  }, [apartmentList]);
+  const { isLoading, isError, data, refetch } = useQuery(
+    "apartment",
+    () =>
+      axios.get("/api/apartment?page=" + page).then((res) => {
+        setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const apartmentSortOption = [
     {
       title: "Building",
@@ -24,6 +42,64 @@ export default function Apartments() {
       onChange: () => {},
     },
   ];
+  async function handleScrollEnd() {
+    if (!loadingMore) {
+      loadingMore = true;
+      await refetch();
+      loadingMore = false;
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("scroll", (e) => {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom + 50 >= docHeight) {
+        handleScrollEnd();
+      }
+    });
+  }, []);
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          margin: "50px 0px",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Spinner></Spinner>
+      </div>
+    );
+  if (isError)
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        Co loi
+      </div>
+    );
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -36,31 +112,7 @@ export default function Apartments() {
             padding: "10px 0",
           }}
         >
-          <div className={styles.searchBar}>
-            <form
-              className={futuna.className}
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "100%",
-                padding: "0 1rem",
-              }}
-            >
-              <input
-                type="search"
-                id="search"
-                style={{
-                  height: "100%",
-                  borderStyle: "none",
-                  flexGrow: "1",
-                  padding: "0 10px",
-                }}
-              ></input>
-              <button style={{ width: "fit-content" }}>
-                <FaSearch></FaSearch>
-              </button>
-            </form>
-          </div>
+          <SearchBar className={styles.searchBar}></SearchBar>
         </div>
         {apartmentSortOption.map((value, index) => (
           <div
@@ -73,10 +125,23 @@ export default function Apartments() {
         ))}
       </div>
       <div className={styles.grid}>
-        {Array.from(Array(9).keys()).map((value, index) =>
-          ApartmentCard(index)
-        )}
+        {apartmentList.map((value, index) => ApartmentCard(value))}
       </div>
+      {loadingMore ? (
+        <div
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Spinner></Spinner>
+        </div>
+      ) : (
+        <></>
+      )}
     </main>
   );
 }
@@ -110,7 +175,7 @@ const FilterButton = ({
   );
 };
 
-const ApartmentCard = (index: number): React.ReactNode => {
+const ApartmentCard = (value: Apartment): React.ReactNode => {
   const router = useRouter();
 
   function handleRouting(route: string): void {
@@ -119,21 +184,26 @@ const ApartmentCard = (index: number): React.ReactNode => {
   return (
     <Card
       onClick={() =>
-        handleRouting("/home/" + "properties/" + index + "?auth=true")
+        handleRouting(
+          "/home/" + "properties/" + value.apartment_id + "?auth=true"
+        )
       }
-      className={`futuna.className ${styles.gridItem}`}
-      style={{ borderRadius: "10px" }}
+      className={`${futuna.className} ${styles.gridItem}`}
+      style={{ borderRadius: "10px", overflow: "hidden" }}
     >
-      <Card.Img
-        variant="top"
-        src="https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&q=80&w=1770&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      />
-      <Card.Body style={{ display: "flex", flexDirection: "column" }}>
-        <Card.Title style={{ alignSelf: "start" }}>Card Title</Card.Title>
-        <Card.Text>
-          {`Some quick example text to build on the card title and make up the
-          bulk of the card's content.`}
-        </Card.Text>
+      <Card.Img variant="top" src={value.images[0]} />
+      <Card.Body
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "start",
+        }}
+      >
+        <Card.Title style={{ alignSelf: "start" }}>
+          {value.rent}
+          <span style={{ color: "grey" }}>{" /month"}</span>
+        </Card.Title>
+        <Card.Text>{value.name}</Card.Text>
       </Card.Body>
     </Card>
   );
