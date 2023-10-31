@@ -1,4 +1,5 @@
 "use client";
+import { QueryClient, QueryClientProvider } from "react-query";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import styles from "@/app/page.module.css"
 import residentStyles from "./resident.module.scss";
@@ -19,11 +20,13 @@ import { residentService } from "@/apiServices/residentService";
 import { useRouter } from "next/navigation";
 import { futuna } from "../../../../public/fonts/futura";
 import { format } from "date-fns";
-import { Person } from "@/models/person";
+import { Resident } from "@/models/resident";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
-  const [residents, setResidents] = useState<Array<Person>>([]);
+  const [residents, setResidents] = useState<Array<Resident>>([]);
   const listOptions = [
     {
       value: 10,
@@ -49,15 +52,31 @@ export default function Residents() {
   const deleleHandle = () => {
     setShowModal(true);
   };
-  useEffect(() => {
-    const fetchApi = async () => {
-      const data = await residentService.getAllResident();
-     
-      setResidents(data);
-    };
+  const retrieveResidents = async () => {
+    try {
+      const res = await axios.get('/api/resident')
+      setResidents(res.data )
+      console.log(res.data)
+      return res.data;
+    }
+    catch(error){
+      console.log(error)
+    }
+    
 
-    fetchApi();
-  }, []);
+  } 
+  const { isLoading, isError, data, refetch } = useQuery('residents', retrieveResidents)
+
+  // useEffect(() => {
+  //   const fetchApi = async () => {
+  //   const data =  await residentService.getAllResident();
+  //    setResidents(data);
+  //   };
+
+  //   fetchApi();
+  // }, []);
+  
+
 
   const titleTable = [
     "ID",
@@ -127,10 +146,10 @@ export default function Residents() {
                 return (
                   <tr key={index}>
                     <td>{resident.id}</td>
-                    <td>{resident.name}</td>
-                    <td>{resident.gender}</td>
+                    <td>{resident.profile.name}</td>
+                    <td>{resident.payment_info}</td>
                     <td>{resident.stay_at && resident.stay_at.name}</td>
-                    <td>{resident.phone_number}</td>
+                    <td>{resident.profile.phone_number}</td>
                     <td>{createAt}</td>
                     <td style={{ width: 20 }}>
                       <div className="d-flex">

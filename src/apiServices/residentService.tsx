@@ -1,8 +1,10 @@
-import { Person } from "@/models/person";
+
 import { request } from "@/utils/request";
 import { json } from "stream/consumers";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from 'next/navigation'
+
 export const residentService = {
   //get all resident
   getAllResident: async () => {
@@ -14,7 +16,8 @@ export const residentService = {
   //create resident
   createResident: async (data: FormData) => {
     try {
-      const res = await request.post("person", data, {
+      console.log(data)
+      const res = await request.post("resident", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -31,16 +34,16 @@ export const residentService = {
       });
     } catch (e) {
       console.log(e);
-      toast.error("Create faily!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      // toast.error("Create faily!", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      // });
     }
   },
   // get resident by id
@@ -97,6 +100,6 @@ export const residentService = {
         progress: undefined,
         theme: "light",
       });
-    }
+    } 
   },
 };

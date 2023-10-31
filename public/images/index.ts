@@ -5,6 +5,8 @@ import residents from "./icons/People.svg"
 import properties from "./icons/Home work.svg"
 import loginBanner from "./banners/loginBanner.png"
 import apartmentCard from "./sample/aparmentCard.png"
+import uploadImg from './icons/uploadImg.png'
+import uploadAvatar from './icons/uploadAvatar.png'
 export const Images = {
     Logo: logo,
     Dashboard: dashboard,
@@ -12,5 +14,6 @@ export const Images = {
     Properties: properties,
     LoginBanner: loginBanner,
     apartmentCard: apartmentCard,
-    noImg
+    uploadImg: uploadImg,
+    uploadAvatar: uploadAvatar
 }
