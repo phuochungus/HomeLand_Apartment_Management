@@ -25,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Francois_One } from "next/font/google";
 import { Images } from "../../../../../public/images";
 import axios from "axios";
+import { RedirectType, redirect } from "next/navigation";
 
 type FormValue = {
   name: string;
@@ -86,20 +87,20 @@ const AddResident = () => {
   const AvatarImage = useMemo(() => {
     return avatar ? (
       <Image
-      onClick={handleAvatarClick}
-      fill
-      style={{ borderRadius: "3%" }}
-      alt=""
-      src={URL.createObjectURL(avatar)}
-    />
+        onClick={handleAvatarClick}
+        fill
+        style={{ borderRadius: "3%" }}
+        alt=""
+        src={URL.createObjectURL(avatar)}
+      />
     ) : (
       <Image
-                onClick={handleAvatarClick}
-                fill
-                style={{ borderRadius: "3%" }}
-                alt=""
-                src={Images.uploadAvatar}
-              />
+        onClick={handleAvatarClick}
+        fill
+        style={{ borderRadius: "3%" }}
+        alt=""
+        src={Images.uploadAvatar}
+      />
     );
   }, [avatar]);
   const handleFontImg = (e: any) => {
@@ -179,19 +180,42 @@ const AddResident = () => {
       try {
         await axios
           .post("/api/resident", form)
-          .then((response) => console.log("fdfs"))
-          .catch((e) => console.log(e));
+          .then((response) => {
+            toast.success("Create successfully!", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+           
+          })
+          .catch((e) =>
+            toast.error("Create faily!", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            })
+          );
       } catch (e) {
         console.log(e);
       }
     }
   };
-  
+
   const handleChangeAvatar = (e: any) => {
     const file = e.target.files[0];
     setAvatar(file);
   };
-  
+
   return (
     <main className={mainStyles.main}>
       <div className={styles.wapper}>
@@ -228,7 +252,7 @@ const AddResident = () => {
                 <Form.Check
                   inline
                   label="Nam"
-                  style={{fontSize:'1rem'}}
+                  style={{ fontSize: "1rem" }}
                   name="gender"
                   type="radio"
                   value="male"
@@ -237,7 +261,7 @@ const AddResident = () => {
                 />
                 <Form.Check
                   inline
-                  style={{fontSize:'1rem'}}
+                  style={{ fontSize: "1rem" }}
                   label="Nữ"
                   name="gender"
                   type="radio"
