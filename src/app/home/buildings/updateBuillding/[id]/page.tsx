@@ -1,7 +1,7 @@
 "use client";
 import React, { ChangeEvent, useCallback, useState } from "react";
 import styles from "../../addBuilding/addBuilding.module.scss"
-import mainStyles from "../../page.module.css";
+import mainStyles from '@/app/page.module.css'
 import utilStyles from "@/styles/utils.module.scss";
 import Form from "react-bootstrap/Form";
 import clsx from "clsx";
