@@ -1,7 +1,7 @@
 "use client";
 
 import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
-
+import { QueryClient, QueryClientProvider } from "react-query";
 import { useEffect, useState } from "react";
 import { ringift } from "../../../public/fonts/Ringift";
 import { Sidebar } from "@/components/sidebar/sidebar";
@@ -14,7 +14,9 @@ import { sidebarInfo } from "@/constraints/sidebarRoutes";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import CustomHeader from "@/components/customHeader/customHeader";
 import { FaList } from "react-icons/fa";
-import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
+
 
 export default function RootLayout({
   children,
@@ -69,7 +71,9 @@ export default function RootLayout({
             >
               <div className={styles.sidebarBody}>
                 {sidebarInfo.map((value, index) => (
+
                   <div key={index} style={{ marginBottom: "3rem" }}>
+
                     {" "}
                     <Button
                       className={`${
@@ -87,9 +91,11 @@ export default function RootLayout({
                       {value.svg}
                       <span style={{ margin: "auto 0" }}>{value.title}</span>
                     </Button>
+
                     <div
                       className={`${styles.sidebarButtonMenu} ${futuna.className}`}
                     >
+
                       {value.menu?.map((value, index) => (
                         <a href={value.href} key={index}>
                           {value.title}
@@ -127,9 +133,11 @@ export default function RootLayout({
               height: "fit-content",
             }}
           >
+
             <CustomHeader
               auth={searchParam.get("auth") == null ? false : true}
             />
+
             {children}
           </div>
         </body>

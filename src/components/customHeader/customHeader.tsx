@@ -95,3 +95,4 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
 };
 
 export default CustomHeader;
+

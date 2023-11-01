@@ -10,8 +10,13 @@ export async function POST(request: NextRequest) {
     maxBodyLength: Infinity,
     url: endpoint.apartment,
     headers: {
+
+      'Content-Type': 'application/json',
+    
+
       'Authorization': "Bearer " + request.cookies.get("token")?.value,
     },
+
     data: body
   };
   const response = await axios.request(config).then((response) => {

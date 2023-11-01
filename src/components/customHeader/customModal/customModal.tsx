@@ -1,4 +1,4 @@
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from 'react-bootstrap'
 import { futuna } from "../../../../public/fonts/futura";
 
 export const CustomModal = ({
