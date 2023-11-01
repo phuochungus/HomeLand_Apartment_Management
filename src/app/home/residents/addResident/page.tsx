@@ -18,7 +18,6 @@ import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { FaFontAwesome } from "react-icons/fa";
-import { residentService } from "@/apiServices/residentService";
 import { futuna } from "../../../../../public/fonts/futura";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
