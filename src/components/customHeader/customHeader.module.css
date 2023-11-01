@@ -92,3 +92,17 @@
     border-style: none;
   }
 }
+
+@media screen and (max-width: 1200px) {
+    .buttonContainer {
+        width: -webkit-fill-available;
+        float: right;
+    }
+}
+@media screen and (max-width: 800px) {
+    .buttonContainer{
+        display: none;
+        visibility: hidden;
+    }
+    
+}
