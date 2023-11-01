@@ -10,7 +10,6 @@ import React, {
 import styles from "./AddResident.module.scss";
 import mainStyles from "../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
-import { useDropzone } from "react-dropzone";
 import Form from "react-bootstrap/Form";
 import clsx from "clsx";
 import { FormGroup } from "react-bootstrap";
