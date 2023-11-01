@@ -19,14 +19,14 @@ type FormValue = {
  
   phoneNumber: string;
   paymentInfo: string;
-  email: string;
+  email: string | undefined;
   avatarImg?: any;
 };
 const UpdateResident = ({ params }: { params: { id: string } }) => {
   const [formValue, setFormValue] = useState({
     phoneNumber: "",
     paymentInfo: "",
-    email: "",
+    email: undefined,
   });
   const [errors, setErrors] = useState<any>();
   const [resident, setResident] = useState<Resident>();
@@ -51,11 +51,14 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const phonePattern =
       /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-    if (formValue.email === "") {
-      err.email = "Trường email là bắt buộc!";
-    } else if (!emailPattern.test(formValue.email)) {
-      err.email = "Email không hợp lệ!";
-    }
+      if(formValue.email){
+        if (formValue.email === "") {
+          err.email = "Trường email là bắt buộc!";
+        } else if (!emailPattern.test(formValue.email)) {
+          err.email = "Email không hợp lệ!";
+        }
+      }
+  
     if (formValue.phoneNumber === "") {
       err.phoneNumber = "Trường số điện thoại là bắt buộc!";
     } else if (!phonePattern.test(formValue.phoneNumber)) {
@@ -74,10 +77,10 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
       console.log(res.data.account)
       const residentData = res.data as Resident;
       setResident(residentData)
-      const newformValue = {
+      const newformValue:any = {
         phoneNumber: residentData.profile.phone_number,
         paymentInfo: residentData.payment_info || "",
-        email: residentData.account.email
+        email: residentData.account? residentData.account.email : undefined
       }
      
       console.log(newformValue)
@@ -88,37 +91,23 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
       console.log(error)
     }
   }
-  const { isLoading, isError, data, refetch } = useQuery('resident', retrieveResident)
-  const updateHandle = async () => {
+  const { isLoading, isError, data, refetch } = useQuery('resident', retrieveResident, {
+    staleTime: Infinity
+  })
+  const updateHandle = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const err = validation();
     setErrors(err);
     if (Object.keys(err).length === 0) {
       try {
-        const form = new FormData();
-        
-        form.append("phone_number", formValue.phoneNumber);
-        form.append("payment_info", formValue.paymentInfo);
-        form.append("email", formValue.email);
-        if(avatar) {
-          form.append("avatar_photo", avatar);
-        }
-
         const data:any = {
-          email: formValue.email,
           phone_number: formValue.phoneNumber,
           payment_info: formValue.paymentInfo
         }
-        let formData:any = {};
-        form.forEach(function(value, key){
-          formData[key] = value;
-});
-           if(avatar) {
-        data.avatar_photo = avatar
-        
-      }
-      console.log(formData) 
-      
-        await axios.patch(`/api/resident/${params.id}`,data); 
+        if(formValue.email) {
+          data.email = formValue.email
+        }
+        await axios.patch(`/api/resident/${params.id}`,JSON.stringify(data)); 
       }
       catch (error) {
         console.error(error)
@@ -150,24 +139,24 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     const file = e.target.files[0];
     setAvatar(file);
   };
-  const AvatarImage = useMemo(() => {
-    return (
-      <Image
-      onClick={handleAvatarClick}
-      fill
-      style={{ borderRadius: "3%" }}
-      alt=""
+  // const AvatarImage = useMemo(() => {
+  //   return (
+  //     <Image
+  //     onClick={handleAvatarClick}
+  //     fill
+  //     style={{ borderRadius: "3%" }}
+  //     alt=""
       
-      src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
-    />
-    );
-  }, [avatar, avatar_photo]);
+  //     src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
+  //   />
+  //   );
+  // }, [avatar, avatar_photo]);
   return (
     <main className={mainStyles.main}>
       <div className={styles.wapper}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>Chỉnh sửa thông tin cư dân</p>
         <div className="d-inline-flex justify-content-between">
-          <div className={styles.avatarLayout}>
+          {/* <div className={styles.avatarLayout}>
             {AvatarImage}
             <input
               onChange={handleChangeAvatar}
@@ -175,7 +164,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               ref={avatarRef}
               style={{ display: "none" }}
             />
-          </div>
+          </div> */}
           <Form method="post" className={clsx(styles.form, futuna.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label className={styles.label}>Họ và tên</Form.Label>
@@ -215,7 +204,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               />
             </div>
           </Form.Group>
-          <Form.Group className="mb-3">
+         {formValue.email && <Form.Group className="mb-3">
             <Form.Label className={styles.label}>Email</Form.Label>
             <Form.Control
               value={formValue.email}
@@ -228,7 +217,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
              {errors && errors.email && (
                 <span className={styles.error}>{errors.email}</span>
               )}
-          </Form.Group>
+          </Form.Group>} 
 
           <Form.Group className="mb-3">
             <Form.Label className={styles.label}>Số điện thoại</Form.Label>

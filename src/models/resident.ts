@@ -4,7 +4,7 @@ export interface Resident {
     role: string;
     id: string;
     profile: Profile;
-    account: Account,
+    account?: Account,
     account_id?: string,
     payment_info?: string,
     contracts: any,

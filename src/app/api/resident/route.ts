@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {  
  
   const data = await request.formData();
-  
+    console.log(data)
     let config = {
     method: 'post',
     maxBodyLength: Infinity,

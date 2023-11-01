@@ -129,7 +129,7 @@ const AddResident = () => {
       err.gender = "Trường giới tính là bắt buộc!";
     }
     if (formValue.email === "") {
-      err.email = "Trường email là bắt buộc!";
+      
     } else if (!emailPattern.test(formValue.email)) {
       err.email = "Email không hợp lệ!";
     }
@@ -170,6 +170,7 @@ const AddResident = () => {
       form.append("gender", formValue.gender);
       form.append("phone_number", formValue.phoneNumber);
       form.append("payment_info", formValue.paymentInfo);
+      if(formValue.email !== "") 
       form.append("email", formValue.email);
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
@@ -194,16 +195,19 @@ const AddResident = () => {
            
           })
           .catch((e) =>
+          {  
+            console.log(e)
             toast.error("Create faily!", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            })
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })}
+          
           );
       } catch (e) {
         console.log(e);

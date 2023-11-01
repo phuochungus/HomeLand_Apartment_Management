@@ -38,28 +38,22 @@ export async function GET(request: NextRequest, { params } : {params: any}) {
   export async function PATCH(request: NextRequest, { params } : {params: any}) {
     
     const data = await request.json();
-//     let formData:any = {};
-//     data.forEach(function(value, key){
-//       formData[key] = value;
-// });
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,
-      url: endpoint.resident + "/" + params.id,
+      url: endpoint.resident + "/" + params.id ,
       headers: {
         // 'Authorization': "Bearer " + request.cookies.get("token")?.value,
-        // 'Content-Type': 'application/json',
+         'Content-Type': 'application/json',
     },
     data:data
     };  
-    console.log(data)
+   
    
     const response = await axios.request(config).then((response) => {
-        console.log('hah')
       if (response.status == 200) {
         // cookies().set("token", response.data)
        // console.log(response.data)
-        
         return NextResponse.json(response.data
         //   , {
         //   status: 200,
