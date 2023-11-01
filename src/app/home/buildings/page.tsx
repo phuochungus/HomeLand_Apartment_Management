@@ -37,7 +37,7 @@ export default function Dashboard() {
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
-    "building",
+    "buildings",
     retrieveBuilding,
     {
       staleTime: Infinity,

@@ -19,11 +19,11 @@ import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { FaFontAwesome } from "react-icons/fa";
 import { futuna } from "../../../../../public/fonts/futura";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Francois_One } from "next/font/google";
 import { Images } from "../../../../../public/images";
 import axios from "axios";
 import { RedirectType, redirect } from "next/navigation";
+import toastMessage from "@/utils/toast";
 
 type FormValue = {
   name: string;
@@ -127,7 +127,6 @@ const AddResident = () => {
       err.gender = "Trường giới tính là bắt buộc!";
     }
     if (formValue.email === "") {
-      
     } else if (!emailPattern.test(formValue.email)) {
       err.email = "Email không hợp lệ!";
     }
@@ -168,8 +167,7 @@ const AddResident = () => {
       form.append("gender", formValue.gender);
       form.append("phone_number", formValue.phoneNumber);
       form.append("payment_info", formValue.paymentInfo);
-      if(formValue.email !== "") 
-      form.append("email", formValue.email);
+      if (formValue.email !== "") form.append("email", formValue.email);
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
       if (avatar) {
@@ -180,33 +178,11 @@ const AddResident = () => {
         await axios
           .post("/api/resident", form)
           .then((response) => {
-            toast.success("Create successfully!", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-           
+            toastMessage({ type: "success", title: "Create successfully!" });
           })
-          .catch((e) =>
-          {  
-            console.log(e)
-            toast.error("Create faily!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })}
-          
-          );
+          .catch((e) => {
+            toastMessage({ type: "error", title: "Create faily!" });
+          });
       } catch (e) {
         console.log(e);
       }

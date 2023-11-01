@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styles from './Modal.module.scss'
+import { futuna } from '../../../public/fonts/futura';
+
 const ModalComponent = ({show, setShow, title, handleConfirm} : {
     show:boolean,
     setShow:Function,
@@ -12,13 +14,13 @@ const ModalComponent = ({show, setShow, title, handleConfirm} : {
 } ) => {    
     const handleClose = () => setShow(false);
   return (
-    <Modal aria-labelledby="contained-modal-title-vcenter"
+    <Modal className={futuna.className} aria-labelledby="contained-modal-title-vcenter"
     centered show={show} onHide={handleClose}>
     <Modal.Header style={{backgroundColor:'var(--red)', color:'#fff'}} closeButton>
-      <Modal.Title >{title}</Modal.Title>
+      <Modal.Title style={{fontSize:'1.2rem'}} >{title}</Modal.Title>
     </Modal.Header>
     <Modal.Body>Khi xóa thì dữ liệu vẫn được lưu trữ trong database.</Modal.Body>
-    <Modal.Footer>
+    <Modal.Footer style={{borderTop: 'none'}}>
       <Button className={clsx(styles.btn)} variant="secondary" onClick={handleClose}>
         Không
       </Button>

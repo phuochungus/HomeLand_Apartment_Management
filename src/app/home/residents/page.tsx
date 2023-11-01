@@ -24,6 +24,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { search } from "@/libs/utils";
 
+
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
   const [residents, setResidents] = useState<Array<Resident>>([]);

@@ -38,7 +38,11 @@
     font-size: 1.25rem;
     padding: 8px 60px;
     border-radius: 10px;
-    margin: 40px auto   ;
+    margin: 40px auto;
+    &:hover {
+    background-color: #4b77e8;
+
+    }
 
 }
 .img {

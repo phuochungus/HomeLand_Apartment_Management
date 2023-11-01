@@ -12,6 +12,7 @@ import { futuna } from "../../../../../../public/fonts/futura";
 import axios from "axios";
 import { Building } from "@/models/building";
 import { useQuery } from "react-query";
+import toastMessage from "@/utils/toast";
 type FormValue = {
   name: string;
   address: string;
@@ -57,8 +58,12 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       };
       try {
         await axios.patch(`/api/building/${params.id}`, data);
+        toastMessage({ type: "success", title: "Update successfully!" });
+
       } catch (error) {
         console.log(error);
+        toastMessage({ type: "error", title: "Update faily!" });
+
       }
     }
   };
@@ -81,7 +86,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
-    "resident",
+    "building",
     retrieveBuilding,
     {
       staleTime: Infinity,

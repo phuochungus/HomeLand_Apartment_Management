@@ -21,6 +21,8 @@ import { Red_Hat_Display } from "next/font/google";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Images } from "../../../../../../public/images";
+import toastMessage from "@/utils/toast";
+import { ToastContainer } from "react-toastify";
 type FormValue = {
   phoneNumber: string;
   paymentInfo: string;
@@ -67,7 +69,6 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   const retrieveResident = async () => {
     try {
       const res = await axios.get(`/api/resident/${params.id}`);
-      console.log(res.data.account);
       const residentData = res.data as Resident;
       setResident(residentData);
       const newformValue: any = {
@@ -75,8 +76,6 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         paymentInfo: residentData.payment_info || "",
         email: residentData.account ? residentData.account.email : undefined,
       };
-
-      console.log(newformValue);
       setFormValue(newformValue);
       return res.data;
     } catch (error) {
@@ -104,8 +103,10 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
           data.email = formValue.email;
         }
         await axios.patch(`/api/resident/${params.id}`, JSON.stringify(data));
+        toastMessage({type: 'success', title: 'Update successfully!'})
       } catch (error) {
-        console.error(error);
+        toastMessage({type: 'error', title: 'Update faily!'})
+
       }
     }
   };
@@ -301,6 +302,18 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 />
               </Form.Group>
             </div>
+            <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
             <ButtonComponent onClick={updateHandle} className={styles.creatBtn}>
               Cập nhật
             </ButtonComponent>

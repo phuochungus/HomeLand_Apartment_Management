@@ -10,6 +10,7 @@ import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { futuna } from "../../../../../public/fonts/futura";
 import axios from "axios";
+import toastMessage from "@/utils/toast";
 type FormValue = {
   name: string;
   address: string;
@@ -57,9 +58,13 @@ const AddBuilding = () => {
       form.append("max_floor", formValue.maxFloor);
       try {
         await axios.post('/api/building', form)
+        toastMessage({ type: "success", title: "Create successfully!" });
+
       }
       catch(e) {
         console.log(e);
+        toastMessage({ type: "error", title: "Create faily!" });
+
       }
       // try {
       //   await residentService.createResident(form);
