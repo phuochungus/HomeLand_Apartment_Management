@@ -13,6 +13,8 @@
     "@emotion/styled": "^11.11.0",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
+    "clsx": "^2.0.0",
+    "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "i18next": "^23.5.1",
     "next": "13.5.4",
@@ -22,7 +24,8 @@
     "react-dom": "^18",
     "react-i18next": "^13.3.0",
     "react-icons": "^4.11.0",
-    "react-query": "^3.39.3"
+    "react-query": "^3.39.3",
+    "sass": "^1.69.5"
   },
   "devDependencies": {
     "@types/node": "^20",
