@@ -1,52 +1,47 @@
-import React from 'react'
-import Tippy from '@tippyjs/react/headless';
-import styles from './searchLayout.module.scss'
-import clsx from 'clsx';
-import { useState } from 'react';
-import { SearchIcon } from '../icons';
+import React, { KeyboardEventHandler, forwardRef } from "react";
+import Tippy from "@tippyjs/react/headless";
+import styles from "./searchLayout.module.scss";
+import clsx from "clsx";
+import { useState } from "react";
+import { SearchIcon } from "../icons";
+interface Props {
+  className?: any;
+  placeHolder: string;
+  onKeydown?: KeyboardEventHandler<HTMLInputElement>;
+  iconClick?:() => void
+}
+type Ref = HTMLInputElement;
+// const SearchLayout = forwardRef<Ref, Props>(({className, placeHolder, onKeydown} : {className?: any, placeHolder:string, onKeydown?: KeyboardEventHandler<HTMLInputElement>}, ref) => {
 
-const SearchLayout = ({className, placeHolder} : {className?: any, placeHolder:string}) => {
-    const [results, setResults] = useState([]);
-    const [valueSearch, setValueSearch] = useState('');
+// })
+const SearchLayout = forwardRef<Ref, Props>((props, ref) => {
+  const [results, setResults] = useState([]);
+  const [valueSearch, setValueSearch] = useState("");
   return (
-//     <Tippy
-//     visible
-//     interactive
-//     render={(attrs) => (
-//         <div className={clsx(styles.tippyWrapper)} {...attrs}>
-//             {results.length > 0 && (
-//                 <div>
-//                     {/* {results.map((result) => (
-//                         <SearchItem data={result} />
-//                     ))} */}
-//                 </div>
-//             )}
-//         </div>
-//     )}
-// >
     <div
-        className={clsx(styles.search, {
-            [`${className}`]: className
-        })}
+      className={clsx(styles.search, {
+        [`${props.className}`]: props.className,
+      })}
     >
-        
-        <input
-            placeholder={placeHolder}
-            value={valueSearch}
-            onChange={(e) => {
-                if (!e.target.value.startsWith(' ')) {
-                    setValueSearch(e.target.value);
-                }
-            }}
-            className={clsx(styles.searchField)}
-        />
-        <SearchIcon width={'24px'} height={'24px'}/>
-        {/* {valueSearch.length > 0 && (
+      <input
+        ref={ref}
+        onKeyDown={props.onKeydown}
+        placeholder={props.placeHolder}
+        value={valueSearch}
+        onChange={(e) => {
+          if (!e.target.value.startsWith(" ")) {
+            setValueSearch(e.target.value);
+          }
+        }}
+        className={clsx(styles.searchField)}
+      />
+      <SearchIcon onClick={props.iconClick} className={styles.searchIcon} width={"24px"} height={"24px"} />
+      {/* {valueSearch.length > 0 && (
             <FontAwesomeIcon onClick={() => setValueSearch('')} icon={faClose} className={cx('close-icon')} />
         )}   */}
     </div>
-// </Tippy>
-  )
-}
+  );
+});
+SearchLayout.displayName = "SearchLayout";
 
-export default SearchLayout
+export default SearchLayout;

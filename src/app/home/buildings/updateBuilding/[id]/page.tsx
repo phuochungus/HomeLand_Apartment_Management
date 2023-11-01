@@ -1,7 +1,7 @@
 "use client";
 import React, { ChangeEvent, useCallback, useState } from "react";
-import styles from "../../addBuilding/addBuilding.module.scss"
-import mainStyles from '@/app/page.module.css'
+import styles from "../../addBuilding/addBuilding.module.scss";
+import mainStyles from "../../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
 import Form from "react-bootstrap/Form";
 import clsx from "clsx";
@@ -9,23 +9,25 @@ import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { futuna } from "../../../../../../public/fonts/futura";
+import axios from "axios";
+import { Building } from "@/models/building";
+import { useQuery } from "react-query";
 type FormValue = {
   name: string;
   address: string;
   maxFloor: string;
-  managerId: string;
 };
-const UpdateBuilding = () => {
+const UpdateBuilding = ({ params }: { params: { id: string } }) => {
   const [formValue, setFormValue] = useState({
     name: "",
     address: "",
     maxFloor: "",
-    managerId: "",
   });
   const [errors, setErrors] = useState<any>();
+  const [building, setBuilding] = useState<Building>();
   const validation = () => {
     let err = {} as FormValue;
-   
+
     if (formValue.name === "") {
       err.name = "Trường tên là bắt buộc!";
     }
@@ -35,9 +37,7 @@ const UpdateBuilding = () => {
     if (formValue.maxFloor === "") {
       err.maxFloor = "Trường số tầng là bắt buộc!";
     }
-    if (formValue.managerId === "") {
-      err.managerId = "Trường mã người quản lí là bắt buộc!";
-    }
+
     return err;
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,25 +49,50 @@ const UpdateBuilding = () => {
     e.preventDefault();
     const err = validation();
     setErrors(err);
-    if(Object.keys(err).length === 0) {
-      const form = new FormData();
-    form.append("name", formValue.name);
-    form.append("address", formValue.address);
-    form.append("manager_id", formValue.managerId);
-    form.append("max_floor", formValue.maxFloor);
-    // try {
-    //   await residentService.createResident(form);
-    // } catch (error) {
-    //   console.log("error");
-    // }
+    if (Object.keys(err).length === 0) {
+      const data = {
+        name: formValue.name,
+        address: formValue.address,
+        max_floor: formValue.maxFloor,
+      };
+      try {
+        await axios.patch(`/api/building/${params.id}`, data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    // else alert(Object.keys(errors).length)
-    
   };
+  //get detail building
+  const retrieveBuilding = async () => {
+    try {
+      const res = await axios.get(`/api/building/${params.id}`);
+      const buildingData = res.data as Building;
+      console.log(buildingData);
+      setBuilding(buildingData);
+      const newformValue: any = {
+        name: buildingData.name,
+        address: buildingData.address,
+        maxFloor: buildingData.max_floor,
+      };
+      setFormValue(newformValue);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const { isLoading, isError, data, refetch } = useQuery(
+    "resident",
+    retrieveBuilding,
+    {
+      staleTime: Infinity,
+    }
+  );
   return (
     <main className={mainStyles.main}>
       <div className={styles.wapper}>
-        <p className={utilStyles.headingXl}>Cập nhật thông tin tòa nhà</p>
+        <p className={clsx(utilStyles.headingXl, styles.title)}>
+          Cập nhật thông tin tòa nhà
+        </p>
 
         <Form className={clsx(styles.form, futuna.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -80,7 +105,9 @@ const UpdateBuilding = () => {
               type="text"
               placeholder="A01..."
             />
-            {errors && errors.name && <span className={styles.error}>{errors.name}</span>}
+            {errors && errors.name && (
+              <span className={styles.error}>{errors.name}</span>
+            )}
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label className={styles.label}>Địa chỉ</Form.Label>
@@ -90,9 +117,8 @@ const UpdateBuilding = () => {
               name="address"
               value={formValue.address}
               onChange={handleChange}
-              
             />
-            {errors &&errors.address && (
+            {errors && errors.address && (
               <span className={styles.error}>{errors.address}</span>
             )}
           </Form.Group>
@@ -106,11 +132,11 @@ const UpdateBuilding = () => {
               value={formValue.maxFloor}
               placeholder=""
             />
-            {errors &&errors.maxFloor && (
+            {errors && errors.maxFloor && (
               <span className={styles.error}>{errors.maxFloor}</span>
             )}
           </Form.Group>
-          <Form.Group className="mb-3">
+          {/* <Form.Group className="mb-3">
             <Form.Label className={styles.label}>Mã người quản lí</Form.Label>
             <Form.Control
               size="lg"
@@ -123,12 +149,9 @@ const UpdateBuilding = () => {
             {errors &&errors.managerId && (
               <span className={styles.error}>{errors.managerId}</span>
             )}
-          </Form.Group>
-         
-          <ToastComponent type="success" />
-
+          </Form.Group> */}
           <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-            Tạo
+            Cập nhật
           </ButtonComponent>
         </Form>
       </div>

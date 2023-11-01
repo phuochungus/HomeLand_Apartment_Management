@@ -2,15 +2,18 @@ export const SearchIcon = ({
   width,
   height,
   className,
+  onClick
 }: {
   width: any;
   height: any;
   className?: any;
+  onClick?: () => void;
 }): JSX.Element => {
   return (
     <svg
       width={width}
       height={height}
+      onClick={onClick}
       className={className}
       viewBox="0 0 30 30"
       fill="none"

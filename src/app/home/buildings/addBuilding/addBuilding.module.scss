@@ -1,9 +1,15 @@
 .wapper {
     width: 80%;
-    font-size: 1.6rem;
+    font-size: 1rem;
 }
 .form {
     width: 100%;
+    input {
+        font-size: 1rem;
+    }
+}
+.title {
+    text-align: center;
 }
 .label {    
     position: relative;
@@ -22,11 +28,11 @@
     margin: 0 auto;
     background-color: #8faeff;
     color: var(--white);
-    font-size: 2rem;
+    font-size: 1.25rem;
     padding: 8px 60px;
     border-radius: 10px;
     transition: 0.1 ease ;
-    &:active {
+    &:hover {
         background-color: #4b77e8;
     }
 }

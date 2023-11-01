@@ -1,7 +1,7 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
-import styles from "@/app/page.module.css"
+import styles from "../page.module.css";
 import residentStyles from "./resident.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
 import { clsx } from "clsx";
@@ -14,7 +14,7 @@ import {
   EditIcon,
   SortIcon,
 } from "@/components/icons";
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { useRouter } from "next/navigation";
 import { futuna } from "../../../../public/fonts/futura";
@@ -22,10 +22,13 @@ import { format } from "date-fns";
 import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { search } from "@/libs/utils";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
   const [residents, setResidents] = useState<Array<Resident>>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const searchRef = createRef<HTMLInputElement>();
   const listOptions = [
     {
       value: 10,
@@ -48,35 +51,25 @@ export default function Residents() {
       // className: cx({ active: maxPageDisplay === 100 }),
     },
   ];
-  const deleleHandle = () => {
+  const deleleHandle = (id: string) => {
+    setSelectedId(id);
     setShowModal(true);
   };
   const retrieveResidents = async () => {
     try {
-      const res = await axios.get('/api/resident')
-      setResidents(res.data )
-      console.log(res.data)
+      const res = await axios.get("/api/resident");
+      setResidents(res.data);
+      console.log(res.data);
       return res.data;
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
+  };
+  const { isLoading, isError, data, refetch } = useQuery(
+   "residents",
+    retrieveResidents,
     
-
-  } 
-  const { isLoading, isError, data, refetch } = useQuery('residents', retrieveResidents)
-
-  // useEffect(() => {
-  //   const fetchApi = async () => {
-  //   const data =  await residentService.getAllResident();
-  //    setResidents(data);
-  //   };
-
-  //   fetchApi();
-  // }, []);
-  
-
-
+  );
   const titleTable = [
     "ID",
     "Tên",
@@ -85,8 +78,46 @@ export default function Residents() {
     "Số điện thoại",
     "Ngày tạo",
   ];
- 
-  //console.log(residents)
+  const handleSearch = async (e: any) => {
+    if (e.key === "Enter") {
+      console.log("hah");
+      try {
+        const res = await axios.get("/api/resident/search", {
+          params: {
+            query: searchRef.current?.value,
+          },
+        });
+        console.log(res.data);
+        setResidents(res.data);
+      } catch (e) {
+        alert(e);
+      }
+    }
+  };
+  const searchIconClick = async () => {
+    console.log("hah");
+    try {
+      const res = await axios.get("/api/resident/search", {
+        params: {
+          query: searchRef.current?.value,
+        },
+      });
+      console.log(res.data);
+      setResidents(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleConfirmDelete = async (id: string) => {
+    console.log(id);
+    setShowModal(false);
+    try {
+      await axios.delete(`/api/resident/${id}`);
+      refetch();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <main className={clsx(styles.main)}>
@@ -118,7 +149,12 @@ export default function Residents() {
             </span>
             <span>Entries</span>
           </div>
-          <SearchLayout placeHolder="tìm dân cư..." />
+          <SearchLayout
+            onKeydown={handleSearch}
+            iconClick={searchIconClick}
+            placeHolder="tìm dân cư..."
+            ref={searchRef}
+          />
         </div>
         <div className="w-100 mt-5">
           <Table
@@ -140,8 +176,7 @@ export default function Residents() {
               {residents.map((resident, index): ReactNode => {
                 const time = new Date(resident.created_at);
                 const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
-               
-                
+
                 return (
                   <tr key={index}>
                     <td>{resident.id}</td>
@@ -163,7 +198,7 @@ export default function Residents() {
                           Sửa
                         </ButtonComponent>
                         <ButtonComponent
-                          onClick={deleleHandle}
+                          onClick={() => deleleHandle(resident.id)}
                           preIcon={<CloseIcon width={16} height={16} />}
                           className={clsx(
                             residentStyles.cudBtn,
@@ -172,10 +207,6 @@ export default function Residents() {
                         >
                           Xóa
                         </ButtonComponent>
-                        <ModalComponent
-                          show={showModal}
-                          setShow={setShowModal}
-                        />
                       </div>
                     </td>
                   </tr>
@@ -185,6 +216,12 @@ export default function Residents() {
           </Table>
         </div>
       </div>
+      <ModalComponent
+        show={showModal}
+        title="Có chắc chắn xóa cư dân này?"
+        handleConfirm={() => handleConfirmDelete(selectedId)}
+        setShow={setShowModal}
+      />
     </main>
   );
 }

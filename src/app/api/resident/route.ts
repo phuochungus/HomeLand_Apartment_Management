@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
       'Content-Type': 'application/json',
   },
   };  
+
  
   const response = await axios.request(config).then((response) => {
     if (response.status == 200) {

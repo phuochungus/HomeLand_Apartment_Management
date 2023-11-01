@@ -9,6 +9,7 @@ import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { futuna } from "../../../../../public/fonts/futura";
+import axios from "axios";
 type FormValue = {
   name: string;
   address: string;
@@ -19,13 +20,12 @@ const AddBuilding = () => {
   const [formValue, setFormValue] = useState({
     name: "",
     address: "",
-    maxFloor: "",
-    managerId: "",
+    maxFloor: ""
   });
   const [errors, setErrors] = useState<any>();
   const validation = () => {
     let err = {} as FormValue;
-   
+
     if (formValue.name === "") {
       err.name = "Trường tên là bắt buộc!";
     }
@@ -35,9 +35,9 @@ const AddBuilding = () => {
     if (formValue.maxFloor === "") {
       err.maxFloor = "Trường số tầng là bắt buộc!";
     }
-    if (formValue.managerId === "") {
-      err.managerId = "Trường mã người quản lí là bắt buộc!";
-    }
+    // if (formValue.managerId === "") {
+    //   err.managerId = "Trường mã người quản lí là bắt buộc!";
+    // }
     return err;
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,23 +49,29 @@ const AddBuilding = () => {
     e.preventDefault();
     const err = validation();
     setErrors(err);
-    if(Object.keys(err).length === 0) {
+    if (Object.keys(err).length === 0) {
       const form = new FormData();
-    form.append("name", formValue.name);
-    form.append("address", formValue.address);
-    form.append("manager_id", formValue.managerId);
-    form.append("max_floor", formValue.maxFloor);
-    // try {
-    //   await residentService.createResident(form);
-    // } catch (error) {
-    //   console.log("error");
-    // }
+      form.append("name", formValue.name);
+      form.append("address", formValue.address);
+      // form.append("manager_id", formValue.managerId);
+      form.append("max_floor", formValue.maxFloor);
+      try {
+        await axios.post('/api/building', form)
+      }
+      catch(e) {
+        console.log(e);
+      }
+      // try {
+      //   await residentService.createResident(form);
+      // } catch (error) {
+      //   console.log("error");
+      // }
     }
   };
   return (
     <main className={mainStyles.main}>
       <div className={styles.wapper}>
-        <p className={utilStyles.headingXl}>Tạo tòa nhà</p>
+        <p className={clsx(utilStyles.headingXl, styles.title)}>Tạo tòa nhà</p>
 
         <Form className={clsx(styles.form, futuna.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -78,7 +84,9 @@ const AddBuilding = () => {
               type="text"
               placeholder="A01..."
             />
-            {errors && errors.name && <span className={styles.error}>{errors.name}</span>}
+            {errors && errors.name && (
+              <span className={styles.error}>{errors.name}</span>
+            )}
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label className={styles.label}>Địa chỉ</Form.Label>
@@ -88,9 +96,8 @@ const AddBuilding = () => {
               name="address"
               value={formValue.address}
               onChange={handleChange}
-              
             />
-            {errors &&errors.address && (
+            {errors && errors.address && (
               <span className={styles.error}>{errors.address}</span>
             )}
           </Form.Group>
@@ -104,11 +111,11 @@ const AddBuilding = () => {
               value={formValue.maxFloor}
               placeholder=""
             />
-            {errors &&errors.maxFloor && (
+            {errors && errors.maxFloor && (
               <span className={styles.error}>{errors.maxFloor}</span>
             )}
           </Form.Group>
-          <Form.Group className="mb-3">
+          {/* <Form.Group className="mb-3">
             <Form.Label className={styles.label}>Mã người quản lí</Form.Label>
             <Form.Control
               size="lg"
@@ -118,11 +125,11 @@ const AddBuilding = () => {
               onChange={handleChange}
               placeholder=""
             />
-            {errors &&errors.managerId && (
+            {errors && errors.managerId && (
               <span className={styles.error}>{errors.managerId}</span>
             )}
-          </Form.Group>
-         
+          </Form.Group> */}
+
           <ToastComponent type="success" />
 
           <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
