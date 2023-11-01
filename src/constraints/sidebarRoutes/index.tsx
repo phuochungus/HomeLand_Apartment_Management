@@ -57,6 +57,20 @@ export const sidebarInfo = [
     svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
   },
   {
+    title: "contracts",
+    svg: <Image src={Images.Properties} alt="ico" width={30} height={30} />,
+    menu: [
+      {
+        title: "All Contracts",
+        href: "/home/contracts",
+      },
+      {
+        title: "Add contracts",
+        href: "/home/contracts/add",
+      },
+    ],
+  },
+  {
     title: "Setting",
     svg: (
       <svg
