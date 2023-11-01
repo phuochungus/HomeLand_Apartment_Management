@@ -1,11 +1,10 @@
 "use client";
-import { QueryClient, QueryClientProvider } from "react-query";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import styles from "../page.module.css";
 import residentStyles from "./resident.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
 import { clsx } from "clsx";
-import Table from "react-bootstrap/Table";
+import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import SearchLayout from "@/components/searchLayout/searchLayout";
 import {
