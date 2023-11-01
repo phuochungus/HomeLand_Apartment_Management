@@ -31,7 +31,7 @@ type FormValue = {
   gender: string;
   phoneNumber: string;
   paymentInfo: string;
-  email: string;
+  email?: string;
   frontImg: any;
   backImg: any;
   avatarImg?: any;
@@ -43,7 +43,7 @@ const AddResident = () => {
     gender: "",
     phoneNumber: "",
     paymentInfo: "",
-    email: "",
+    email: ""
   });
   const [errors, setErrors] = useState<any>();
   const [frontImg, setFrontImg] = useState<any>();
@@ -126,6 +126,7 @@ const AddResident = () => {
     if (formValue.gender === "") {
       err.gender = "Trường giới tính là bắt buộc!";
     }
+    if(formValue.email)
     if (formValue.email === "") {
     } else if (!emailPattern.test(formValue.email)) {
       err.email = "Email không hợp lệ!";
@@ -167,7 +168,7 @@ const AddResident = () => {
       form.append("gender", formValue.gender);
       form.append("phone_number", formValue.phoneNumber);
       form.append("payment_info", formValue.paymentInfo);
-      if (formValue.email !== "") form.append("email", formValue.email);
+      form.append("email", formValue.email);
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
       if (avatar) {
@@ -181,6 +182,8 @@ const AddResident = () => {
             toastMessage({ type: "success", title: "Create successfully!" });
           })
           .catch((e) => {
+            console.log(e)
+            console.log(form)
             toastMessage({ type: "error", title: "Create faily!" });
           });
       } catch (e) {

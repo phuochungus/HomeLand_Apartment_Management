@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
 }
 export async function POST(request: NextRequest) {
   const data = await request.formData();
+  console.log(data)
   let config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
     },
     data: data,
   };
-
+  console.log(endpoint.resident)
   const response = await axios
     .request(config)
     .then((response) => {
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
       }
     })
     .catch((error) => {
+      
       return NextResponse.json(error.response.data.message, {
         status: error.response.status,
         statusText: error.response.statusText,

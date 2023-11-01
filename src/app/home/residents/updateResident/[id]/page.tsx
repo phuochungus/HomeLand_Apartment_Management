@@ -105,6 +105,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         await axios.patch(`/api/resident/${params.id}`, JSON.stringify(data));
         toastMessage({type: 'success', title: 'Update successfully!'})
       } catch (error) {
+        console.log(error)
         toastMessage({type: 'error', title: 'Update faily!'})
 
       }
