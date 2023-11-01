@@ -35,7 +35,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {  
  
   const data = await request.formData();
-    console.log(data)
     let config = {
     method: 'post',
     maxBodyLength: Infinity,
@@ -47,7 +46,7 @@ export async function POST(request: NextRequest) {
   };   
 
   const response = await axios.request(config).then((response) => {
-    console.log(response.status)
+    
     if (response.status == 201) {
     
      // console.log(body)

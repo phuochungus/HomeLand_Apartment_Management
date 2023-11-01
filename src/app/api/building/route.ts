@@ -2,7 +2,6 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { endpoint } from "@/constraints/endpoints";
 import { cookies } from "next/headers";
-// import { Person } from "@/models/person";
 export async function GET(request: NextRequest) {
   let config = {
     method: "get",

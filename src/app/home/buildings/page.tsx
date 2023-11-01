@@ -20,9 +20,11 @@ export default function Dashboard() {
   const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [buildings, setBuildings] = useState<Array<Building>>([]);
+  const [selectedId, setSelectedId] = useState("");
   const searchRef = createRef<HTMLInputElement>();
-  const titleTable = ["ID", "Tên", "Địa chỉ", "Số tầng", "ID người quản lí"];
-  const deleleHandle = () => {
+  const titleTable = ["ID", "Tên", "Địa chỉ", "Số tầng"];
+  const deleleHandle = (id: string) => {
+    setSelectedId(id);
     setShowModal(true);
   };
   const retrieveBuilding = async () => {
@@ -49,6 +51,15 @@ export default function Dashboard() {
         },
       });
       setBuildings(res.data);
+    }
+  };
+  const handleConfirmDelete = async (id: string) => {
+    setShowModal(false);
+    try {
+      await axios.delete(`/api/building/${id}`);
+      refetch();
+    } catch (err) {
+      console.log(err);
     }
   };
   const searchIconClick = async () => {
@@ -120,7 +131,8 @@ export default function Dashboard() {
                           Sửa
                         </ButtonComponent>
                         <ButtonComponent
-                          onClick={deleleHandle}
+                          onClick={() => deleleHandle(building.building_id)}
+                        
                           preIcon={<CloseIcon width={16} height={16} />}
                           className={clsx(
                             buildingStyles.cudBtn,
@@ -129,11 +141,7 @@ export default function Dashboard() {
                         >
                           Xóa
                         </ButtonComponent>
-                        {/* <ModalComponent
-                          handleConfirm={}
-                          show={showModal}
-                          setShow={setShowModal}
-                        /> */}
+                       
                       </div>
                     </td>
                   </tr>
@@ -143,6 +151,12 @@ export default function Dashboard() {
           </Table>
         </div>
       </div>
+      <ModalComponent
+        show={showModal}
+        title="Có chắc chắn xóa tòa này?"
+        handleConfirm={() => handleConfirmDelete(selectedId)}
+        setShow={setShowModal}
+      />
     </main>
   );
 }
