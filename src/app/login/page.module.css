@@ -22,7 +22,10 @@
     padding: 40px;
     width: 750px;
 }
-
+.form input{
+    font-weight: bold;
+    padding: 0 10px;
+}
 .header {
     display: flex;
     align-content: center;
@@ -106,4 +109,23 @@
     .bannerContainer{
         height: 220px
     }
+}
+
+.passwordButton.hidden .hidden{
+    display: inline;
+    visibility: visible;
+    cursor: pointer;
+}
+.passwordButton.hidden .show{
+    display: none;
+    visibility: hidden;
+}
+.passwordButton.show .show{
+    display: inline;
+    visibility: visible;
+    cursor: pointer;
+}
+.passwordButton.show .hidden{
+    display: none;
+    visibility: hidden;
 }
