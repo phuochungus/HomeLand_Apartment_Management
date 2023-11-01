@@ -16,7 +16,6 @@ import {
 } from "@/components/icons";
 import { useState, useEffect, ReactNode } from "react";
 import ModalComponent from "@/components/Modal/Modal";
-import { residentService } from "@/apiServices/residentService";
 import { useRouter } from "next/navigation";
 import { futuna } from "../../../../public/fonts/futura";
 import { format } from "date-fns";

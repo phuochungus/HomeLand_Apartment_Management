@@ -6,7 +6,6 @@ import utilStyles from "@/styles/utils.module.scss";
 import Form from "react-bootstrap/Form";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
-import { residentService } from "@/apiServices/residentService";
 import { Resident } from "@/models/resident";
 import { format } from "date-fns";
 import clsx from "clsx";

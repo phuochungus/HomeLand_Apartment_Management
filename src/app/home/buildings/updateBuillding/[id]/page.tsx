@@ -8,7 +8,6 @@ import clsx from "clsx";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Image from "next/image";
 import ToastComponent from "@/components/ToastComponent/ToastComponent";
-import { residentService } from "@/apiServices/residentService";
 import { futuna } from "../../../../../../public/fonts/futura";
 type FormValue = {
   name: string;
@@ -56,11 +55,11 @@ const UpdateBuilding = () => {
     form.append("address", formValue.address);
     form.append("manager_id", formValue.managerId);
     form.append("max_floor", formValue.maxFloor);
-    try {
-      await residentService.createResident(form);
-    } catch (error) {
-      console.log("error");
-    }
+    // try {
+    //   await residentService.createResident(form);
+    // } catch (error) {
+    //   console.log("error");
+    // }
     }
     // else alert(Object.keys(errors).length)
     
