@@ -58,13 +58,13 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
         max_floor: formValue.maxFloor,
       };
       try {
-        loadingFiler(document.body);
+        // loadingFiler(document.body);
         await axios.patch(`/api/building/${params.id}`, data);
-        removeLoadingFilter(document.body);
+        // removeLoadingFilter(document.body);
         toastMessage({ type: "success", title: "Update successfully!" });
       } catch (error) {
         console.log(error);
-        removeLoadingFilter(document.body);
+        // removeLoadingFilter(document.body);
         toastMessage({ type: "error", title: "Update faily!" });
       }
     }
