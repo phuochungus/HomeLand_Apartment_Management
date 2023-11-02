@@ -11,7 +11,6 @@ import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { futuna } from "../../../../../public/fonts/futura";
 import axios from "axios";
 import toastMessage from "@/utils/toast";
-import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
   name: string;
   address: string;

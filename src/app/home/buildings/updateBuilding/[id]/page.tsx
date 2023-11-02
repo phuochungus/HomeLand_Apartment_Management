@@ -13,7 +13,6 @@ import axios from "axios";
 import { Building } from "@/models/building";
 import { useQuery } from "react-query";
 import toastMessage from "@/utils/toast";
-import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
   name: string;
   address: string;

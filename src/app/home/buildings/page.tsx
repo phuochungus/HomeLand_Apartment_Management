@@ -16,7 +16,6 @@ import { format } from "date-fns";
 import { Building } from "@/models/building";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);

@@ -23,7 +23,6 @@ import axios from "axios";
 import { Images } from "../../../../../../public/images";
 import toastMessage from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
-import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
   phoneNumber: string;
   paymentInfo: string;
