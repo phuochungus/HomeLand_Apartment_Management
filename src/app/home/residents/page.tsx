@@ -49,22 +49,19 @@ export default function Residents() {
   };
   const retrieveResidents = async () => {
     try {
-      loadingFiler(document.body!)
       const res = await axios.get("/api/resident");
       setResidents(res.data);
-      removeLoadingFilter(document.body!);
+
       return res.data;
     } catch (error) {
       console.log(error);
-      removeLoadingFilter(document.body!);
-
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
     "residents",
     retrieveResidents,
     {
-      staleTime: Infinity
+      staleTime: Infinity,
     }
   );
   const titleTable = [

@@ -30,14 +30,14 @@ export default function Dashboard() {
   };
   const retrieveBuilding = async () => {
     try {
-       loadingFiler(document.body!);
+    
       const res = await axios.get("/api/building");
-       removeLoadingFilter(document.body!);
+      
       const buildingsData : Building[] = res.data;
       setBuildings(buildingsData);
       return res.data;
     } catch (error) {
-      removeLoadingFilter(document.body!);
+     
       console.log(error);
     }
   };
