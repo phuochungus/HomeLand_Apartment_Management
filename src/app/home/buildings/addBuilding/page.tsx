@@ -57,12 +57,12 @@ const AddBuilding = () => {
       form.append("address", formValue.address);
       form.append("max_floor", formValue.maxFloor);
       try {
-        loadingFiler(document.getElementsByTagName("main")[0]);
+        loadingFiler(document.body!);
         await axios.post("/api/building", form);
-        removeLoadingFilter(document.getElementsByTagName("main")[0]);
+        removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Create successfully!" });
       } catch (e) {
-        removeLoadingFilter(document.getElementsByTagName("main")[0]);
+        removeLoadingFilter(document.body!);
 
         console.log(e);
         toastMessage({ type: "error", title: "Create faily!" });
