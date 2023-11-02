@@ -11,6 +11,7 @@ import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { futuna } from "../../../../../public/fonts/futura";
 import axios from "axios";
 import toastMessage from "@/utils/toast";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
   name: string;
   address: string;
@@ -21,7 +22,7 @@ const AddBuilding = () => {
   const [formValue, setFormValue] = useState({
     name: "",
     address: "",
-    maxFloor: ""
+    maxFloor: "",
   });
   const [errors, setErrors] = useState<any>();
   const validation = () => {
@@ -54,23 +55,19 @@ const AddBuilding = () => {
       const form = new FormData();
       form.append("name", formValue.name);
       form.append("address", formValue.address);
-      // form.append("manager_id", formValue.managerId);
       form.append("max_floor", formValue.maxFloor);
       try {
-        await axios.post('/api/building', form)
+        loadingFiler(document.body);
+        await axios.post("/api/building", form);
+        removeLoadingFilter(document.body);
         toastMessage({ type: "success", title: "Create successfully!" });
+      } catch (e) {
+        removeLoadingFilter(document.body);
 
-      }
-      catch(e) {
         console.log(e);
         toastMessage({ type: "error", title: "Create faily!" });
-
       }
-      // try {
-      //   await residentService.createResident(form);
-      // } catch (error) {
-      //   console.log("error");
-      // }
+
     }
   };
   return (

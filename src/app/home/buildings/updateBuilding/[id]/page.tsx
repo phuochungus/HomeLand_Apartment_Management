@@ -13,6 +13,7 @@ import axios from "axios";
 import { Building } from "@/models/building";
 import { useQuery } from "react-query";
 import toastMessage from "@/utils/toast";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
   name: string;
   address: string;
@@ -57,22 +58,24 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
         max_floor: formValue.maxFloor,
       };
       try {
+        loadingFiler(document.body);
         await axios.patch(`/api/building/${params.id}`, data);
+        removeLoadingFilter(document.body);
         toastMessage({ type: "success", title: "Update successfully!" });
-
       } catch (error) {
         console.log(error);
+        removeLoadingFilter(document.body);
         toastMessage({ type: "error", title: "Update faily!" });
-
       }
     }
   };
   //get detail building
   const retrieveBuilding = async () => {
     try {
+      loadingFiler(document.body);
       const res = await axios.get(`/api/building/${params.id}`);
-      const buildingData = res.data as Building;
-      console.log(buildingData);
+      removeLoadingFilter(document.body);
+      const buildingData : Building = res.data;
       setBuilding(buildingData);
       const newformValue: any = {
         name: buildingData.name,
@@ -141,20 +144,6 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
               <span className={styles.error}>{errors.maxFloor}</span>
             )}
           </Form.Group>
-          {/* <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Mã người quản lí</Form.Label>
-            <Form.Control
-              size="lg"
-              type="text"
-              name="managerId"
-              value={formValue.managerId}
-              onChange={handleChange}
-              placeholder=""
-            />
-            {errors &&errors.managerId && (
-              <span className={styles.error}>{errors.managerId}</span>
-            )}
-          </Form.Group> */}
           <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
             Cập nhật
           </ButtonComponent>

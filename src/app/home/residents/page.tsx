@@ -22,8 +22,7 @@ import { format } from "date-fns";
 import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { search } from "@/libs/utils";
-
+import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
@@ -33,23 +32,15 @@ export default function Residents() {
   const listOptions = [
     {
       value: 10,
-      // handleActive: () => handleSetActive(10),
-      // className: clsx({ active: maxPageDisplay === 10 }),
     },
     {
       value: 20,
-      // handleActive: () => handleSetActive(20),
-      // className: cx({ active: maxPageDisplay === 20 }),
     },
     {
       value: 50,
-      // handleActive: () => handleSetActive(50),
-      // className: cx({ active: maxPageDisplay === 50 }),
     },
     {
       value: 100,
-      // handleActive: () => handleSetActive(100),
-      // className: cx({ active: maxPageDisplay === 100 }),
     },
   ];
   const deleleHandle = (id: string) => {
@@ -58,18 +49,23 @@ export default function Residents() {
   };
   const retrieveResidents = async () => {
     try {
+      loadingFiler(document.body)
       const res = await axios.get("/api/resident");
       setResidents(res.data);
-      console.log(res.data);
+      removeLoadingFilter(document.body);
       return res.data;
     } catch (error) {
       console.log(error);
+      removeLoadingFilter(document.body);
+
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
-   "residents",
+    "residents",
     retrieveResidents,
-    
+    {
+      staleTime: Infinity
+    }
   );
   const titleTable = [
     "ID",

@@ -1,4 +1,4 @@
-import { endpoint } from "@/constraints/endpoints";
+  import { endpoint } from "@/constraints/endpoints";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 

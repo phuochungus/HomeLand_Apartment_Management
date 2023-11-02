@@ -24,6 +24,7 @@ import { Images } from "../../../../../public/images";
 import axios from "axios";
 import { RedirectType, redirect } from "next/navigation";
 import toastMessage from "@/utils/toast";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 
 type FormValue = {
   name: string;
@@ -43,7 +44,7 @@ const AddResident = () => {
     gender: "",
     phoneNumber: "",
     paymentInfo: "",
-    email: ""
+    email: "",
   });
   const [errors, setErrors] = useState<any>();
   const [frontImg, setFrontImg] = useState<any>();
@@ -126,11 +127,11 @@ const AddResident = () => {
     if (formValue.gender === "") {
       err.gender = "Trường giới tính là bắt buộc!";
     }
-    if(formValue.email)
-    if (formValue.email === "") {
-    } else if (!emailPattern.test(formValue.email)) {
-      err.email = "Email không hợp lệ!";
-    }
+    if (formValue.email)
+      if (formValue.email === "") {
+      } else if (!emailPattern.test(formValue.email)) {
+        err.email = "Email không hợp lệ!";
+      }
     if (formValue.phoneNumber === "") {
       err.phoneNumber = "Trường số điện thoại là bắt buộc!";
     } else if (!phonePattern.test(formValue.phoneNumber)) {
@@ -176,14 +177,15 @@ const AddResident = () => {
         form.append("avatar_photo", avatar);
       }
       try {
+        loadingFiler(document.body);
         await axios
           .post("/api/resident", form)
           .then((response) => {
+            removeLoadingFilter(document.body);
             toastMessage({ type: "success", title: "Create successfully!" });
           })
           .catch((e) => {
-            console.log(e)
-            console.log(form)
+            removeLoadingFilter(document.body);
             toastMessage({ type: "error", title: "Create faily!" });
           });
       } catch (e) {

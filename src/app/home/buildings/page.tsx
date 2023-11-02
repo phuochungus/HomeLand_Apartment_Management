@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { Building } from "@/models/building";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
@@ -29,10 +30,14 @@ export default function Dashboard() {
   };
   const retrieveBuilding = async () => {
     try {
+      loadingFiler(document.body);
       const res = await axios.get("/api/building");
-      setBuildings(res.data);
+      removeLoadingFilter(document.body);
+      const buildingsData : Building[] = res.data;
+      setBuildings(buildingsData);
       return res.data;
     } catch (error) {
+      removeLoadingFilter(document.body);
       console.log(error);
     }
   };
@@ -127,12 +132,10 @@ export default function Dashboard() {
                           )}
                           href={`/home/buildings/updateBuilding/${building.building_id}/?auth=true`}
                         >
-                          
                           Sửa
                         </ButtonComponent>
                         <ButtonComponent
                           onClick={() => deleleHandle(building.building_id)}
-                        
                           preIcon={<CloseIcon width={16} height={16} />}
                           className={clsx(
                             buildingStyles.cudBtn,
@@ -141,7 +144,6 @@ export default function Dashboard() {
                         >
                           Xóa
                         </ButtonComponent>
-                       
                       </div>
                     </td>
                   </tr>
