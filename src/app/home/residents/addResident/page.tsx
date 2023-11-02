@@ -177,15 +177,15 @@ const AddResident = () => {
         form.append("avatar_photo", avatar);
       }
       try {
-        // loadingFiler(document.body);
+        loadingFiler(document.getElementsByTagName("main")[0]);
         await axios
           .post("/api/resident", form)
           .then((response) => {
-            // removeLoadingFilter(document.body);
+            removeLoadingFilter(document.getElementsByTagName("main")[0]);
             toastMessage({ type: "success", title: "Create successfully!" });
           })
           .catch((e) => {
-            // removeLoadingFilter(document.body);
+            removeLoadingFilter(document.getElementsByTagName("main")[0]);
             toastMessage({ type: "error", title: "Create faily!" });
           });
       } catch (e) {

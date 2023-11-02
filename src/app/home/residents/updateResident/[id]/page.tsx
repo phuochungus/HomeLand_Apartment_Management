@@ -69,7 +69,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   };
   const retrieveResident = async () => {
     try {
-      // loadingFiler(document.body);
+      loadingFiler(document.getElementsByTagName("main")[0]);
       const res = await axios.get(`/api/resident/${params.id}`);
       const residentData = res.data as Resident;
       setResident(residentData);
@@ -78,12 +78,12 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         paymentInfo: residentData.payment_info || "",
         email: residentData.account ? residentData.account.email : undefined,
       };
-      // removeLoadingFilter(document.body);
+      removeLoadingFilter(document.getElementsByTagName("main")[0]);
 
       setFormValue(newformValue);
       return res.data;
     } catch (error) {
-      // removeLoadingFilter(document.body);
+      removeLoadingFilter(document.getElementsByTagName("main")[0]);
       console.log(error);
     }
   };
@@ -100,7 +100,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     setErrors(err);
     if (Object.keys(err).length === 0) {
       try {
-        // loadingFiler(document.body);
+        loadingFiler(document.getElementsByTagName("main")[0]);
         const data: any = {
           phone_number: formValue.phoneNumber,
           payment_info: formValue.paymentInfo,
@@ -109,10 +109,10 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
           data.email = formValue.email;
         }
         await axios.patch(`/api/resident/${params.id}`, JSON.stringify(data));
-        // removeLoadingFilter(document.body);
+        removeLoadingFilter(document.getElementsByTagName("main")[0]);
         toastMessage({ type: "success", title: "Update successfully!" });
       } catch (error) {
-        // removeLoadingFilter(document.body);
+        removeLoadingFilter(document.getElementsByTagName("main")[0]);
         console.log(error);
         toastMessage({ type: "error", title: "Update faily!" });
       }

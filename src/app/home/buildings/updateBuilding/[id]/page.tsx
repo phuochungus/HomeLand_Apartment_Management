@@ -58,13 +58,13 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
         max_floor: formValue.maxFloor,
       };
       try {
-        // loadingFiler(document.body);
+        loadingFiler(document.getElementsByTagName("main")[0]);
         await axios.patch(`/api/building/${params.id}`, data);
-        // removeLoadingFilter(document.body);
+        removeLoadingFilter(document.getElementsByTagName("main")[0]);
         toastMessage({ type: "success", title: "Update successfully!" });
       } catch (error) {
         console.log(error);
-        // removeLoadingFilter(document.body);
+        removeLoadingFilter(document.getElementsByTagName("main")[0]);
         toastMessage({ type: "error", title: "Update faily!" });
       }
     }
@@ -72,9 +72,9 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
   //get detail building
   const retrieveBuilding = async () => {
     try {
-      loadingFiler(document.body);
+      loadingFiler(document.getElementsByTagName("main")[0]);
       const res = await axios.get(`/api/building/${params.id}`);
-      removeLoadingFilter(document.body);
+      removeLoadingFilter(document.getElementsByTagName("main")[0]);
       const buildingData : Building = res.data;
       setBuilding(buildingData);
       const newformValue: any = {
@@ -85,6 +85,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       setFormValue(newformValue);
       return res.data;
     } catch (error) {
+      removeLoadingFilter(document.getElementsByTagName("main")[0])
       console.log(error);
     }
   };

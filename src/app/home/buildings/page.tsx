@@ -30,14 +30,14 @@ export default function Dashboard() {
   };
   const retrieveBuilding = async () => {
     try {
-      // loadingFiler(document.body);
+       loadingFiler(document.getElementsByTagName("main")[0]);
       const res = await axios.get("/api/building");
-      // removeLoadingFilter(document.body);
+       removeLoadingFilter(document.getElementsByTagName("main")[0]);
       const buildingsData : Building[] = res.data;
       setBuildings(buildingsData);
       return res.data;
     } catch (error) {
-      // removeLoadingFilter(document.body);
+      removeLoadingFilter(document.getElementsByTagName("main")[0]);
       console.log(error);
     }
   };
