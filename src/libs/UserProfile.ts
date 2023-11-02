@@ -1,32 +1,30 @@
 "use client";
 
-import { stringify } from "querystring";
-
 export var UserProfile = (function () {
     var getProfile = function () {
-        const profile = window.localStorage.getItem("user");
+        const profile = localStorage.getItem("user");
         if (profile)
             return JSON.parse(profile)
         return undefined;
     }
     var setProfile = function (user: {}) {
-        const profile = window.localStorage.getItem("user");
+        const profile = localStorage.getItem("user");
         if (profile)
-            window.localStorage.setItem('user', JSON.stringify({ ...JSON.parse(profile), ...user }))
+            localStorage.setItem('user', JSON.stringify({ ...JSON.parse(profile), ...user }))
     }
     var getRole = function () {
-        const profile = window.localStorage.getItem("user");
+        const profile = localStorage.getItem("user");
         if (profile)
             return JSON.parse(profile).role;  // Or pull this from cookie/localStorage
         return undefined;
     };
 
     var setRole = function (role: string) {
-        const profile = window.localStorage.getItem("user");
+        const profile = localStorage.getItem("user");
         if (profile)
-            window.localStorage.setItem("user", JSON.stringify({ ...JSON.parse(profile), role: role }));
+            localStorage.setItem("user", JSON.stringify({ ...JSON.parse(profile), role: role }));
         else
-            window.localStorage.setItem("user", JSON.stringify({ role: role }));
+            localStorage.setItem("user", JSON.stringify({ role: role }));
 
         // Also set this in cookie/localStorage
     };
@@ -38,11 +36,11 @@ export var UserProfile = (function () {
     };
 
     var setId = function (id: string) {
-        const profile = window.localStorage.getItem("user");
+        const profile = localStorage.getItem("user");
         if (profile)
-            window.localStorage.setItem("user", JSON.stringify({ ...JSON.parse(profile), id: id }));
+            localStorage.setItem("user", JSON.stringify({ ...JSON.parse(profile), id: id }));
         else
-            window.localStorage.setItem("user", JSON.stringify({ id: id }));
+            localStorage.setItem("user", JSON.stringify({ id: id }));
     };
     return {
         getProfile,
