@@ -3,14 +3,15 @@
   "home": {
     "body": "A store designed for all your pet needs"
   },
-  "building":"Building",
-  "floor":"Floor",
-  "apartment": "Apartment", 
+  "building": "Building",
+  "floor": "Floor",
+  "apartment": "Apartment",
   "phone_number": "Phone Number",
   "name": "Name",
   "create_at": "Create At",
   "expire_at": "Expire At",
-  "search_contract":"Search contract with resident name...",
-  "see_all_contract":"All contracts",
-  "status":"Status"
+  "search_contract": "Search contract with resident name...",
+  "see_all_contract": "All contracts",
+  "status": "Status",
+  "add_contract": "Add contract"
 }

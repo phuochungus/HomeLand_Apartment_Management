@@ -6,4 +6,5 @@ export const endpoint = {
   apartment: baseUrl + "/apartment",
   person: baseUrl + "/person",
   contract: baseUrl + "/contract",
+  me: baseUrl + "/me",
 };

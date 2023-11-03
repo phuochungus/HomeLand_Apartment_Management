@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
 export default function Contracts() {
   const [ContractList, setContractList] = useState<Contract[]>([]);
-  const [buildingFilter, setBuildingFilter] = useState("default");
   const [t, i18n] = useTranslation();
   const router = useRouter();
 
@@ -39,6 +38,11 @@ export default function Contracts() {
     },
     {
       title: t("floor"),
+      selections: [],
+      onChange: () => {},
+    },
+    {
+      title: t("apartment"),
       selections: [],
       onChange: () => {},
     },
@@ -159,9 +163,6 @@ export default function Contracts() {
           ))}
         </tbody>
       </Table>
-      <div className={styles.grid}>
-        {ContractList.map((value, index) => ContractCard(value))}
-      </div>
       {loadingMore ? (
         <div
           style={{
@@ -203,40 +204,5 @@ const FilterButton = ({
         style={{ width: "100%" }}
       ></SearchDropdown>
     </div>
-  );
-};
-
-const ContractCard = (value: Contract): React.ReactNode => {
-  const router = useRouter();
-
-  function handleRouting(route: string): void {
-    router.push(route);
-  }
-  return (
-    <>{value.contract_id}</>
-    // <Card
-    //   onClick={() =>
-    //     handleRouting(
-    //       "/home/" + "properties/" + value.contract_id + "?auth=true"
-    //     )
-    //   }
-    //   className={`${futuna.className} ${styles.gridItem}`}
-    //   style={{ borderRadius: "10px", overflow: "hidden" }}
-    // >
-    //   <Card.Img variant="top" src={value.images[0]} />
-    //   <Card.Body
-    //     style={{
-    //       display: "flex",
-    //       flexDirection: "column",
-    //       justifyContent: "start",
-    //     }}
-    //   >
-    //     <Card.Title style={{ alignSelf: "start" }}>
-    //       {value.rent}
-    //       <span style={{ color: "grey" }}>{" /month"}</span>
-    //     </Card.Title>
-    //     <Card.Text>{value.name}</Card.Text>
-    //   </Card.Body>
-    // </Card>
   );
 };

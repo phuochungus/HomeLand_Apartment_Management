@@ -104,13 +104,7 @@ export default function Apartments() {
     <main className={styles.main}>
       <div className={styles.container}>
         <div
-          className={styles.itemContainer}
-          style={{
-            height: "100%",
-            width: "40%",
-            borderStyle: "none",
-            padding: "10px 0",
-          }}
+          className={`${styles.itemContainer} ${styles.searchBarContainer}`}
         >
           <SearchBar className={styles.searchBar}></SearchBar>
         </div>

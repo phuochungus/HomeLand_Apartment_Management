@@ -8,6 +8,7 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import { UserProfile } from "@/libs/UserProfile";
 export default function Login() {
   const router = useRouter();
   const handleSignIn = async () => {
@@ -31,6 +32,7 @@ export default function Login() {
     axios
       .request(config)
       .then((res) => {
+        UserProfile.setProfile(res.data);
         router.replace("/home/dashboard?auth=true");
       })
       .catch((err) => {
