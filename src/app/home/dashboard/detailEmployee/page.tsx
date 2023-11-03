@@ -16,7 +16,7 @@ const DetailEmployee = () => {
                                 <p className={styles.headingXl}>Chi tiết nhân viên</p>
 
                                 <Form className={styles.form}> 
-                                        <img alt="Profile" src="/images/logos/Logo.png" height="250" className={styles.profileImage} />
+                                        <img alt="Profile" src="/images/logos/Logo@3x.png" height="250" className={styles.profileImage} />
                                         <div  className={styles.Buttondiv}>
                                         <ButtonComponent className={styles.creatBtn1}>Xóa</ButtonComponent>
                                         <ButtonComponent className={styles.creatBtn2}>Sửa</ButtonComponent>

@@ -28,20 +28,28 @@
         margin: 0 8px;
 }
 
+.dashboardStyles.col {
+        display: flex;
+        align-items: stretch;
+        justify-content: stretch;
+}
 
 .dashboardBackground {
         background-color: aliceblue;
 }
 
+      
 .search {
         background-color: aliceblue;
         padding: 2px;
         margin-left: -29px;
+        margin-right: 20px;
         border-radius: 8px;
         color: black;
         height: 30px;
         width: 250px;
         position: relative;
+        
 }
 
 .search-input {
@@ -50,7 +58,9 @@
         outline: none;
         padding: 0;
 }
-
+.form-control{
+        margin-right: 200px;
+}
 .searchbutton {
         color: black;
         border: none;
@@ -58,6 +68,7 @@
         position: absolute;
         right: 10px;
         top: 50%;
+        margin-right: -16px;
         transform: translateY(-50%);
 
 }
@@ -65,20 +76,25 @@
 .modalADE {
         color: black;
 }
-
 .rowcss {
         border-color: black;
 }
-
+/* .formsearch{
+        margin-right: 50px;
+        background-color: aliceblue;
+        
+} */
 .addBtn {
         background-color: var(--primary);
-        color: var(--white);
+      
         padding: var(--default-padding-vertical) var(--default-padding-horizontal);
         border-radius: 8px;
-        margin-left: 300px;
+        margin-left: 80px;
         margin-top: -10px;
         margin-bottom: 10px;
         background-color: #0744e1;
+        margin-right: 20px;
+        color: aliceblue;
 
 
 }
@@ -99,6 +115,7 @@
         text-align: right;
         margin-bottom: 10px;
 }
+
 .card {
         transition: transform 0.3s, z-index 0.3s;
 }
@@ -118,7 +135,8 @@
         transform: scale(1.025);
         z-index: 1;
 }
-.main{
+
+.main {
         font-family: "Times New Roman", serif;
         font-size: 18px;
         font-weight: normal;
