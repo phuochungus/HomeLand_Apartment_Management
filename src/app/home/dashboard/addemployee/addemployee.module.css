@@ -4,9 +4,33 @@
 
 }
 
+.avatarLayout {
+        width: 20%;
+        height: 250px;
+        margin-right: 40px;
+        position: relative;
+
+}
 
 .box {
         width: 40%;
+}
+
+.creatBtn1 {
+        margin: 20px auto;
+        background-color: #8faeff;
+        color: var(--white);
+        font-size: 1.25rem;
+        padding: 8px 60px;
+        border-radius: 10px;
+        transition: 0.1s ease;
+}
+.error{
+        color: #fc0404;
+}
+.creatBtn1:active {
+        background-color: #4b77e8;
+        /* Màu mới khi ấn vào */
 }
 
 .headingLg {
@@ -32,7 +56,7 @@
         align-items: center;
 }
 
-.creatBtn1 {
+/* .creatBtn1 {
         color: white;
         border: 1px solid black;
         width: 200px;
@@ -44,7 +68,7 @@
         justify-content: center;
         padding: var(--default-padding-vertical) var(--default-padding-horizontal);
 
-}
+} */
 
 .dropzone {
         color: black;
