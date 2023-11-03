@@ -149,7 +149,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   // }, [avatar, avatar_photo]);
   return (
     <main className={mainStyles.main}>
-      <div className={styles.wapper}>
+      <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
           Chỉnh sửa thông tin cư dân
         </p>
@@ -165,7 +165,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
           </div> */}
           <Form method="post" className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label className={styles.label}>Họ và tên</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>Họ và tên</Form.Label>
               <Form.Control
                 value={resident && resident.profile.name}
                 size="lg"
@@ -175,7 +175,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label className={styles.label}>Giới tính</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>Giới tính</Form.Label>
 
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
@@ -220,7 +220,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             )}
 
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>Số điện thoại</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>Số điện thoại</Form.Label>
               <Form.Control
                 value={formValue.phoneNumber}
                 onChange={handleChange}
@@ -250,7 +250,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>Ngày sinh</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>Ngày sinh</Form.Label>
               <Form.Control
                 value={
                   resident &&
@@ -264,7 +264,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             </Form.Group>
             <div className="d-flex justify-content-around">
               <Form.Group className="mb-3">
-                <Form.Label className={styles.label}>Ảnh trước CCCD</Form.Label>
+                <Form.Label className={clsx(styles.label, styles.required)}>Ảnh trước CCCD</Form.Label>
                 <Form.Control
                   accept="image/*"
                   size="lg"
@@ -288,7 +288,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label className={styles.label}>Ảnh sau CCCD</Form.Label>
+                <Form.Label className={clsx(styles.label, styles.required)}>Ảnh sau CCCD</Form.Label>
                 <Form.Control
                   accept="image/*"
                   size="lg"

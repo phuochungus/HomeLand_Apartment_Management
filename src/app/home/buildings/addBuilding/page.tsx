@@ -12,6 +12,7 @@ import { futuna } from "../../../../../public/fonts/futura";
 import axios from "axios";
 import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import { ToastContainer } from "react-toastify";
 type FormValue = {
   name: string;
   address: string;
@@ -56,6 +57,7 @@ const AddBuilding = () => {
       try {
         loadingFiler(document.body!);
         await axios.post("/api/building", form);
+        setFormValue({ name: "", address: "", maxFloor: "" });
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Create successfully!" });
       } catch (e) {
@@ -67,7 +69,7 @@ const AddBuilding = () => {
   };
   return (
     <main className={mainStyles.main}>
-      <div className={styles.wapper}>
+      <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>Tạo tòa nhà</p>
 
         <Form className={clsx(styles.form, futuna.className)}>
@@ -112,28 +114,23 @@ const AddBuilding = () => {
               <span className={styles.error}>{errors.maxFloor}</span>
             )}
           </Form.Group>
-          {/* <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Mã người quản lí</Form.Label>
-            <Form.Control
-              size="lg"
-              type="text"
-              name="managerId"
-              value={formValue.managerId}
-              onChange={handleChange}
-              placeholder=""
-            />
-            {errors && errors.managerId && (
-              <span className={styles.error}>{errors.managerId}</span>
-            )}
-          </Form.Group> */}
-
-          <ToastComponent type="success" />
-
           <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
             Tạo
           </ButtonComponent>
         </Form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </main>
   );
 };

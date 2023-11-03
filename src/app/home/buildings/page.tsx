@@ -17,6 +17,8 @@ import { Building } from "@/models/building";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import toastMessage from "@/utils/toast";
+import { ToastContainer } from "react-toastify";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
@@ -62,8 +64,10 @@ export default function Dashboard() {
     setShowModal(false);
     try {
       await axios.delete(`/api/building/${id}`);
+      toastMessage({ type: "success", title: "Delete successfully!" });
       refetch();
     } catch (err) {
+      toastMessage({ type: "error", title: "Delete faily!" });
       console.log(err);
     }
   };
@@ -77,7 +81,7 @@ export default function Dashboard() {
   };
   return (
     <main className={clsx(styles.main)}>
-      <div className={clsx(buildingStyles.wrapper)}>
+      <div className={clsx(buildingStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl, buildingStyles.title)}>
           Quản lí tòa nhà
         </h1>
@@ -95,7 +99,7 @@ export default function Dashboard() {
           onKeydown={handleSearch}
           iconClick={searchIconClick}
           className={buildingStyles.searchLayout}
-          placeHolder="tìm tòa nhà..."
+          placeHolder="Tìm tòa nhà..."
           ref={searchRef}
         />
         <div className="w-100 mt-5">
@@ -158,6 +162,18 @@ export default function Dashboard() {
         title="Có chắc chắn xóa tòa này?"
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </main>
   );

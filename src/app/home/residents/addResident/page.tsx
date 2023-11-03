@@ -51,6 +51,8 @@ const AddResident = () => {
   const [backImg, setBackImg] = useState<any>();
   const [avatar, setAvatar] = useState<any>();
   const avatarRef = useRef<HTMLInputElement>(null);
+  const frontRef = useRef<HTMLInputElement>(null);
+  const [imagesKeys, setImagesKeys] = useState({avatar:"", front:"", end:""});
   const handleAvatarClick = () => {
     avatarRef.current ? avatarRef.current.click() : console.error("error");
   };
@@ -137,9 +139,6 @@ const AddResident = () => {
     } else if (!phonePattern.test(formValue.phoneNumber)) {
       err.phoneNumber = "Số điện thoại không hợp lệ!";
     }
-    if (formValue.paymentInfo === "") {
-      err.paymentInfo = "Thông tin thanh toán là bắt buộc!";
-    }
     if (!frontImg) {
       err.frontImg = "Vui lòng chọn ảnh!";
     }
@@ -177,15 +176,27 @@ const AddResident = () => {
         form.append("avatar_photo", avatar);
       }
       try {
-        loadingFiler(document.body!)
+        loadingFiler(document.body!);
         await axios
           .post("/api/resident", form)
           .then((response) => {
-            removeLoadingFilter(document.body!)
+            setFormValue({
+              name: "",
+              dateOfBirth: "",
+              gender: "male",
+              phoneNumber: "",
+              paymentInfo: "",
+              email: "",
+            });
+            setFrontImg(null);
+            setBackImg(null);
+            setAvatar(null)
+            setImagesKeys({avatar: Math.random().toString(36), front:Math.random().toString(36), end: Math.random().toString(36)});
+            removeLoadingFilter(document.body!);
             toastMessage({ type: "success", title: "Create successfully!" });
           })
           .catch((e) => {
-            removeLoadingFilter(document.body!)
+            removeLoadingFilter(document.body!);
             toastMessage({ type: "error", title: "Create faily!" });
           });
       } catch (e) {
@@ -201,7 +212,7 @@ const AddResident = () => {
 
   return (
     <main className={mainStyles.main}>
-      <div className={styles.wapper}>
+      <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.header)}>Tạo cư dân</p>
         <div className="d-inline-flex justify-content-between">
           <div className={styles.avatarLayout}>
@@ -209,13 +220,16 @@ const AddResident = () => {
             <input
               onChange={handleChangeAvatar}
               type="file"
+              key={imagesKeys.avatar||""}
               ref={avatarRef}
               style={{ display: "none" }}
             />
           </div>
           <Form className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label className={styles.label}>Họ và tên</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Họ và tên
+              </Form.Label>
               <Form.Control
                 size="lg"
                 name="name"
@@ -230,7 +244,9 @@ const AddResident = () => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label className={styles.label}>Giới tính</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Giới tính
+              </Form.Label>
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
                   inline
@@ -272,7 +288,9 @@ const AddResident = () => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>Số điện thoại</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Số điện thoại
+              </Form.Label>
               <Form.Control
                 size="lg"
                 type="text"
@@ -302,7 +320,9 @@ const AddResident = () => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>Ngày sinh</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Ngày sinh
+              </Form.Label>
               <Form.Control
                 size="lg"
                 type="date"
@@ -317,11 +337,14 @@ const AddResident = () => {
             </Form.Group>
             <div className="d-flex justify-content-around">
               <Form.Group className="mb-3">
-                <Form.Label className={styles.label}>Ảnh trước CCCD</Form.Label>
+                <Form.Label className={clsx(styles.label, styles.required)}>
+                  Ảnh trước CCCD
+                </Form.Label>
                 <Form.Control
                   accept="image/*"
                   onChange={handleFontImg}
                   size="lg"
+                  key={imagesKeys.front||""}
                   name="front"
                   type="file"
                   placeholder=""
@@ -332,12 +355,15 @@ const AddResident = () => {
                 )}
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label className={styles.label}>Ảnh sau CCCD</Form.Label>
+                <Form.Label className={clsx(styles.label, styles.required)}>
+                  Ảnh sau CCCD
+                </Form.Label>
                 <Form.Control
                   accept="image/*"
                   name="back"
                   onChange={handleBackImg}
                   size="lg"
+                  key={imagesKeys.end||""}
                   type="file"
                   placeholder=""
                 />
