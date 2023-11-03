@@ -32,7 +32,7 @@ export default function Dashboard() {
     
       const res = await axios.get("/api/building");
       
-      const buildingsData : Building[] = res.data;
+      const buildingsData = res.data;
       setBuildings(buildingsData);
       return res.data;
     } catch (error) {

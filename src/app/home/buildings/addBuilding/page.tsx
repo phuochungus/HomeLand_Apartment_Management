@@ -36,9 +36,6 @@ const AddBuilding = () => {
     if (formValue.maxFloor === "") {
       err.maxFloor = "Trường số tầng là bắt buộc!";
     }
-    // if (formValue.managerId === "") {
-    //   err.managerId = "Trường mã người quản lí là bắt buộc!";
-    // }
     return err;
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +54,6 @@ const AddBuilding = () => {
       form.append("max_floor", formValue.maxFloor);
       try {
         await axios.post("/api/building", form);
-
         toastMessage({ type: "success", title: "Create successfully!" });
       } catch (e) {
         console.log(e);

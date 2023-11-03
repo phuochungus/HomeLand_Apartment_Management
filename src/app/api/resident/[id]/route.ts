@@ -12,7 +12,7 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
     },
   };
   const response = await axios
-    .request(config)
+    .request(config)  
     .then((response) => {
       if (response.status == 200) {
         const result = response.data;

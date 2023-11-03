@@ -72,7 +72,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     try {
       const res = await axios.get(`/api/building/${params.id}`);
 
-      const buildingData: Building = res.data;
+      const buildingData = res.data as Building;
       setBuilding(buildingData);
       const newformValue: any = {
         name: buildingData.name,
