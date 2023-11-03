@@ -6,5 +6,7 @@ export const endpoint = {
     profile: baseUrl + "/me",
     tokenValidate: baseUrl + "/token/validate",
     apartment: baseUrl + "/apartment",
-    employee: baseUrl + "/employee"
+    employee: baseUrl + "/employee",
+    person: baseUrl + "/person",
+    me: baseUrl + "/me"
 }

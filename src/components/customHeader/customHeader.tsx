@@ -31,7 +31,6 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
 
   return (
     <>
-      <CustomModal show={showModal} onHide={() => setShowModal(false)} />
       <header
         style={{
           width: "100%",
@@ -45,7 +44,7 @@ const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
         <div className={style.logoContainer}>
           <div className={style.brandLabel}>HomeLand</div>
         </div>
-        <div style={{ alignItems: "center" }}>
+        <div style={{ alignItems: "center" }} className={style.buttonContainer}>
           <Row className="align-items-center">
             <Col>
               {!auth ? (

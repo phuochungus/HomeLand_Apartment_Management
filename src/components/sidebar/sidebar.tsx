@@ -29,6 +29,7 @@ export const Sidebar = ({
         <Offcanvas
           show={show}
           onHide={() => onClose!()}
+          className = {styles.offCanvas}
         >
           <Offcanvas.Header closeButton>{header}</Offcanvas.Header>
           <Offcanvas.Body className={`${drawerClass ?? ""}`}>

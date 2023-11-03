@@ -7,11 +7,23 @@ import { useRouter } from "next/navigation";
 import { Apartment } from "@/models/apartment";
 import axios from "axios";
 import { useQuery } from "react-query";
-
+import SearchBar from "@/components/searchBar/searchBar";
+import { useEffect, useMemo, useState } from "react";
 export default function Apartments() {
-  const apartmentList  :Apartment[] = [];
-  const { isLoading, isError, data } = useQuery("apartment", () =>
-    axios.get("/api/apartment?page=1").then((res) => res.data as Apartment[])
+  const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
+  var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
+  var page = useMemo(() => {
+    return Math.floor(apartmentList.length / 30) + 1;
+  }, [apartmentList]);
+  const { isLoading, isError, data, refetch } = useQuery(
+    "apartment",
+    () =>
+      axios.get("/api/apartment?page=" + page).then((res) => {
+        setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
   const apartmentSortOption = [
     {
@@ -30,6 +42,34 @@ export default function Apartments() {
       onChange: () => {},
     },
   ];
+  async function handleScrollEnd() {
+    if (!loadingMore) {
+      loadingMore = true;
+      await refetch();
+      loadingMore = false;
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("scroll", (e) => {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom + 50 >= docHeight) {
+        handleScrollEnd();
+      }
+    });
+  }, []);
   if (isLoading)
     return (
       <div
@@ -64,39 +104,9 @@ export default function Apartments() {
     <main className={styles.main}>
       <div className={styles.container}>
         <div
-          className={styles.itemContainer}
-          style={{
-            height: "100%",
-            width: "40%",
-            borderStyle: "none",
-            padding: "10px 0",
-          }}
+          className={`${styles.itemContainer} ${styles.searchBarContainer}`}
         >
-          <div className={styles.searchBar}>
-            <form
-              className={futuna.className}
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "100%",
-                padding: "0 1rem",
-              }}
-            >
-              <input
-                type="search"
-                id="search"
-                style={{
-                  height: "100%",
-                  borderStyle: "none",
-                  flexGrow: "1",
-                  padding: "0 10px",
-                }}
-              ></input>
-              <button style={{ width: "fit-content" }}>
-                <FaSearch></FaSearch>
-              </button>
-            </form>
-          </div>
+          <SearchBar className={styles.searchBar}></SearchBar>
         </div>
         {apartmentSortOption.map((value, index) => (
           <div
@@ -109,10 +119,23 @@ export default function Apartments() {
         ))}
       </div>
       <div className={styles.grid}>
-        {data!.map((value, index) =>
-          ApartmentCard(value)
-        )}
+        {apartmentList.map((value, index) => ApartmentCard(value))}
       </div>
+      {loadingMore ? (
+        <div
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Spinner></Spinner>
+        </div>
+      ) : (
+        <></>
+      )}
     </main>
   );
 }
@@ -146,7 +169,7 @@ const FilterButton = ({
   );
 };
 
-const ApartmentCard = (value:Apartment): React.ReactNode => {
+const ApartmentCard = (value: Apartment): React.ReactNode => {
   const router = useRouter();
 
   function handleRouting(route: string): void {
@@ -155,21 +178,26 @@ const ApartmentCard = (value:Apartment): React.ReactNode => {
   return (
     <Card
       onClick={() =>
-        handleRouting("/home/" + "properties/" + value.apartment_id + "?auth=true")
+        handleRouting(
+          "/home/" + "properties/" + value.apartment_id + "?auth=true"
+        )
       }
       className={`${futuna.className} ${styles.gridItem}`}
-      style={{ borderRadius: "10px" , overflow: "hidden",}}
+      style={{ borderRadius: "10px", overflow: "hidden" }}
     >
-      <Card.Img
-        variant="top"
-        src={value.images[0]}
-      />
-      <Card.Body style={{ display: "flex", flexDirection: "column", justifyContent: "start" }}>
-        <Card.Title style={{ alignSelf: "start" }}>{value.rent}</Card.Title>
+      <Card.Img variant="top" src={value.images[0]} />
+      <Card.Body
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "start",
+        }}
+      >
+        <Card.Title style={{ alignSelf: "start" }}>
+          {value.rent}
+          <span style={{ color: "grey" }}>{" /month"}</span>
+        </Card.Title>
         <Card.Text>{value.name}</Card.Text>
-        <Card.Text className={styles.blockWithText}>
-          {value.description}
-        </Card.Text>
       </Card.Body>
     </Card>
   );

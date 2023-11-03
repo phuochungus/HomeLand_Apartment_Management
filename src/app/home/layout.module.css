@@ -5,21 +5,23 @@
     height: auto;
 }
 
-.sidebarButtonMenu{
+.sidebarButtonMenu {
     display: flex;
     flex-direction: column;
     align-content: center;
     padding: 0 5rem;
     font-size: 1rem;
 }
-.sidebarButtonMenu a{
+
+.sidebarButtonMenu a {
     text-decoration: none;
     color: black;
 }
 
-.sidebarButtonMenu a.active{
+.sidebarButtonMenu a.active {
     color: blue
 }
+
 @media screen and (max-width: 1400px) {
     .sidebar {
         visibility: hidden;
@@ -32,7 +34,7 @@
     margin-top: 3rem;
 }
 
-.sidebarButton {
+button.sidebarButton{
     position: relative;
     height: 4rem;
     width: 100%;
@@ -49,19 +51,19 @@
     font-weight: 400;
 }
 
-.sidebarButton svg {
+button.sidebarButton svg {
     margin-right: 10px;
 }
 
-.sidebarButton img {
+button.sidebarButton img {
     margin-right: 10px;
 }
 
-.sidebarButton svg path {
+button.sidebarButton svg path {
     fill: black;
 }
 
-.sidebarButton:hover {
+button.sidebarButton:hover {
     /* width: 110%; */
     color: white;
     background-color: #2864FF;
@@ -69,19 +71,24 @@
     font-weight: bold;
 }
 
-.sidebarButton:hover svg path {
+button.sidebarButton:hover svg path {
     fill: white;
 }
 
-.current {
+button.current {
     color: white;
     background-color: #2864FF;
     padding-left: 2.5rem;
     font-weight: bold;
 }
 
-.current svg path {
+button.current svg path {
     fill: white;
+}
+
+a.currentItemMenu {
+    text-decoration: underline;
+    color: blue;
 }
 
 .drawer {
@@ -100,22 +107,28 @@
     width: 100%;
     margin-top: 1.2rem;
 }
-.drawerButton {
+button.drawerButton {
     height: fit-content;
     display: none;
     flex-wrap: wrap;
     background-color: transparent;
-    border-style:hidden;
+    border-style: hidden;
     visibility: hidden;
     margin-left: 2rem;
 }
+
 @media screen and (max-width: 1400px) {
     .header {
         margin-bottom: 0;
         margin-top: 0;
     }
-    .drawerButton{
+    button.drawerButton{
         visibility: visible;
         display: flex;
+    }
+}
+@media screen and (max-width: 400px) {
+    .sidebarButtonMenu{
+        padding: 0 3rem
     }
 }

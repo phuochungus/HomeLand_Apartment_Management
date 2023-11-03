@@ -1,8 +1,8 @@
 .content {
-    width: "100%";
-    display: "flex";
+    position:relative;
+    display: flex;
     flex-direction: column;
-    margin: 0 3rem;
+    padding: 0 3rem;
 }
 
 .typeSelectContainer {
@@ -41,6 +41,7 @@
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
 }
 
 .residentListsItem {
@@ -49,6 +50,8 @@
     flex-wrap: wrap;
     align-content: center;
     justify-content: space-between;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .getMoreInfoButton {
@@ -75,6 +78,25 @@
     justify-content: center;
     align-content: center;
 }
-.uploadIcon:hover{
+
+.uploadIcon:hover {
     opacity: 0.5;
+}
+
+.searchBar {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.searchBar form input:focus {
+    outline: none;
+}
+
+.missing {
+    border-style: solid;
+    border-color: #FF4747 !important;
+}
+.missing + svg{
+    border-color: #FF4747 !important;
 }
