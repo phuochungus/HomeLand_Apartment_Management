@@ -1,4 +1,3 @@
-import { BaseNextRequest } from "next/dist/server/base-http"
 
 const baseUrl = "https://homeland-be.onrender.com"
 export const endpoint = {
