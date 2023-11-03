@@ -8,8 +8,8 @@ import {
   Modal,
   Spinner,
 } from "react-bootstrap";
-import styles from "./add.module.css";
-import { futuna } from "../../../../../public/fonts/futura";
+import styles from "./edit.module.css";
+import { futuna } from "../../../../../../public/fonts/futura";
 import {
   FaBed,
   FaCheckCircle,
@@ -21,14 +21,14 @@ import {
   FaUpload,
 } from "react-icons/fa";
 import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
-import { Person } from "@/models/person";
 import { useEffect, useRef, useState } from "react";
 import SearchBar from "@/components/searchBar/searchBar";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import { Resident } from "@/models/resident";
-import { headers } from "next/headers";
+import { Apartment } from "@/models/apartment";
+import { useRouter } from "next/navigation";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
@@ -82,26 +82,60 @@ async function addImage(data: FormData, fileList: (File | URL)[]) {
     else data.append("images", iterator);
   }
 }
-export default function AddApartment() {
+export default function EditApartment({ params }: { params: { id: string } }) {
   const [show, setShow] = useState(false);
   function handleClose() {
     setShow(false);
   }
   const [selectedResidentLists, setSelectedList] = useState<Resident[]>([]);
   const [residentLists, setResidentLists] = useState<Resident[]>([]);
-  const { isLoading, isError, data } = useQuery("resident", () =>
+  const fileList = useRef<(File | URL)[]>([]);
+  const router = useRouter();
+  const residentQuery = useQuery("resident", () =>
     axios.get("/api/resident").then((res) => {
       setResidentLists(res.data as Resident[]);
       return res.data as Resident[];
     })
   );
-  const fileList = useRef<(File | URL)[]>([]);
+  const apartmentQuery = useQuery(
+    "apartment",
+      () => axios.get("/api/apartment/" + params.id).then((res) => {
+        const apartment = res.data as Apartment;
+        const temp: (File | URL)[] = [];
+        apartment.images.forEach((element) => {
+          temp.push(new URL(element));
+        });
+        fileList.current = [...temp];
+        const field = [
+          "name",
+          "width",
+          "length",
+          "bedroom",
+          "bathroom",
+          "description",
+        ];
+        field.forEach((element) => {
+          const inputElement = document.getElementById(
+            element
+          ) as HTMLInputElement;
+          if (inputElement)
+            inputElement.value =
+              apartment[element as keyof Apartment].toString();
+        });
+        if (apartment.resident) setSelectedList(apartment.resident);
+        return apartment;
+      })
+    ,
+    { refetchOnWindowFocus: false}
+  );
   function handleFileChange(files: (File | URL)[]) {
     fileList.current = files;
+    console.log(fileList.current.length);
   }
   async function handleSubmit() {
     loadingFiler(document.body!);
     if (!validateData()) {
+      removeLoadingFilter(document.body!);
       return;
     }
     const data = new FormData();
@@ -138,15 +172,16 @@ export default function AddApartment() {
     });
     await addImage(data, fileList.current).then(() => {
       let config = {
-        method: "post",
+        method: "patch",
         maxBodyLength: Infinity,
-        url: "/api/apartment",
+        url: "/api/apartment/" + params.id,
         data: data,
       };
       axios
         .request(config)
         .then((res) => {
-          alert("Done create");
+          alert("Done update apartment " + params.id);
+          router.back();
         })
         .catch((err) => {
           alert(err.response.data);
@@ -155,7 +190,7 @@ export default function AddApartment() {
     removeLoadingFilter(document.body!);
   }
   function searchtest(params: string) {
-    setResidentLists(search(data!, "name", params));
+    setResidentLists(search(residentQuery.data!, "name", params));
   }
   function onCheck(param: Resident) {
     const temp = selectedResidentLists;
@@ -171,7 +206,32 @@ export default function AddApartment() {
       setSelectedList(temp);
     }
   }
-  if (isLoading)
+  useEffect(() => {
+    if(apartmentQuery.data)
+    {
+      const apartment = apartmentQuery.data!
+      const field = [
+        "name",
+        "width",
+        "length",
+        "bedroom",
+        "bathroom",
+        "description",
+      ];
+      field.forEach((element) => {
+        const inputElement = document.getElementById(
+          element
+        ) as HTMLInputElement;
+        if (inputElement)
+          inputElement.value =
+            apartment[element as keyof Apartment].toString();
+      });
+      if (apartment.resident) setSelectedList(apartment.resident);
+    }
+    else
+      apartmentQuery.refetch();
+  }, [apartmentQuery]);  
+  if (residentQuery.isLoading || apartmentQuery.isLoading)
     return (
       <div
         style={{
@@ -187,7 +247,7 @@ export default function AddApartment() {
         <Spinner></Spinner>
       </div>
     );
-  if (isError)
+  if (residentQuery.error || apartmentQuery.error)
     return (
       <div
         style={{
@@ -219,7 +279,10 @@ export default function AddApartment() {
             style={{ width: "30%" }}
           ></Form.Control>
           <div style={{ width: "100%", height: "20px" }}></div>
-          <DragDropFileInput onChange={handleFileChange}>
+          <DragDropFileInput
+            onChange={handleFileChange}
+            initFileList={fileList.current}
+          >
             <div
               className={styles.uploadIcon}
               style={{

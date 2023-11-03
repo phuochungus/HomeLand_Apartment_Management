@@ -65,7 +65,7 @@ button.sidebarButton svg path {
 
 button.sidebarButton:hover {
     /* width: 110%; */
-    color: white;
+    color: white !important;
     background-color: #2864FF;
     padding-left: 2.5rem;
     font-weight: bold;

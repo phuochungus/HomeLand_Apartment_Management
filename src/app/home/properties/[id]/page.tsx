@@ -6,9 +6,9 @@ import Furniture from "@/components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
 import { useEffect, useState } from "react";
-import { endpoint } from "@/constraints/endpoints";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
@@ -20,6 +20,7 @@ export default function Page({ params }: { params: { id: string } }) {
       .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)
   );
+  const router = useRouter();
   const furnitureInfo = [
     {
       title: "Bedrooms",
@@ -59,7 +60,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.bathRooms ?? "0").toString(),
+      value: (data?.bathroom ?? "0").toString(),
     },
     {
       title: "Square Area",
@@ -118,7 +119,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <p className="">{data.address}</p>
               </Col>
               <Col className="text-end">
-              <Button variant="warning">Edit</Button>{' '}
+              <Button variant="warning" onClick={() => router.push(params.id + "/edit")}>Edit</Button>{' '}
               
               </Col>
             </Row>
