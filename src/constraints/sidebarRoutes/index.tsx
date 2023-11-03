@@ -64,10 +64,8 @@ export const sidebarInfo = [
   {
     title: "Buildings",
     svg: <BuildingIcon width={30} height={30} />,
-  },
-  {
-    title: "Buildings",
-    svg: <BuildingIcon width={30} height={30} />,
+    roles: ["admin", "manager"],
+
   },
   {
     title: "Facility",
