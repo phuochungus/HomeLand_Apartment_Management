@@ -7,5 +7,6 @@ export const endpoint = {
   resident: baseUrl + "/resident",
   apartment: baseUrl + "/apartment",
   person: baseUrl + "/person",
+    me: baseUrl + "/me",
   building: baseUrl + "/building",
 };

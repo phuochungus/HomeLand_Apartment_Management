@@ -20,6 +20,7 @@ export const sidebarInfo = [
       </svg>
     ),
     menu: [],
+    roles: [],
   },
   {
     title: "Properties",
@@ -34,6 +35,7 @@ export const sidebarInfo = [
         href: "/home/properties/add",
       },
     ],
+    roles: ["admin", "manager"],
   },
   {
     title: "Service",
@@ -52,17 +54,23 @@ export const sidebarInfo = [
       </svg>
     ),
     menu: [],
+    roles: ["admin", "manager", "resident"],
   },
   {
     title: "Residents",
     svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
+    roles: ["admin", "manager", "resident"],
   },
   {
     title: "Buildings",
     svg: <BuildingIcon width={30} height={30} />,
   },
   {
-    title: "Setting",
+    title: "Buildings",
+    svg: <BuildingIcon width={30} height={30} />,
+  },
+  {
+    title: "Facility",
     svg: (
       <svg
         width="30"
@@ -78,6 +86,6 @@ export const sidebarInfo = [
       </svg>
     ),
     menu: [],
+    roles: ["admin", "manager", "technician"],
   },
-  
 ];

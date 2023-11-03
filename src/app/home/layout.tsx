@@ -16,6 +16,7 @@ import CustomHeader from "@/components/customHeader/customHeader";
 import { FaList } from "react-icons/fa";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "react-toastify/dist/ReactToastify.css";
+import { UserProfile } from "@/libs/UserProfile";
 
 export default function RootLayout({
   children,
@@ -32,7 +33,7 @@ export default function RootLayout({
   function handleRouting(route: string): void {
     router.push(route);
   }
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient();
   const [showDrawer, setShowDrawer] = useState(false);
   return (
     <QueryClientProvider client={queryClient}>
@@ -69,57 +70,56 @@ export default function RootLayout({
               }
             >
               <div className={styles.sidebarBody}>
-                {sidebarInfo.map((value, index) => (
-                  <div key={index} style={{ marginBottom: "3rem" }}>
-                    {" "}
-                    <Button
-                      className={`${
-                        pathName == "/home/" + value.title.toLowerCase()
-                          ? styles.current
-                          : ""
-                      } ${styles.sidebarButton} `}
-                      onClick={() =>
-                        handleRouting(
-                          "/home/" + value.title.toLowerCase() + "?auth=true"
-                        )
-                      }
-                      style={futuna.style}
-                    >
-                      {value.svg}
-                      <span style={{ margin: "auto 0" }}>{value.title}</span>
-                    </Button>
-                    <div
-                      className={`${styles.sidebarButtonMenu} ${futuna.className}`}
-                    >
-                      {value.menu?.map((value, index) => (
-                        <a href={value.href} key={index}>
-                          {value.title}
-                        </a>
-                      ))}
+                {sidebarInfo.map((value, index) =>
+                  value.roles.length == 0 ||
+                  value.roles.includes(UserProfile.getRole()) ? (
+                    <div key={index} style={{ marginBottom: "3rem" }}>
+                      {" "}
+                      <Button
+                        className={`${
+                          pathName.includes(
+                            "/home/" + value.title.toLowerCase()
+                          )
+                            ? styles.current
+                            : ""
+                        } ${styles.sidebarButton} `}
+                        onClick={() =>
+                          handleRouting(
+                            "/home/" + value.title.toLowerCase() + "?auth=true"
+                          )
+                        }
+                        style={futuna.style}
+                      >
+                        {value.svg}
+                        <span style={{ margin: "auto 0" }}>{value.title}</span>
+                      </Button>
+                      <div
+                        className={`${styles.sidebarButtonMenu} ${futuna.className}`}
+                      >
+                        {value.menu?.map((value, index) => (
+                          <a
+                            href={value.href}
+                            key={index}
+                            className={`${
+                              pathName == value.href
+                                ? styles.currentItemMenu
+                                : ""
+                            }`}
+                          >
+                            {value.title}
+                          </a>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ) : (
+                    <></>
+                  )
+                )}
               </div>
             </Sidebar>
           ) : (
             <></>
           )}
-          <div
-            style={{
-              height: "130px",
-              display: "flex",
-              alignContent: "center",
-              flexWrap: "wrap",
-              background: "#E8EAEC"
-            }}
-          >
-            <Button
-              className={styles.drawerButton}
-              onClick={() => setShowDrawer(true)}
-            >
-              <FaList color={"#000000"}></FaList>
-            </Button>
-          </div>
 
           <div
             style={{
@@ -128,9 +128,28 @@ export default function RootLayout({
               height: "fit-content",
             }}
           >
-            <CustomHeader
-              auth={searchParam.get("auth") == null ? false : true}
-            />
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  height: "130px",
+                  display: "flex",
+                  alignContent: "center",
+                  flexWrap: "wrap",
+                  background: "#E8EAEC",
+                }}
+              >
+                <Button
+                  className={styles.drawerButton}
+                  onClick={() => setShowDrawer(true)}
+                >
+                  <FaList color={"#000000"}></FaList>
+                </Button>
+              </div>
+              <CustomHeader
+                auth={searchParam.get("auth") == null ? false : true}
+              />
+            </div>
+
             {children}
           </div>
         </body>
