@@ -18,7 +18,7 @@ export async function validateToken(token: string | undefined): Promise<boolean>
 export function loadingFiler(container: HTMLElement) {
     //document: The current HTMl, usage: Create new HTML => Loading Div with spinner
     //container: The HTML element to put the loading inside,
-    window.scroll({top: 0})
+    window.scroll({ top: 0 })
     var div = document.createElement("div");
     div.className = "loadingFilter";
     div.style.backgroundColor = "black";
@@ -43,17 +43,16 @@ export function removeLoadingFilter(container: HTMLElement) {
     container.removeChild(temp[0]);
 }
 
-export function search(list: any[], field: string, param: any, ): any[]
-{
-    const result:any[] = [];
-    if(list.length == 0)
+export function search(list: any[], field: string, param: any,): any[] {
+    const result: any[] = [];
+    if (list.length == 0)
         return [];
-    const t = 
-    list.forEach(element => {
-        const data = element[field as keyof typeof list[0]]
-        if(isString(data) && (data as string).includes(param) || data == param)
-        result.push(element);
-            
-    });
+    const t =
+        list.forEach(element => {
+            const data = element[field as keyof typeof list[0]]
+            if (isString(data) && (data as string).includes(param) || data == param)
+                result.push(element);
+
+        });
     return result
 }
