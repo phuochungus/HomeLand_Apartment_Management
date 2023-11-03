@@ -6,13 +6,12 @@ export async function GET(request: NextRequest) {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.resident,
+    url: endpoint.building,
     headers: {
       Authorization: "Bearer " + request.cookies.get("token")?.value,
       "Content-Type": "application/json",
     },
   };
-
   const response = await axios
     .request(config)
     .then((response) => {
@@ -31,26 +30,25 @@ export async function GET(request: NextRequest) {
 }
 export async function POST(request: NextRequest) {
   const data = await request.formData();
-  console.log(data)
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: endpoint.resident,
+    url: endpoint.building,
     headers: {
       "Content-Type": "multipart/form-data",
     },
     data: data,
   };
-  console.log(endpoint.resident)
+
   const response = await axios
     .request(config)
     .then((response) => {
+      console.log(response.status);
       if (response.status == 201) {
         return NextResponse.json(response.data);
       }
     })
     .catch((error) => {
-      
       return NextResponse.json(error.response.data.message, {
         status: error.response.status,
         statusText: error.response.statusText,

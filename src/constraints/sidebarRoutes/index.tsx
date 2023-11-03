@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
+import { BuildingIcon } from "@/components/icons";
 
 export const sidebarInfo = [
   {
@@ -56,23 +57,19 @@ export const sidebarInfo = [
     roles: ["admin", "manager", "resident"],
   },
   {
+    title: "Contracts",
+    svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
+    roles: ["admin", "manager"],
+  },
+  {
     title: "Residents",
     svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
     roles: ["admin", "manager", "resident"],
   },
   {
-    title: "contracts",
-    svg: <Image src={Images.Properties} alt="ico" width={30} height={30} />,
-    menu: [
-      {
-        title: "All Contracts",
-        href: "/home/contracts",
-      },
-      {
-        title: "Add contracts",
-        href: "/home/contracts/add",
-      },
-    ],
+    title: "Buildings",
+    svg: <BuildingIcon width={30} height={30} />,
+    roles: ["admin", "manager", "resident"],
   },
   {
     title: "Facility",
