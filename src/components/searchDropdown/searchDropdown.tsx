@@ -71,6 +71,8 @@ export default function SearchDropdown({
         style={{
           width: "100%",
           display: "flex",
+          backgroundColor: "white",
+          color: "black",
           alignItems: "center",
           justifyContent: "space-between",
         }}

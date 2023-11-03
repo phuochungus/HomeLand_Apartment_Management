@@ -14,6 +14,7 @@ import { Building } from "@/models/building";
 import { useQuery } from "react-query";
 import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import { ToastContainer } from "react-toastify";
 type FormValue = {
   name: string;
   address: string;
@@ -62,6 +63,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
         await axios.patch(`/api/building/${params.id}`, data);
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Update successfully!" });
+
       } catch (error) {
       removeLoadingFilter(document.body!);
         console.log(error);
@@ -98,7 +100,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
   );
   return (
     <main className={mainStyles.main}>
-      <div className={styles.wapper}>
+      <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
           Cập nhật thông tin tòa nhà
         </p>
@@ -150,6 +152,18 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
           </ButtonComponent>
         </Form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </main>
   );
 };

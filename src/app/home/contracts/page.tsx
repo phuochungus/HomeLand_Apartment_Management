@@ -7,10 +7,11 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useQuery } from "react-query";
 import SearchBar from "@/components/searchBar/searchBar";
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { Contract } from "@/models/contract";
 import { useTranslation } from "react-i18next";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
+import { format } from "date-fns";
 export default function Contracts() {
   const [ContractList, setContractList] = useState<Contract[]>([]);
   const [t, i18n] = useTranslation();
@@ -112,7 +113,7 @@ export default function Contracts() {
           <div
             key={index}
             className={styles.itemContainer}
-            style={{ height: "100%", width: "20%", padding: "0 1rem" }}
+            style={{ height: "100%", width: "15%", padding: "0 1rem" }}
           >
             {FilterButton(value)}
           </div>
@@ -121,7 +122,7 @@ export default function Contracts() {
           className={styles.itemContainer}
           style={{
             height: "100%",
-            width: "20%",
+            width: "15%",
             padding: "0 1rem",
             alignItems: "center",
             alignContent: "center",
@@ -151,16 +152,47 @@ export default function Contracts() {
           </tr>
         </thead>
         <tbody>
-          {ContractList.map((value, index) => (
-            <tr key={index}>
-              <td>{value.contract_id}</td>
-              <td>{value.contract_id}</td>
-              <td>{value.contract_id}</td>
-              <td>{value.contract_id}</td>
-              <td>{value.created_at.toString()}</td>
-              <td>{value.expire_at.toString()}</td> <td></td>
-            </tr>
-          ))}
+          {ContractList.map((value, index): ReactNode => {
+            return (
+              <tr key={index}>
+                <td>{value.contract_id}</td>
+                <td>{value.resident.profile.name}</td>
+                <td>{value.resident.profile.phone_number}</td>
+                <td>{value.apartment.name}</td>
+                <td>
+                  {format(new Date(value.created_at), "yyyy-MM-dd HH:mm:ss")}
+                </td>
+                <td>
+                  {format(new Date(value.expire_at), "yyyy-MM-dd HH:mm:ss")}
+                </td>{" "}
+                <td></td>
+                <td style={{ width: 20 }}>
+                  <div className="d-flex">
+                    <Button
+                      onClick={() => {
+                        router.push(
+                          "/home/contracts/updateContract/" +
+                            value.contract_id +
+                            "?auth=true"
+                        );
+                      }}
+                      variant="warning"
+                    >
+                      Sửa
+                    </Button>
+                    
+                    <Button
+                      onClick={() => {}}
+                      variant="danger"
+                      style={{ marginLeft: "20px" }}
+                    >
+                      Xóa
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
       {loadingMore ? (

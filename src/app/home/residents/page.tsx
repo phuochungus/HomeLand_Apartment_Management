@@ -23,6 +23,8 @@ import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import { ToastContainer } from "react-toastify";
+import toastMessage from "@/utils/toast";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
@@ -49,14 +51,14 @@ export default function Residents() {
   };
   const retrieveResidents = async () => {
     try {
-      loadingFiler(document.body!)
+      loadingFiler(document.body!);
       const res = await axios.get("/api/resident");
-      removeLoadingFilter(document.body!)
+      removeLoadingFilter(document.body!);
       setResidents(res.data);
-      
+
       return res.data;
     } catch (error) {
-      removeLoadingFilter(document.body!)
+      removeLoadingFilter(document.body!);
 
       console.log(error);
     }
@@ -110,17 +112,21 @@ export default function Residents() {
     console.log(id);
     setShowModal(false);
     try {
+
       await axios.delete(`/api/resident/${id}`);
+      toastMessage({ type: "success", title: "Delete successfully!" });
+
       refetch();
     } catch (err) {
+      toastMessage({ type: "errpr", title: "Delete faily!" });
       console.log(err);
     }
   };
 
   return (
     <main className={clsx(styles.main)}>
-      <div className={clsx(residentStyles.wrapper)}>
-        <h1 className={clsx(utilStyles.headingXl)}>Quản lí căn hộ</h1>
+      <div className={clsx(residentStyles.wrapper, futuna.className)}>
+        <h1 className={clsx(utilStyles.headingXl)}>Quản lí cư dân</h1>
         <div className={clsx(residentStyles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>Danh sách cư dân</h1>
           <ButtonComponent
@@ -150,7 +156,7 @@ export default function Residents() {
           <SearchLayout
             onKeydown={handleSearch}
             iconClick={searchIconClick}
-            placeHolder="tìm dân cư..."
+            placeHolder="Tìm dân cư..."
             ref={searchRef}
           />
         </div>
@@ -219,6 +225,18 @@ export default function Residents() {
         title="Có chắc chắn xóa cư dân này?"
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </main>
   );

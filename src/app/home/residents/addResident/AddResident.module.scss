@@ -16,18 +16,21 @@ font-size: 1rem;
   }
 }
 .label {
-  position: relative;
   font-size: 1rem;
+}
+.required {
+  position: relative;
   &::after {
     content: "*";
     color: red;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
   }
 }
+
 .creatBtn {
   margin: 20px auto;
   background-color: #8faeff;
