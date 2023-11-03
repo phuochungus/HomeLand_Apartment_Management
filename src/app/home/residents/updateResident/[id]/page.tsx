@@ -23,6 +23,7 @@ import axios from "axios";
 import { Images } from "../../../../../../public/images";
 import toastMessage from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
   phoneNumber: string;
   paymentInfo: string;
@@ -68,8 +69,9 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   };
   const retrieveResident = async () => {
     try {
-      
+      loadingFiler(document.body!)
       const res = await axios.get(`/api/resident/${params.id}`);
+      removeLoadingFilter(document.body!)
       const residentData = res.data as Resident;
       setResident(residentData);
       const newformValue: any = {
@@ -82,7 +84,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
       setFormValue(newformValue);
       return res.data;
     } catch (error) {
-    
+      removeLoadingFilter(document.body!)
       console.log(error);
     }
   };
@@ -107,11 +109,12 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         if (formValue.email) {
           data.email = formValue.email;
         }
+        loadingFiler(document.body!);
         await axios.patch(`/api/resident/${params.id}`, JSON.stringify(data));
-      
+        removeLoadingFilter(document.body!)
         toastMessage({ type: "success", title: "Update successfully!" });
       } catch (error) {
-      
+        removeLoadingFilter(document.body!)
         console.log(error);
         toastMessage({ type: "error", title: "Update faily!" });
       }

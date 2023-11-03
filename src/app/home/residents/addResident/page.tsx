@@ -24,6 +24,7 @@ import { Images } from "../../../../../public/images";
 import axios from "axios";
 import { RedirectType, redirect } from "next/navigation";
 import toastMessage from "@/utils/toast";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 
 type FormValue = {
   name: string;
@@ -176,15 +177,15 @@ const AddResident = () => {
         form.append("avatar_photo", avatar);
       }
       try {
-        
+        loadingFiler(document.body!)
         await axios
           .post("/api/resident", form)
           .then((response) => {
-          
+            removeLoadingFilter(document.body!)
             toastMessage({ type: "success", title: "Create successfully!" });
           })
           .catch((e) => {
-          
+            removeLoadingFilter(document.body!)
             toastMessage({ type: "error", title: "Create faily!" });
           });
       } catch (e) {

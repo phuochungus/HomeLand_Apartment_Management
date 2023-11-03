@@ -22,6 +22,7 @@ import { format } from "date-fns";
 import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
@@ -48,11 +49,15 @@ export default function Residents() {
   };
   const retrieveResidents = async () => {
     try {
+      loadingFiler(document.body!)
       const res = await axios.get("/api/resident");
+      removeLoadingFilter(document.body!)
       setResidents(res.data);
-
+      
       return res.data;
     } catch (error) {
+      removeLoadingFilter(document.body!)
+
       console.log(error);
     }
   };
