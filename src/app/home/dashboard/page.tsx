@@ -46,12 +46,12 @@ export default function Dashboard() {
           <Row>
             <Col xs={12} md={6} className="d-flex">
               <ButtonComponent href="/home/dashboard/addemployee" className={classNames(dashboardStyles.addBtn, futuna.className)}>
-                Tạo nhân viên
+                Tạo
               </ButtonComponent>
             </Col>
             <Col xs={12} md={6} className="ml-auto">
               <div className="input-group">
-              <input type="search" placeholder='Nhập tên nhân viên' className={classNames(dashboardStyles.search)}/>
+                <input type="search" placeholder='Nhập tên nhân viên' className={classNames(dashboardStyles.search)} />
 
                 <div className="input-group-append">
                   <button className={classNames(dashboardStyles.searchbutton)}>
