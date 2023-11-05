@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { Francois_One } from "next/font/google";
 import { Images } from "../../../../../public/images";
+import classNames from 'classnames';
 interface File {
         preview: string
 }
@@ -48,10 +49,22 @@ const AddEmployee = () => {
         //                 return res.data as Employee[];
         //         })
         // );
+        const [imagesKeys, setImagesKeys] = useState({ avatar: "", front: "", end: "" });
+        const [frontImg, setFrontImg] = useState<any>();
+        const [backImg, setBackImg] = useState<any>();
         const [avatar, setAvatar] = useState<any>();
         const [errors, setErrors] = useState<any>();
         const handleFileUpload = (file: any) => {
                 setImage(file);
+        };
+        const handleFontImg = (e: any) => {
+                const file = e.target.files[0];
+
+                setFrontImg(file);
+        };
+        const handleBackImg = (e: any) => {
+                const file = e.target.files[0];
+                setBackImg(file);
         };
         const whiteBackground = {
                 backgroundColor: "white",
@@ -72,6 +85,34 @@ const AddEmployee = () => {
 
                 setImg(file);
         }
+        const BackImage = useMemo(() => {
+                return backImg ? (
+                        <Image
+                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                                className={styles.img}
+                                width={420}
+                                height={120}
+                                alt=""
+                                src={URL.createObjectURL(backImg)}
+                        />
+                ) : (
+                        <></>
+                );
+        }, [backImg]);
+        const FrontImage = useMemo(() => {
+                return frontImg ? (
+                        <Image
+                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                                className={styles.img}
+                                width={420}
+                                height={120}
+                                alt=""
+                                src={URL.createObjectURL(frontImg)}
+                        />
+                ) : (
+                        <></>
+                );
+        }, [frontImg]);
         const handleAvatarClick = () => {
                 avatarRef.current ? avatarRef.current.click() : console.error("error");
         };
@@ -226,6 +267,43 @@ const AddEmployee = () => {
                                                         <span className={styles.error}>{errors.phoneNumber}</span>
                                                 )}
                                         </Form.Group>
+                                        <div className={styles.box}>
+                                                <Form.Group className="mb-3">
+                                                        <Form.Label className={classNames(styles.label, styles.required)}>
+                                                                Ảnh trước CCCD
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                                accept="image/*"
+                                                                onChange={handleFontImg}
+                                                                size="lg"
+                                                                key={imagesKeys.front || ""}
+                                                                name="front"
+                                                                type="file"
+                                                                placeholder=""
+                                                        />
+                                                        {FrontImage}
+
+                                                </Form.Group>
+
+                                        </div>
+                                        <div className={styles.box}>
+                                                <Form.Group className="mb-3">
+                                                        <Form.Label className={classNames(styles.label, styles.required)}>
+                                                                Ảnh sau CCCD
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                                accept="image/*"
+                                                                name="back"
+                                                                onChange={handleBackImg}
+                                                                size="lg"
+                                                                key={imagesKeys.end || ""}
+                                                                type="file"
+                                                                placeholder=""
+                                                        />
+                                                        {BackImage}
+
+                                                </Form.Group>
+                                        </div>
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Công việc</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" />

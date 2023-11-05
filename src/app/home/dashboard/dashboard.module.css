@@ -1,19 +1,25 @@
 .headingXl {
         font-size: 3.6rem;
         color: black;
+        font-family: sans-serif;
+        text-decoration: none;
 }
 
 .headingLg {
         font-size: 2.4rem;
         color: black;
+        text-decoration: none;
+        font-family: sans-serif;
 }
 
 .headingMd {
         background-color: var(--primary);
+        font-family: sans-serif;
 }
 
 .wrapper {
         width: 90%;
+
 }
 
 .header {
@@ -26,77 +32,88 @@
 .perPage {
         display: flex;
         margin: 0 8px;
+
 }
 
 .dashboardStyles.col {
         display: flex;
         align-items: stretch;
         justify-content: stretch;
+
 }
 
 .dashboardBackground {
         background-color: aliceblue;
 }
 
-      
+
 .search {
         background-color: aliceblue;
-        padding: 2px;
-        margin-left: -29px;
-        margin-right: 20px;
-        border-radius: 8px;
+        border-radius: 20px;
         color: black;
         height: 30px;
         width: 250px;
-        position: relative;
-        
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        border: 2px solid black;
+        margin-left: -90px;
+
 }
 
-.search-input {
-        width: 100%;
-        border: none;
-        outline: none;
-        padding: 0;
+.search:hover,
+.search:focus-within {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        font-weight: bold;
 }
-.form-control{
+
+.search:focus {
+        outline: none;
+}
+
+.form-control {
         margin-right: 200px;
 }
+
+.searchContainer {
+        display: flex;
+        align-items: center;
+}
+
 .searchbutton {
         color: black;
-        border: none;
-        padding: 10px 30px;
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        margin-right: -16px;
-        transform: translateY(-50%);
-
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-left: -60px;
+        padding-right: 20px;
 }
+
 
 .modalADE {
         color: black;
 }
+
 .rowcss {
         border-color: black;
 }
-/* .formsearch{
+
+.formsearch {
         margin-right: 50px;
         background-color: aliceblue;
-        
-} */
+        border-radius: 20px 20px 20px 20px;
+}
+
 .addBtn {
-        background-color: var(--primary);
-      
+        background-color: #0744e1;
         padding: var(--default-padding-vertical) var(--default-padding-horizontal);
         border-radius: 8px;
-        margin-left: 80px;
-        margin-top: -10px;
+
+        margin-top: -5px;
         margin-bottom: 10px;
-        background-color: #0744e1;
-        margin-right: 20px;
+        margin-right: 140px;
         color: aliceblue;
-
-
+        height: 40px;
+        text-decoration: none;
 }
 
 .profile-stat {
@@ -114,16 +131,34 @@
 .address {
         text-align: right;
         margin-bottom: 10px;
+        text-decoration: none;
 }
 
+.font-weight-light {
+        font-weight: normal;
+        text-decoration: none;
+
+}
+
+.link{
+        text-decoration: none;
+}
+a.no-underline {
+        text-decoration: none;
+      }
+      
 .card {
-        transition: transform 0.3s, z-index 0.3s;
-}
+        transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
 
+}
+.ch {
+        text-decoration: none;
+}
 
 .card:hover {
-        transform: scale(1);
-        z-index: 1;
+        transform: scale(1.025);
+        opacity: 1;
+
 }
 
 .card:not(:hover) {
@@ -134,10 +169,12 @@
 .hoveredCard:hover {
         transform: scale(1.025);
         z-index: 1;
+        opacity: 1;
 }
 
 .main {
         font-family: "Times New Roman", serif;
         font-size: 18px;
         font-weight: normal;
+        text-decoration: none;
 }

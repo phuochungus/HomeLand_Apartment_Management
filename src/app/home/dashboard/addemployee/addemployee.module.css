@@ -1,6 +1,6 @@
 .headingXl {
         font-size: 3.6rem;
-        font-family: var(--font-mono);
+        font-family: sans-serif; 
 
 }
 
@@ -13,7 +13,8 @@
 }
 
 .box {
-        width: 40%;
+        width: 50%;
+        font-family: sans-serif; 
 }
 
 .creatBtn1 {
@@ -24,6 +25,7 @@
         padding: 8px 60px;
         border-radius: 10px;
         transition: 0.1s ease;
+        font-family: sans-serif; 
 }
 .error{
         color: #fc0404;
@@ -43,10 +45,7 @@
         font-family: var(--font-mono);
 }
 
-.headingXl {
-        color: black;
-        font-family: var(--font-mono);
-}
+
 
 .form {
         color: black;

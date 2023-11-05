@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import styles from "../page.module.css";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import dashboardStyles from "./dashboard.module.css";
-// import styles from "../page.module.css";
 import Link from "next/link";
 import Form from 'react-bootstrap/Form';
 import classNames from 'classnames';
@@ -12,7 +11,6 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { AiOutlineSearch } from 'react-icons/ai'
 import React, { useState } from "react";
-import Modal from 'react-bootstrap/Modal';
 import Container from 'react-bootstrap/Container';
 import { futuna } from "../../../../public/fonts/futura";
 import {
@@ -28,16 +26,12 @@ export default function Dashboard() {
   };
   const customCardStyle = {
     backgroundColor: "#d4e0ff",
+
   }
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [t, i18n] = useTranslation();
 
   return (<main className={dashboardStyles.main} style={whiteBackground}>
-    <div>
-      <div>
-        <button onClick={() => i18n.changeLanguage("vi")}>Vi</button>
-      </div>
-    </div>
     <Container fluid>
       <div className={classNames(dashboardStyles.wrapper, dashboardStyles.dashboardBackground)}>
         <h1 className={classNames(dashboardStyles.headingXl)}>Quản lí nhân viên</h1>
@@ -45,28 +39,27 @@ export default function Dashboard() {
           <h1 className={classNames(dashboardStyles.headingLg)}>Danh sách nhân viên</h1>
           <Row>
             <Col xs={12} md={6} className="d-flex">
-              <ButtonComponent href="/home/dashboard/addemployee" className={classNames(dashboardStyles.addBtn, futuna.className)}>
+              <ButtonComponent href="/home/dashboard/addemployee" className={classNames(dashboardStyles.addBtn)}>
                 Tạo
               </ButtonComponent>
             </Col>
             <Col xs={12} md={6} className="ml-auto">
-              <div className="input-group">
+              <div className={classNames(dashboardStyles.searchContainer)}>
                 <input type="search" placeholder='Nhập tên nhân viên' className={classNames(dashboardStyles.search)} />
-
-                <div className="input-group-append">
-                  <button className={classNames(dashboardStyles.searchbutton)}>
-                    <AiOutlineSearch />
-                  </button>
-                </div>
+                <button className={classNames(dashboardStyles.searchbutton)}>
+                  <AiOutlineSearch />
+                </button>
               </div>
+
             </Col>
+
           </Row>
         </div>
         <div className={classNames(dashboardStyles.card)}>
           <Row xs={1} md={2} className="g-4">
             {Array.from({ length: 4 }).map((_, idx) => (
               <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
-                <Link href="/home/dashboard/detailEmployee">
+                <Link href="/home/dashboard/detailEmployee" className={dashboardStyles.link}>
                   <Card style={customCardStyle}
 
                     onMouseEnter={() => setHoveredCard(idx)}
@@ -84,13 +77,14 @@ export default function Dashboard() {
                       <div className="d-flex justify-content-between">
                       </div>
                     </CardHeader>
-                    <CardBody className="pt-0">
+                    <CardBody className={classNames(dashboardStyles.ch)}>
                       <Row>
                         <div className="col">
                           <div className="card-profile-stats d-flex justify-content-center">
                             <div className="profile-stat">
-                              <span className="name">Họ và tên: </span>
-                              <span className="description" style={{ marginBottom: '10px' }} >Võ Công Bình</span>
+                              <span className="name no-underline">Họ và tên: </span>
+                              <span className="description no-underline" style={{ marginBottom: '10px' }}>Võ Công Bình</span>
+
                             </div>
 
                           </div>
@@ -124,6 +118,6 @@ export default function Dashboard() {
         </div>
       </div>
     </Container>
-  </main>
+  </main >
   );
 }

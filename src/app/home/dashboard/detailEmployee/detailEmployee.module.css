@@ -1,36 +1,46 @@
 .headingXl {
         font-size: 3.6rem;
         color: #000;
-
+        font-family: sans-serif;
 
 }
 
 .headingLg {
         font-size: 2.4rem;
         color: #000;
+        font-family: sans-serif;
 }
 
 .headingMd {
         background-color: var(--primary);
         color: #000;
-}.label{
-        color: #000;
+        font-family: sans-serif;
 }
-.profileImage{
-      
+
+.label {
+        color: #000;
+        font-family: sans-serif;
+}
+
+.profileImage {
+
         display: flex;
         justify-content: center;
-         align-items: center;
+        align-items: center;
 }
-.creatBtn1{
+
+.creatBtn1 {
         color: white;
         margin-top: 30px;
         width: 140px;
         height: 50px;
         background-color: red;
         border-radius: 8px;
-       
-}.creatBtn2{
+        font-family: sans-serif;
+        font-size: 25px
+}
+
+.creatBtn2 {
         color: white;
         margin-top: 30px;
         margin-left: 70px;
@@ -38,19 +48,54 @@
         height: 50px;
         background-color: green;
         border-radius: 8px;
-      
-        
+        font-family: sans-serif;
+        font-size: 25px
 }
-.Buttondiv{
+
+.Buttondiv {
         display: flex;
         justify-content: center;
-         align-items: center;
+        align-items: center;
+        font-family: sans-serif;
 }
-.form{
+
+.form {
         display: flex;
         flex-direction: column;
         align-items: center;
+        font-family: sans-serif;
 }
+
 .box {
-        width: 40%;
+        width: 50%;
 }
+
+.avatarLayout {
+        width: 120px;
+        height: 120px;
+        margin-right: 40px;
+        position: relative;
+        margin-left: 320px;
+}
+
+.label {
+        font-size: 1rem;
+}
+.img {
+        width: 100%;
+        height: 160px;
+      }
+
+/* .required {
+        position: relative;
+}
+
+.required::after {
+        content: "*";
+        color: red;
+        font-size: 20px;
+        font-weight: 700;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+} */
