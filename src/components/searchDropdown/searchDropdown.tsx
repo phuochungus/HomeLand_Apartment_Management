@@ -56,13 +56,13 @@ export default function SearchDropdown({
 }: {
   className?: string;
   style?: React.CSSProperties;
-  onChange?: (params: string) => void;
+  onChange?: (params: number) => void;
   title: string;
   selections: any[];
 }) {
   const [dropdownValue, setDropdownValue] = useState(title);
-  async function onChangeItem(value: string) {
-    await (onChange && onChange(value));
+  async function onChangeItem(value:string , index:number) {
+    await (onChange && onChange(index));
     setDropdownValue(value);
   }
   return (
@@ -86,7 +86,7 @@ export default function SearchDropdown({
           <Dropdown.Item
             key={index}
             eventKey={index.toString()}
-            onClick={() => onChangeItem(value)}
+            onClick={() => onChangeItem(value,index)}
           >
             {value}
           </Dropdown.Item>

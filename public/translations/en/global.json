@@ -13,5 +13,6 @@
   "search_contract": "Search contract with resident name...",
   "see_all_contract": "All contracts",
   "status": "Status",
-  "add_contract": "Add contract"
+  "add_contract": "Add contract",
+  "resident": "Resident"
 }

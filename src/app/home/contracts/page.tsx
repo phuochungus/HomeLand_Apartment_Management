@@ -12,6 +12,9 @@ import { Contract } from "@/models/contract";
 import { useTranslation } from "react-i18next";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
 import { format } from "date-fns";
+import ModalComponent from "../../../components/Modal/Modal";
+import toastMessage from "../../../utils/toast";
+import { ToastContainer } from "react-toastify";
 export default function Contracts() {
   const [ContractList, setContractList] = useState<Contract[]>([]);
   const [t, i18n] = useTranslation();
@@ -24,13 +27,33 @@ export default function Contracts() {
   const { isLoading, isError, data, refetch } = useQuery(
     "contract",
     () =>
-      axios.get("/api/contract?page=" + page).then((res) => {
-        setContractList([...ContractList, ...(res.data as Contract[])]);
+      axios.get("/api/contract").then((res) => {
+        setContractList(res.data as Contract[]);
       }),
     {
       refetchOnWindowFocus: false,
     }
   );
+  const [showModal, setShowModal] = useState(false);
+  const [selectedContractId, setSelectedContractId] = useState("");
+  const handleConfirmDelete = async (id: string) => {
+    console.log(id);
+    setShowModal(false);
+    try {
+      await axios.delete(`/api/contract/${id}`);
+      toastMessage({ type: "success", title: "Delete successfully!" });
+
+      refetch();
+    } catch (err) {
+      toastMessage({ type: "error", title: "Delete fail!" });
+      console.log(err);
+    }
+  };
+  const deleteHandle = (id: string) => {
+    setSelectedContractId(id);
+    setShowModal(true);
+  };
+
   const ContractSortOption = [
     {
       title: t("building"),
@@ -180,9 +203,9 @@ export default function Contracts() {
                     >
                       Sửa
                     </Button>
-                    
+
                     <Button
-                      onClick={() => {}}
+                      onClick={() => deleteHandle(value.contract_id)}
                       variant="danger"
                       style={{ marginLeft: "20px" }}
                     >
@@ -210,6 +233,24 @@ export default function Contracts() {
       ) : (
         <></>
       )}
+      <ModalComponent
+        show={showModal}
+        title="Có chắc chắn xóa hợp đồng này?"
+        handleConfirm={() => handleConfirmDelete(selectedContractId)}
+        setShow={setShowModal}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </main>
   );
 }
@@ -221,7 +262,7 @@ const FilterButton = ({
 }: {
   title: string;
   selections: string[];
-  onChange?: (params: string) => void;
+  onChange?: (params: number) => void;
 }): React.ReactNode => {
   return (
     <div

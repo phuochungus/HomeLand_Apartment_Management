@@ -14,4 +14,6 @@
   "search_contract": "Tìm hợp đồng của cư dân",
   "status":"Trạng thái",
   "add_contract":"Tạo hợp đồng"
+  ,
+  "resident":"Cư dân"
 }

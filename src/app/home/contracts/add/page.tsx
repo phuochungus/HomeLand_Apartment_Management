@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, ReactNode, useCallback, useState } from "react";
 import styles from "./addContract.module.css";
 import { futuna } from "../../../../../public/fonts/futura";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,7 @@ import {
   Form,
   Modal,
   Row,
+  Tab,
   Table,
 } from "react-bootstrap";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
@@ -17,22 +18,125 @@ import { format } from "date-fns";
 import { Resident } from "@/models/resident";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { Apartment } from "@/models/apartment";
+import { Building } from "@/models/building";
+import SearchBar from "@/components/searchBar/searchBar";
+import { loadingFiler, removeLoadingFilter } from "../../../../libs/utils";
+import toastMessage from "../../../../utils/toast";
+import { ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+type CreateContractParams = {
+  resident_id: string;
+  apartment_id: string;
+  role: string;
+  status: string;
+  created_at?: string;
+  expire_at: string;
+};
 export default function Page() {
   const [t, i18n] = useTranslation();
-  //const [selectedResident, setSelectedResident] = useState<Resident>();
+  const [selectedResident, setSelectedResident] = useState<Resident>();
   const [Residents, setResidents] = useState<Resident[]>([]);
-  const [fullscreen, setFullscreen] = useState(true);
+  const [Apartments, setApartments] = useState<Apartment[]>([]);
+  const [Buildings, setBuildings] = useState<Building[]>([]);
   const [show, setShow] = useState(false);
+  const router = useRouter();
+  const [errors, setErrors] = useState<any>();
 
-  const { isLoading, isError, data, refetch } = useQuery(
-    "contract",
+  const [createContractParams, setCreateContractParams] =
+    useState<CreateContractParams>({
+      resident_id: "",
+      apartment_id: "",
+      role: "rent",
+      status: "inactive",
+      created_at: "",
+      expire_at: "",
+    });
+
+  const handleCreate = async () => {
+    const err = validation();
+    setErrors(err);
+
+    if (Object.keys(err).length === 0) {
+      const form = new FormData();
+      form.append("resident_id", createContractParams.resident_id);
+      form.append("apartment_id", createContractParams.apartment_id);
+      form.append("role", createContractParams.role);
+      form.append("status", createContractParams.status);
+      form.append(
+        "expire_at",
+        `${createContractParams.expire_at}T03:37:07.070Z`
+      );
+      try {
+        loadingFiler(document.body!);
+        await axios
+          .post("/api/contract", form)
+          .then((response) => {
+            router.back();
+            removeLoadingFilter(document.body!);
+            toastMessage({ type: "success", title: "Create successfully!" });
+          })
+          .catch((e) => {
+            removeLoadingFilter(document.body!);
+            toastMessage({ type: "error", title: "Create fail!" });
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+  const validation = () => {
+    let err = {} as CreateContractParams;
+    if (createContractParams.apartment_id === "") {
+      err.apartment_id = "Vui lòng chọn phòng!";
+    }
+    if (createContractParams.apartment_id === "") {
+      err.expire_at = "Vui lòng chọn ngày hết hạn!";
+    }
+    if (createContractParams.apartment_id === "") {
+      err.resident_id = "Vui lòng chọn cư dân!";
+    }
+    return err;
+  };
+  useQuery(
+    "resident",
     () =>
       axios.get("/api/resident").then((res) => {
-        setResidents([...Residents, ...(res.data as Resident[])]);
+        setResidents(res.data as Resident[]);
       }),
     {
       refetchOnWindowFocus: false,
     }
+  );
+  useQuery(
+    "apartment",
+    () =>
+      axios.get("/api/apartment").then((res) => {
+        setApartments(res.data as Apartment[]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  useQuery(
+    "building",
+    () =>
+      axios.get("/api/building").then((res) => {
+        setBuildings(res.data as Building[]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const newObj = {
+        ...createContractParams,
+        [e.target.name]: e.target.value,
+      };
+      setCreateContractParams(newObj);
+    },
+    [createContractParams]
   );
 
   const ContractSortOptions = [
@@ -40,9 +144,9 @@ export default function Page() {
       title: t("building"),
       child: (
         <SearchDropdown
-          title={"hello"}
-          selections={["hello1", "hello2"]}
-          onChange={() => {}}
+          title={"Choose Building"}
+          selections={Buildings.map((building) => building.name)}
+          onChange={(index) => {}}
           style={{ width: "100%" }}
         ></SearchDropdown>
       ),
@@ -51,7 +155,7 @@ export default function Page() {
       title: t("floor"),
       child: (
         <SearchDropdown
-          title={"hello"}
+          title={"Choose Floor"}
           selections={["hello1", "hello2"]}
           onChange={() => {}}
           style={{ width: "100%" }}
@@ -60,13 +164,27 @@ export default function Page() {
     },
     {
       title: t("apartment"),
+      required: true,
+
       child: (
-        <SearchDropdown
-          title={"hello"}
-          selections={["hello1", "hello2"]}
-          onChange={() => {}}
-          style={{ width: "100%" }}
-        ></SearchDropdown>
+        <div>
+          {" "}
+          <SearchDropdown
+            title={"Choose Apartment"}
+            selections={Apartments.map((building) => building.name)}
+            onChange={(index) => {
+              const newObj = {
+                ...createContractParams,
+                ["apartment_id"]: Apartments[index].apartment_id,
+              };
+              setCreateContractParams(newObj);
+            }}
+            style={{ width: "100%" }}
+          ></SearchDropdown>
+          {errors && errors.apartment_id && (
+            <span className={styles.error}>{errors.apartment_id}</span>
+          )}
+        </div>
       ),
     },
   ];
@@ -74,34 +192,33 @@ export default function Page() {
     {
       title: t("create_at"),
       child: (
-        <Form.Group className="mb-3">
+        <Form.Group>
           <Form.Control
             size="lg"
             type="date"
-            name="dateOfBirth"
+            name="create_at"
+            disabled
             value={new Date().toISOString().split("T")[0]}
-            //    onChange={handleChange}
+            onChange={handleChange}
           />
-          {/* {errors && errors.dateOfBirth && (
-        <span className={styles.error}>{errors.dateOfBirth}</span>
-      )} */}
         </Form.Group>
       ),
     },
     {
       title: t("expire_at"),
+      required: true,
+
       child: (
-        <Form.Group className="mb-3">
+        <Form.Group>
           <Form.Control
             size="lg"
             type="date"
-            name="dateOfBirth"
-            //value={formValue.dateOfBirth}
-            //    onChange={handleChange}
+            name="expire_at"
+            onChange={handleChange}
           />
-          {/* {errors && errors.dateOfBirth && (
-            <span className={styles.error}>{errors.dateOfBirth}</span>
-          )} */}
+          {errors && errors.expire_at && (
+            <span className={styles.error}>{errors.expire_at}</span>
+          )}
         </Form.Group>
       ),
     },
@@ -116,9 +233,10 @@ export default function Page() {
           <Col>{DateSortOptions.map((option) => FilterButton(option))}</Col>
         </Row>
       </Container>
-      <Container fluid>
+      <Container style={{ padding: 0, marginTop: "20px" }}>
         <Row>
           <Col>
+            <h5 className={styles.required} style={{width:"100px"}}>{t("resident")}</h5>
             <Table responsive="sm" style={{ width: "100%" }}>
               <thead>
                 <tr>
@@ -127,56 +245,129 @@ export default function Page() {
                   <th>{t("phone_number")}</th>
                   <th>{t("apartment")}</th>
                   <th>{t("create_at")}</th>
-                  <th>{t("expire_at")}</th>
                 </tr>
               </thead>
               <tbody>
-                {/* {resident != undefined ? (
+                {selectedResident != undefined ? (
                   <tr>
-                    <td>{resident.id}</td>
-                    <td>{resident.profile.name}</td>
-                    <td>{resident.payment_info}</td>
-                    <td>{resident.stay_at && resident.stay_at.name}</td>
-                    <td>{resident.profile.phone_number}</td>
+                    <td>{selectedResident.id}</td>
+                    <td>{selectedResident.profile.name}</td>
+                    <td>{selectedResident.profile.phone_number}</td>
+                    <td>
+                      {selectedResident.stay_at &&
+                        selectedResident.stay_at.name}
+                    </td>
                     <td>
                       {format(
-                        new Date(resident.created_at),
+                        new Date(selectedResident.created_at),
                         "yyyy-MM-dd HH:mm:ss"
                       )}
                     </td>
                   </tr>
                 ) : (
                   <></>
-                )} */}
-                {/* {ContractList.map((value, index) => (
-            <tr key={index}>
-              <td>{value.contract_id}</td>
-              <td>{value.contract_id}</td>
-              <td>{value.contract_id}</td>
-              <td>{value.contract_id}</td>
-              <td>{value.created_at.toString()}</td>
-              <td>{value.expire_at.toString()}</td> <td></td>
-            </tr>
-          ))} */}
+                )}
               </tbody>
             </Table>
+            {errors && errors.resident_id && (
+              <span className={styles.error}>{errors.resident_id}</span>
+            )}
           </Col>
           <Col md="auto">
             <Button onClick={() => setShow(true)}>Edit</Button>
           </Col>
 
           <Modal
+            dialogClassName={styles.modal}
             show={show}
-            fullscreen={"lg-down"}
             onHide={() => setShow(false)}
           >
             <Modal.Header closeButton>
               <Modal.Title>Modal</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Modal body content</Modal.Body>
+            <Modal.Body>
+              <SearchBar></SearchBar>
+              <Table style={{ width: "100%" }} striped hover>
+                <thead>
+                  <tr>
+                    <th>{t("ID")}</th>
+                    <th>{t("name")}</th>
+                    <th>{t("phone_number")}</th>
+                    <th>{t("apartment")}</th>
+                    <th>{t("create_at")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Residents.map((resident, index): ReactNode => {
+                    const time = new Date(resident.created_at);
+                    const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                    const handleRowClick = () => {
+                      setSelectedResident(resident);
+                      setCreateContractParams({
+                        ...createContractParams,
+                        resident_id: resident.id,
+                      });
+                      setShow(false);
+                    };
+
+                    return (
+                      <tr
+                        key={index}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleRowClick()}
+                      >
+                        <td>{resident.id}</td>
+                        <td>{resident.profile && resident.profile.name}</td>
+                        <td>{resident.profile.phone_number}</td>
+                        <td>{resident.stay_at && resident.stay_at.name}</td>
+                        <td>{createAt}</td>
+                        <td style={{ width: 20 }}></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Modal.Body>
           </Modal>
         </Row>
+        <Row
+          style={{
+            display: "flex",
+
+            marginTop: "250px",
+            justifyContent: "center",
+          }}
+        >
+          <Col
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              paddingRight: "120px",
+            }}
+          >
+            {" "}
+            <Button
+              className=" start-50"
+              onClick={handleCreate}
+              style={{ width: "100px" }}
+            >
+              Create
+            </Button>
+          </Col>
+        </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </main>
   );
 }
@@ -184,9 +375,11 @@ export default function Page() {
 const FilterButton = ({
   title,
   child,
+  required,
 }: {
   title: string;
   child?: React.ReactNode;
+  required?: boolean;
 }): React.ReactNode => {
   return (
     <Container
@@ -202,12 +395,24 @@ const FilterButton = ({
               display: "flex",
               padding: 0,
               margin: 0,
+              marginRight: "20px",
             }}
+            className={required ? styles.required : styles.non}
           >
             {title}
           </p>
         </Col>
-        <Col>{child}</Col>
+        <Col
+          style={{
+            width: "100px",
+            alignContent: "center",
+            display: "flex",
+            padding: 0,
+            margin: 0,
+          }}
+        >
+          {child}
+        </Col>
         <Col></Col>
       </Row>
     </Container>
