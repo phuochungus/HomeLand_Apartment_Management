@@ -2,23 +2,6 @@ import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 
-// The forwardRef is important!!
-// Dropdown needs access to the DOM node in order to position the Menu
-const CustomToggle = React.forwardRef<any, any>(
-  ({ children, onClick }, ref) => (
-    <a
-      href=""
-      ref={ref}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick(e);
-      }}
-    >
-      {children}
-    </a>
-  )
-);
-
 const CustomMenu = React.forwardRef<any, any>(
   ({ children, style, className, "aria-labelledby": labeledBy }, ref) => {
     const [value, setValue] = useState("");
@@ -46,7 +29,7 @@ const CustomMenu = React.forwardRef<any, any>(
     );
   }
 );
-
+CustomMenu.displayName = "CustomMenu";
 export default function SearchDropdown({
   className,
   style,
@@ -61,7 +44,7 @@ export default function SearchDropdown({
   selections: any[];
 }) {
   const [dropdownValue, setDropdownValue] = useState(title);
-  async function onChangeItem(value:string , index:number) {
+  async function onChangeItem(value: string, index: number) {
     await (onChange && onChange(index));
     setDropdownValue(value);
   }
@@ -86,7 +69,7 @@ export default function SearchDropdown({
           <Dropdown.Item
             key={index}
             eventKey={index.toString()}
-            onClick={() => onChangeItem(value,index)}
+            onClick={() => onChangeItem(value, index)}
           >
             {value}
           </Dropdown.Item>
