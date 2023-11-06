@@ -98,7 +98,7 @@ export default function EditApartment({ params }: { params: { id: string } }) {
     })
   );
   const apartmentQuery = useQuery(
-    "apartment",
+    "apartmentDetail",
       () => axios.get("/api/apartment/" + params.id).then((res) => {
         const apartment = res.data as Apartment;
         const temp: (File | URL)[] = [];

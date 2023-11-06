@@ -15,7 +15,7 @@ export default function Page({ params }: { params: { id: string } }) {
   //console.log(apartment);
   const [imageLoaded, setImageLoaded] = useState(true); // Set it to true by default
 
-  const { isLoading, data ,isError} = useQuery("apartment", () =>
+  const { isLoading, data ,isError} = useQuery("apartmentDetail", () =>
     axios
       .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)

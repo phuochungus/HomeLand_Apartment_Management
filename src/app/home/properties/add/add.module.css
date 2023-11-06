@@ -4,7 +4,9 @@
     flex-direction: column;
     padding: 0 3rem;
 }
-
+.content #name{
+    width: 100%
+}
 .typeSelectContainer {
     height: fit-content;
     border-radius: 15px;
@@ -99,4 +101,9 @@
 }
 .missing + svg{
     border-color: #FF4747 !important;
+}
+@media screen and (max-width: 800px) {
+    #name {
+        width: 100% ;
+    }
 }
