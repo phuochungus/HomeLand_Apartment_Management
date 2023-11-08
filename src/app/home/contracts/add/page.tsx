@@ -165,13 +165,13 @@ export default function Page() {
     {
       title: t("apartment"),
       required: true,
-
       child: (
-        <div>
+        <div style={{ width: "100%" }}>
           {" "}
           <SearchDropdown
             title={"Choose Apartment"}
-            selections={Apartments.map((building) => building.name)}
+            style={{ width: "100%" }}
+            selections={Apartments.map((apartment) => apartment.name)}
             onChange={(index) => {
               const newObj = {
                 ...createContractParams,
@@ -179,7 +179,6 @@ export default function Page() {
               };
               setCreateContractParams(newObj);
             }}
-            style={{ width: "100%" }}
           ></SearchDropdown>
           {errors && errors.apartment_id && (
             <span className={styles.error}>{errors.apartment_id}</span>
@@ -236,7 +235,9 @@ export default function Page() {
       <Container style={{ padding: 0, marginTop: "20px" }}>
         <Row>
           <Col>
-            <h5 className={styles.required} style={{width:"100px"}}>{t("resident")}</h5>
+            <h5 className={styles.required} style={{ width: "100px" }}>
+              {t("resident")}
+            </h5>
             <Table responsive="sm" style={{ width: "100%" }}>
               <thead>
                 <tr>
@@ -280,21 +281,36 @@ export default function Page() {
           <Modal
             dialogClassName={styles.modal}
             show={show}
+            style={futuna.style}
             onHide={() => setShow(false)}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Modal</Modal.Title>
+              <Modal.Title>{t("residentsList")}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <SearchBar></SearchBar>
+              <div
+                className={styles.itemContainer}
+                style={{
+                  height: "40px",
+                  width: "40%",
+                  borderStyle: "none",
+                  margin: 0,
+                }}
+              >
+                <SearchBar
+                  className={styles.searchBar}
+                  placeholder={t("search_resident")}
+                ></SearchBar>
+              </div>
+
               <Table style={{ width: "100%" }} striped hover>
                 <thead>
                   <tr>
-                    <th>{t("ID")}</th>
-                    <th>{t("name")}</th>
-                    <th>{t("phone_number")}</th>
-                    <th>{t("apartment")}</th>
-                    <th>{t("create_at")}</th>
+                    <th style={{ width: "20%" }}>{t("ID")}</th>
+                    <th style={{ width: "20%" }}>{t("name")}</th>
+                    <th style={{ width: "25%" }}>{t("phone_number")} </th>
+                    <th style={{ width: "10%" }}>{t("apartment")}</th>
+                    <th style={{ width: "25%" }}>{t("create_at")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -321,7 +337,6 @@ export default function Page() {
                         <td>{resident.profile.phone_number}</td>
                         <td>{resident.stay_at && resident.stay_at.name}</td>
                         <td>{createAt}</td>
-                        <td style={{ width: 20 }}></td>
                       </tr>
                     );
                   })}

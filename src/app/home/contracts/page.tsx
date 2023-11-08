@@ -27,13 +27,14 @@ export default function Contracts() {
   const { isLoading, isError, data, refetch } = useQuery(
     "contract",
     () =>
-      axios.get("/api/contract").then((res) => {
-        setContractList(res.data as Contract[]);
+      axios.get("/api/contract?page=" + page).then((res) => {
+        setContractList([...ContractList, ...(res.data as Contract[])]);
       }),
     {
       refetchOnWindowFocus: false,
     }
   );
+
   const [showModal, setShowModal] = useState(false);
   const [selectedContractId, setSelectedContractId] = useState("");
   const handleConfirmDelete = async (id: string) => {
@@ -42,8 +43,7 @@ export default function Contracts() {
     try {
       await axios.delete(`/api/contract/${id}`);
       toastMessage({ type: "success", title: "Delete successfully!" });
-
-      refetch();
+      setContractList(ContractList.filter((item) => item.contract_id !== id));
     } catch (err) {
       toastMessage({ type: "error", title: "Delete fail!" });
       console.log(err);
@@ -53,6 +53,27 @@ export default function Contracts() {
     setSelectedContractId(id);
     setShowModal(true);
   };
+  useEffect(() => {
+    window.addEventListener("scroll", (e) => {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom + 50 >= docHeight) {
+        handleScrollEnd();
+      }
+    });
+  }, []);
 
   const ContractSortOption = [
     {
@@ -79,7 +100,7 @@ export default function Contracts() {
   async function handleScrollEnd() {
     if (!loadingMore) {
       loadingMore = true;
-      await refetch();
+      refetch();
       loadingMore = false;
     }
   }
@@ -157,7 +178,7 @@ export default function Contracts() {
             onClick={() => {
               router.push("/home/contracts/add?auth=true");
             }}
-            style={{ alignItems: "center" }}
+            style={{ alignItems: "center", fontWeight: 600 }}
           >
             Add Contract
           </Button>
@@ -165,19 +186,20 @@ export default function Contracts() {
       </div>
       <Table responsive="sm">
         <thead>
-          <tr>
+          <tr style={{ width: "100%" }}>
             <th>{t("ID")}</th>
             <th>{t("name")}</th>
             <th>{t("phone_number")}</th>
             <th>{t("apartment")}</th>
             <th>{t("create_at")}</th>
             <th>{t("expire_at")}</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {ContractList.map((value, index): ReactNode => {
             return (
-              <tr key={index}>
+              <tr key={index} style={{ cursor: "pointer" }}>
                 <td>{value.contract_id}</td>
                 <td>{value.resident.profile.name}</td>
                 <td>{value.resident.profile.phone_number}</td>
@@ -188,7 +210,6 @@ export default function Contracts() {
                 <td>
                   {format(new Date(value.expire_at), "yyyy-MM-dd HH:mm:ss")}
                 </td>{" "}
-                <td></td>
                 <td style={{ width: 20 }}>
                   <div className="d-flex">
                     <Button

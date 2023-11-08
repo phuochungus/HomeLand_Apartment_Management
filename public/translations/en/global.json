@@ -14,5 +14,7 @@
   "see_all_contract": "All contracts",
   "status": "Status",
   "add_contract": "Add contract",
-  "resident": "Resident"
+  "resident": "Resident",
+  "residentsList":"All Residents",
+  "search_resident":"Search resident by name..."
 }

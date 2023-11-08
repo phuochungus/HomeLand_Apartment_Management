@@ -15,5 +15,7 @@
   "status":"Trạng thái",
   "add_contract":"Tạo hợp đồng"
   ,
-  "resident":"Cư dân"
+  "resident":"Cư dân",
+  "residentsList":"Danh sách cư dân",
+  "search_resident":"Tìm cư dân"
 }
