@@ -13,8 +13,7 @@
   "expire_at": "Ngày hết hạn",
   "search_contract": "Tìm hợp đồng của cư dân",
   "status":"Trạng thái",
-  "add_contract":"Tạo hợp đồng"
-  ,
+  "add_contract":"Tạo hợp đồng",
   "resident":"Cư dân",
   "residentsList":"Danh sách cư dân",
   "search_resident":"Tìm cư dân"

@@ -1,5 +1,11 @@
 "use client";
-import React, { ChangeEvent, ReactNode, useCallback, useState } from "react";
+import React, {
+  ChangeEvent,
+  ReactNode,
+  createRef,
+  useCallback,
+  useState,
+} from "react";
 import styles from "./addContract.module.css";
 import { futuna } from "../../../../../public/fonts/futura";
 import { useTranslation } from "react-i18next";
@@ -25,6 +31,7 @@ import { loadingFiler, removeLoadingFilter } from "../../../../libs/utils";
 import toastMessage from "../../../../utils/toast";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import SearchLayout from "../../../../components/searchLayout/searchLayout";
 type CreateContractParams = {
   resident_id: string;
   apartment_id: string;
@@ -52,6 +59,34 @@ export default function Page() {
       created_at: "",
       expire_at: "",
     });
+  const searchRef = createRef<HTMLInputElement>();
+
+  const handleSearch = async (e: any) => {
+    if (e.key === "Enter") {
+      try {
+        const res = await axios.get("/api/resident/search", {
+          params: {
+            query: searchRef.current?.value,
+          },
+        });
+        setResidents(res.data);
+      } catch (e) {
+        alert(e);
+      }
+    }
+  };
+  const searchIconClick = async () => {
+    try {
+      const res = await axios.get("/api/resident/search", {
+        params: {
+          query: searchRef.current?.value,
+        },
+      });
+      setResidents(res.data);
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   const handleCreate = async () => {
     const err = validation();
@@ -241,24 +276,24 @@ export default function Page() {
             <Table responsive="sm" style={{ width: "100%" }}>
               <thead>
                 <tr>
-                  <th>{t("ID")}</th>
-                  <th>{t("name")}</th>
-                  <th>{t("phone_number")}</th>
-                  <th>{t("apartment")}</th>
-                  <th>{t("create_at")}</th>
+                  <th style={{ width: "20%" }}>{t("ID")}</th>
+                  <th style={{ width: "20%" }}>{t("name")}</th>
+                  <th style={{ width: "25%" }}>{t("phone_number")} </th>
+                  <th style={{ width: "10%" }}>{t("apartment")}</th>
+                  <th style={{ width: "25%" }}>{t("create_at")}</th>
                 </tr>
               </thead>
               <tbody>
                 {selectedResident != undefined ? (
                   <tr>
-                    <td>{selectedResident.id}</td>
-                    <td>{selectedResident.profile.name}</td>
-                    <td>{selectedResident.profile.phone_number}</td>
-                    <td>
+                    <td style={{ width: "20%" }}>{selectedResident.id}</td>
+                    <td style={{ width: "20%" }}>{selectedResident.profile.name}</td>
+                    <td style={{ width: "25%" }}>{selectedResident.profile.phone_number}</td>
+                    <td style={{ width: "10%" }}>
                       {selectedResident.stay_at &&
                         selectedResident.stay_at.name}
                     </td>
-                    <td>
+                    <td style={{ width: "25%" }}>
                       {format(
                         new Date(selectedResident.created_at),
                         "yyyy-MM-dd HH:mm:ss"
@@ -291,26 +326,30 @@ export default function Page() {
               <div
                 className={styles.itemContainer}
                 style={{
+                  position: "absolute",
                   height: "40px",
                   width: "40%",
                   borderStyle: "none",
                   margin: 0,
+                  right: "5%",
                 }}
               >
-                <SearchBar
-                  className={styles.searchBar}
-                  placeholder={t("search_resident")}
-                ></SearchBar>
+                <SearchLayout
+                  onKeydown={handleSearch}
+                  iconClick={searchIconClick}
+                  placeHolder={t("search_resident")}
+                  ref={searchRef}
+                />
               </div>
 
-              <Table style={{ width: "100%" }} striped hover>
+              <Table style={{ width: "100%", marginTop: "50px" }} striped hover>
                 <thead>
                   <tr>
                     <th style={{ width: "20%" }}>{t("ID")}</th>
-                    <th style={{ width: "20%" }}>{t("name")}</th>
+                    <th style={{ width: "23%" }}>{t("name")}</th>
                     <th style={{ width: "25%" }}>{t("phone_number")} </th>
                     <th style={{ width: "10%" }}>{t("apartment")}</th>
-                    <th style={{ width: "25%" }}>{t("create_at")}</th>
+                    <th style={{ width: "22%" }}>{t("create_at")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -349,20 +388,20 @@ export default function Page() {
           style={{
             display: "flex",
 
-            marginTop: "250px",
+            marginTop: "200px",
             justifyContent: "center",
           }}
         >
           <Col
             style={{
-              display: "flex",
-              justifyContent: "center",
+              position: "absolute",
+              left: "50%",
               paddingRight: "120px",
+              bottom: "5%",
             }}
           >
             {" "}
             <Button
-              className=" start-50"
               onClick={handleCreate}
               style={{ width: "100px" }}
             >
