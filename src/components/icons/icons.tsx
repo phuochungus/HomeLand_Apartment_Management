@@ -196,3 +196,50 @@ export const BuildingIcon = ({
 
   );
 };
+export const ManagerIcon = ({
+  width,
+  height,
+  className,
+}: {
+  width: any;
+  height: any;
+  className?: any;
+}): JSX.Element => {
+  return (
+    <svg width={width} height={height} viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <rect width="96" height="96" fill="url(#pattern998)"/>
+    <defs>
+    <pattern id="pattern998" patternContentUnits="objectBoundingBox" width="1" height="1">
+    <use xlinkHref="#image0_833_767" transform="scale(0.0104167)"/>
+    </pattern>
+    <image id="image0_833_767" width="96" height="96" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAADrklEQVR4nO2cy28NURzHPxKPSsqqhEgsUAmJJiJBUsGu/4BXI9aCna1odEMi3Yi36tLGxl+gxQIpEY8lK0L0dkFoq+oxctLfjeu60Rl3Zn5z7/1+kt9mOr2/1zlnfmfOmQNCCCGEEEIIIYQQQhSPpUAvMAiMAiVgxqRk164BB4Al3sY2E+uBIWASiGJKuPc60OltfCOzGBgAviUIfLWE3nEWaPN2ptHoBF7UEfhqeQCs9HaqUdhsY3qUsrwBuryda4SWX8og+JVJWOHtZFFpA55mGPyyPLbni6hiIIfgl6W/Wnmrs77OaiepfNZQ9CdDOQa/LJecGlshZ7iTDgmY0Ix5ll6H4Jdlv9nQ0gw6JuCqt/NFYNQxAWGG3PKMOyZgrOWjD3x1TMC0EoAS4M24hiBfRvUQ9uWaYwKuOPteCA44JmCvt/NFoN1eC+Qd/AnTLZhdQM87AWHoExUrYTM5Bj/MPdaUlYtZzuaYgDOmU1QtST7IIfj3gUWVisVvwoL56wyD/xZYVaFP1KDLdi+kHfyQ2E21FIq/WQbcTXnY0XaUhCyy3QsTdVY7pzXm18cKW0BPkogJW+1SqZki7baGG97fPLTFlK8mY3btMrBPM1whhBBCCCGEEEIIIZJ/ObPF9g31ATeAYfvK8ZV9zjptUrJr4W+37d4++9/wGzo7Yg4WANuA48AtWzrMYjnylunYZjpblnnAVltwGXb6RmzSdPebLcGmpiY4uMPe2b9zCHgUo4cE27qbLRnLgRPAy5QD9gk4ZPIp5d9+aTaHtemGZaN9//slg9b6CFhXoWudXUtbzxfbNrmBBmK1rcd+zyAgP4FzwMIaeucDp4AfGegNv3kTWEuBWWil33QGAYiA90BPDDt67N4sbAi+nSxiBdWV8gFLUQ0ZSWDPSMa2PC/SJq+9Oe7v3x3Dnt05HvixB2eO2Lich8NRzF6QdeuvlOD7YZw4mNEDL6qjF+TV+ivlh73yyP18nykHZyPg6D/sOuZk01TeR2Tec3I0KmAPKMudvILf7ehkNMfstMPZtu3NfrzMWAz7xpr9+Jtnjg6OFKwKqpYnOcSfj44OXohh30VH+z7kEH835yKbd8zFUWcbM8fTuV0x7Av3KAEZBWFZjAQkrYTSboCZ0wjHi5WUgPQTMJwgAUkqobQbYNP2gPMJbAzVkhLgUAH9TyWUlJbtATsT2JikEkrb/6ZNQEcCG5NUQmn7nzkewX//H3bGfSeUtv9CCCGEEEIIIYQQQlCLX+PxlBqSeNXFAAAAAElFTkSuQmCC"/>
+    </defs>
+    </svg>
+    
+
+  );
+};
+export const TechnicianIcon = ({
+  width,
+  height,
+  className,
+}: {
+  width: any;
+  height: any;
+  className?: any;
+}): JSX.Element => {
+  return (
+    <svg width={width} height={height} viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <rect width="96" height="96" fill="url(#pattern999)"/>
+    <defs>
+    <pattern id="pattern999" patternContentUnits="objectBoundingBox" width="1" height="1">
+    <use xlinkHref="#image0_833_768" transform="scale(0.0104167)"/>
+    </pattern>
+    <image id="image0_833_768" width="96" height="96" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAEjklEQVR4nO2dyWsUQRSHf0aj4oaBuOFBZXLRJAgq/gfiwRgPiogiasT15i1B8SSoiFldTiqYg+JNcIOoBxH1oAET14OKoiKCWxJjNNGWIjUwhMlUVXdt0/U+aAikp7av+/XrmqoEIAiCIAiCIAiCIJKyEEAjgCcA+gBEgoPQRCmAJgCDEoNOAgwM/nXFgac7QCNNMQefQpCmmK8adkiAJ1c/3QEaYNkOCXBILwlwC4UYx5AAx5AAx3gnoBpAS85cSB//uRlAlYsGhcIEAKcA/C1wNQwBOAFgvOvGpnHwbyukY7dIgl5Ox8iF2zS3IViqBWGnUDiqdN34NNCS4FW80XXj08DTBAK6XTc+DfQkENCjWNcYTeekiiQCfijUMw3AJYnzLgMoUyg3cnwURQiakjPtK4Kd08U/E4SAZgsP4YsKDc6edyEUAVU8pVSteAjAIonylyo2OPfcJSEIAJ9eUK24RbLsswkEnAlFAJvbualQaQdfyiFDVwIBr0MRkJXQJghHQ/zKlx38fF/5icg9dyAkAVkq+cO1mw9eL//5uGTMH8mnBAJ6QxSgm3sJOvcwRn0kYAT7EwxKPdQhASOYAaA/xsCwz5RDHRKQh80xBmY74lE0AmYDOAjgPoDveQr+wn93IOaVOJKjCp06DDdzW9YE7JHcfJA9WKe2ITnrJepi57ia27Ii4EiCyq4AqEg4QJGpW1rTYlujAjZoqJC9HB0CMMlTAZUx57aMC5gI4L3Git8CWOehAPA3eu8ErDXUgA6+ycEnAapzW1YEnDPYiD8AjgGY6omArIRWC+FImjcWroYPADYJvte1JWC0uS0nAuZbGPzI9hWlCSvt2erBwEYhCzAZ/yMS4Ef8j+gOsBP/PwJ4kCIBPYL2yC6PsRb/WTgrAVAH4HMKBLwQtKfGt/i/Jafs6fytc7CIBVwVtKdb8v3GWvyfl6eOxQDuFKmAvRJtYqv6auOI0B3/mcykRJ4JmGvyb0Xojv9skVXaBIDvjTMiwGT8T5OAWQC+mRBgI/6nQQBjRcxQVFTx32cBjJ0xZk+t5v9pF8BYqRiOjDxY8h1MaAgCss+Ek/x7jtjtvaFZAAtpoQjIMgfAbr4Y4dko3yeMyjXNAmSOhkINCo1WBwLaXXfaJ2ocCOh03WmfGM+XjtgU0A9grOuO+8QuB3dBxnWnfaKU77OyKaDWdad9Y4dlAQ2uO+zjXfDKooB21x32kTqJgWN7hWVYIyin03BfihKWmbwUDNxvydnOCkE5vygTij85x+aPRJRI7PnKKF4gwdwFohUAbPJpgURZLMxElAmZ2SzHpjBEsAdtRJlQvLvguWDw2FqfcYJyWKoZUSYUj40Sd8EyQRnsZSuiTKjwnwcrG+Uol3gvWCUQkBF8vj+kTMjEyxTL9UWZ0E9BGUl3UwYtQCaN7KRMyIyAd/wKF3GeMiEzAvZJ3nn1lAkN80/j4D8GMFlSwGrKhIYZ0rjDUWXlQ0ZQXjCZkMzaFdHB/o/iTMV6SygTGmYgz4CybTdfCxxsm9FdvvhoeQL5jygTIgiCIAiCIAgCgfEfuEbpvUxO5DwAAAAASUVORK5CYII="/>
+    </defs>
+    </svg>
+    
+    
+
+  );
+};

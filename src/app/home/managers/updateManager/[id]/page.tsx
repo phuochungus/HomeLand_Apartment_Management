@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import styles from "./UpdateResident.module.scss";
+import styles from "../../../residents/addResident/AddResident.module.scss";
 import mainStyles from "../../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
 import Form from "react-bootstrap/Form";
@@ -24,65 +24,57 @@ import { Images } from "../../../../../../public/images";
 import toastMessage from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import { Manager } from "@/models/manager";
 type FormValue = {
   gender: string;
   phoneNumber: string;
-  paymentInfo: string;
-  email: string | undefined;
+  email: string;
   avatarImg?: any;
 };
-const UpdateResident = ({ params }: { params: { id: string } }) => {
+const UpdateManager = ({ params }: { params: { id: string } }) => {
   const [formValue, setFormValue] = useState({
     gender: "",
     phoneNumber: "",
-    paymentInfo: "",
-    email: undefined,
+    email: "",
   });
   const [errors, setErrors] = useState<any>();
-  const [resident, setResident] = useState<Resident>();
-
+  const [manager, setManager] = useState<Manager>();
   const [avatar, setAvatar] = useState<any>();
   const avatarRef = useRef<HTMLInputElement>(null);
-  let avatar_photo = resident?.account?.avatarURL as string;
+  let avatar_photo = manager?.account.avatarURL as string;
   const validation = () => {
     let err = {} as FormValue;
     const emailPattern =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const phonePattern =
       /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-    if (formValue.email) {
-      if (formValue.email === "") {
-        err.email = "Trường email là bắt buộc!";
-      } else if (!emailPattern.test(formValue.email)) {
-        err.email = "Email không hợp lệ!";
-      }
-    }
     if (formValue.gender === "") {
       err.gender = "Trường giới tính là bắt buộc!";
+    }
+    if (formValue.email === "") {
+      err.email = "Trường email là bắt buộc!";
+    } else if (!emailPattern.test(formValue.email)) {
+      err.email = "Email không hợp lệ!";
     }
     if (formValue.phoneNumber === "") {
       err.phoneNumber = "Trường số điện thoại là bắt buộc!";
     } else if (!phonePattern.test(formValue.phoneNumber)) {
       err.phoneNumber = "Số điện thoại không hợp lệ!";
     }
-    if (formValue.paymentInfo === "") {
-      err.paymentInfo = "Thông tin thanh toán là bắt buộc!";
-    }
 
     return err;
   };
-  const retrieveResident = async () => {
+  const retrieveManager = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get(`/api/resident/${params.id}`);
+      const res = await axios.get(`/api/manager/${params.id}`);
       removeLoadingFilter(document.body!);
-      const residentData = res.data as Resident;
-      setResident(residentData);
+      const managerData = res.data as Manager;
+      setManager(managerData);
       const newformValue: any = {
-        gender: residentData.profile.gender,
-        phoneNumber: residentData.profile.phone_number,
-        paymentInfo: residentData.payment_info || "",
-        email: residentData.account ? residentData.account.email : undefined,
+        gender: managerData.profile.gender,
+        phoneNumber: managerData.profile.phone_number,
+        email: managerData.account?.email,
       };
 
       setFormValue(newformValue);
@@ -93,8 +85,8 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
-    "resident",
-    retrieveResident,
+    "manager",
+    retrieveManager,
     {
       staleTime: Infinity,
     }
@@ -105,19 +97,20 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     setErrors(err);
     if (Object.keys(err).length === 0) {
       try {
+        const data: any = {
+          gender: formValue.gender,
+          phone_number: formValue.phoneNumber,
+          email: formValue.email,
+          avatar_photo: avatar,
+        };
         const form = new FormData();
         form.append("gender", formValue.gender);
         form.append("phone_number", formValue.phoneNumber);
-        if (formValue.email) {
-          form.append("email", formValue.email);
-        }
-        if (formValue.paymentInfo) {
-          form.append("payment_info", formValue.paymentInfo);
-        }
-        // form.append("avatar_photo", avatar);
+        form.append("email", formValue.email);
+        form.append("avatar_photo", avatar);
         form.append("_method", "PATCH");
         loadingFiler(document.body!);
-        await axios.post(`/api/resident/${params.id}`, form);
+        await axios.post(`/api/manager/${params.id}`, form);
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Update successfully!" });
       } catch (error) {
@@ -142,26 +135,28 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     const file = e.target.files[0];
     setAvatar(file);
   };
-  // const AvatarImage = useMemo(() => {
-  //   return (
-  //     <Image
-  //     onClick={handleAvatarClick}
-  //     fill
-  //     style={{ borderRadius: "3%" }}
-  //     alt=""
-
-  //     src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
-  //   />
-  //   );
-  // }, [avatar, avatar_photo]);
+  const AvatarImage = useMemo(() => {
+    return (
+      <Image
+        onClick={handleAvatarClick}
+        fill
+        style={{ borderRadius: "3%" }}
+        alt=""
+        onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+        className={styles.img}
+        unoptimized={true}
+        src={avatar ? URL.createObjectURL(avatar) : avatar_photo}
+      />
+    );
+  }, [avatar, avatar_photo]);
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
-          Chỉnh sửa thông tin cư dân
+          Chỉnh sửa thông tin người quản lí
         </p>
         <div className="d-inline-flex justify-content-between">
-          {/* <div className={styles.avatarLayout}>
+          <div className={styles.avatarLayout}>
             {AvatarImage}
             <input
               onChange={handleChangeAvatar}
@@ -169,14 +164,14 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               ref={avatarRef}
               style={{ display: "none" }}
             />
-          </div> */}
+          </div>
           <Form method="post" className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className={clsx(styles.label, styles.required)}>
                 Họ và tên
               </Form.Label>
               <Form.Control
-                value={resident && resident.profile.name}
+                value={manager && manager.profile.name}
                 size="lg"
                 disabled
                 type="text"
@@ -190,12 +185,11 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
 
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
+                  checked={manager && manager.profile.gender === "male"}
                   inline
                   label="Nam"
-                  checked={formValue.gender === 'male'}
                   style={{ fontSize: "1rem" }}
-                  onChange={handleChange}
-                  name="gender"
+                  name="group1"
                   type="radio"
                   value="male"
                   id={`inline-radio-1`}
@@ -203,10 +197,9 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 <Form.Check
                   inline
                   label="Nữ"
-                  checked={formValue.gender === 'female'}
                   style={{ fontSize: "1rem" }}
-                  onChange={handleChange}
-                  name="gender"
+                  checked={manager && manager.profile.gender === "female"}
+                  name="group1"
                   type="radio"
                   value="female"
                   id={`inline-radio-2`}
@@ -247,29 +240,13 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>
-                Thông tin thanh toán
-              </Form.Label>
-              <Form.Control
-                value={formValue.paymentInfo}
-                onChange={handleChange}
-                name="paymentInfo"
-                size="lg"
-                type="text"
-                placeholder=""
-              />
-              {errors && errors.paymentInfo && (
-                <span className={styles.error}>{errors.paymentInfo}</span>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
                 Ngày sinh
               </Form.Label>
               <Form.Control
                 value={
-                  resident &&
-                  format(new Date(resident.profile.date_of_birth), "yyyy-MM-dd")
+                  manager &&
+                  format(new Date(manager.profile.date_of_birth), "yyyy-MM-dd")
                 }
                 size="lg"
                 type="date"
@@ -298,9 +275,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                   unoptimized={true}
                   alt=""
                   src={
-                    resident
-                      ? resident.profile.front_identify_card_photo_URL
-                      : ""
+                    manager ? manager.profile.front_identify_card_photo_URL : ""
                   }
                 />
               </Form.Group>
@@ -324,9 +299,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                   alt=""
                   unoptimized={true}
                   src={
-                    resident
-                      ? resident.profile.back_identify_card_photo_URL
-                      : ""
+                    manager ? manager.profile.back_identify_card_photo_URL : ""
                   }
                 />
               </Form.Group>
@@ -353,4 +326,4 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default UpdateResident;
+export default UpdateManager;
