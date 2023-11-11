@@ -295,43 +295,7 @@ export default function Page() {
             <h5 className={styles.required} style={{ width: "100px" }}>
               {t("resident")}
             </h5>
-            {/* <Table responsive="sm" style={{ width: "100%" }}>
-              <thead>
-                <tr>
-                  <th style={{ width: "20%" }}>{t("ID")}</th>
-                  <th style={{ width: "20%" }}>{t("name")}</th>
-                  <th style={{ width: "25%" }}>{t("phone_number")} </th>
-                  <th style={{ width: "10%" }}>{t("apartment")}</th>
-                  <th style={{ width: "25%" }}>{t("create_at")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedResident != undefined ? (
-                  <tr>
-                    <td style={{ width: "20%" }}>{selectedResident.id}</td>
-                    <td style={{ width: "20%" }}>
-                      {selectedResident.profile.name}
-                    </td>
-                    <td style={{ width: "25%" }}>
-                      {selectedResident.profile.phone_number}
-                    </td>
-                    <td style={{ width: "10%" }}>
-                      {selectedResident.stay_at &&
-                        selectedResident.stay_at.name}
-                    </td>
-                    <td style={{ width: "25%" }}>
-                      {format(
-                        new Date(selectedResident.created_at),
-                        "yyyy-MM-dd HH:mm:ss"
-                      )}
-                    </td>
-                  </tr>
-                ) : (
-                  <></>
-                )}
-              </tbody>
-            </Table> */}
-          </Col>
+             </Col>
           <Col md="auto">
             <Button onClick={() => setShow(true)}>Choose Resident</Button>
           </Col>
