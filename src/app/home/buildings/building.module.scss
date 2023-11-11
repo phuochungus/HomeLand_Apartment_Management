@@ -27,6 +27,7 @@
 //table
 .tableBuilding {
   text-align: center;
+
 }
 .cudBtn {
   color: white;
@@ -48,5 +49,11 @@
   background-color: var(--red);
   &:hover {
     background-color: #f90e0e;
+  }
+}
+.detailBtn {
+  background-color: var(--blue);
+  &:hover {
+    background-color: #4764b1;
   }
 }

@@ -75,6 +75,7 @@ export default function Residents() {
     "ID",
     "Tên",
     "Email",
+    "Quản lí tòa",
     "Số điện thoại",
     "Ngày tạo",
   ];
@@ -186,6 +187,7 @@ export default function Residents() {
                     <td>{manager.id}</td>
                     <td>{manager.profile.name}</td>
                     <td>{manager.account?.email}</td>
+                    <td>{manager.building? manager.building.name: ""}</td>
                     <td>{manager.profile.phone_number}</td>
                     <td>{createAt}</td>
                     <td style={{ width: 20 }}>

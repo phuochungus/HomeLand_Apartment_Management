@@ -1,10 +1,11 @@
+import { Building } from "./building";
 
 export interface Manager {
     role: string;
     id: string;
     profile: Profile;
     account: Account,
-    stay_at: any;
+    building?: Building
     created_at: Date;
     deleted_at?: Date;
   }
