@@ -44,7 +44,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
       const res = await axios.get(`/api/building/${params.id}`);
       removeLoadingFilter(document.body!);
       const buildingData = res.data as Building;
-      console.log(buildingData)
+      console.log(buildingData);
       setBuilding(buildingData);
       return res.data;
     } catch (error) {
@@ -82,8 +82,8 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
     try {
       await axios.post(`/api/building/${params.id}/deleteManager`, undefined, {
         params: {
-          managerId: id
-        }
+          managerId: id,
+        },
       });
       toastMessage({ type: "success", title: "Delete successfully!" });
       refetch();
@@ -106,11 +106,11 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
           },
         }
       );
-      const updatedBuilding = res.data; 
+      const updatedBuilding = res.data;
       if (updatedBuilding.managers) {
-
-      } refetch()
-      setListChecked([])
+      }
+      refetch();
+      setListChecked([]);
     } catch (e: any) {
       throw new Error(e.message);
     }
@@ -124,7 +124,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
     setShowModalManager(true);
   };
   const { refetch } = useQuery("detail-building", retrieveBuilding, {
-    staleTime: Infinity
+    staleTime: Infinity,
   });
   return (
     <main className={mainStyles.main}>
@@ -168,55 +168,57 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
               Thêm người quản lí
             </ButtonComponent>
           </div>
-        {building?.managers && building.managers?.length > 0 ? <Table
-            className={clsx(styles.tableBuilding, futuna.className)}
-            striped
-            bordered
-            hover
-          >
-            <thead>
-              <tr>
-                {titleTable.map((title: String, index) => (
-                  <th key={index}>{title}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {building.managers.map((manager, index): React.ReactNode => {
-                 const time = new Date(manager.created_at);
-                 const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
-                return (
-                  <tr key={index}>
-                    <td>{manager.id}</td>
-                    <td>{manager.profile.name}</td>
-                    <td>{manager.profile.phone_number}</td>
-                    <td>{manager.account.email}</td>
-                    <td>{createAt}</td>
-                    {/* <td>{building.manager_id}</td> */}
+          {building?.managers && building.managers?.length > 0 ? (
+            <Table
+              className={clsx(styles.tableBuilding, futuna.className)}
+              striped
+              bordered
+              hover
+            >
+              <thead>
+                <tr>
+                  {titleTable.map((title: String, index) => (
+                    <th key={index}>{title}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {building.managers.map((manager, index): React.ReactNode => {
+                  const time = new Date(manager.created_at);
+                  const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                  return (
+                    <tr key={index}>
+                      <td>{manager.id}</td>
+                      <td>{manager.profile.name}</td>
+                      <td>{manager.profile.phone_number}</td>
+                      <td>{manager.account.email}</td>
+                      <td>{createAt}</td>
+                      {/* <td>{building.manager_id}</td> */}
 
-                    <td>
-                      <div className="d-flex justify-content-center">
-                        <ButtonComponent
-                          onClick={() => deleleHandle(manager.id)}
-                          preIcon={<CloseIcon width={16} height={16} />}
-                          className={clsx(
-                            styles.cudBtn,
-                            buildingStyles.deleteBtn
-                          )}
-                        >
-                          Xóa
-                        </ButtonComponent>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table> : (
+                      <td>
+                        <div className="d-flex justify-content-center">
+                          <ButtonComponent
+                            onClick={() => deleleHandle(manager.id)}
+                            preIcon={<CloseIcon width={16} height={16} />}
+                            className={clsx(
+                              styles.cudBtn,
+                              buildingStyles.deleteBtn
+                            )}
+                          >
+                            Xóa
+                          </ButtonComponent>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          ) : (
             <p style={{ textAlign: "center", marginTop: "100px" }}>
               Chưa có người quản lí nào trong tòa!
             </p>
-          )} 
+          )}
         </div>
       </div>
       <ToastContainer

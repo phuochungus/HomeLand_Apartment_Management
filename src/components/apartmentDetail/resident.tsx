@@ -3,18 +3,21 @@ import { Col, Container, Row, Button } from "react-bootstrap";
 
 export interface IResidentProps {
   img: JSX.Element;
+  name: string;
+  phone_number: string;
 }
 
-export default function Resident(props: IResidentProps) {
+export default function 
+Resident(props: IResidentProps) {
   return (
     <Container style={{ marginBottom: "20px" }}>
       <Row className="align-items-center">
         <Col md="auto">
-          <div style={{ width: "80px" }}>{props.img}</div>
+          <div style={{ width: "80px", borderRadius: "50%" }}>{props.img}</div>
         </Col>
         <Col>
-          <h4>Manh Ho Dinh</h4>
-          <h4>2152327</h4>
+          <h4>{props.name}</h4>
+          <h4>{props.phone_number}</h4>
         </Col>
         <Col md="auto">
           <Button variant="info" style={{ alignItems: "center" }}>
