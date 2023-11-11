@@ -15,6 +15,10 @@
   "status": "Status",
   "add_contract": "Add contract",
   "resident": "Resident",
-  "residentsList":"All Residents",
-  "search_resident":"Search resident by name..."
+  "residentsList": "All Residents",
+  "search_resident": "Search resident by name...",
+  "birthday": "Birthday",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female"
 }

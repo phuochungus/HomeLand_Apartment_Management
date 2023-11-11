@@ -16,5 +16,9 @@
   "add_contract":"Tạo hợp đồng",
   "resident":"Cư dân",
   "residentsList":"Danh sách cư dân",
-  "search_resident":"Tìm cư dân"
+  "search_resident":"Tìm cư dân",
+  "birthday":"Ngày sinh",
+  "gender":"Giới tính",
+  "male":"Nam",
+  "female":"Nữ"
 }

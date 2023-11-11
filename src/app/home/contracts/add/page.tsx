@@ -14,6 +14,7 @@ import {
   Col,
   Container,
   Form,
+  Image,
   Modal,
   Row,
   Tab,
@@ -32,6 +33,7 @@ import toastMessage from "../../../../utils/toast";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import SearchLayout from "../../../../components/searchLayout/searchLayout";
+import CustomTextBox from "../../../../components/textBox/textBox";
 type CreateContractParams = {
   resident_id: string;
   apartment_id: string;
@@ -125,10 +127,10 @@ export default function Page() {
     if (createContractParams.apartment_id === "") {
       err.apartment_id = "Vui lòng chọn phòng!";
     }
-    if (createContractParams.apartment_id === "") {
+    if (createContractParams.expire_at === "") {
       err.expire_at = "Vui lòng chọn ngày hết hạn!";
     }
-    if (createContractParams.apartment_id === "") {
+    if (createContractParams.resident_id === "") {
       err.resident_id = "Vui lòng chọn cư dân!";
     }
     return err;
@@ -257,7 +259,27 @@ export default function Page() {
       ),
     },
   ];
-
+  const residentDetails = selectedResident
+    ? [
+        {
+          title: t("birthday"),
+          value:
+            selectedResident &&
+            format(
+              new Date(selectedResident.profile.date_of_birth),
+              "dd-MM-yyyy"
+            ),
+        },
+        {
+          title: t("gender"),
+          value: t(selectedResident.profile.gender),
+        },
+        {
+          title: t("phone_number"),
+          value: selectedResident.profile.phone_number,
+        },
+      ]
+    : [];
   return (
     <main className={styles.main} style={futuna.style}>
       <h1>{t("add_contract")}</h1>
@@ -273,7 +295,7 @@ export default function Page() {
             <h5 className={styles.required} style={{ width: "100px" }}>
               {t("resident")}
             </h5>
-            <Table responsive="sm" style={{ width: "100%" }}>
+            {/* <Table responsive="sm" style={{ width: "100%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "20%" }}>{t("ID")}</th>
@@ -287,8 +309,12 @@ export default function Page() {
                 {selectedResident != undefined ? (
                   <tr>
                     <td style={{ width: "20%" }}>{selectedResident.id}</td>
-                    <td style={{ width: "20%" }}>{selectedResident.profile.name}</td>
-                    <td style={{ width: "25%" }}>{selectedResident.profile.phone_number}</td>
+                    <td style={{ width: "20%" }}>
+                      {selectedResident.profile.name}
+                    </td>
+                    <td style={{ width: "25%" }}>
+                      {selectedResident.profile.phone_number}
+                    </td>
                     <td style={{ width: "10%" }}>
                       {selectedResident.stay_at &&
                         selectedResident.stay_at.name}
@@ -304,13 +330,10 @@ export default function Page() {
                   <></>
                 )}
               </tbody>
-            </Table>
-            {errors && errors.resident_id && (
-              <span className={styles.error}>{errors.resident_id}</span>
-            )}
+            </Table> */}
           </Col>
           <Col md="auto">
-            <Button onClick={() => setShow(true)}>Edit</Button>
+            <Button onClick={() => setShow(true)}>Choose Resident</Button>
           </Col>
 
           <Modal
@@ -384,27 +407,72 @@ export default function Page() {
             </Modal.Body>
           </Modal>
         </Row>
+      </Container>
+      <Container style={{ padding: 0, marginTop: "20px" }}>
+        {selectedResident && (
+          <Row className="align-items-center">
+            <Col md="auto" className="align-self-stretch">
+              <Image
+                loading="lazy"
+                width={250}
+                rounded
+                src={
+                  selectedResident.profile.avatar_photo ??
+                  "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
+                }
+              ></Image>
+              <p>{selectedResident.profile.name}</p>
+              <p>{selectedResident.id}</p>
+            </Col>
+            <Col className="align-self-stretch">
+              {residentDetails.map((detail, index) => (
+                <Row key={index} className="mb-5">
+                  <CustomTextBox
+                    title={detail.title}
+                    value={detail.value}
+                    isDisable={true}
+                  ></CustomTextBox>
+                </Row>
+              ))}
+            </Col>
+            <Col className="d-flex flex-column justify-content-between">
+              <Image
+                src={selectedResident.profile.front_identify_card_photo_URL}
+                width={400}
+                height={200}
+                loading="lazy"
+                rounded
+              ></Image>
+              <Image
+                src={selectedResident.profile.back_identify_card_photo_URL}
+                width={400}
+                height={200}
+                loading="lazy"
+                rounded
+                style={{ marginTop: "20px" }}
+              ></Image>
+            </Col>
+          </Row>
+        )}
+        {errors && errors.resident_id && (
+          <span className={styles.error}>{errors.resident_id}</span>
+        )}
+
         <Row
           style={{
             display: "flex",
-
-            marginTop: "200px",
+            marginTop: selectedResident ? "0px" : "200px",
             justifyContent: "center",
+            position: "relative",
+            left: "40%",
           }}
         >
           <Col
             style={{
-              position: "absolute",
-              left: "50%",
-              paddingRight: "120px",
-              bottom: "5%",
+              marginTop: "20px",
             }}
           >
-            {" "}
-            <Button
-              onClick={handleCreate}
-              style={{ width: "100px" }}
-            >
+            <Button onClick={handleCreate} style={{ width: "100px" }}>
               Create
             </Button>
           </Col>
