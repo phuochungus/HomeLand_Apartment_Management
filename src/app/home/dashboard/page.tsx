@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { AiOutlineSearch } from 'react-icons/ai'
-import React, { useState } from "react";
+import React, { ReactNode, useMemo, useState } from "react";
 import Container from 'react-bootstrap/Container';
 import { futuna } from "../../../../public/fonts/futura";
 import {
@@ -19,15 +19,49 @@ import {
   CardBody,
   CardImg,
 } from "react-bootstrap/";
+import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
+import axios from "axios";
+import { Employee } from "@/models/employee";
+import { useQuery } from "react-query";
+import { profile } from "console";
+
 export default function Dashboard() {
+  const [employeeList, setEmployeeList] = useState<Employee[]>([]);
+  var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
+  var page = useMemo(() => {
+    return Math.floor(employeeList.length / 30) + 1;
+  }, [employeeList]);
+  const [emoloyee, setEmployee] = useState<Array<Employee>>([]);
   const [showDialog, setShowDialog] = useState(false);
   const whiteBackground = {
-    backgroundColor: "white",
+    backgroundColor: "#E8EAEC",
   };
   const customCardStyle = {
-    backgroundColor: "#d4e0ff",
+    backgroundColor: "white",
 
   }
+  const retrieveEmployee = async () => {
+    try {
+      loadingFiler(document.body!);
+      const res = await axios.get("/api/employee");
+      removeLoadingFilter(document.body!);
+      setEmployee(res.data);
+
+      return res.data;
+    } catch (error) {
+      removeLoadingFilter(document.body!);
+
+      console.log(error);
+    }
+  };
+  const { isLoading, isError, data, refetch } = useQuery(
+    "employee",
+    retrieveEmployee,
+    {
+      staleTime: Infinity,
+    }
+  );
+
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [t, i18n] = useTranslation();
 
@@ -55,20 +89,21 @@ export default function Dashboard() {
 
           </Row>
         </div>
-        <div className={classNames(dashboardStyles.card)}>
+      
+
+        <div className={classNames(dashboardStyles.carddiv)}>
           <Row xs={1} md={2} className="g-4">
-            {Array.from({ length: 4 }).map((_, idx) => (
+            {emoloyee.map((employee, idx) => (
               <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
                 <Link href="/home/dashboard/detailEmployee" className={dashboardStyles.link}>
                   <Card style={customCardStyle}
-
                     onMouseEnter={() => setHoveredCard(idx)}
                     onMouseLeave={() => setHoveredCard(null)}
                     className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
                     onClick={() => setShowDialog(true)} >
                     <CardImg
                       alt="..."
-                      src="/images/logos/Logo@3x.png"
+                      src={employee.profile.avatar_photo}
                       variant="top"
                       height="250"
                       className="img-fluid"
@@ -83,39 +118,34 @@ export default function Dashboard() {
                           <div className="card-profile-stats d-flex justify-content-center">
                             <div className="profile-stat">
                               <span className="name no-underline">Họ và tên: </span>
-                              <span className="description no-underline" style={{ marginBottom: '10px' }}>Võ Công Bình</span>
-
+                              <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
                             </div>
-
                           </div>
                         </div>
                       </Row>
                       <div className="text-center">
                         <span className="birth">
-                          Ngày sinh: <span className="font-weight-light">tt/mm/yy</span>
+                          Ngày sinh: <span className="font-weight-light">{employee.profile.name}</span>
                         </span>
                         <div className="address">
-                          Địa chỉ: <span className="ni location_pin mr-2">xxxx</span>
+                          Địa chỉ: <span className="ni location_pin mr-2">{employee.profile.name}</span>
                         </div>
                         <div className="phonenumber">
-                          Số điện thoại: <span className="ni location_pin mr-2">xxxx</span>
+                          Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.name}</span>
                         </div>
                         <div className="address">
-                          Tòa nhà: <span className="ni location_pin mr-2">xxxx</span>
+                          Tòa nhà: <span className="ni location_pin mr-2">{employee.profile.name}</span>
                         </div>
                       </div>
-
                     </CardBody>
-
-
                   </Card>
                 </Link>
               </Col>
             ))}
-
           </Row>
-
         </div>
+
+
       </div>
     </Container>
   </main >

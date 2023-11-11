@@ -1,20 +1,24 @@
 .headingXl {
         font-size: 3.6rem;
         font-family: sans-serif; 
-
+        padding-left: 20px;
 }
 
-.avatarLayout {
-        width: 20%;
-        height: 250px;
-        margin-right: 40px;
-        position: relative;
-
-}
 
 .box {
         width: 50%;
         font-family: sans-serif; 
+}
+.avatarLayout {
+        width: 160px;
+        height: 160px;
+        margin-right: 40px;
+        position: relative;
+        margin-left: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: sans-serif;
 }
 
 .creatBtn1 {
@@ -77,6 +81,7 @@
 .img {
         width: 100%;
         height: 160px;
+        margin-top: 10px;
 }
 
 .label {

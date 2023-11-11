@@ -94,8 +94,8 @@ const DetailEmployee = () => {
                         <Image
                                 onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
                                 className={styles.img}
-                                width={420}
-                                height={120}
+                                width={400}
+                                height={140}
                                 alt=""
                                 src={URL.createObjectURL(backImg)}
                         />
@@ -108,8 +108,8 @@ const DetailEmployee = () => {
                         <Image
                                 onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
                                 className={styles.img}
-                                width={420}
-                                height={120}
+                                width={400}
+                                height={140}
                                 alt=""
                                 src={URL.createObjectURL(frontImg)}
                         />
