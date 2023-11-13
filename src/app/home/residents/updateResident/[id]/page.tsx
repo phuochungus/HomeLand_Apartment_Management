@@ -95,6 +95,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
       staleTime: Infinity,
     }
   );
+  
   const updateHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const err = validation();
@@ -299,6 +300,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
 
                 <Image
                   onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                  
                   className={styles.img}
                   width={80}
                   height={40}

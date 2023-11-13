@@ -377,7 +377,7 @@ const AddResident = () => {
             <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
               Tạo
             </ButtonComponent>
-          </Form>
+          </Form> 
         </div>
       </div>
       <ToastContainer

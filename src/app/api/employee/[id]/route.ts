@@ -2,7 +2,6 @@ import { endpoint } from "@/constraints/endpoints";
 import { Employee } from "@/models/employee";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
-
 export async function GET(request: NextRequest, { params }: { params: any }) {
   let config = {
     method: "get",
@@ -10,6 +9,7 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
     url: endpoint.employee + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
     },
   };
   const response = await axios
@@ -38,6 +38,7 @@ export async function PATCH(request: NextRequest, { params }: { params: any }) {
     url: endpoint.employee + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
     },
     data: data,
   };
@@ -65,6 +66,10 @@ export async function DELETE(
     method: "delete",
     maxBodyLength: Infinity,
     url: endpoint.employee + "/" + params.id,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
+    },
   };
   const response = await axios
     .request(config)

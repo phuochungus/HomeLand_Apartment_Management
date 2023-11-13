@@ -8,17 +8,15 @@
 .box {
         width: 50%;
         font-family: sans-serif; 
+       
 }
 .avatarLayout {
         width: 160px;
         height: 160px;
-        margin-right: 40px;
+        margin-right: 60px;
         position: relative;
-        margin-left: 320px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-family: sans-serif;
+        margin-left: 40px;
+       
 }
 
 .creatBtn1 {
@@ -36,7 +34,6 @@
 }
 .creatBtn1:active {
         background-color: #4b77e8;
-        /* Màu mới khi ấn vào */
 }
 
 .headingLg {

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     maxBodyLength: Infinity,
     url: endpoint.employee,
     headers: {
-      Authorization: "Bearer " + request.cookies.get("token")?.value,
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
       "Content-Type": "application/json",
     },
   };
@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     url: endpoint.employee,
     headers: {
       "Content-Type": "multipart/form-data",
+      'Authorization': "Bearer " + request.cookies.get("token")?.value,
     },
     data: data,
   };

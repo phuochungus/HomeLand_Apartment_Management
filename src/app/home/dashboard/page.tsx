@@ -26,12 +26,13 @@ import { useQuery } from "react-query";
 import { profile } from "console";
 
 export default function Dashboard() {
+  const [imageLoaded, setImageLoaded] = useState(true);
   const [employeeList, setEmployeeList] = useState<Employee[]>([]);
   var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
   var page = useMemo(() => {
     return Math.floor(employeeList.length / 30) + 1;
   }, [employeeList]);
-  const [emoloyee, setEmployee] = useState<Array<Employee>>([]);
+  const [employee, setEmployee] = useState<Array<Employee>>([]);
   const [showDialog, setShowDialog] = useState(false);
   const whiteBackground = {
     backgroundColor: "#E8EAEC",
@@ -46,11 +47,10 @@ export default function Dashboard() {
       const res = await axios.get("/api/employee");
       removeLoadingFilter(document.body!);
       setEmployee(res.data);
-
+      console.log(res.data);
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
-
       console.log(error);
     }
   };
@@ -73,7 +73,7 @@ export default function Dashboard() {
           <h1 className={classNames(dashboardStyles.headingLg)}>Danh sách nhân viên</h1>
           <Row>
             <Col xs={12} md={6} className="d-flex">
-              <ButtonComponent href="/home/dashboard/addemployee" className={classNames(dashboardStyles.addBtn)}>
+              <ButtonComponent href="/home/dashboard/addemployee?auth=true" className={classNames(dashboardStyles.addBtn)}>
                 Tạo
               </ButtonComponent>
             </Col>
@@ -89,59 +89,65 @@ export default function Dashboard() {
 
           </Row>
         </div>
-      
+
 
         <div className={classNames(dashboardStyles.carddiv)}>
           <Row xs={1} md={2} className="g-4">
-            {emoloyee.map((employee, idx) => (
-              <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
-                <Link href="/home/dashboard/detailEmployee" className={dashboardStyles.link}>
-                  <Card style={customCardStyle}
-                    onMouseEnter={() => setHoveredCard(idx)}
-                    onMouseLeave={() => setHoveredCard(null)}
-                    className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
-                    onClick={() => setShowDialog(true)} >
-                    <CardImg
-                      alt="..."
-                      src={employee.profile.avatar_photo}
-                      variant="top"
-                      height="250"
-                      className="img-fluid"
-                    ></CardImg>
-                    <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                      <div className="d-flex justify-content-between">
-                      </div>
-                    </CardHeader>
-                    <CardBody className={classNames(dashboardStyles.ch)}>
-                      <Row>
-                        <div className="col">
-                          <div className="card-profile-stats d-flex justify-content-center">
-                            <div className="profile-stat">
-                              <span className="name no-underline">Họ và tên: </span>
-                              <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
+            {employee.map((employee, idx): ReactNode => {
+              return (
+                <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
+                  <Link href={`/home/dashboard/${employee.id}/?auth=true`} className={dashboardStyles.link}>
+                    <Card style={customCardStyle}
+                      onMouseEnter={() => setHoveredCard(idx)}
+                      onMouseLeave={() => setHoveredCard(null)}
+                      className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
+                      onClick={() => setShowDialog(true)} >
+
+                      <CardImg
+                        alt="..."
+                        onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                        // src={
+                        //   employee.profilePicture
+                        // }
+                       src = "..\images\logos\Logo@3x.png"
+                        variant="top"
+                        height="250"  
+                        className="img-fluid"
+
+                      ></CardImg>
+                      <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                        <div className="d-flex justify-content-between">
+                        </div>
+                      </CardHeader>
+                      <CardBody className={classNames(dashboardStyles.ch)}>
+                        <Row>
+                          <div className="col">
+                            <div className="card-profile-stats d-flex justify-content-center">
+                              <div className="profile-stat">
+                                <span className="name no-underline">Tên: </span>
+                                <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
+                              </div>
                             </div>
                           </div>
+                        </Row>
+                        <div className="text-center">
+                          <span className="birth">
+                            Ngày sinh: <span className="ni location_pin mr-2">{employee.profile.date_of_birth.toString()}</span>
+                          </span>
+                          <div className="address">
+                            Giới tính: <span className="ni location_pin mr-2">{employee.profile.gender}</span>
+                          </div>
+                          <div className="phonenumber">
+                            Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
+                          </div>
+                          
                         </div>
-                      </Row>
-                      <div className="text-center">
-                        <span className="birth">
-                          Ngày sinh: <span className="font-weight-light">{employee.profile.name}</span>
-                        </span>
-                        <div className="address">
-                          Địa chỉ: <span className="ni location_pin mr-2">{employee.profile.name}</span>
-                        </div>
-                        <div className="phonenumber">
-                          Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.name}</span>
-                        </div>
-                        <div className="address">
-                          Tòa nhà: <span className="ni location_pin mr-2">{employee.profile.name}</span>
-                        </div>
-                      </div>
-                    </CardBody>
-                  </Card>
-                </Link>
-              </Col>
-            ))}
+                      </CardBody>
+                    </Card>
+                  </Link>
+                </Col>
+              );
+            })}
           </Row>
         </div>
 

@@ -75,11 +75,11 @@ padding-left: 20px;
 .avatarLayout {
         width: 160px;
         height: 160px;
-        margin-right: 40px;
+        margin-right: 60px;
         position: relative;
-        margin-left: 320px;
+        margin-left: 40px;
+       
 }
-
 .label {
         font-size: 1rem;
 }

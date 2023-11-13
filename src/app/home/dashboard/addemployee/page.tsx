@@ -18,9 +18,7 @@ import { Images } from "../../../../../public/images";
 import classNames from 'classnames';
 import toastMessage from '@/utils/toast';
 import { ToastContainer } from 'react-toastify';
-interface File {
-        preview: string
-}
+import { Col, Row } from 'react-bootstrap';
 
 type FormValue = {
         name: string;
@@ -33,33 +31,7 @@ type FormValue = {
 };
 const AddEmployee = () => {
 
-        const handleAvatarClick = () => {
-                avatarRef.current ? avatarRef.current.click() : console.error("error");
-        };
-        const [avatar, setAvatar] = useState<any>();
-        const AvatarImage = useMemo(() => {
-                return avatar ? (
-                        <Image
-                                onClick={handleAvatarClick}
-                                fill
-                                style={{ borderRadius: "60%" }}
-                                alt=""
-                                src={URL.createObjectURL(avatar)}
-                        />
-                ) : (
-                        <Image
-                                onClick={handleAvatarClick}
-                                fill
-                                style={{ borderRadius: "30%" }}
-                                alt=""
-                                src={Images.uploadAvatar}
-                        />
-                );
-        }, [avatar]);
-        const handleChangeAvatar = (e: any) => {
-                const file = e.target.files[0];
-                setAvatar(file);
-        };
+
         const [imagesKeys, setImagesKeys] = useState({ avatar: "", front: "", end: "" });
         const [frontImg, setFrontImg] = useState<any>();
         const [backImg, setBackImg] = useState<any>();
@@ -84,16 +56,35 @@ const AddEmployee = () => {
                 gender: "",
                 phoneNumber: "",
         });
-        // const [frontImg, setFrontImg] = useState<any>();
-        // const [backImg, setBackImg] = useState<any>();
-        const [image, setImage] = useState(null);
-        const [Img, setImg] = useState<File>({ preview: "" })
-        const handleImg = (e: any) => {
-                const file = e.target.files[0];
-                file.preview = URL.createObjectURL(file)
 
-                setImg(file);
-        }
+        const [avatar, setAvatar] = useState<any>();
+        const handleAvatarClick = () => {
+                avatarRef.current ? avatarRef.current.click() : console.error("error");
+        };
+
+        const handleChangeAvatar = (e: any) => {
+                const file = e.target.files[0];
+                setAvatar(file);
+        };
+        const AvatarImage = useMemo(() => {
+                return avatar ? (
+                        <Image
+                                onClick={handleAvatarClick}
+                                fill
+                                style={{ borderRadius: "60%" }}
+                                alt=""
+                                src={URL.createObjectURL(avatar)}
+                        />
+                ) : (
+                        <Image
+                                onClick={handleAvatarClick}
+                                fill
+                                style={{ borderRadius: "30%" }}
+                                alt=""
+                                src={Images.uploadAvatar}
+                        />
+                );
+        }, [avatar]);
         const BackImage = useMemo(() => {
                 return backImg ? (
                         <Image
@@ -108,6 +99,7 @@ const AddEmployee = () => {
                         <></>
                 );
         }, [backImg]);
+
         const FrontImage = useMemo(() => {
                 return frontImg ? (
                         <Image
@@ -162,6 +154,8 @@ const AddEmployee = () => {
 
         const createHandle = async (e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault();
+                console.log('createHandle called');
+                console.log('formValue:', formValue);
                 const err = validation();
                 setErrors(err);
                 if (Object.keys(err).length === 0) {
@@ -172,32 +166,35 @@ const AddEmployee = () => {
                         form.append("phone_number", formValue.phoneNumber);
                         form.append("front_identify_card_photo", frontImg);
                         form.append("back_identify_card_photo", backImg);
-                        if (avatar) {
-                                console.log(avatar);
-                                form.append("avatar_photo", avatar);
-                        }
+                        // if (avatar) {
+                        //         console.log(avatar);
+                        //         form.append("avatar_photo", avatar);
+                        // }
+                        // form.append("avatar_photo", avatar || "");
                         try {
                                 loadingFiler(document.body!);
                                 await axios
-                                        .post("/api/emoloyee", form)
+                                        .post("/api/employee", form)
                                         .then((response) => {
                                                 setFormValue({
                                                         name: "",
                                                         dateOfBirth: "",
-                                                        gender: "male",
+                                                        gender: "",
                                                         phoneNumber: "",
 
 
                                                 });
                                                 setFrontImg(null);
                                                 setBackImg(null);
-                                                setAvatar(null)
+                                                setAvatar(null);
                                                 setImagesKeys({ avatar: Math.random().toString(36), front: Math.random().toString(36), end: Math.random().toString(36) });
                                                 removeLoadingFilter(document.body!);
+
                                                 toastMessage({ type: "success", title: "Create successfully!" });
                                         })
                                         .catch((e) => {
                                                 removeLoadingFilter(document.body!);
+                                                console.log(e);
                                                 toastMessage({ type: "error", title: "Create faily!" });
                                         });
                         } catch (e) {
@@ -212,23 +209,27 @@ const AddEmployee = () => {
                         <div className={styles.wapper}>
                                 <p className={styles.headingXl}>Thêm nhân viên</p>
                                 <Form className={styles.form}>
-                                        <Form.Group className={styles.box}>
-                                                <Form.Label className={styles.label}>Ảnh đại diện:</Form.Label>
-                                                <div className={styles.avatarLayout}>
-                                                        {AvatarImage}
-                                                        <input
-                                                                onChange={handleChangeAvatar}
-                                                                type="file"
-                                                                key={imagesKeys.avatar || ""}
-                                                                ref={avatarRef}
-                                                                style={{ display: "none" }}
-                                                        />
-                                                </div>
 
-                                        </Form.Group>
+                                        <Row>
+                                                <Col xs={12} md={6}>
+                                                        <Form.Group className={styles.box}>
+                                                                <div className={styles.avatarLayout} style={{ display: 'flex', alignItems: 'center' }}>
+                                                                        <Form.Label className={styles.label}>Ảnh đại diện:</Form.Label>
+                                                                        {AvatarImage}
+                                                                        <input
+                                                                                onChange={handleChangeAvatar}
+                                                                                type="file"
+                                                                                key={imagesKeys.avatar || ""}
+                                                                                ref={avatarRef}
+                                                                                style={{ display: "none" }}
+                                                                        />
+                                                                </div>
+                                                        </Form.Group>
+                                                </Col>
+                                        </Row>
 
 
-                                        <Form.Group className={styles.box} controlId="exampleForm.ControlInput1">
+                                        <Form.Group className={styles.box} >
                                                 <Form.Label className={styles.label}>Họ và tên</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" value={formValue.name} onChange={handleChange} name="name" />
                                                 {errors && errors.name && (
@@ -236,7 +237,7 @@ const AddEmployee = () => {
                                                 )}
                                         </Form.Group>
 
-                                        <Form.Group className={styles.box} controlId="exampleForm.ControlTextarea1">
+                                        <Form.Group className={styles.box} >
                                                 <Form.Label className={styles.label}>Ngày sinh</Form.Label>
                                                 <Form.Control
                                                         size="lg"
@@ -261,6 +262,7 @@ const AddEmployee = () => {
                                                         label="Nam"
                                                         name="gender"
                                                         value="male"
+                                                        onChange={handleChange}
                                                         type='radio'
                                                         id={`inline-radio-1`}
                                                 />
@@ -270,11 +272,14 @@ const AddEmployee = () => {
                                                         name="gender"
                                                         type='radio'
                                                         value="female"
+                                                        onChange={handleChange}
                                                         id={`inline-radio-2`}
                                                 />
 
                                         </div>
-
+                                        {errors && errors.gender && (
+                                                <span className={styles.error}>{errors.gender}</span>
+                                        )}
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Số điện thoại</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" name="phoneNumber" value={formValue.phoneNumber} onChange={handleChange} />
@@ -324,16 +329,15 @@ const AddEmployee = () => {
                                                         )}
                                                 </Form.Group>
                                         </div>
-                                        <Form.Group className={styles.box}>
+                                        {/* <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Công việc</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" />
 
-                                        </Form.Group>
-                                        <div className={styles.button_wrapper}>
-                                                <ButtonComponent onClick={createHandle} className={styles.creatBtn1}>
-                                                        Tạo
-                                                </ButtonComponent>
-                                        </div>
+                                        </Form.Group> */}
+
+                                        <ButtonComponent onClick={createHandle} className={styles.creatBtn1}>
+                                                Tạo
+                                        </ButtonComponent>
 
                                 </Form>
                         </div >
