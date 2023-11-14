@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { AiOutlineSearch } from 'react-icons/ai'
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, createRef, useMemo, useState } from "react";
 import Container from 'react-bootstrap/Container';
 import { futuna } from "../../../../public/fonts/futura";
 import {
@@ -24,8 +24,11 @@ import axios from "axios";
 import { Employee } from "@/models/employee";
 import { useQuery } from "react-query";
 import { profile } from "console";
+import SearchLayout from "@/components/searchLayout/searchLayout";
 
 export default function Dashboard() {
+  const [selectedId, setSelectedId] = useState("");
+  const searchRef = createRef<HTMLInputElement>();
   const [imageLoaded, setImageLoaded] = useState(true);
   const [employeeList, setEmployeeList] = useState<Employee[]>([]);
   var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
@@ -61,7 +64,36 @@ export default function Dashboard() {
       staleTime: Infinity,
     }
   );
-
+  const handleSearch = async (e: any) => {
+    if (e.key === "Enter") {
+      console.log("hah");
+      try {
+        const res = await axios.get("/api/employee/search", {
+          params: {
+            query: searchRef.current?.value,
+          },
+        });
+        console.log(res.data);
+        setEmployee(res.data);
+      } catch (e) {
+        alert(e);
+      }
+    }
+  };
+  const searchIconClick = async () => {
+    console.log("hah");
+    try {
+      const res = await axios.get("/api/employee/search", {
+        params: {
+          query: searchRef.current?.value,
+        },
+      });
+      console.log(res.data);
+      setEmployee(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [t, i18n] = useTranslation();
 
@@ -78,12 +110,13 @@ export default function Dashboard() {
               </ButtonComponent>
             </Col>
             <Col xs={12} md={6} className="ml-auto">
-              <div className={classNames(dashboardStyles.searchContainer)}>
-                <input type="search" placeholder='Nhập tên nhân viên' className={classNames(dashboardStyles.search)} />
-                <button className={classNames(dashboardStyles.searchbutton)}>
-                  <AiOutlineSearch />
-                </button>
-              </div>
+              <SearchLayout
+                onKeydown={handleSearch}
+                iconClick={searchIconClick}
+                placeHolder="Tìm dân cư..."
+                ref={searchRef}
+              />
+
 
             </Col>
 
@@ -94,6 +127,7 @@ export default function Dashboard() {
         <div className={classNames(dashboardStyles.carddiv)}>
           <Row xs={1} md={2} className="g-4">
             {employee.map((employee, idx): ReactNode => {
+              const dateOfBirth = new Date(employee.profile.date_of_birth);
               return (
                 <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
                   <Link href={`/home/dashboard/${employee.id}/?auth=true`} className={dashboardStyles.link}>
@@ -109,9 +143,9 @@ export default function Dashboard() {
                         // src={
                         //   employee.profilePicture
                         // }
-                       src = "..\images\logos\Logo@3x.png"
+                        src="..\images\logos\Logo@3x.png"
                         variant="top"
-                        height="250"  
+                        height="250"
                         className="img-fluid"
 
                       ></CardImg>
@@ -132,15 +166,17 @@ export default function Dashboard() {
                         </Row>
                         <div className="text-center">
                           <span className="birth">
-                            Ngày sinh: <span className="ni location_pin mr-2">{employee.profile.date_of_birth.toString()}</span>
+                            Ngày sinh: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('en-CA')}</span>
+
                           </span>
                           <div className="address">
+
                             Giới tính: <span className="ni location_pin mr-2">{employee.profile.gender}</span>
                           </div>
                           <div className="phonenumber">
                             Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
                           </div>
-                          
+
                         </div>
                       </CardBody>
                     </Card>

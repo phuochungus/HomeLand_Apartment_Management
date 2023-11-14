@@ -20,6 +20,7 @@ import toastMessage from '@/utils/toast';
 import { ToastContainer } from 'react-toastify';
 import { Col, Row } from 'react-bootstrap';
 
+
 type FormValue = {
         name: string;
         dateOfBirth: string;
@@ -31,7 +32,7 @@ type FormValue = {
 };
 const AddEmployee = () => {
 
-
+        const router = useRouter();
         const [imagesKeys, setImagesKeys] = useState({ avatar: "", front: "", end: "" });
         const [frontImg, setFrontImg] = useState<any>();
         const [backImg, setBackImg] = useState<any>();
@@ -191,6 +192,9 @@ const AddEmployee = () => {
                                                 removeLoadingFilter(document.body!);
 
                                                 toastMessage({ type: "success", title: "Create successfully!" });
+                                                setTimeout(() => {
+                                                        router.push('/home/dashboard?auth=true');
+                                                      }, 2000);
                                         })
                                         .catch((e) => {
                                                 removeLoadingFilter(document.body!);

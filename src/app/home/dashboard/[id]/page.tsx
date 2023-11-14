@@ -33,6 +33,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
         // const deleleHandle = () => {
         //         setShowModal(true);
         // };
+        const router = useRouter();
         const [selectedId, setSelectedId] = useState("");
         const [formValue, setFormValue] = useState({
                 name: "",
@@ -55,6 +56,9 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                         toastMessage({ type: "success", title: "Delete successfully!" });
 
                         refetch();
+                        setTimeout(() => {
+                                router.push('/home/dashboard?auth=true');
+                              }, 2000);
                 } catch (err) {
                         toastMessage({ type: "errpr", title: "Delete faily!" });
                         console.log(err);
@@ -288,7 +292,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         label="Nữ"
                                                         name="gender"
                                                         type='radio'
-                                                        checked={employee && employee.profile.gender === "male"}
+                                                        checked={employee && employee.profile.gender === "female"}
 
                                                         value="female"
                                                         id={`inline-radio-2`}
@@ -392,7 +396,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                         /> */}
                         <ModalComponent
                                 show={showModal}
-                                title="Có chắc chắn xóa cư dân này?"
+                                title="Có chắc chắn xóa nhân viên này?"
                                 handleConfirm={() => handleConfirmDelete(selectedId)}
                                 setShow={setShowModal}
                         />
