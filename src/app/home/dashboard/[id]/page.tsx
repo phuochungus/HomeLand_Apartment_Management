@@ -71,7 +71,15 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                 avatarRef.current ? avatarRef.current.click() : console.error("error");
         };
 
+        const fileToBase64 = (file: File): Promise<string | ArrayBuffer | null> => {
+                return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = (error) => reject(error);
 
+                });
+        };
 
         const handleFontImg = (e: React.ChangeEvent<HTMLInputElement>) => {
                 const file = e.target.files?.[0];
@@ -146,20 +154,20 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                         <></>
                 );
         }, [backImg]);
-        const FrontImage = useMemo(() => {
-                return frontImg ? (
-                        <Image
-                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-                                className={styles.img}
-                                width={400}
-                                height={140}
-                                alt=""
-                                src={URL.createObjectURL(frontImg)}
-                        />
-                ) : (
-                        <></>
-                );
-        }, [frontImg]);
+        // const FrontImage = useMemo(() => {
+        //         return frontImg ? (
+        //                 <Image
+        //                         onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+        //                         className={styles.img}
+        //                         width={400}
+        //                         height={140}
+        //                         alt=""
+        //                         src={URL.createObjectURL(frontImg)}
+        //                 />
+        //         ) : (
+        //                 <></>
+        //         );
+        // }, [frontImg]);
         const [avatar, setAvatar] = useState<any>();
         const retrieveEmployee = async () => {
                 try {
@@ -186,6 +194,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                         console.log(error);
                 }
         };
+
         const { isLoading, isError, data, refetch } = useQuery(
                 "employee",
                 retrieveEmployee,
@@ -322,18 +331,19 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         <Form.Label className={classNames(styles.label, styles.required)}>
                                                                 Ảnh trước CCCD
                                                         </Form.Label>
+
                                                         <Form.Control
-                                                                
+
                                                                 accept="image/*"
                                                                 size="lg"
                                                                 key={imagesKeys.front || ""}
-                                                                name="front"
+                                                                name="FrontImg"
                                                                 type="file"
-                                                               value={formValue.frontImg}
+                                                                value={formValue.frontImg}
                                                                 onChange={handleFontImg}
                                                                 placeholder=""
                                                         />
-                                                        {FrontImage}
+
                                                         <Image
                                                                 onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
                                                                 className={styles.img}
@@ -355,11 +365,11 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         </Form.Label>
                                                         <Form.Control
                                                                 accept="image/*"
-                                                             
+
                                                                 name="back"
                                                                 onChange={handleBackImg}
                                                                 size="lg"
-                                                                
+
                                                                 key={imagesKeys.end || ""}
                                                                 type="file"
                                                                 placeholder=""
