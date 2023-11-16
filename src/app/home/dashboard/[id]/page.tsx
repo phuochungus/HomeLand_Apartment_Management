@@ -251,7 +251,12 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                                         <Form.Label className={styles.label}>Ảnh đại diện:</Form.Label>
                                                                         {AvatarImage}
                                                                         <input
-                                                                                disabled
+                                                                              
+                                                                              src={
+                                                                                employee
+                                                                                        ? employee.profilePictureURL
+                                                                                        : ""
+                                                                        }
                                                                                 onChange={handleChangeAvatar}
                                                                                 type="file"
                                                                                 key={imagesKeys.avatar || ""}

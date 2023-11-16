@@ -20,6 +20,7 @@ import toastMessage from '@/utils/toast';
 import { ToastContainer } from 'react-toastify';
 import { Col, Row } from 'react-bootstrap';
 
+
 type FormValue = {
         name: string;
         dateOfBirth: string;
@@ -31,7 +32,7 @@ type FormValue = {
 };
 const AddEmployee = () => {
 
-
+        const router = useRouter();
         const [imagesKeys, setImagesKeys] = useState({ avatar: "", front: "", end: "" });
         const [frontImg, setFrontImg] = useState<any>();
         const [backImg, setBackImg] = useState<any>();
@@ -166,10 +167,10 @@ const AddEmployee = () => {
                         form.append("phone_number", formValue.phoneNumber);
                         form.append("front_identify_card_photo", frontImg);
                         form.append("back_identify_card_photo", backImg);
-                        // if (avatar) {
-                        //         console.log(avatar);
-                        //         form.append("avatar_photo", avatar);
-                        // }
+                        if (avatar) {
+                                console.log(avatar);
+                                form.append("profile_picture", avatar);
+                        }
                         // form.append("avatar_photo", avatar || "");
                         try {
                                 loadingFiler(document.body!);
@@ -191,6 +192,9 @@ const AddEmployee = () => {
                                                 removeLoadingFilter(document.body!);
 
                                                 toastMessage({ type: "success", title: "Create successfully!" });
+                                                setTimeout(() => {
+                                                        router.push('/home/dashboard?auth=true');
+                                                }, 2000);
                                         })
                                         .catch((e) => {
                                                 removeLoadingFilter(document.body!);
@@ -254,7 +258,7 @@ const AddEmployee = () => {
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Giới tính</Form.Label>
 
-                                        </Form.Group>
+                                     
                                         <div key={`inline-radio`} className={styles.box}>
 
                                                 <Form.Check
@@ -275,11 +279,12 @@ const AddEmployee = () => {
                                                         onChange={handleChange}
                                                         id={`inline-radio-2`}
                                                 />
-
+                                                
                                         </div>
                                         {errors && errors.gender && (
-                                                <span className={styles.error}>{errors.gender}</span>
-                                        )}
+                                                        <span className={styles.error}>{errors.gender}</span>
+                                                )}
+                                        </Form.Group>
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Số điện thoại</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" name="phoneNumber" value={formValue.phoneNumber} onChange={handleChange} />

@@ -20,7 +20,7 @@
 }
 
 .wrapper {
-        width: 90%;
+        width: 100%;
 
 }
 
@@ -47,6 +47,7 @@
 .dashboardBackground {
 
         background-Color: "#E8EAEC",
+
 }
 
 
@@ -54,7 +55,7 @@
         background-color: aliceblue;
         border-radius: 20px;
         color: black;
-        height: 30px;
+        height: 60px;
         width: 250px;
         display: flex;
         align-items: center;
@@ -104,24 +105,51 @@
         margin-right: 50px;
         background-color: aliceblue;
         border-radius: 20px 20px 20px 20px;
+        
 }
+
+
 
 .addBtn {
         background-color: #0744e1;
         padding: var(--default-padding-vertical) var(--default-padding-horizontal);
         border-radius: 8px;
-
-        margin-top: 0px;
-        margin-bottom: 10px;
-        margin-right: 140px;
+        margin-right: 10px;
+        margin-left: 140px;
         color: aliceblue;
         height: 40px;
         text-decoration: none;
 }
 
+@media (max-width: 600px) {
+        .addBtn {
+                margin-left: 20px;
+                margin-right: 20px;
+                height: 30px;
+        }
+}
+
+@media (min-width: 600px) and (max-width: 1200px) {
+        .addBtn {
+                margin-right: 20px;
+                margin-left: 20px;
+                height: 35px;
+        }
+
+        .main {
+                margin-right: 20px;
+                margin-left: 20px;
+        }
+}
+
+
+
+
+
 .profile-stat {
         display: block;
         margin-bottom: 10px;
+        
 }
 
 .text-center {
@@ -154,7 +182,8 @@ a.no-underline {
 .card {
         margin: 10px;
         margin-bottom: 10px;
-      
+        padding: 1px;
+        
 }
 
 .ch {
@@ -166,7 +195,7 @@ a.no-underline {
         opacity: 1;
 }
 
-.col{
+.col {
         margin-bottom: 50px;
 
 }
@@ -176,6 +205,24 @@ a.no-underline {
         font-size: 18px;
         font-weight: normal;
         text-decoration: none;
-
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
 
 }
+
+.fluid {
+        margin-left: 10px;
+        margin-right: 10px;
+
+}
+
+.dashboardStyles.carddiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column; /* if you want to align the cards vertically */
+    }
