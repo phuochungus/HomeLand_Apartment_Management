@@ -132,7 +132,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
         };
         const BackImage = useMemo(() => {
                 console.log(frontImg);
-                console.log(employee?.profile.front_identify_card_photo_URL);
+                console.log(employee?.profile.back_identify_card_photo_URL);
                 return backImg ? (
                         <Image
                                 onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
@@ -174,8 +174,8 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                 dateofBirth: employeeData.profile.date_of_birth,
                                 gender: employeeData.profile.gender,
                                 phoneNumber: employeeData.profile.phone_number,
-                                frontImg: employeeData.profile.front_identify_card_photo_URL,
-                                backImg: employeeData.profile.back_identify_card_photo_URL,
+                                front_identify_card_photo: employeeData.profile.front_identify_card_photo_URL,
+                                back_identify_card_photo: employeeData.profile.back_identify_card_photo_URL,
                         };
 
 
@@ -324,11 +324,12 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         </Form.Label>
                                                         <Form.Control
                                                                 
-
+                                                                accept="image/*"
                                                                 size="lg"
                                                                 key={imagesKeys.front || ""}
                                                                 name="front"
                                                                 type="file"
+                                                               value={formValue.frontImg}
                                                                 onChange={handleFontImg}
                                                                 placeholder=""
                                                         />
@@ -353,7 +354,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                                 Ảnh sau CCCD
                                                         </Form.Label>
                                                         <Form.Control
-                                                               
+                                                                accept="image/*"
                                                              
                                                                 name="back"
                                                                 onChange={handleBackImg}
