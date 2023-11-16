@@ -126,7 +126,7 @@ export default function Dashboard() {
             <Row xs={1} md={2} className="g-4">
               {employee.map((employee, idx): ReactNode => {
                 const dateOfBirth = new Date(employee.profile.date_of_birth);
-                const employeeName = employee.profile.name.toLowerCase(); // Chuyển tên nhân viên về chữ thường để tìm kiếm không phân biệt hoa thường
+                const employeeName = employee.profile.name.toLowerCase(); 
                 const searchTerm = searchRef.current?.value.toLowerCase();
                 if (searchTerm && employeeName.includes(searchTerm)) {
                 }
@@ -149,7 +149,7 @@ export default function Dashboard() {
                           variant="top"
                           height="250"
                           className="img-fluid"
-                          style={{ objectFit: 'cover', height: '250px' }}
+                          style={{ objectFit: 'cover', height: '250px',borderRadius: "60%", padding:'20px' }}
                         ></CardImg>
                         <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                           <div className="d-flex justify-content-between">

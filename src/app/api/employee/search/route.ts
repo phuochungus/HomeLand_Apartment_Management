@@ -6,6 +6,9 @@ export async function GET(request: NextRequest) {
     const queryString = request.nextUrl.searchParams.get('query')
     const baseUrl = endpoint.employee + '/search'
     const response = await axios.get(baseUrl , {
+      headers: {
+        "Authorization": "Bearer " + request.cookies.get("token")?.value,
+    },
         params: {
             query: queryString
         }

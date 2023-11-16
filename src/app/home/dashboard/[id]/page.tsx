@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import styles from "./detailEmployee.module.css";
 import Form from 'react-bootstrap/Form';
-import React, { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { Images } from "../../../../../public/images";
 import { format } from "date-fns";
@@ -24,8 +24,8 @@ type FormValue = {
         gender: string;
         phoneNumber: string;
         avatarImg?: any;
-        // frontImg: any;
-        // backImg: any;
+        frontImg: any;
+        backImg: any;
 };
 
 const DetailEmployee = ({ params }: { params: { id: string } }) => {
@@ -34,13 +34,14 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
         //         setShowModal(true);
         // };
         const [selectedId, setSelectedId] = useState("");
-        const [formValue, setFormValue] = useState({
+        const [formValue, setFormValue] = useState<any>({
                 name: "",
                 dateOfBirth: "",
                 gender: "",
                 phoneNumber: "",
-                // frontImg: "",
-                // backImg: ""
+                backImg: "",
+                frontImg: "",
+
         });
         const deleleHandle = (id: string) => {
                 setSelectedId(id);
@@ -70,23 +71,44 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                 avatarRef.current ? avatarRef.current.click() : console.error("error");
         };
 
-        const handleFontImg = (e: any) => {
-                if (e.target.files.length > 0) {
-
-                        const newImageUrl = URL.createObjectURL(e.target.files[0]);
 
 
-                        setFrontImg(newImageUrl);
-                }
+        const handleFontImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                const url = URL.createObjectURL(file);
+
+                setEmployee((prevState) => {
+                        if (!prevState) return prevState;
+
+                        return {
+                                ...prevState,
+                                profile: {
+                                        ...prevState.profile,
+                                        front_identify_card_photo_URL: url,
+                                },
+                        };
+                });
         };
-        const handleBackImg = (e: any) => {
-                if (e.target.files.length > 0) {
 
-                        const newImageUrl = URL.createObjectURL(e.target.files[0]);
+        const handleBackImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
 
+                const url = URL.createObjectURL(file);
 
-                        setBackImg(newImageUrl);
-                }
+                setEmployee((prevState) => {
+                        if (!prevState) return prevState;
+
+                        return {
+                                ...prevState,
+                                profile: {
+                                        ...prevState.profile,
+                                        back_identify_card_photo_URL: url,
+                                },
+                        };
+                });
         };
 
         const validation = () => {
@@ -108,56 +130,37 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                 // }
                 return err;
         };
-        // const BackImage = useMemo(() => {
-        //         console.log(frontImg);
-        //         console.log(employee?.profile.front_identify_card_photo_URL);
-        //         return backImg ? (
-        //                 <Image
-        //                         onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-        //                         className={styles.img}
-        //                         width={400}
-        //                         height={140}
-        //                         alt=""
-        //                         src={URL.createObjectURL(backImg)}
-        //                 />
-        //         ) : (
-        //                 <></>
-        //         );
-        // }, [backImg]);
-        // const FrontImage = useMemo(() => {
-        //         return frontImg ? (
-        //                 <Image
-        //                         onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-        //                         className={styles.img}
-        //                         width={400}
-        //                         height={140}
-        //                         alt=""
-        //                         src={URL.createObjectURL(frontImg)}
-        //                 />
-        //         ) : (
-        //                 <></>
-        //         );
-        // }, [frontImg]);
-        const [avatar, setAvatar] = useState<any>();
-        const AvatarImage = useMemo(() => {
-                return avatar ? (
+        const BackImage = useMemo(() => {
+                console.log(frontImg);
+                console.log(employee?.profile.front_identify_card_photo_URL);
+                return backImg ? (
                         <Image
-                                onClick={handleAvatarClick}
-                                fill
-                                style={{ borderRadius: "60%" }}
+                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                                className={styles.img}
+                                width={400}
+                                height={140}
                                 alt=""
-                                src={URL.createObjectURL(avatar)}
+                                src={URL.createObjectURL(backImg)}
                         />
                 ) : (
-                        <Image
-                                onClick={handleAvatarClick}
-                                fill
-                                style={{ borderRadius: "30%" }}
-                                alt=""
-                                src={Images.uploadAvatar}
-                        />
+                        <></>
                 );
-        }, [avatar]);
+        }, [backImg]);
+        const FrontImage = useMemo(() => {
+                return frontImg ? (
+                        <Image
+                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                                className={styles.img}
+                                width={400}
+                                height={140}
+                                alt=""
+                                src={URL.createObjectURL(frontImg)}
+                        />
+                ) : (
+                        <></>
+                );
+        }, [frontImg]);
+        const [avatar, setAvatar] = useState<any>();
         const retrieveEmployee = async () => {
                 try {
                         loadingFiler(document.body!)
@@ -171,8 +174,8 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                 dateofBirth: employeeData.profile.date_of_birth,
                                 gender: employeeData.profile.gender,
                                 phoneNumber: employeeData.profile.phone_number,
-                                // frontImg: employeeData.profile.front_identify_card_photo_URL,
-                                // backImg: employeeData.profile.back_identify_card_photo_URL,
+                                frontImg: employeeData.profile.front_identify_card_photo_URL,
+                                backImg: employeeData.profile.back_identify_card_photo_URL,
                         };
 
 
@@ -206,6 +209,8 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
         const whiteBackground = {
                 backgroundColor: "white",
         };
+
+
         const updateHandle = async (e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault();
                 console.log('createHandle called');
@@ -218,13 +223,10 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                         name: formValue.name,
                                         gender: formValue.gender,
                                         phone_number: formValue.phoneNumber,
-                                        // frontImg: formValue.frontImg,
-                                        // backImg: formValue.backImg,
+                                        front_identify_card_photo: formValue.frontImg,
+                                        back_identify_card_photo: formValue.backImg,
+
                                 };
-                                // if (avatar) {
-                                //         console.log(avatar);
-                                //         data.avatar = avatar;
-                                // }
 
                                 loadingFiler(document.body!);
                                 await axios.patch(`/api/employee/${params.id}`, JSON.stringify(data));
@@ -248,20 +250,22 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                 <Col xs={12} md={6}>
                                                         <Form.Group className={styles.box}>
                                                                 <div className={styles.avatarLayout} style={{ display: 'flex', alignItems: 'center' }}>
-                                                                        <Form.Label className={styles.label}>Ảnh đại diện:</Form.Label>
-                                                                        {AvatarImage}
-                                                                        <input
-                                                                              
-                                                                              src={
-                                                                                employee
-                                                                                        ? employee.profilePictureURL
-                                                                                        : ""
-                                                                        }
-                                                                                onChange={handleChangeAvatar}
-                                                                                type="file"
-                                                                                key={imagesKeys.avatar || ""}
-                                                                                ref={avatarRef}
-                                                                                style={{ display: "none" }}
+                                                                        {/* <Form.Label className={styles.label}>Ảnh đại diện:</Form.Label> */}
+
+                                                                        <Image
+                                                                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+
+                                                                                style={{ borderRadius: "60%" }}
+                                                                                className={styles.img}
+                                                                                width={80}
+                                                                                height={40}
+                                                                                alt=""
+                                                                                unoptimized={true}
+                                                                                src={
+                                                                                        employee
+                                                                                                ? employee.profilePictureURL
+                                                                                                : ""
+                                                                                }
                                                                         />
                                                                 </div>
                                                         </Form.Group>
@@ -293,7 +297,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         label="Nữ"
                                                         name="gender"
                                                         type='radio'
-                                                        checked={employee && employee.profile.gender === "male"}
+                                                        checked={employee && employee.profile.gender === "female"}
 
                                                         value="female"
                                                         id={`inline-radio-2`}
@@ -319,30 +323,26 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                                 Ảnh trước CCCD
                                                         </Form.Label>
                                                         <Form.Control
-                                                                accept="image/*"
+                                                                
 
                                                                 size="lg"
                                                                 key={imagesKeys.front || ""}
                                                                 name="front"
                                                                 type="file"
-                                                                disabled
+                                                                onChange={handleFontImg}
                                                                 placeholder=""
                                                         />
-
+                                                        {FrontImage}
                                                         <Image
                                                                 onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-
                                                                 className={styles.img}
                                                                 width={80}
                                                                 height={40}
                                                                 alt=""
                                                                 unoptimized={true}
-                                                                src={
-                                                                        employee
-                                                                                ? employee.profile.front_identify_card_photo_URL
-                                                                                : ""
-                                                                }
+                                                                src={employee ? employee.profile.front_identify_card_photo_URL : ""}
                                                         />
+
 
                                                 </Form.Group>
 
@@ -353,12 +353,12 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                                 Ảnh sau CCCD
                                                         </Form.Label>
                                                         <Form.Control
-                                                                accept="image/*"
-                                                                onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                                                               
+                                                             
                                                                 name="back"
-
+                                                                onChange={handleBackImg}
                                                                 size="lg"
-                                                                disabled
+                                                                
                                                                 key={imagesKeys.end || ""}
                                                                 type="file"
                                                                 placeholder=""
