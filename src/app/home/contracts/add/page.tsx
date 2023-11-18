@@ -381,7 +381,7 @@ export default function Page() {
                 width={250}
                 rounded
                 src={
-                  selectedResident.account?.avatarURL ??
+                  selectedResident.profile?.avatarURL ??
                   "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
                 }
               ></Image>

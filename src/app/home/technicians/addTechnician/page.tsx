@@ -44,6 +44,7 @@ const AddTechnician = () => {
     gender: "",
     phoneNumber: "",
     email: "",
+    identifyNumber:""
   });
   const [errors, setErrors] = useState<any>();
   const [frontImg, setFrontImg] = useState<any>();
@@ -139,6 +140,9 @@ const AddTechnician = () => {
     } else if (!phonePattern.test(formValue.phoneNumber)) {
       err.phoneNumber = "Số điện thoại không hợp lệ!";
     }
+    if (formValue.identifyNumber === "") {
+      err.name = "Trường căn cước công dân là bắt buộc!";
+    }
     if (!frontImg) {
       err.frontImg = "Vui lòng chọn ảnh!";
     }
@@ -170,6 +174,7 @@ const AddTechnician = () => {
       form.append("email", formValue.email);
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
+      form.append("identify_number", formValue.identifyNumber);
       if (avatar) {
         console.log(avatar);
         form.append("avatar_photo", avatar);
@@ -185,6 +190,7 @@ const AddTechnician = () => {
               gender: "male",
               phoneNumber: "",
               email: "",
+              identifyNumber:""
             });
             setFrontImg(null);
             setBackImg(null);
@@ -299,6 +305,22 @@ const AddTechnician = () => {
               />
               {errors && errors.phoneNumber && (
                 <span className={styles.error}>{errors.phoneNumber}</span>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className={styles.label}>
+                Số căn cước công dân
+              </Form.Label>
+              <Form.Control
+                size="lg"
+                type="text"
+                name="identifyNumber"
+                onChange={handleChange}
+                value={formValue.identifyNumber}
+                placeholder=""
+              />
+              {errors && errors.identifyNumber && (
+                <span className={styles.error}>{errors.identifyNumber}</span>
               )}
             </Form.Group>
             <Form.Group className="mb-3">

@@ -29,7 +29,7 @@ type FormValue = {
   phoneNumber: string;
   paymentInfo: string;
   email: string | undefined;
-  avatarImg?: any;
+  avatarURL?: any;
 };
 const UpdateResident = ({ params }: { params: { id: string } }) => {
   const [formValue, setFormValue] = useState({
@@ -43,7 +43,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
 
   const [avatar, setAvatar] = useState<any>();
   const avatarRef = useRef<HTMLInputElement>(null);
-  let avatar_photo = resident?.account?.avatarURL as string;
+  let avatar_photo = resident?.profile?.avatarURL as string;
   const validation = () => {
     let err = {} as FormValue;
     const emailPattern =
@@ -65,9 +65,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     } else if (!phonePattern.test(formValue.phoneNumber)) {
       err.phoneNumber = "Số điện thoại không hợp lệ!";
     }
-    if (formValue.paymentInfo === "") {
-      err.paymentInfo = "Thông tin thanh toán là bắt buộc!";
-    }
+    
 
     return err;
   };
@@ -114,6 +112,9 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         if (formValue.paymentInfo) {
           form.append("payment_info", formValue.paymentInfo);
         }
+        if(avatar){
+          form.append("avatar_photo", avatar);
+        }
         // form.append("avatar_photo", avatar);
         form.append("_method", "PATCH");
         loadingFiler(document.body!);
@@ -142,18 +143,19 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     const file = e.target.files[0];
     setAvatar(file);
   };
-  // const AvatarImage = useMemo(() => {
-  //   return (
-  //     <Image
-  //     onClick={handleAvatarClick}
-  //     fill
-  //     style={{ borderRadius: "3%" }}
-  //     alt=""
-
-  //     src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
-  //   />
-  //   );
-  // }, [avatar, avatar_photo]);
+  const AvatarImage = useMemo(() => {
+    return (
+      <Image
+      onClick={handleAvatarClick}
+      fill
+      style={{ borderRadius: "3%" }}
+      alt=""
+      onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+      unoptimized={true}
+      src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
+    />
+    );
+  }, [avatar, avatar_photo]);
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
@@ -161,7 +163,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
           Chỉnh sửa thông tin cư dân
         </p>
         <div className="d-inline-flex justify-content-between">
-          {/* <div className={styles.avatarLayout}>
+          <div className={styles.avatarLayout}>
             {AvatarImage}
             <input
               onChange={handleChangeAvatar}
@@ -169,7 +171,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               ref={avatarRef}
               style={{ display: "none" }}
             />
-          </div> */}
+          </div>
           <Form method="post" className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className={clsx(styles.label, styles.required)}>
@@ -261,6 +263,22 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               {errors && errors.paymentInfo && (
                 <span className={styles.error}>{errors.paymentInfo}</span>
               )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className={styles.label}>
+                Số căn cước công dân
+              </Form.Label>
+              <Form.Control
+                disabled
+                size="lg"
+                type="text"
+                  value={
+                  resident &&
+                  resident.profile.identify_number
+                }
+                placeholder=""
+              />
+             
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>

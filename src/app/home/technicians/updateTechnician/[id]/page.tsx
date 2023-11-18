@@ -26,7 +26,7 @@ type FormValue = {
   gender: string;
   phoneNumber: string;
   email: string;
-  avatarImg?: any;
+  avatarURL?: any;
 };
 const UpdateTechnician = ({ params }: { params: { id: string } }) => {
   const [formValue, setFormValue] = useState({
@@ -38,7 +38,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
   const [technician, setTechnician] = useState<Technician>();
   const [avatar, setAvatar] = useState<any>();
   const avatarRef = useRef<HTMLInputElement>(null);
-  let avatar_photo = technician?.account.avatarURL as string;
+  let avatar_photo = technician?.profile.avatarURL as string;
   const validation = () => {
     let err = {} as FormValue;
     const emailPattern =
@@ -237,6 +237,22 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
               {errors && errors.phoneNumber && (
                 <span className={styles.error}>{errors.phoneNumber}</span>
               )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className={styles.label}>
+                Số căn cước công dân
+              </Form.Label>
+              <Form.Control
+                disabled
+                size="lg"
+                type="text"
+                  value={
+                  technician &&
+                  technician.profile.identify_number
+                }
+                placeholder=""
+              />
+             
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
