@@ -9,4 +9,5 @@ export const endpoint = {
   me: baseUrl + "/me",
   building: baseUrl + "/building",
   contract: baseUrl + "/contract",
+  service: baseUrl + "/service",
 };
