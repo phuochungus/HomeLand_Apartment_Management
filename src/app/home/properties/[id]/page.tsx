@@ -263,7 +263,7 @@ export default function Page({ params }: { params: { id: string } }) {
                             <Image
                               loading="lazy"
                               src={
-                                resident.account?.avatarURL ||
+                                resident.profile.avatarURL ||
                                 "/path/to/your/image.jpg"
                               } // Replace with your image link
                               alt="Description of the image"
