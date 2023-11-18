@@ -1,5 +1,6 @@
-// const baseUrl = "https://homeland-be.onrender.com";
-const baseUrl ='http://localhost:5002'
+
+const baseUrl = "https://homeland-be.onrender.com";
+
 export const endpoint = {
   login: baseUrl + "/auth/signin",
   profile: baseUrl + "/me",
