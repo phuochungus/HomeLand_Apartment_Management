@@ -1,3 +1,4 @@
+import { Apartment } from "./apartment";
 
 export interface Resident {
     role: string;
@@ -11,5 +12,5 @@ export interface Resident {
     created_at: Date;
     deleted_at?: Date;
     stay_at_apartment_id?: string,
-
+    
   }

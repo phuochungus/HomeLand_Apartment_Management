@@ -15,6 +15,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import CustomHeader from "@/components/customHeader/customHeader";
 import { FaList } from "react-icons/fa";
 import { QueryClient, QueryClientProvider } from "react-query";
+import "react-toastify/dist/ReactToastify.css";
 import { UserProfile } from "@/libs/UserProfile";
 
 export default function RootLayout({
