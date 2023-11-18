@@ -105,7 +105,7 @@
         margin-right: 50px;
         background-color: aliceblue;
         border-radius: 20px 20px 20px 20px;
-        
+
 }
 
 
@@ -149,20 +149,21 @@
 .profile-stat {
         display: block;
         margin-bottom: 10px;
-        
+
 }
 
 .text-center {
         text-align: center;
 }
-
+.name,
 .birth,
 .address,
 .phonenumber,
 .address {
         text-align: right;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         text-decoration: none;
+        line-height: 1.4;
 }
 
 .font-weight-light {
@@ -183,17 +184,26 @@ a.no-underline {
         margin: 10px;
         margin-bottom: 10px;
         padding: 1px;
-        
+
 }
 
 .ch {
         text-decoration: none;
+        margin-bottom: 30px;
 }
 
-.card:hover {
-        box-shadow: 0 10px 24px 0px rgba(0, 0, 0, 0.12), 0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 6px 10px -6px rgba(0, 0, 0, 0.25);
-        opacity: 1;
+
+.card {
+
+        transition: box-shadow 0.3s ease-in-out;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+
+.card:hover {
+        box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.12), 0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 6px 10px -6px rgba(0, 0, 0, 0.25);
+}
+
 
 .col {
         margin-bottom: 50px;
@@ -224,5 +234,12 @@ a.no-underline {
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column; /* if you want to align the cards vertically */
-    }
+        flex-direction: column;
+        /* if you want to align the cards vertically */
+}
+.phonenumber{
+        margin-bottom: 20px;
+        text-decoration: none;
+        line-height: 1.4;
+        text-align: right;
+}

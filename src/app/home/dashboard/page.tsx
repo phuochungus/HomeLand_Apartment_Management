@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { AiOutlineSearch } from 'react-icons/ai'
-import React, { ReactNode, createRef, useMemo, useState } from "react";
+import React, { ReactNode, createRef, useMemo, useRef, useState } from "react";
 import Container from 'react-bootstrap/Container';
 import { futuna } from "../../../../public/fonts/futura";
 import {
@@ -25,10 +25,14 @@ import { Employee } from "@/models/employee";
 import { useQuery } from "react-query";
 import { profile } from "console";
 import SearchLayout from "@/components/searchLayout1/searchLayout";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
+  const [isSearchResult, setIsSearchResult] = useState(false);
+ 
   const [selectedId, setSelectedId] = useState("");
-  const searchRef = createRef<HTMLInputElement>();
+  const searchRef = useRef<HTMLInputElement>(null);
+
   const [imageLoaded, setImageLoaded] = useState(true);
   const [employeeList, setEmployeeList] = useState<Employee[]>([]);
   var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
@@ -68,20 +72,37 @@ export default function Dashboard() {
     if (e.key === "Enter") {
       console.log("hah");
       try {
+        loadingFiler(document.body!);
+
         const res = await axios.get("/api/employee/search", {
           params: {
             query: searchRef.current?.value,
           },
         });
         console.log(res.data);
+
+        removeLoadingFilter(document.body!);
         setEmployee(res.data);
+        setIsSearchResult(true);
       } catch (e) {
         alert(e);
       }
     }
   };
+  
+  const clearSearch = () => {
+    setIsSearchResult(false);
+    searchRef.current?.focus(); 
+    
+    if (searchRef && searchRef.current) {
+      searchRef.current.value = '';
+      refetch();
+    }
+  };
+  
   const renderGender = (gender: string) => {
     return gender === 'male' ? 'Nam' : 'Nữ';
+
   };
   const searchIconClick = async () => {
     console.log("hah");
@@ -112,85 +133,87 @@ export default function Dashboard() {
               Tạo
             </ButtonComponent>
 
-            </div>
-            <SearchLayout
-              onKeydown={handleSearch}
-              iconClick={searchIconClick}
-              placeHolder="Nhập tên nhân viên"
-              ref={searchRef}
-            />
           </div>
+        
+          <SearchLayout
+            onKeydown={handleSearch}
+            iconClick={searchIconClick}
+            placeHolder="Nhập tên nhân viên"
+            ref={searchRef}
+            xClick={clearSearch}
+          />
+        </div>
 
 
-          <div className={classNames(dashboardStyles.carddiv)}>
-            <Row xs={1} md={2} className="g-4">
-              {employee.map((employee, idx): ReactNode => {
-                const dateOfBirth = new Date(employee.profile.date_of_birth);
-                const employeeName = employee.profile.name.toLowerCase(); 
-                const searchTerm = searchRef.current?.value.toLowerCase();
-                if (searchTerm && employeeName.includes(searchTerm)) {
-                }
-                return (
-                  <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
-                    <Link href={`/home/dashboard/${employee.id}/?auth=true`} className={dashboardStyles.link}>
-                      <Card style={customCardStyle}
-                        onMouseEnter={() => setHoveredCard(idx)}
-                        onMouseLeave={() => setHoveredCard(null)}
-                        className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
-                        onClick={() => setShowDialog(true)} >
+        <div className={classNames(dashboardStyles.carddiv)}>
+          <Row xs={1} md={2} className="g-4">
+            {employee.map((employee, idx): ReactNode => {
+              const dateOfBirth = new Date(employee.profile.date_of_birth);
+              const employeeName = employee.profile.name.toLowerCase();
+              const searchTerm = searchRef.current?.value.toLowerCase();
+              if (searchTerm && employeeName.includes(searchTerm)) {
+              }
+              return (
+                <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
+                  <Link href={`/home/dashboard/${employee.id}/?auth=true`} className={dashboardStyles.link}>
+                    <Card style={customCardStyle}
+                      onMouseEnter={() => setHoveredCard(idx)}
+                      onMouseLeave={() => setHoveredCard(null)}
+                      className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
+                      onClick={() => setShowDialog(true)} >
 
-                        <CardImg
-                          alt="..."
-                          onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-                          src={
-                            employee.profilePictureURL
-                          }
-                          // src="..\images\logos\Logo@3x.png"
-                          variant="top"
-                          height="250"
-                          className="img-fluid"
-                          style={{ objectFit: 'cover', height: '250px',borderRadius: "60%", padding:'20px' }}
-                        ></CardImg>
-                        <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                          <div className="d-flex justify-content-between">
-                          </div>
-                        </CardHeader>
-                        <CardBody className={classNames(dashboardStyles.ch)}>
-                          <Row>
-                            <div className="col">
-                              <div className="card-profile-stats d-flex justify-content-center">
-                                <div className="profile-stat">
-                                  <span className="name no-underline">Tên: </span>
-                                  <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
-                                </div>
+                      <CardImg
+                        alt="..."
+                        onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                        src={
+                          employee.profilePictureURL
+                        }
+                        // src="..\images\logos\Logo@3x.png"
+                        variant="top"
+                        height="250"
+                        className="img-fluid"
+                        style={{ objectFit: 'cover', height: '250px', borderRadius: "60%", padding: '20px' }}
+                      ></CardImg>
+                      <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                        <div className="d-flex justify-content-between">
+                        </div>
+                      </CardHeader>
+                      <CardBody className={classNames(dashboardStyles.ch)}>
+                        <Row>
+                          <div className="col">
+                            <div className="card-profile-stats d-flex justify-content-center">
+                              <div className="profile-stat">
+                                <span className="name no-underline">Tên: </span>
+                                <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
                               </div>
                             </div>
-                          </Row>
-                          <div className="text-center">
-                            <span className="birth">
-                              Ngày sinh: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('en-CA')}</span>
+                          </div>
+                        </Row>
+                        <div className="text-center">
+                          <span className="birth">
+                            Ngày sinh: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('en-CA')}</span>
 
-                            </span>
-                            <div className="address">
+                          </span>
+                          <div className="address">
 
                             Giới tính: <span className="ni location_pin mr-2">{renderGender(employee.profile.gender)}</span>
-                            </div>
-                            <div className="phonenumber">
-                              Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
-                            </div>
-
                           </div>
-                        </CardBody>
-                      </Card>
-                    </Link>
-                  </Col>
-                );
-              })}
-            </Row>
-          </div>
+                          <div className="phonenumber">
+                            Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
+                          </div>
 
-
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </Link>
+                </Col>
+              );
+            })}
+          </Row>
         </div>
+
+
+      </div>
     </Container>
   </main >
   );

@@ -389,10 +389,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         />
                                                 </Form.Group>
                                         </div>
-                                        <Form.Group className={styles.box} >
-                                                <Form.Label className={styles.label}>Công việc</Form.Label>
-                                                <Form.Control size="lg" type="text" placeholder="" />
-                                        </Form.Group>
+                                      
 
                                 </Form>
                         </div>
