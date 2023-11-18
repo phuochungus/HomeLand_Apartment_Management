@@ -1,3 +1,4 @@
+import { Resident } from "./resident";
 
 export type Apartment = {
     apartment_id: string ;
@@ -13,4 +14,5 @@ export type Apartment = {
     description: string;
     floorId: string;
     buildingId: string;
+    residents?: Array<Resident>
 }

@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import styles from "./AddResident.module.scss";
+import styles from "../../residents/addResident/AddResident.module.scss";
 import mainStyles from "../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
 import Form from "react-bootstrap/Form";
@@ -32,20 +32,19 @@ type FormValue = {
   gender: string;
   phoneNumber: string;
   paymentInfo: string;
-  email?: string;
+  email: string;
   frontImg: any;
   backImg: any;
   avatarImg?: any;
 };
-const AddResident = () => {
+const AddManager = () => {
   const [formValue, setFormValue] = useState({
     name: "",
     dateOfBirth: "",
     gender: "",
     phoneNumber: "",
-    paymentInfo: "",
     email: "",
-    identifyNumber:""
+     identifyNumber:""
   });
   const [errors, setErrors] = useState<any>();
   const [frontImg, setFrontImg] = useState<any>();
@@ -124,17 +123,17 @@ const AddResident = () => {
     if (formValue.name === "") {
       err.name = "Trường họ và tên là bắt buộc!";
     }
-    if (formValue.identifyNumber === "") {
-      err.name = "Trường căn cước công dân là bắt buộc!";
-    }
     if (formValue.dateOfBirth === "") {
       err.dateOfBirth = "Trường ngày sinh là bắt buộc!";
     }
     if (formValue.gender === "") {
       err.gender = "Trường giới tính là bắt buộc!";
     }
-    if (formValue.email)
+    if (formValue.identifyNumber === "") {
+      err.name = "Trường căn cước công dân là bắt buộc!";
+    }
       if (formValue.email === "") {
+        err.email = "Trường email là bắt buộc!";
       } else if (!emailPattern.test(formValue.email)) {
         err.email = "Email không hợp lệ!";
       }
@@ -171,25 +170,24 @@ const AddResident = () => {
       form.append("date_of_birth", formValue.dateOfBirth);
       form.append("gender", formValue.gender);
       form.append("phone_number", formValue.phoneNumber);
-      form.append("payment_info", formValue.paymentInfo);
-      form.append("identify_number", formValue.identifyNumber);
       form.append("email", formValue.email);
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
+      form.append("identify_number", formValue.identifyNumber);
       if (avatar) {
-        form.append("avatarURL", avatar);
+        console.log(avatar);
+        form.append("avatar_photo", avatar);
       }
       try {
         loadingFiler(document.body!);
         await axios
-          .post("/api/resident", form)
+          .post("/api/manager", form)
           .then((response) => {
             setFormValue({
               name: "",
               dateOfBirth: "",
               gender: "male",
               phoneNumber: "",
-              paymentInfo: "",
               email: "",
               identifyNumber:""
             });
@@ -218,7 +216,7 @@ const AddResident = () => {
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
-        <p className={clsx(utilStyles.headingXl, styles.header)}>Tạo cư dân</p>
+        <p className={clsx(utilStyles.headingXl, styles.header)}>Tạo người quản lí</p>
         <div className="d-inline-flex justify-content-between">
           <div className={styles.avatarLayout}>
             {AvatarImage}
@@ -279,7 +277,7 @@ const AddResident = () => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>Email</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>Email</Form.Label>
               <Form.Control
                 size="lg"
                 type="email"
@@ -306,22 +304,6 @@ const AddResident = () => {
               />
               {errors && errors.phoneNumber && (
                 <span className={styles.error}>{errors.phoneNumber}</span>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>
-                Thông tin thanh toán
-              </Form.Label>
-              <Form.Control
-                size="lg"
-                type="text"
-                name="paymentInfo"
-                onChange={handleChange}
-                value={formValue.paymentInfo}
-                placeholder=""
-              />
-              {errors && errors.paymentInfo && (
-                <span className={styles.error}>{errors.paymentInfo}</span>
               )}
             </Form.Group>
              <Form.Group className="mb-3">
@@ -417,4 +399,4 @@ const AddResident = () => {
   );
 };
 
-export default AddResident;
+export default AddManager;

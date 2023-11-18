@@ -1,8 +1,6 @@
 .wrapper {
   width: 90%;
 }
-
-
 .header {
   width: 100%;
   display: flex;
@@ -20,14 +18,24 @@
     background-color: #0744e1;
   }
 }
-.searchLayout {
-  margin: 20px 0px;
-  float: right;
+//per page
+.perPage {
+  display: flex;
+  font-size: 1rem;
+  align-items: center;
+  span {
+    margin: 0 8px;
+    select {
+      font-size: 1rem;
+      option {
+        font-size: 1rem;
+      }
+    }
+  }
 }
 //table
-.tableBuilding {
+.tableResident {
   text-align: center;
-
 }
 .cudBtn {
   color: white;
@@ -49,11 +57,5 @@
   background-color: var(--red);
   &:hover {
     background-color: #f90e0e;
-  }
-}
-.detailBtn {
-  background-color: var(--blue);
-  &:hover {
-    background-color: #4764b1;
   }
 }

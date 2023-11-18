@@ -1,12 +1,11 @@
 import { endpoint } from "@/constraints/endpoints";
-import { Resident } from "@/models/resident";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest, { params }: { params: any }) {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.resident + "/" + params.id,
+    url: endpoint.manager + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
     },
@@ -32,9 +31,8 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
 export async function POST(request: NextRequest, { params }: { params: any }) {
   const data = await request.formData();
   data.delete("_method")
-  console.log(data)
   const response = await axios
-    .patch(endpoint.resident + "/" + params.id, data)
+    .patch(endpoint.manager + "/" + params.id, data)
     .then((response) => {
       if (response.status == 200) {
         return NextResponse.json(response.data);
@@ -56,7 +54,7 @@ export async function DELETE(
   let config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: endpoint.resident + "/" + params.id,
+    url: endpoint.manager + "/" + params.id,
   };
   const response = await axios
     .request(config)
