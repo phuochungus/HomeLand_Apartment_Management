@@ -33,6 +33,7 @@ export default function Login() {
       .request(config)
       .then((res) => {
         UserProfile.setProfile(res.data);
+        UserProfile.setRole(res.data.role);
         router.replace("/home/dashboard?auth=true");
       })
       .catch((err) => {
