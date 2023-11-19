@@ -570,7 +570,7 @@ const ModalResidentItem = (
         />
         {value.account ? (
           <Image
-            src={value.account.avatarURL}
+            src={value.profile.avatarURL}
             alt="ava"
             style={{
               width: "2rem",
@@ -627,7 +627,7 @@ const ResidentItem = (
         >
           {value.account ? (
             <Image
-              src={value.account.avatarURL}
+              src={value.profile.avatarURL}
               alt="ava"
               style={{
                 width: "2rem",

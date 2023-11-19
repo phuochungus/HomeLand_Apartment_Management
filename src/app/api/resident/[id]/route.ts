@@ -29,19 +29,12 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
   return response;
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: any }) {
-  const data = await request.json();
-  let config = {
-    method: "patch",
-    maxBodyLength: Infinity,
-    url: endpoint.resident + "/" + params.id,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
+export async function POST(request: NextRequest, { params }: { params: any }) {
+  const data = await request.formData();
+  data.delete("_method")
+  console.log(data)
   const response = await axios
-    .request(config)
+    .patch(endpoint.resident + "/" + params.id, data)
     .then((response) => {
       if (response.status == 200) {
         return NextResponse.json(response.data);

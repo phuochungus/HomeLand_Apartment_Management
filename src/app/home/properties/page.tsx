@@ -36,9 +36,10 @@ export default function Apartments() {
       axios
         .get("/api/apartment?page=" + loadingMore.current.page)
         .then((res) => {
-          if((res.data as Apartment[]).length == 0)
-            loadingMore.current.page = -1;
-          loadingMore.current.isLoading = true;
+          const temp = { ...loadingMore.current };
+          if ((res.data as Apartment[]).length == 0) temp.page = -1;
+          temp.isLoading = false;
+          loadingMore.current = temp;
           setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
         }),
     {
@@ -70,7 +71,9 @@ export default function Apartments() {
       html.offsetHeight
     );
     const windowBottom = windowHeight + window.pageYOffset;
+    console.log(windowBottom, docHeight);
     if (windowBottom + 50 >= docHeight) {
+      console.log("load more");
       handleScrollEnd();
     }
   });
@@ -132,9 +135,7 @@ export default function Apartments() {
             justifyContent: "center",
             marginTop: "20px",
           }}
-        >
-          <Spinner></Spinner>
-        </div>
+        ></div>
       ) : (
         <></>
       )}
@@ -187,7 +188,9 @@ const ApartmentCard = (value: Apartment): React.ReactNode => {
       className={`${futuna.className} ${styles.gridItem}`}
       style={{ borderRadius: "10px", overflow: "hidden" }}
     >
-      <Suspense fallback={<Placeholder as={Card.Img} animation="glow"></Placeholder>}>
+      <Suspense
+        fallback={<Placeholder as={Card.Img} animation="glow"></Placeholder>}
+      >
         <Card.Img variant="top" src={value.images[0]} />
       </Suspense>
       <Card.Body

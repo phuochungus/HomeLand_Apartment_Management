@@ -4,7 +4,6 @@ export type Apartment = {
     apartment_id: string ;
     name:string;
     rent: string;
-    address:string;
     images:string[];
     bedroom:number;
     bathroom:number;
@@ -14,5 +13,5 @@ export type Apartment = {
     description: string;
     floorId: string;
     buildingId: string;
-    resident: Resident[]
+    residents?: Array<Resident>
 }

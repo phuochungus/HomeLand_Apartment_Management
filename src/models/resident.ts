@@ -1,3 +1,4 @@
+import { Apartment } from "./apartment";
 
 export interface Resident {
     role: string;

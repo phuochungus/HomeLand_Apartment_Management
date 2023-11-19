@@ -74,7 +74,6 @@ export default function RootLayout({
                   value.roles.length == 0 ||
                   value.roles.includes(UserProfile.getRole()) ? (
                     <div key={index} style={{ marginBottom: "3rem" }}>
-                      {" "}
                       <Button
                         className={`${
                           pathName.includes(

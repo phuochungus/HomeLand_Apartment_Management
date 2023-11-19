@@ -1,6 +1,6 @@
 type Account = {
     email: string,
     password: string,
-    id: string,
-    avatarURL: string,
+    owner_id: string,
+
 }

@@ -103,6 +103,11 @@ export const sidebarInfo = [
     roles: ["admin", "manager", "resident"],
   },
   {
+    title: "Contracts",
+    svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
+    roles: ["admin", "manager"],
+  },
+  {
     title: "Residents",
     svg: (
       <svg

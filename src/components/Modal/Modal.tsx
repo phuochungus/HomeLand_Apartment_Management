@@ -25,7 +25,7 @@ const ModalComponent = ({show, setShow, title, handleConfirm} : {
         Không
       </Button>
       <Button className={clsx(styles.btn)} variant="primary"  onClick={handleConfirm}>
-        xác nhận<nav></nav>
+        Xác nhận<nav></nav>
       </Button>
     </Modal.Footer>
   </Modal>
