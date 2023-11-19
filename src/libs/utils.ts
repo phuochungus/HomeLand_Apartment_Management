@@ -23,7 +23,7 @@ export function loadingFiler(container: HTMLElement) {
     div.className = "loadingFilter";
     div.style.backgroundColor = "black";
     div.style.width = "100%";
-    div.style.height = "100vh";
+    div.style.height = "100%";
     div.style.opacity = "0.2";
     div.style.position = "absolute";
     div.style.display = "flex";

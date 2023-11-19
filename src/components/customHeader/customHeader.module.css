@@ -1,8 +1,7 @@
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1200px) {
   .logoContainer {
     width: fit-content;
     height: 100%;
-    justify-content: center;
     align-content: center;
     display: flex;
     flex-wrap: wrap;
@@ -13,7 +12,7 @@
     width: fit-content;
     display: flex;
     flex-wrap: wrap;
-    font-size: 3.4rem;
+    font-size: 4vw;
     width: fit-content;
     cursor: default;
   }
@@ -32,7 +31,6 @@
     width: fit-content;
     height: 100%;
     display: flex;
-    align-content: center;
     align-items: center;
     justify-content: end;
     flex-wrap: wrap;
@@ -44,11 +42,11 @@
   }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1200px) {
   .logoContainer {
     width: 100%;
     height: 100%;
-    justify-content: center;
+    justify-content: start;
     align-content: center;
     display: flex;
     font-weight: bolder;
@@ -58,7 +56,7 @@
     width: fit-content;
     display: flex;
     flex-wrap: wrap;
-    font-size: 3.4rem;
+    font-size: 4vw;
   }
   .menuContainer {
     width: fit-content;
@@ -91,18 +89,20 @@
     background-color: transparent;
     border-style: none;
   }
+  .buttonContainer {
+    width: -webkit-fill-available;
+    float: right;
+    display: flex;
+    justify-content: end;
+}
 }
 
-@media screen and (max-width: 1200px) {
-    .buttonContainer {
-        width: -webkit-fill-available;
-        float: right;
-    }
-}
 @media screen and (max-width: 800px) {
     .buttonContainer{
         display: none;
         visibility: hidden;
     }
-    
+    .brandLabel {
+      font-size: 10vw;
+    }
 }

@@ -32,18 +32,6 @@ import { headers } from "next/headers";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
-function getImageList(): string[] {
-  const grid = document.getElementById("imageBlobGrid");
-  const length = grid?.children.length;
-  if (!length) return [];
-  const result: string[] = [];
-  for (let index = 0; index < length; index++) {
-    const element = grid?.children.item(index);
-    result.push((element as HTMLImageElement).src);
-  }
-  return result;
-}
-
 function missingField(element: HTMLElement) {
   element.className = element.className.split("missing")[0];
   element.className += " " + styles.missing;
@@ -52,16 +40,8 @@ function missingField(element: HTMLElement) {
     element.onfocus = null;
   };
 }
-function validateData() {
+function validateData(field: string[]) {
   let flag: boolean = true;
-  const field = [
-    "name",
-    "width",
-    "length",
-    "bedroom",
-    "bathroom",
-    "description",
-  ];
   const grid = document.getElementById("imageBlobGrid");
   if (!grid) {
     missingField(document.getElementById("label-file-upload")!);
@@ -101,7 +81,15 @@ export default function AddApartment() {
   }
   async function handleSubmit() {
     loadingFiler(document.body!);
-    if (!validateData()) {
+    const field = [
+      "name",
+      "width",
+      "length",
+      "bedroom",
+      "bathroom",
+      "description",
+    ];
+    if (!validateData(field)) {
       return;
     }
     const data = new FormData();
