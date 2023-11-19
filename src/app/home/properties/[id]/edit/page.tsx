@@ -120,9 +120,9 @@ export default function EditApartment({ params }: { params: { id: string } }) {
           ) as HTMLInputElement;
           if (inputElement)
             inputElement.value =
-              apartment[element as keyof Apartment].toString();
+              (apartment[element as keyof Apartment])!.toString();
         });
-        if (apartment.resident) setSelectedList(apartment.resident);
+        if (apartment.residents) setSelectedList(apartment.residents);
         return apartment;
       })
     ,
@@ -224,9 +224,9 @@ export default function EditApartment({ params }: { params: { id: string } }) {
         ) as HTMLInputElement;
         if (inputElement)
           inputElement.value =
-            apartment[element as keyof Apartment].toString();
+            (apartment[element as keyof Apartment])!.toString();
       });
-      if (apartment.resident) setSelectedList(apartment.resident);
+      if (apartment.residents) setSelectedList(apartment.residents);
     }
     else
       apartmentQuery.refetch();
@@ -645,7 +645,7 @@ const ModalResidentItem = (
         />
         {value.account ? (
           <Image
-            src={value.account.avatarURL}
+            src={value.profile.avatarURL}
             alt="ava"
             style={{
               width: "2rem",
@@ -702,7 +702,7 @@ const ResidentItem = (
         >
           {value.account ? (
             <Image
-              src={value.account.avatarURL}
+              src={value.profile.avatarURL}
               alt="ava"
               style={{
                 width: "2rem",

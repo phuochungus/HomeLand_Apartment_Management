@@ -12,5 +12,6 @@ export const endpoint = {
   building: baseUrl + "/building",
   vehicle: baseUrl + "/vehicle",
   contract: baseUrl + "/contract",
-
+  manager: baseUrl + "/manager",
+  technician: baseUrl + "/technician",
 };
