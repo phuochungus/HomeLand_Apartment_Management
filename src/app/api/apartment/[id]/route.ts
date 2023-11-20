@@ -32,6 +32,7 @@ export async function GET(
           description: response.data.description,
           floorId: response.data.floor_id,
           buildingId: response.data.building_id,
+          residents: response.data.residents 
         } as Apartment;
         const result: Apartment = temp;
 

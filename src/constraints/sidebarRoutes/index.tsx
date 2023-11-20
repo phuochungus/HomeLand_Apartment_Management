@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
-import { BuildingIcon } from "@/components/icons";
+import { BuildingIcon, ManagerIcon, TechnicianIcon } from "@/components/icons";
 
 export const sidebarInfo = [
   {
@@ -57,14 +57,27 @@ export const sidebarInfo = [
     roles: ["admin", "manager", "resident"],
   },
   {
+    title: "Contracts",
+    svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
+    roles: ["admin", "manager"],
+  },
+  {
     title: "Residents",
     svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
-    roles: ["admin", "manager", "resident"],
+    roles: ["admin", "manager"],
+  },{
+    title: "Managers",
+    svg: <ManagerIcon width={30} height={30} />,
+    roles: ["admin"],
+  },{
+    title: "Technicians",
+    svg: <TechnicianIcon width={30} height={30} />,
+    roles: ["admin"],
   },
   {
     title: "Buildings",
     svg: <BuildingIcon width={30} height={30} />,
-    roles: ["admin", "manager"],
+    roles: ["admin"],
 
   },
   {

@@ -1,7 +1,18 @@
 "use client";
 import { Apartment } from "@/models/apartment";
 import styles from "./page.module.css";
-import { Button, Carousel, Col, Container, Image, Row, Spinner } from "react-bootstrap";
+import modalStyles from "@/styles/modal.module.scss";
+import {
+  Button,
+  Carousel,
+  Col,
+  Container,
+  Image,
+  Modal,
+  Row,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
@@ -9,17 +20,28 @@ import { useEffect, useState } from "react";
 import { endpoint } from "@/constraints/endpoints";
 import { useQuery } from "react-query";
 import axios from "axios";
-
+import { Resident as ResidentModel } from "@/models/resident";
+import { AddResidentIcon } from "@/components/icons";
+import clsx from "clsx";
+import ButtonComponent from "@/components/buttonComponent/buttonComponent";
+import { format } from "date-fns";
+import { Resident as ResidentType } from "@/models/resident";
+import Apartments from "../page";
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(apartment);
+  const [showModalResident, setShowModalResident] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(true); // Set it to true by default
-
-  const { isLoading, data ,isError} = useQuery("apartment", () =>
+  const [checkAll, setCheckAll] = useState(false);
+  const [listChecked, setListChecked] = useState<String[]>([]);
+  const [residents, setResidents] = useState<Array<ResidentType>>([]);
+  const { isLoading, data, refetch, isError } = useQuery("apartment", () =>
     axios
       .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)
   );
+  console.log(data);
+  const titleTable = ["ID", "Tên", "Số điện thoại", "Ngày tạo"];
   const furnitureInfo = [
     {
       title: "Bedrooms",
@@ -77,7 +99,11 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.width ?? "0").toString() + " x "+ (data?.length ?? "0").toString()+" (m2)",
+      value:
+        (data?.width ?? "0").toString() +
+        " x " +
+        (data?.length ?? "0").toString() +
+        " (m2)",
     },
     {
       title: "Status",
@@ -104,7 +130,55 @@ export default function Page({ params }: { params: { id: string } }) {
     { img: "image", name: "Manh Ho Dinh", id: "21522327" },
     { img: "image", name: "Manh Ho Dinh", id: "21522327" },
   ];
-
+  const handleCheckAll = () => {
+    setCheckAll(!checkAll);
+    let newList: String[];
+    if (!checkAll) newList = residents.map((item) => item.id);
+    else newList = [];
+    setListChecked(newList);
+  };
+  const handleCheck = (id: string) => {
+    const isCheck = listChecked?.includes(id);
+    let newList: String[];
+    if (isCheck) {
+      newList = listChecked?.filter((item) => item !== id);
+    } else newList = [...listChecked, id];
+    if (newList.length === residents.length) {
+      setCheckAll(true);
+    } else setCheckAll(false);
+    setListChecked(newList);
+  };
+  const handleSave = async () => {
+    try {
+      const res = await axios.post(
+        `/api/apartment/${params.id}/addResidents`,
+        undefined,
+        {
+          params: {
+            residentIds: listChecked,
+          },
+          paramsSerializer: {
+            indexes: null,
+          },
+        }
+      );
+      const updatedResident = res.data;
+      refetch();
+      setListChecked([]);
+      setCheckAll(false);
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+    setShowModalResident(false);
+  };
+  const handleShowResidentModal = async () => {
+    const res = await axios.get("/api/resident");
+    const data: ResidentModel[] = res.data;
+    console.log(data);
+    const newData = data.filter((item) => item.stay_at === null);
+    setResidents(newData);
+    setShowModalResident(true);
+  };
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
@@ -118,15 +192,13 @@ export default function Page({ params }: { params: { id: string } }) {
                 <p className="">{data.address}</p>
               </Col>
               <Col className="text-end">
-              <Button variant="warning">Edit</Button>{' '}
-              
+                <Button variant="warning">Edit</Button>{" "}
               </Col>
             </Row>
             <Row style={{ marginTop: "20px" }}>
               <Carousel>
                 {data.images.map((value, index) => (
-                  <Carousel.Item  key={index}
-                  style={{ height: "500px" }}>
+                  <Carousel.Item key={index} style={{ height: "500px" }}>
                     <Image
                       loading="lazy"
                       className=" img-fluid h-100 w-100"
@@ -156,102 +228,186 @@ export default function Page({ params }: { params: { id: string } }) {
               <p style={{ marginTop: "20px" }}>{data.description}</p>
             </Row>
             <Row>
-              <h3 style={{ marginTop: "20px" }}>
-                <b>List by apartment resident</b>
-              </h3>
+              <div className="d-flex justify-content-between">
+                <h3 style={{ marginTop: "20px" }}>
+                  <b>List by apartment resident</b>
+                </h3>
+                <ButtonComponent
+                  onClick={handleShowResidentModal}
+                  preIcon={<AddResidentIcon width={24} height={24} />}
+                  className={clsx(styles.addBtn, futuna.className)}
+                >
+                  Thêm cư dân
+                </ButtonComponent>
+              </div>
             </Row>
 
-            <Row
-              style={{
-                backgroundColor: "rgba(40, 100, 255, 0.1)",
-                border: "1px black solid",
-                borderRadius: "20px",
-                margin: "20px 0px",
-                paddingTop: "20px ",
-              }}
-            >
-              {residentInfo.map((value, index) => (
-                <>
-                  {index % 2 == 0 ? <Row></Row> : <></>}
-                  <Col>
-                    {" "}
-                    <Resident
-                      img={
-                        imageLoaded ? (
-                          <Image
-                            loading="lazy"
-                            src="/path/to/your/image.jpg" // Replace with your image link
-                            alt="Description of the image"
-                            width={300}
-                            height={200}
-                            onErrorCapture={() => setImageLoaded(false)}
-                            onError={() => setImageLoaded(false)}
-                          />
-                        ) : (
-                          <svg
-                            width="48"
-                            height="42"
-                            viewBox="0 0 48 42"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M24 0.9328C10.752 0.9328 0 10.007 0 21.1877C0 32.3685 10.752 41.4427 24 41.4427C37.248 41.4427 48 32.3685 48 21.1877C48 10.007 37.248 0.9328 24 0.9328ZM12.168 33.9078C13.2 32.0849 19.488 30.3025 24 30.3025C28.512 30.3025 34.824 32.0849 35.832 33.9078C32.568 36.0954 28.464 37.3917 24 37.3917C19.536 37.3917 15.432 36.0954 12.168 33.9078ZM39.264 30.9709C35.832 27.4465 27.504 26.2515 24 26.2515C20.496 26.2515 12.168 27.4465 8.736 30.9709C6.288 28.2567 4.8 24.8741 4.8 21.1877C4.8 12.2553 13.416 4.98379 24 4.98379C34.584 4.98379 43.2 12.2553 43.2 21.1877C43.2 24.8741 41.712 28.2567 39.264 30.9709ZM24 9.03478C19.344 9.03478 15.6 12.1945 15.6 16.124C15.6 20.0535 19.344 23.2132 24 23.2132C28.656 23.2132 32.4 20.0535 32.4 16.124C32.4 12.1945 28.656 9.03478 24 9.03478ZM24 19.1622C22.008 19.1622 20.4 17.8052 20.4 16.124C20.4 14.4428 22.008 13.0858 24 13.0858C25.992 13.0858 27.6 14.4428 27.6 16.124C27.6 17.8052 25.992 19.1622 24 19.1622Z"
-                              fill="black"
+            {data.residents && data.residents.length > 0 ? (
+              <Row
+                style={{
+                  backgroundColor: "rgba(40, 100, 255, 0.1)",
+                  border: "1px black solid",
+                  borderRadius: "20px",
+                  margin: "20px 0px",
+                  paddingTop: "20px ",
+                }}
+              >
+                {data.residents.map((resident, index) => (
+                  <>
+                    {index % 2 == 0 ? <Row></Row> : <></>}
+                    <Col>
+                      {" "}
+                      <Resident
+                        img={
+                          imageLoaded ? (
+                            <Image
+                              loading="lazy"
+                              src={
+                                resident.profile.avatarURL ||
+                                "/path/to/your/image.jpg"
+                              } // Replace with your image link
+                              alt="Description of the image"
+                              width={300}
+                              height={200}
+                              onErrorCapture={() => setImageLoaded(false)}
+                              onError={() => setImageLoaded(false)}
                             />
-                          </svg>
-                        )
-                      }
-                    ></Resident>
-                  </Col>
-                  {index == residentInfo.length - 1 && index % 2 == 0 ? (
-                    <Col></Col>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              ))}
-            </Row>
+                          ) : (
+                            <svg
+                              width="48"
+                              height="42"
+                              viewBox="0 0 48 42"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M24 0.9328C10.752 0.9328 0 10.007 0 21.1877C0 32.3685 10.752 41.4427 24 41.4427C37.248 41.4427 48 32.3685 48 21.1877C48 10.007 37.248 0.9328 24 0.9328ZM12.168 33.9078C13.2 32.0849 19.488 30.3025 24 30.3025C28.512 30.3025 34.824 32.0849 35.832 33.9078C32.568 36.0954 28.464 37.3917 24 37.3917C19.536 37.3917 15.432 36.0954 12.168 33.9078ZM39.264 30.9709C35.832 27.4465 27.504 26.2515 24 26.2515C20.496 26.2515 12.168 27.4465 8.736 30.9709C6.288 28.2567 4.8 24.8741 4.8 21.1877C4.8 12.2553 13.416 4.98379 24 4.98379C34.584 4.98379 43.2 12.2553 43.2 21.1877C43.2 24.8741 41.712 28.2567 39.264 30.9709ZM24 9.03478C19.344 9.03478 15.6 12.1945 15.6 16.124C15.6 20.0535 19.344 23.2132 24 23.2132C28.656 23.2132 32.4 20.0535 32.4 16.124C32.4 12.1945 28.656 9.03478 24 9.03478ZM24 19.1622C22.008 19.1622 20.4 17.8052 20.4 16.124C20.4 14.4428 22.008 13.0858 24 13.0858C25.992 13.0858 27.6 14.4428 27.6 16.124C27.6 17.8052 25.992 19.1622 24 19.1622Z"
+                                fill="black"
+                              />
+                            </svg>
+                          )
+                        }
+                        name={resident.profile.name}
+                        phone_number={resident.profile.phone_number}
+                      ></Resident>
+                    </Col>
+                    {index == residentInfo.length - 1 && index % 2 == 0 ? (
+                      <Col></Col>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                ))}
+              </Row>
+            ) : (
+              <p className={styles.noResident}> Have no resident</p>
+            )}
           </Container>
         </div>
+        <Modal
+          dialogClassName={clsx(modalStyles.modal, futuna.className)}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          show={showModalResident}
+          onHide={() => setShowModalResident(false)}
+        >
+          <Modal.Header className={modalStyles.modalHeader} closeButton>
+            <Modal.Title className={modalStyles.titleModal}>
+              Thêm cư dân cho phòng
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className={modalStyles.bodyModal}>
+            <h3 className={modalStyles.bodyHeader}>Danh sách cư dân</h3>
+            <Table
+              className={clsx(modalStyles.table, futuna.className)}
+              striped
+              bordered
+              hover
+            >
+              <thead>
+                <tr>
+                  <th style={{ width: 20 }}>
+                    <input
+                      type="checkbox"
+                      checked={checkAll}
+                      onChange={handleCheckAll}
+                    />
+                  </th>
+                  {titleTable.map((title: String, index) => (
+                    <th key={index}>{title}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {residents.map((resident, index): React.ReactNode => {
+                  const time = new Date(resident.created_at);
+                  const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <input
+                          value={resident.id}
+                          type="checkbox"
+                          onChange={(e) => handleCheck(e.target.value)}
+                          checked={listChecked.includes(resident.id)}
+                        />
+                      </td>
+                      <td>{resident.id}</td>
+                      <td>{resident.profile.name}</td>
+                      <td>{resident.profile.phone_number}</td>
+                      <td>{createAt}</td>
+                      {/* <td>{building.resident_id}</td> */}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer className={modalStyles.footerModal}>
+            <ButtonComponent
+              className={modalStyles.saveBtn}
+              onClick={handleSave}
+            >
+              Save
+            </ButtonComponent>
+          </Modal.Footer>
+        </Modal>
       </main>
     );
   }
-  
+
   if (isLoading)
     return (
       <main className={styles.main} style={futuna.style}>
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          height: "100%",
-          margin: "50px 0px",
-          justifyContent: "center",
-          alignContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        <Spinner></Spinner>
-      </div>
-    </main>
-      
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            margin: "50px 0px",
+            justifyContent: "center",
+            alignContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Spinner></Spinner>
+        </div>
+      </main>
     );
   if (isError)
     return (
       <main className={styles.main} style={futuna.style}>
-      
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        Co loi
-      </div>
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
+            alignContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          Co loi
+        </div>
       </main>
     );
   return <div></div>;

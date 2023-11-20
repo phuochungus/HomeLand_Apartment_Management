@@ -45,6 +45,7 @@ const AddResident = () => {
     phoneNumber: "",
     paymentInfo: "",
     email: "",
+    identifyNumber:""
   });
   const [errors, setErrors] = useState<any>();
   const [frontImg, setFrontImg] = useState<any>();
@@ -123,6 +124,9 @@ const AddResident = () => {
     if (formValue.name === "") {
       err.name = "Trường họ và tên là bắt buộc!";
     }
+    if (formValue.identifyNumber === "") {
+      err.name = "Trường căn cước công dân là bắt buộc!";
+    }
     if (formValue.dateOfBirth === "") {
       err.dateOfBirth = "Trường ngày sinh là bắt buộc!";
     }
@@ -168,12 +172,12 @@ const AddResident = () => {
       form.append("gender", formValue.gender);
       form.append("phone_number", formValue.phoneNumber);
       form.append("payment_info", formValue.paymentInfo);
+      form.append("identify_number", formValue.identifyNumber);
       form.append("email", formValue.email);
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
       if (avatar) {
-        console.log(avatar);
-        form.append("avatar_photo", avatar);
+        form.append("avatarURL", avatar);
       }
       try {
         loadingFiler(document.body!);
@@ -187,6 +191,7 @@ const AddResident = () => {
               phoneNumber: "",
               paymentInfo: "",
               email: "",
+              identifyNumber:""
             });
             setFrontImg(null);
             setBackImg(null);
@@ -317,6 +322,22 @@ const AddResident = () => {
               />
               {errors && errors.paymentInfo && (
                 <span className={styles.error}>{errors.paymentInfo}</span>
+              )}
+            </Form.Group>
+             <Form.Group className="mb-3">
+              <Form.Label className={styles.label}>
+                Số căn cước công dân
+              </Form.Label>
+              <Form.Control
+                size="lg"
+                type="text"
+                name="identifyNumber"
+                onChange={handleChange}
+                value={formValue.identifyNumber}
+                placeholder=""
+              />
+              {errors && errors.identifyNumber && (
+                <span className={styles.error}>{errors.identifyNumber}</span>
               )}
             </Form.Group>
             <Form.Group className="mb-3">

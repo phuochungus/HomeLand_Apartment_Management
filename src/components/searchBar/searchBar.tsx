@@ -5,11 +5,13 @@ import { ReactNode } from "react";
 export default function SearchBar({
   className,
   style,
+  placeholder,
   onChange,
 }: {
   className?: string;
   style?: React.CSSProperties;
   onChange?: (params: string) => void;
+  placeholder?: string | "Search...";
 }): ReactNode {
   return (
     <div className={className} style={style}>
@@ -25,6 +27,7 @@ export default function SearchBar({
         <input
           type="search"
           id="search"
+          placeholder={placeholder}
           style={{
             height: "100%",
             borderStyle: "none",
