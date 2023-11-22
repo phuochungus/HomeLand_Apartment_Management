@@ -65,11 +65,11 @@ export const sidebarInfo = [
     title: "Residents",
     svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
     roles: ["admin", "manager"],
-  },{
+  }, {
     title: "Managers",
     svg: <ManagerIcon width={30} height={30} />,
     roles: ["admin"],
-  },{
+  }, {
     title: "Technicians",
     svg: <TechnicianIcon width={30} height={30} />,
     roles: ["admin"],
@@ -103,16 +103,19 @@ export const sidebarInfo = [
     title: "Floor",
     svg: (
       <svg
-        width="40"
-        height="40"
-        viewBox="0 0 40 40"
+        width="50"
+        height="50"
+        viewBox="0 -10 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M35.6855 4.44444V8.88889H26.8464V4.44444H35.6855ZM13.5877 4.44444V17.7778H4.74865V4.44444H13.5877ZM35.6855 22.2222V35.5556H26.8464V22.2222H35.6855ZM13.5877 31.1111V35.5556H4.74865V31.1111H13.5877ZM40.105 0H22.4268V13.3333H40.105V0ZM18.0073 0H0.329102V22.2222H18.0073V0ZM40.105 17.7778H22.4268V40H40.105V17.7778ZM18.0073 26.6667H0.329102V40H18.0073V26.6667Z"
+          d="M2 2v18h3v-1H3v-6h3V9h5V8H6V3h15v5h-6v1h6v5h-4v1h4v6H11v-7h-1v5H8v1h2v2h12V2zm3 4H3V5h2zm-2 6v-1h2v1zm2-2H3V9h2zM3 8V7h2v1zm2-4H3V3h2z"
           fill="black"
+          stroke="black" 
+          stroke-width="1" 
         />
+        
       </svg>
     ),
     menu: [],
