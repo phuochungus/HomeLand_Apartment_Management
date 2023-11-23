@@ -1,17 +1,23 @@
 "use client";
+import { format } from "date-fns";
 
 import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
 import {
   Button,
   ButtonGroup,
+  Col,
+  Container,
   Dropdown,
   Form,
   InputGroup,
+  Modal,
+  Row,
+  Table,
 } from "react-bootstrap";
 import { FaUpload } from "react-icons/fa";
 
 import styles from "./addVehicle.module.css";
-import { useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { Resident } from "@/models/resident";
 import { futuna } from "../../../../../public/fonts/futura";
 import axios from "axios";
@@ -20,13 +26,101 @@ import { useQuery } from "react-query";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import toastMessage from "@/utils/toast";
+import { t } from "i18next";
+import SearchLayout from "@/components/searchLayout/searchLayout";
 export default function AddVehicle(): React.ReactNode {
   const [selectedRes, setSelectedRes] = useState<Resident | undefined>(
     undefined
   );
+  const [show, setShow] = useState(false);
   const [residents, setResidents] = useState<Array<Resident>>([]);
   const [imageList, setImageList] = useState<(File | URL)[]>(Array(3));
   const inputRef = useRef<HTMLButtonElement>(null);
+  const ResidentModel = (): ReactNode => {
+    return (
+      <Container style={{ padding: 0, marginTop: "20px" }}>
+        <Row>
+          <Col>
+            <h5 className={styles.required} style={{ width: "200px" }}>
+              {t("resident")}
+            </h5>
+          </Col>
+          <Col md="auto">
+            <Button onClick={() => setShow(true)}>Choose Resident</Button>
+          </Col>
+
+          <Modal
+            dialogClassName={styles.modal}
+            show={show}
+            style={futuna.style}
+            onHide={() => setShow(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>{t("residentsList")}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div
+                className={styles.itemContainer}
+                style={{
+                  position: "absolute",
+                  height: "40px",
+                  width: "40%",
+                  borderStyle: "none",
+                  margin: 0,
+                  right: "5%",
+                }}
+              >
+                <SearchLayout
+                  onChange={(e) => {
+                    setResidents(search(data, "id", e.target.value));
+                    setShow(false);
+                  }}
+                  placeHolder={t("search_resident")}
+                />
+              </div>
+
+              <Table style={{ width: "100%", marginTop: "50px" }} striped hover>
+                <thead>
+                  <tr>
+                    <th style={{ width: "20%" }}>{t("ID")}</th>
+                    <th style={{ width: "23%" }}>{t("name")}</th>
+                    <th style={{ width: "25%" }}>{t("phone_number")} </th>
+                    <th style={{ width: "10%" }}>{t("apartment")}</th>
+                    <th style={{ width: "22%" }}>{t("create_at")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {residents.map((resident, index): ReactNode => {
+                    const time = new Date(resident.created_at);
+                    const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                    const handleRowClick = () => {
+                      setSelectedRes(resident);
+                      setShow(false);
+                    };
+
+                    return (
+                      <tr
+                        key={index}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleRowClick()}
+                      >
+                        <td>{resident.id}</td>
+                        <td>{resident.profile && resident.profile.name}</td>
+                        <td>{resident.profile.phone_number}</td>
+                        <td>{resident.stay_at && resident.stay_at.name}</td>
+                        <td>{createAt}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Modal.Body>
+          </Modal>
+        </Row>
+      </Container>
+    );
+  };
+
   function handleFileChange(file: URL | File, index: number): void {
     const temp = [...imageList];
     if (temp.length > index) temp[index] = file;
@@ -119,7 +213,7 @@ export default function AddVehicle(): React.ReactNode {
       else data.append("backRegistrationPhoto", fileList[2]);
     }
 
-    await addImage(data, imageList).then(async () =>  {
+    await addImage(data, imageList).then(async () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
@@ -130,7 +224,7 @@ export default function AddVehicle(): React.ReactNode {
         .request(config)
         .then((res) => {
           toastMessage({ type: "success", title: "Đã đăng ký thành công" });
-          window.location.reload()
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -223,120 +317,170 @@ export default function AddVehicle(): React.ReactNode {
                 </div>
               </DragDropFileInput>
             </Form.Group>
-            <Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label className={`${styles.label} ${styles.required}`}>
-                  Mã cư dân
-                </Form.Label>
-                <InputGroup style={{ width: "50%" }}>
-                  <Form.Control
-                    id="inputId"
-                    size="lg"
-                    name="id"
-                    type="text"
-                    onClick={() => handleOnFocus()}
-                    onChange={(e) => {
-                      setResidents(search(data, "id", e.target.value));
-                    }}
+            <div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  fontWeight:"bold",
+                  fontSize:"2vw"
+                }}
+              >
+                Cư dân
+              </div>
+              {selectedRes == undefined ? (
+                <div>
+                  <div>Please select resident first</div>
+                  <Button
                     style={{
-                      margin: "0",
+                      width: "fit-content",
+                      height: "fit-content",
                     }}
-                  />
-                  <Dropdown as={ButtonGroup}>
-                    <Dropdown.Toggle
-                      split
-                      ref={inputRef}
-                      style={{
-                        background: "white",
-                        color: "black",
-                        borderColor: "#dee2e6",
-                        borderLeftStyle: "none",
-                        margin: "0",
-                      }}
-                    ></Dropdown.Toggle>
-                    <Dropdown.Menu
-                      align="end"
-                      style={{ height: "200px", overflowY: "scroll" }}
+                    onClick={() => setShow(true)}
+                  >
+                    Select resident
+                  </Button>
+                </div>
+              ) : (
+                <Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label
+                      className={`${styles.label} ${styles.required}`}
                     >
-                      {residents.map((value, index) => (
-                        <Dropdown.Item
-                          key={index}
+                      Mã cư dân
+                    </Form.Label>
+
+                    <InputGroup style={{ width: "100%" }}>
+                      <Form.Control
+                        id="inputId"
+                        size="lg"
+                        name="id"
+                        type="text"
+                        onClick={() => handleOnFocus()}
+                        onChange={(e) => {
+                          setResidents(search(data, "id", e.target.value));
+                        }}
+                        style={{
+                          margin: "0",
+                        }}
+                        value={selectedRes.id}
+                      />
+                      <Dropdown as={ButtonGroup}>
+                        <Dropdown.Toggle
+                          split
+                          ref={inputRef}
+                          style={{
+                            background: "white",
+                            color: "black",
+                            borderColor: "#dee2e6",
+                            borderLeftStyle: "none",
+                            margin: "0",
+                            marginRight: "2vw",
+                          }}
+                        ></Dropdown.Toggle>
+                        <Dropdown.Menu
+                          align="end"
+                          style={{ height: "200px", overflowY: "scroll" }}
+                        >
+                          {residents.map((value, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => {
+                                console.log("click");
+                                setSelectedRes(residents[index]);
+                                (
+                                  document.getElementById(
+                                    "inputName"
+                                  ) as HTMLInputElement
+                                ).value = residents[index].profile.name;
+                                (
+                                  document.getElementById(
+                                    "inputId"
+                                  ) as HTMLInputElement
+                                ).value = residents[index].id;
+                                (
+                                  document.getElementById(
+                                    "inputSDT"
+                                  ) as HTMLInputElement
+                                ).value = residents[index].profile.phone_number;
+                              }}
+                            >
+                              {value.id}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                        <Button
+                          style={{ float: "right", borderRadius: "0.5vw" }}
                           onClick={() => {
-                            console.log("click");
-                            setSelectedRes(residents[index]);
-                            (
-                              document.getElementById(
-                                "inputName"
-                              ) as HTMLInputElement
-                            ).value = residents[index].profile.name;
-                            (
-                              document.getElementById(
-                                "inputId"
-                              ) as HTMLInputElement
-                            ).value = residents[index].id;
-                            (
-                              document.getElementById(
-                                "inputSDT"
-                              ) as HTMLInputElement
-                            ).value = residents[index].profile.phone_number;
+                            setShow(true);
                           }}
                         >
-                          {value.id}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </InputGroup>
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label className={`${styles.label} ${styles.required}`}>
-                  Họ và tên
-                </Form.Label>
-                <Form.Control
-                  id={"inputName"}
-                  size="lg"
-                  name="name"
-                  type="text"
-                  disabled={selectedRes ? true : false}
-                  placeholder="Nguyễn Văn A..."
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label className={`${styles.label} ${styles.required}`}>
-                  CCCD
-                </Form.Label>
-                <Form.Control
-                  id={"inputCCCD"}
-                  size="lg"
-                  name="CCCD"
-                  type="text"
-                  placeholder="CCCD is appeared here"
-                  disabled={true}
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label className={`${styles.label} ${styles.required}`}>
-                  Số điện thoại
-                </Form.Label>
-                <Form.Control
-                  id={"inputSDT"}
-                  size="lg"
-                  name="SDT"
-                  type="phone"
-                  placeholder="03**************"
-                  disabled={true}
-                />
-              </Form.Group>
-            </Form.Group>
+                          Change resident
+                        </Button>
+                      </Dropdown>
+                    </InputGroup>
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label
+                      className={`${styles.label} ${styles.required}`}
+                    >
+                      Họ và tên
+                    </Form.Label>
+                    <Form.Control
+                      id={"inputName"}
+                      size="lg"
+                      name="name"
+                      type="text"
+                      value={selectedRes.profile.name ?? ""}
+                      disabled={selectedRes ? true : false}
+                      placeholder="Nguyễn Văn A..."
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label
+                      className={`${styles.label} ${styles.required}`}
+                    >
+                      CCCD
+                    </Form.Label>
+                    <Form.Control
+                      id={"inputCCCD"}
+                      size="lg"
+                      name="CCCD"
+                      type="text"
+                      value={selectedRes.profile.identify_number ?? ""}
+                      placeholder="CCCD is appeared here"
+                      disabled={true}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label
+                      className={`${styles.label} ${styles.required}`}
+                    >
+                      Số điện thoại
+                    </Form.Label>
+                    <Form.Control
+                      id={"inputSDT"}
+                      size="lg"
+                      name="SDT"
+                      type="phone"
+                      value={selectedRes.profile.phone_number ?? ""}
+                      placeholder="03**************"
+                      disabled={true}
+                    />
+                  </Form.Group>
+                </Form.Group>
+              )}
+            </div>
           </Form.Group>
           <Form.Group
             style={{
@@ -352,6 +496,7 @@ export default function AddVehicle(): React.ReactNode {
           </Form.Group>
         </Form>
       </div>
+      {ResidentModel()}
       <ToastContainer
         position="top-right"
         autoClose={5000}

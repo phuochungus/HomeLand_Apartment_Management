@@ -25,8 +25,6 @@ import {
 import ModalComponent from "@/components/Modal/Modal";
 import { usePathname, useRouter } from "next/navigation";
 import { futuna } from "../../../../public/fonts/futura";
-import { format } from "date-fns";
-import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
@@ -56,7 +54,6 @@ export default function Vehicles() {
   const [showLimit, setShowLimit] = useState<number>(10);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [selectedId, setSelectedId] = useState("");
-  const [sortField, setSortField] = useState<String | undefined>(undefined);
   const searchRef = createRef<HTMLInputElement>();
   const path = usePathname();
   const deleleHandle = (id: string) => {
@@ -82,14 +79,9 @@ export default function Vehicles() {
       staleTime: Infinity,
     }
   );
-  const titleTable = [
-    { name: "ID", field: "id" },
-    { name: "Biển số xe", field: "licensePlate" },
-    { name: "Tình trạng", field: "status" },
-    { name: "Cư dân sở hữu", field: "residentId" },
-  ];
+  const titleTable = ["ID", "Loại xe", "Chủ sở hữu", "Thời hạn", "Tình trạng"];
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(data);
+    console.log(data)
     if (e.currentTarget.value == "") setVehicles(data);
     else setVehicles(search(data, "licensePlate", e.currentTarget.value));
   };
@@ -117,16 +109,7 @@ export default function Vehicles() {
     if (Math.ceil(vehicles.length / showLimit) >= value) setPageNumber(value);
   };
   function handleChangeOrder(order: SortOrder, title: String) {
-    setVehicles([
-      ...vehicles.sort(
-        (a, b) =>
-          -order *
-          a[title as keyof Vehicle]
-            .toString()
-            .localeCompare(b[title as keyof Vehicle].toString())
-      ),
-    ]);
-    setSortField(title);
+    throw new Error("Function not implemented.");
   }
 
   return (
@@ -179,16 +162,13 @@ export default function Vehicles() {
           >
             <thead>
               <tr>
-                {titleTable.map((title, index) => (
+                {titleTable.map((title: String, index) => (
                   <th key={index}>
-                    {title.name}{" "}
+                    {title}{" "}
                     <SortIcon
                       width={12}
                       height={12}
-                      isUsed={sortField == title.field}
-                      onChangeOrder={(order) => {
-                        handleChangeOrder(order, title.field);
-                      }}
+                      onChangeOrder={(order) => {}}
                     />
                   </th>
                 ))}

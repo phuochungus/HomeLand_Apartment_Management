@@ -28,6 +28,10 @@
     font-size: 1.25vw;
 }
 
+.modal {
+    min-width: 60vw;
+}
+
 .required {
     position: relative;
 }
@@ -60,10 +64,12 @@
 .creatBtn:hover {
     background-color: #4b77e8;
 }
+
 .missing {
     border-style: solid;
     border-color: #FF4747 !important;
 }
-.missing + svg{
+
+.missing+svg {
     border-color: #FF4747 !important;
 }
