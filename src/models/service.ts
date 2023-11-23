@@ -4,6 +4,6 @@ export type Service = {
   service_id: string;
   name: string;
   description: string;
-  imageURLs: string[];
-  servicePackage: servicePackage[];
+  imageURLs?: string[];
+  servicePackages: servicePackage[];
 };

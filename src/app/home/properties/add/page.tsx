@@ -155,7 +155,7 @@ export default function AddApartment() {
           alert(err.response.data);
         });
     });
-    removeLoadingFilter(document.body!)
+    removeLoadingFilter(document.body!);
   }
   function searchtest(params: string) {
     setResidentLists(search(data!, "name", params));

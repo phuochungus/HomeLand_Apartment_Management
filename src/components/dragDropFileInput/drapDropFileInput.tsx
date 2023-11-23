@@ -11,13 +11,19 @@ import { FaTrash } from "react-icons/fa";
 
 export default function DragDropFileInput({
   children,
+  onChange,
+  initFileList,
 }: {
   children: ReactNode | undefined;
+  onChange?: (files: (File | URL)[]) => void;
+  initFileList?: (File | URL)[];
 }): ReactNode {
   // drag drop file component
   // drag state
   const [dragActive, setDragActive] = useState(false);
-  const [fileLists, setFileLists] = useState<File[]>([]);
+  const [fileLists, setFileLists] = useState<(File | URL)[]>(
+    initFileList ?? []
+  );
   // ref
   const inputRef = useRef<HTMLInputElement>(null);
   // handle drag events
@@ -49,18 +55,19 @@ export default function DragDropFileInput({
     }
   };
   function handleFiles(files: FileList) {
-    if (fileLists.length > 0) {
-      const tempList = [...Array.from(files)];
-      const uniqueFile: File[] = [];
-      tempList.forEach((element) => {
-        for (let index = 0; index < fileLists.length; index++) {
-          const element1 = fileLists[index];
-          if (element.name == element1.name) break;
-          uniqueFile.push(element);
-        }
-      });
-      setFileLists([...fileLists, ...uniqueFile]);
-    } else setFileLists(Array.from(files));
+    const tempList = [...Array.from(files)];
+    const uniqueFile: (File | URL)[] = [];
+    tempList.forEach((element) => {
+      let index = 0;
+      for (; index < fileLists.length; index++) {
+        const element1 = fileLists[index];
+        if (element1 instanceof URL) continue;
+        if (element.name == element1.name) break;
+      }
+      if (index == fileLists.length) uniqueFile.push(element);
+    });
+    if(onChange) onChange([...fileLists, ...uniqueFile])
+    setFileLists([...fileLists, ...uniqueFile])
     document.getElementById("label-file-upload")!.className = document
       .getElementById("label-file-upload")!
       .className.split("missing")[0];
@@ -78,7 +85,11 @@ export default function DragDropFileInput({
       result.push(
         <Stack style={{ position: "relative" }}>
           <Image
-            src={URL.createObjectURL(element as Blob)}
+            src={
+              element instanceof URL
+                ? element.href
+                : URL.createObjectURL(element as Blob)
+            }
             alt="image"
             style={{
               width: "auto-fit",
@@ -93,6 +104,7 @@ export default function DragDropFileInput({
             onClick={() => {
               const temp = [...fileLists];
               temp.splice(index, 1);
+              if(onChange) onChange(temp)
               setFileLists(temp);
             }}
           >
@@ -118,10 +130,7 @@ export default function DragDropFileInput({
         onChange={handleChange}
         style={{ display: "none", visibility: "hidden" }}
       />
-      <div
-        id="label-file-upload"
-        className={dragActive ? "drag-active" : ""}
-      >
+      <div id="label-file-upload" className={dragActive ? "drag-active" : ""}>
         <div
           style={{
             width: "100%",
@@ -143,11 +152,7 @@ export default function DragDropFileInput({
               >
                 Click to upload more file here
               </p>
-              <div
-                className={`${styles.dragDrop}`}
-              >
-                {ImageGrid()}
-              </div>
+              <div className={`${styles.dragDrop}`}>{ImageGrid()}</div>
             </>
           ) : (
             <>

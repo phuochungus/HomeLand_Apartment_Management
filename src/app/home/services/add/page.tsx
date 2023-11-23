@@ -22,7 +22,7 @@ import {
 } from "react-icons/fa";
 import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
 import { Person } from "@/models/person";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchBar from "@/components/searchBar/searchBar";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -37,8 +37,12 @@ function getImageList(): string[] {
   const result: string[] = [];
   for (let index = 0; index < length; index++) {
     const element = grid?.children.item(index);
+
     result.push((element as HTMLImageElement).src);
+
+    console.log(element);
   }
+  console.log(grid.children);
   return result;
 }
 
@@ -67,22 +71,21 @@ function validateData() {
   });
   return flag;
 }
-async function addImage(data: FormData, fileList: string[]) {
+async function addImage(data: FormData, fileList: (File | URL)[]) {
   for await (const iterator of fileList) {
-    const blob = await fetch(iterator).then(async (r) => {
-      return await r.blob();
-    });
-    const file = new File(
-      [blob],
-      fileList.indexOf(iterator) + "." + blob.type.split("/")[1]
-    );
-    data.append("images", file);
+    if (iterator instanceof URL) data.append("images", iterator.href);
+    else data.append("images", iterator);
   }
+  return data;
 }
 export default function AddService() {
   const [show, setShow] = useState(false);
   function handleClose() {
     setShow(false);
+  }
+  const fileList = useRef<(File | URL)[]>([]);
+  function handleFileChange(files: (File | URL)[]) {
+    fileList.current = files;
   }
 
   async function handleSubmit() {
@@ -92,7 +95,6 @@ export default function AddService() {
       return;
     }
     const data = new FormData();
-    const fileList = getImageList();
     data.append(
       "name",
       (document.getElementById("name") as HTMLInputElement).value
@@ -101,17 +103,11 @@ export default function AddService() {
       "description",
       (document.getElementById("description") as HTMLInputElement).value
     );
-    await addImage(data, fileList).then(() => {
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: "/api/service",
-        data: data,
-      };
+    await addImage(data, fileList.current).then(async () => {
       console.log(data.get("images"));
-      axios
-        .request(config)
-        .then((res) => {
+      await axios
+        .post("/api/service", data)
+        .then((response) => {
           alert("Done create");
         })
         .catch((err) => {
@@ -138,7 +134,7 @@ export default function AddService() {
             style={{ width: "30%" }}
           ></Form.Control>
           <div style={{ width: "100%", height: "20px" }}></div>
-          <DragDropFileInput>
+          <DragDropFileInput onChange={handleFileChange}>
             <div
               className={styles.uploadIcon}
               style={{
