@@ -35,7 +35,6 @@ export default function Page({ params }: { params: { id: string } }) {
     { img: "image", name: "Manh Ho Dinh", id: "21522327" },
     { img: "image", name: "Manh Ho Dinh", id: "21522327" },
     { img: "image", name: "Manh Ho Dinh", id: "21522327" },
-    
   ];
 
   if (data != null) {
@@ -122,6 +121,8 @@ export default function Page({ params }: { params: { id: string } }) {
                           </svg>
                         )
                       }
+                      name={"Service abc"}
+                      phone_number={"123"}
                     ></Resident>
                   </Col>
                   {index == residentInfo.length - 1 && index % 2 == 0 ? (
