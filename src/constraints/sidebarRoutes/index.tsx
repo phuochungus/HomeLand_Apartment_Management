@@ -38,7 +38,7 @@ export const sidebarInfo = [
     roles: ["admin", "manager"],
   },
   {
-    title: "Service",
+    title: "Services",
     svg: (
       <svg
         width="30"

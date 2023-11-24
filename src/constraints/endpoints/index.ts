@@ -15,4 +15,5 @@ export const endpoint = {
   building: baseUrl + "/building",
   contract: baseUrl + "/contract",
   floor: baseUrl + "/floor",
+  service: baseUrl + "/service",
 };
