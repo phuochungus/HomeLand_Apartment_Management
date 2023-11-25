@@ -8,8 +8,8 @@ export async function GET(request: NextRequest) {
     maxBodyLength: Infinity,
     url: endpoint.floor,
     headers: {
-      Authorization: "Bearer " + request.cookies.get("token")?.value,
       "Content-Type": "application/json",
+      'Authorization': "Bearer " + request.cookies.get("token")?.value,
     },
   };
   const response = await axios
@@ -36,10 +36,11 @@ export async function POST(request: NextRequest) {
     url: endpoint.floor,
     headers: {
       "Content-Type": "multipart/form-data",
+      'Authorization': "Bearer " + request.cookies.get("token")?.value,
     },
     data: data,
   };
-
+  console.log(endpoint.floor)
   const response = await axios
     .request(config)
     .then((response) => {

@@ -11,7 +11,7 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import ModalComponent from "@/components/Modal/Modal";
 import SearchLayout from "@/components/searchLayout/searchLayout";
-import { CloseIcon, EditIcon } from "@/components/icons";
+import { CloseIcon, DetailIcon, EditIcon } from "@/components/icons";
 import { format } from "date-fns";
 import { Building } from "@/models/building";
 import { Floor } from "@/models/floor";
@@ -55,7 +55,7 @@ export default function Dashboard() {
     {
       title: t("building"),
       selections: ["hello1", "hello2"],
-      building_id: ["some_building_id"], 
+      building_id: ["some_building_id"],
       onChange: () => { },
     },
   ];
@@ -93,19 +93,19 @@ export default function Dashboard() {
     <main className={clsx(styles.main)}>
       <div className={clsx(buildingStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl, buildingStyles.title)}>
-          Quản lí tòa nhà
+          Quản lí phòng
         </h1>
         <div className={clsx(buildingStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách tòa nhà</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>Danh sách phòng</h1>
           <ButtonComponent
-            href="/home/buildings/addBuilding?auth=true"
+            href="/home/floor/addFloor?auth=true"
             //   preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(buildingStyles.addBtn, futuna.className)}
           >
             Tạo tòa nhà
           </ButtonComponent>
         </div>
-        {FloorSortOption.map((value, index) => (
+        {/* {FloorSortOption.map((value, index) => (
           <div
             key={index}
             className={styles.itemContainer}
@@ -129,7 +129,7 @@ export default function Dashboard() {
               ))}
             </Form.Select>
           </div>
-        ))}
+        ))} */}
         <SearchLayout
           onKeydown={handleSearch}
           iconClick={searchIconClick}
@@ -170,10 +170,18 @@ export default function Dashboard() {
                             buildingStyles.cudBtn,
                             buildingStyles.editBtn
                           )}
-                          href={`/home/buildings/updateBuilding/${floor.building_id}/?auth=true`}
+                          href={`/home/floor/updateFloor/${floor.floor_id}/?auth=true`}
                         >
                           Sửa
                         </ButtonComponent>
+                        <ButtonComponent
+                          href={`/home/floor/detailFloor/${floor.floor_id}/?auth=true`}
+                          preIcon={<DetailIcon width={16} height={16} />}
+                          className={clsx(buildingStyles.cudBtn, buildingStyles.detailBtn)}
+                        >
+                          Chi tiết
+                        </ButtonComponent>
+
                         <ButtonComponent
                           onClick={() => deleleHandle(floor.building_id)}
                           preIcon={<CloseIcon width={16} height={16} />}
