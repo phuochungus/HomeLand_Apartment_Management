@@ -19,7 +19,7 @@ import axios from "axios";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import toastMessage from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
-export default function Dashboard() {
+export default function Building() {
   const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [buildings, setBuildings] = useState<Array<Building>>([]);
