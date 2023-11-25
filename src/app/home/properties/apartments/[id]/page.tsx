@@ -14,9 +14,9 @@ import {
   Table,
 } from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
-import { futuna } from "../../../../../public/fonts/futura";
+import { futuna } from "../../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Resident as ResidentModel } from "@/models/resident";
@@ -25,7 +25,6 @@ import clsx from "clsx";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { format } from "date-fns";
 import { Resident as ResidentType } from "@/models/resident";
-import Apartments from "../add/page";
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(apartment);
@@ -39,7 +38,6 @@ export default function Page({ params }: { params: { id: string } }) {
       .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)
   );
-  console.log(data);
   const titleTable = ["ID", "Tên", "Số điện thoại", "Ngày tạo"];
   const furnitureInfo = [
     {

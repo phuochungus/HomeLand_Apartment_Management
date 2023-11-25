@@ -9,7 +9,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import styles from "./edit.module.css";
-import { futuna } from "../../../../../../public/fonts/futura";
+import { futuna } from "../../../../../../../public/fonts/futura";
 import {
   FaBed,
   FaCheckCircle,

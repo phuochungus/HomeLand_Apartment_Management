@@ -25,8 +25,6 @@ import {
 import ModalComponent from "@/components/Modal/Modal";
 import { usePathname, useRouter } from "next/navigation";
 import { futuna } from "../../../../../public/fonts/futura";
-import { format } from "date-fns";
-import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
@@ -34,7 +32,6 @@ import { ToastContainer } from "react-toastify";
 import toastMessage from "@/utils/toast";
 import PageIndicator from "@/components/pageIndicator/PageIndicator";
 import { SortOrder } from "@/models/enums";
-import { Vehicle } from "@/models/vehicle";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { Equipment } from "@/models/equipment";
 const listOptions = [
