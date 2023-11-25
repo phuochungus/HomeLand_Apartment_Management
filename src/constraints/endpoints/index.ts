@@ -15,4 +15,5 @@ export const endpoint = {
   manager: baseUrl + "/manager",
   technician: baseUrl + "/technician",
   equipment: baseUrl + "/equipment",
+  service: baseUrl + "/service",
 };
