@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
     let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url: endpoint.vehicle,
+        url: endpoint.equipment,
         headers: {
             Authorization: "Bearer " + request.cookies.get("token")?.value,
             "Content-Type": "application/json",
@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
             }
         })
         .catch((error) => {
-            console.log(error);
             return NextResponse.json(error.response.data.message, {
                 status: error.response.status,
                 statusText: error.response.statusText,
@@ -33,7 +32,7 @@ export async function POST(request: NextRequest) {
     let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: endpoint.vehicle,
+        url: endpoint.equipment,
         headers: {
             Authorization: "Bearer " + request.cookies.get("token")?.value,
             "Content-Type": "multipart/form-data",

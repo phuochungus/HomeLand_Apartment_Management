@@ -1,7 +1,7 @@
 "use client";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
-import styles from "../page.module.css";
-import vehicleStyles from "./vehicle.module.scss";
+import styles from "../../page.module.css";
+import equipmentStyles from "./equipments.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
 import { clsx } from "clsx";
 import Table from "react-bootstrap/Table";
@@ -24,7 +24,9 @@ import {
 } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { usePathname, useRouter } from "next/navigation";
-import { futuna } from "../../../../public/fonts/futura";
+import { futuna } from "../../../../../public/fonts/futura";
+import { format } from "date-fns";
+import { Resident } from "@/models/resident";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
@@ -34,6 +36,7 @@ import PageIndicator from "@/components/pageIndicator/PageIndicator";
 import { SortOrder } from "@/models/enums";
 import { Vehicle } from "@/models/vehicle";
 import { FaFacebookMessenger } from "react-icons/fa";
+import { Equipment } from "@/models/equipment";
 const listOptions = [
   {
     value: 10,
@@ -49,11 +52,16 @@ const listOptions = [
   },
 ];
 export default function Vehicles() {
+  const user = JSON.parse(localStorage.getItem("user") ?? "{}");
+  const router = useRouter();
+  if (!user.id) router.push("/home");
+
   const [showModal, setShowModal] = useState(false);
-  const [vehicles, setVehicles] = useState<Array<Vehicle>>([]);
+  const [vehicles, setVehicles] = useState<Array<Equipment>>([]);
   const [showLimit, setShowLimit] = useState<number>(10);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [selectedId, setSelectedId] = useState("");
+  const [sortField, setSortField] = useState<String | undefined>(undefined);
   const searchRef = createRef<HTMLInputElement>();
   const path = usePathname();
   const deleleHandle = (id: string) => {
@@ -63,7 +71,7 @@ export default function Vehicles() {
   const retrieveResidents = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/vehicle");
+      const res = await axios.get("/api/equipment");
       removeLoadingFilter(document.body!);
       setVehicles(res.data);
       return res.data;
@@ -73,15 +81,20 @@ export default function Vehicles() {
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
-    "vehicles",
+    "equipments",
     retrieveResidents,
     {
       staleTime: Infinity,
     }
   );
-  const titleTable = ["ID", "Loại xe", "Chủ sở hữu", "Thời hạn", "Tình trạng"];
+  const titleTable = [
+    { name: "ID", field: "id" },
+    { name: "Tên thiết bị", field: "name" },
+    { name: "Tình trạng", field: "status" },
+    { name: "Căn hộ / Tòa nhà lắp đặt", field: "apartment_id" },
+  ];
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(data)
+    console.log(data);
     if (e.currentTarget.value == "") setVehicles(data);
     else setVehicles(search(data, "licensePlate", e.currentTarget.value));
   };
@@ -89,7 +102,7 @@ export default function Vehicles() {
     loadingFiler(document.body!);
     setShowModal(false);
     await axios
-      .delete(`/api/vehicle/${id}`)
+      .delete(`/api/equipment/${id}`)
       .then((res) => {
         toastMessage({ type: "success", title: "Delete successfully!" });
         refetch();
@@ -109,27 +122,36 @@ export default function Vehicles() {
     if (Math.ceil(vehicles.length / showLimit) >= value) setPageNumber(value);
   };
   function handleChangeOrder(order: SortOrder, title: String) {
-    throw new Error("Function not implemented.");
+    setVehicles([
+      ...vehicles.sort(
+        (a, b) =>
+          -order *
+          a[title as keyof Equipment]!
+            .toString()
+            .localeCompare(b[title as keyof Equipment]!.toString())
+      ),
+    ]);
+    setSortField(title);
   }
 
   return (
     <main className={clsx(styles.main)}>
-      <div className={clsx(vehicleStyles.wrapper, futuna.className)}>
+      <div className={clsx(equipmentStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl)}>
-          Quản lí phương tiện đăng kí giữ xe
+          Quản lí thiết bị chung cư
         </h1>
-        <div className={clsx(vehicleStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách phương tiện</h1>
+        <div className={clsx(equipmentStyles.header)}>
+          <h1 className={clsx(utilStyles.headingLg)}>Danh sách thiết bị</h1>
           <ButtonComponent
             href={`${path}/add`}
             preIcon={<AddResidentIcon width={24} height={24} />}
-            className={clsx(vehicleStyles.addBtn, futuna.className)}
+            className={clsx(equipmentStyles.addBtn, futuna.className)}
           >
-            Đăng kí phương tiện
+            Thêm thiết bị
           </ButtonComponent>
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
-          <div className={clsx(vehicleStyles.perPage)}>
+          <div className={clsx(equipmentStyles.perPage)}>
             <span>Show</span>
             <span>
               <Form.Select
@@ -149,26 +171,29 @@ export default function Vehicles() {
           </div>
           <SearchLayout
             onChange={handleSearch}
-            placeHolder="Tìm phương tiện..."
+            placeHolder="Tìm thiết bị..."
             ref={searchRef}
           />
         </div>
         <div className="w-100 mt-5">
           <Table
-            className={clsx(vehicleStyles.tableResident, futuna.className)}
+            className={clsx(equipmentStyles.tableResident, futuna.className)}
             striped
             bordered
             hover
           >
             <thead>
               <tr>
-                {titleTable.map((title: String, index) => (
+                {titleTable.map((title, index) => (
                   <th key={index}>
-                    {title}{" "}
+                    {title.name}{" "}
                     <SortIcon
                       width={12}
                       height={12}
-                      onChangeOrder={(order) => {}}
+                      isUsed={sortField == title.field}
+                      onChangeOrder={(order) => {
+                        handleChangeOrder(order, title.field);
+                      }}
                     />
                   </th>
                 ))}
@@ -180,13 +205,13 @@ export default function Vehicles() {
                   (pageNumber - 1) * showLimit,
                   (pageNumber - 1) * showLimit + showLimit - 1
                 )
-                .map((vehicle, index): ReactNode => {
+                .map((equipment, index): ReactNode => {
                   return (
                     <tr key={index}>
-                      <td>{vehicle.id}</td>
-                      <td>{vehicle.licensePlate}</td>
-                      <td>{vehicle.status}</td>
-                      <td>{vehicle.residentId}</td>
+                      <td>{equipment.id}</td>
+                      <td>{equipment.name}</td>
+                      <td>{equipment.status}</td>
+                      <td>{equipment.apartment_id || equipment.building_id}</td>
                       <td
                         style={{
                           width: "100%",
@@ -198,8 +223,8 @@ export default function Vehicles() {
                           <ButtonComponent
                             preIcon={<EditIcon width={16} height={16} />}
                             className={clsx(
-                              vehicleStyles.cudBtn,
-                              vehicleStyles.editBtn
+                              equipmentStyles.cudBtn,
+                              equipmentStyles.editBtn
                             )}
                             href={`add`}
                           >
@@ -210,18 +235,18 @@ export default function Vehicles() {
                               <FaFacebookMessenger width={16} height={16} />
                             }
                             className={clsx(
-                              vehicleStyles.cudBtn,
-                              vehicleStyles.notiBtn
+                              equipmentStyles.cudBtn,
+                              equipmentStyles.notiBtn
                             )}
                           >
                             Send notification
                           </ButtonComponent>
                           <ButtonComponent
-                            onClick={() => deleleHandle(vehicle.id)}
+                            onClick={() => deleleHandle(equipment.id)}
                             preIcon={<CloseIcon width={16} height={16} />}
                             className={clsx(
-                              vehicleStyles.cudBtn,
-                              vehicleStyles.deleteBtn
+                              equipmentStyles.cudBtn,
+                              equipmentStyles.deleteBtn
                             )}
                           >
                             Xóa

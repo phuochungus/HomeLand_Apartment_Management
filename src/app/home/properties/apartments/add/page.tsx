@@ -9,7 +9,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import styles from "./add.module.css";
-import { futuna } from "../../../../../public/fonts/futura";
+import { futuna } from "../../../../../../public/fonts/futura";
 import {
   FaBed,
   FaCheckCircle,
@@ -21,14 +21,12 @@ import {
   FaUpload,
 } from "react-icons/fa";
 import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
-import { Person } from "@/models/person";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import SearchBar from "@/components/searchBar/searchBar";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import { Resident } from "@/models/resident";
-import { headers } from "next/headers";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
@@ -203,7 +201,7 @@ export default function AddApartment() {
           <Form.Control
             id="name"
             type="text"
-            placeholder="Aparment name..."
+            placeholder="Apartment name..."
             style={{ width: "30%" }}
           ></Form.Control>
           <div style={{ width: "100%", height: "20px" }}></div>

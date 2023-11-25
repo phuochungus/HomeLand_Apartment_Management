@@ -14,4 +14,5 @@ export const endpoint = {
   contract: baseUrl + "/contract",
   manager: baseUrl + "/manager",
   technician: baseUrl + "/technician",
+  equipment: baseUrl + "/equipment",
 };

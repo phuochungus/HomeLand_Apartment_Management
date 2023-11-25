@@ -1,7 +1,6 @@
 "use client";
-import { FaSearch } from "react-icons/fa";
-import styles from "./properties.module.css";
-import { futuna } from "../../../../public/fonts/futura";
+import styles from "../../properties.module.css";
+import { futuna } from "../../../../../public/fonts/futura";
 import { Card, Placeholder, Spinner } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { Apartment } from "@/models/apartment";

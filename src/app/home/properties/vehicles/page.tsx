@@ -1,6 +1,6 @@
 "use client";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
-import styles from "../page.module.css";
+import styles from "../../page.module.css";
 import vehicleStyles from "./vehicle.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
 import { clsx } from "clsx";
@@ -24,9 +24,7 @@ import {
 } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { usePathname, useRouter } from "next/navigation";
-import { futuna } from "../../../../public/fonts/futura";
-import { format } from "date-fns";
-import { Resident } from "@/models/resident";
+import { futuna } from "../../../../../public/fonts/futura";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
@@ -51,6 +49,10 @@ const listOptions = [
   },
 ];
 export default function Vehicles() {
+  const user = JSON.parse(localStorage.getItem("user") ?? "{}");
+  const router = useRouter();
+  if (!user.id) router.push("/home");
+
   const [showModal, setShowModal] = useState(false);
   const [vehicles, setVehicles] = useState<Array<Vehicle>>([]);
   const [showLimit, setShowLimit] = useState<number>(10);
@@ -68,8 +70,11 @@ export default function Vehicles() {
       loadingFiler(document.body!);
       const res = await axios.get("/api/vehicle");
       removeLoadingFilter(document.body!);
-      setVehicles(res.data);
-      return res.data;
+      var data = res.data
+      if (user.role == "resident")
+        data = search(data, 'residentId', user.id)
+      setVehicles(data)
+      return data;
     } catch (error) {
       removeLoadingFilter(document.body!);
       console.log(error);

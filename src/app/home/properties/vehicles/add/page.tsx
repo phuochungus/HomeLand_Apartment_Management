@@ -19,7 +19,7 @@ import { FaUpload } from "react-icons/fa";
 import styles from "./addVehicle.module.css";
 import { ReactNode, useRef, useState } from "react";
 import { Resident } from "@/models/resident";
-import { futuna } from "../../../../../public/fonts/futura";
+import { futuna } from "../../../../../../public/fonts/futura";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import { useQuery } from "react-query";
@@ -38,17 +38,6 @@ export default function AddVehicle(): React.ReactNode {
   const inputRef = useRef<HTMLButtonElement>(null);
   const ResidentModel = (): ReactNode => {
     return (
-      <Container style={{ padding: 0, marginTop: "20px" }}>
-        <Row>
-          <Col>
-            <h5 className={styles.required} style={{ width: "200px" }}>
-              {t("resident")}
-            </h5>
-          </Col>
-          <Col md="auto">
-            <Button onClick={() => setShow(true)}>Choose Resident</Button>
-          </Col>
-
           <Modal
             dialogClassName={styles.modal}
             show={show}
@@ -116,8 +105,6 @@ export default function AddVehicle(): React.ReactNode {
               </Table>
             </Modal.Body>
           </Modal>
-        </Row>
-      </Container>
     );
   };
 
@@ -157,10 +144,12 @@ export default function AddVehicle(): React.ReactNode {
     };
   }
   function validateData(): boolean {
+    
     var flag = false;
     if (selectedRes == null) {
       flag = true;
-      missingField(document.getElementById("inputId")!);
+      toastMessage({ type: "error", title: "Hãy chọn cư dân" });
+      return flag;
     }
     const licensePlate = document.getElementById("vehicleLicense");
     if (!licensePlate) {

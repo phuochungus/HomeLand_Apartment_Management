@@ -25,7 +25,7 @@ import clsx from "clsx";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { format } from "date-fns";
 import { Resident as ResidentType } from "@/models/resident";
-import Apartments from "../page";
+import Apartments from "../add/page";
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(apartment);

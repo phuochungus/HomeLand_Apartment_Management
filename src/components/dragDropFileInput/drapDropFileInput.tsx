@@ -19,7 +19,7 @@ export default function DragDropFileInput({
   imageContainer,
   multiFile = true,
 }: {
-  id?:string;
+  id?: string;
   imageid?: string;
   children: ReactNode | undefined;
   className?: string;
@@ -68,9 +68,15 @@ export default function DragDropFileInput({
     if (multiFile == false) {
       if (onChange) onChange([...Array.from(files)]);
       setFileLists([...Array.from(files)]);
-      document.getElementById(id ?? (imageid ? imageid + "_container" : ""))!.className = document
-        .getElementById(id ?? (imageid ? imageid + "_container" : ""))!
-        .className.split("missing")[0];
+      if (
+        document.getElementById(id ?? (imageid ? imageid + "_container" : ""))!
+          .className
+      )
+        document.getElementById(
+          id ?? (imageid ? imageid + "_container" : "")
+        )!.className = document
+          .getElementById(id ?? (imageid ? imageid + "_container" : ""))!
+          .className.split("missing")[0];
       return;
     }
     const tempList = [...Array.from(files)];
@@ -86,7 +92,9 @@ export default function DragDropFileInput({
     });
     if (onChange) onChange([...fileLists, ...uniqueFile]);
     setFileLists([...fileLists, ...uniqueFile]);
-    document.getElementById(id ?? (imageid ? imageid + "_container" : ""))!.className = document
+    document.getElementById(
+      id ?? (imageid ? imageid + "_container" : "")
+    )!.className = document
       .getElementById(id ?? (imageid ? imageid + "_container" : ""))!
       .className.split("missing")[0];
   }
@@ -100,23 +108,7 @@ export default function DragDropFileInput({
       const element = fileLists[0];
       if (imageContainer) {
         return (
-            <imageContainer.type>
-              <Image
-                id={imageid}
-                src={
-                  element instanceof URL
-                    ? element.href
-                    : URL.createObjectURL(element as Blob)
-                }
-                alt="Bien so xe"
-                width={0}
-                height={0}
-                style={{ width: "100%", height: "100%" }}
-              />
-            </imageContainer.type>
-        );
-      } else
-        return (
+          <imageContainer.type>
             <Image
               id={imageid}
               src={
@@ -129,6 +121,22 @@ export default function DragDropFileInput({
               height={0}
               style={{ width: "100%", height: "100%" }}
             />
+          </imageContainer.type>
+        );
+      } else
+        return (
+          <Image
+            id={imageid}
+            src={
+              element instanceof URL
+                ? element.href
+                : URL.createObjectURL(element as Blob)
+            }
+            alt="Bien so xe"
+            width={0}
+            height={0}
+            style={{ width: "100%", height: "100%" }}
+          />
         );
     }
 
@@ -188,7 +196,9 @@ export default function DragDropFileInput({
       />
       <div
         id={id ?? (imageid ? imageid + "_container" : "")}
-        className={`${dragActive ? styles.dragActive : ""} ${className} ${styles.labelFileUpload}`}
+        className={`${dragActive ? styles.dragActive : ""} ${className} ${
+          styles.labelFileUpload
+        }`}
       >
         <div
           style={{
