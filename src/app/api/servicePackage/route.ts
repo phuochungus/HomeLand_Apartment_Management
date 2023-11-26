@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: endpoint.service,
+    url: endpoint.servicePackage,
     data: body,
     headers: {
       Authorization: "Bearer " + request.cookies.get("token")?.value,
