@@ -16,4 +16,5 @@ export const endpoint = {
   complain: baseUrl + "/complain",
   task: baseUrl + "/task",
   repairInvoice: baseUrl + "/repairInvoice",
+  service: baseUrl + "/service",
 };
