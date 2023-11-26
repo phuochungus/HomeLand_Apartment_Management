@@ -1,3 +1,4 @@
+"use client"
 import styles from "./history.module.scss";
 import tableStyles from "../../../../../styles/table.module.scss";
 import modalStyles from "../../../../../styles/modal.module.scss";

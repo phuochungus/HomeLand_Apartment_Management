@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import styles from "./submitComplain.module.scss";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
