@@ -25,7 +25,7 @@ const History = () => {
   const [complains, setComplains] = useState<Array<Complain>>([]);
   const [showModalInvoice, setShowModalInvoice] = useState(false);
   const [invoice, setInvoice] = useState<RepairInvoice>();
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState<string | undefined>("");
   const titleTable = ["Request date", "Complaint content", "Status", "Bill"];
   const titleInvoice = [
     {
@@ -49,17 +49,19 @@ const History = () => {
       throw err;
     }
   });
-  const rejectHandler = async (id: string) => {
-    try {
-      loadingFiler(document.body!);
-      await axios.delete(`/api/complain/${id}`);
-      refetch();
-      removeLoadingFilter(document.body!);
-    } catch (e) {
-      removeLoadingFilter(document.body!);
-      throw e;
+  const rejectHandler = async (id: string | undefined) => {
+    if (id) {
+      try {
+        loadingFiler(document.body!);
+        await axios.delete(`/api/complain/${id}`);
+        refetch();
+        removeLoadingFilter(document.body!);
+      } catch (e) {
+        removeLoadingFilter(document.body!);
+        throw e;
+      }
+      setShowModalInvoice(false);
     }
-    setShowModalInvoice(false);
   };
   const handleShowInvoice = async (id: string | undefined) => {
     if (id) {

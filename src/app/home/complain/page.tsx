@@ -155,7 +155,7 @@ const Complain = () => {
                         />
                         <div className={styles.info}>
                           <span className={styles.residentName}>{resident.profile.name}</span>
-                          <span className={styles.residentEmail}>{resident.account? resident.account.email: ""}</span>
+                          <span style={{marginTop: 4}} className={styles.residentEmail}>{resident.profile.phone_number}</span>
                         </div>
                       </div>
                     </td>
@@ -177,18 +177,19 @@ const Complain = () => {
 
                     <td style={{ width: 200 }}>
                       <div className="d-flex">
-                      {complain.task?.assignee? <ButtonComponent
+                      {complain.task?<ButtonComponent
                           preIcon={<AssignIcon width={16} height={16} />}
-                          className={clsx(styles.cudBtn, styles.assignBtn)}
-                          onClick={() => handleShowTechnicianModal(complain.complain_id)}
+                          className={clsx(styles.cudBtn, styles.assignedBtn)}
                         >
                           Assigned
                          
                         </ButtonComponent>:<ButtonComponent
                           preIcon={<AssignIcon width={16} height={16} />}
-                          className={clsx(styles.cudBtn, styles.assignedBtn)}
+                          className={clsx(styles.cudBtn, styles.assignBtn)}
+                          onClick={() => handleShowTechnicianModal(complain.complain_id)}
+
                         >
-                          Assigned
+                          Assign
                          
                         </ButtonComponent> }
                        
