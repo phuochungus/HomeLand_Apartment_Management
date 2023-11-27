@@ -14,7 +14,6 @@ import {
   FaBed,
   FaCheckCircle,
   FaList,
-  FaPersonBooth,
   FaShower,
   FaSquare,
   FaTrash,

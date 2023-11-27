@@ -59,21 +59,3 @@
     background-color: #f90e0e;
   }
 }
-.notiBtn {
-  background-color:rgba(40, 100, 255, 0.80);
-  &:hover {
-    background-color: rgba(40, 100, 255, 1);
-  }
-}
-.pendingBtn{
-  color: var(--white);
-  font-size: 1rem;
-  text-decoration: none;
-  padding: var(--default-padding-vertical) var(--default-padding-horizontal);
-  border-radius: 8px;
-  background-color:rgba(0, 220, 92,0.8);
-  &:hover {
-    background-color: rgba(0, 220, 92, 1);
-  }
-  margin-left: 1vw;
-}

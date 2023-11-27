@@ -30,3 +30,33 @@ export async function DELETE(request: NextRequest, { params }: { params: any }) 
         });
     return response;
 }
+
+export async function PATCH(request: NextRequest, { params }: { params: any }) {
+    const data = await request.json()
+    let config = {
+        method: "patch",
+        maxBodyLength: Infinity,
+        url: endpoint.vehicle + "/" + params.id,
+        headers: {
+            Authorization: "Bearer " + request.cookies.get("token")?.value,
+            "Content-Type": "application/json",
+        },
+        data: data
+    };
+
+    const response = await axios
+        .request(config)
+        .then((response) => {
+            if (response.status == 200) {
+                return NextResponse.json(response.data);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            return NextResponse.json(error.response.data.message, {
+                status: error.response.status,
+                statusText: error.response.statusText,
+            });
+        });
+    return response;
+}

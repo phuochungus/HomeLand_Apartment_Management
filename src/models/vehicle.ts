@@ -5,7 +5,7 @@ export type Vehicle = {
     status:string;
     licensePlate: string;
     frontRegistrationPhotoURL:string;
-    backRegistrationPhotoURL:string[];
-    licensePlatePhotoURL:number;
+    backRegistrationPhotoURL:string;
+    licensePlatePhotoURL:string;
     residentId: string;
 }

@@ -61,8 +61,7 @@ export default function AddVehicle(): React.ReactNode {
               >
                 <SearchLayout
                   onChange={(e) => {
-                    setResidents(search(data, "id", e.target.value));
-                    setShow(false);
+                    setResidents( search(data, "id", e.target.value));
                   }}
                   placeHolder={t("search_resident")}
                 />

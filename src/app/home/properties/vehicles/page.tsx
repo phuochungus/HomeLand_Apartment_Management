@@ -70,10 +70,9 @@ export default function Vehicles() {
       loadingFiler(document.body!);
       const res = await axios.get("/api/vehicle");
       removeLoadingFilter(document.body!);
-      var data = res.data
-      if (user.role == "resident")
-        data = search(data, 'residentId', user.id)
-      setVehicles(data)
+      var data = res.data;
+      if (user.role == "resident") data = search(data, "residentId", user.id);
+      setVehicles(data);
       return data;
     } catch (error) {
       removeLoadingFilter(document.body!);
@@ -142,13 +141,26 @@ export default function Vehicles() {
         </h1>
         <div className={clsx(vehicleStyles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>Danh sách phương tiện</h1>
-          <ButtonComponent
-            href={`${path}/add`}
-            preIcon={<AddResidentIcon width={24} height={24} />}
-            className={clsx(vehicleStyles.addBtn, futuna.className)}
-          >
-            Đăng kí phương tiện
-          </ButtonComponent>
+          <div style={{ display: "flex" }}>
+            <ButtonComponent
+              href={`${path}/add`}
+              preIcon={<AddResidentIcon width={24} height={24} />}
+              className={clsx(vehicleStyles.addBtn, futuna.className)}
+            >
+              Đăng kí phương tiện
+            </ButtonComponent>
+            {user.role == "admin" ? (
+              <ButtonComponent
+              href={`${path}/requests`}
+                preIcon={<AddResidentIcon width={24} height={24} />}
+                className={clsx(vehicleStyles.pendingBtn, futuna.className)}
+              >
+                Xác nhận đăng ký
+              </ButtonComponent>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
           <div className={clsx(vehicleStyles.perPage)}>
