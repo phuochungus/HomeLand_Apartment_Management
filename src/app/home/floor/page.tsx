@@ -17,6 +17,7 @@ import { Building } from "@/models/building";
 import { Floor } from "@/models/floor";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { Link } from "react-bootstrap/lib/Navbar";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import toastMessage from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
@@ -59,6 +60,7 @@ export default function Dashboard() {
       onChange: () => { },
     },
   ];
+
   const buildingId = FloorSortOption[0].building_id;
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
@@ -81,8 +83,9 @@ export default function Dashboard() {
   //     console.log(err);
   //   }
   // };
+  
   const searchIconClick = async () => {
-    const res = await axios.get("/api/floor", {
+    const res = await axios.get("/api/floor/search", {
       params: {
         query: searchRef.current?.value,
       },
@@ -93,16 +96,16 @@ export default function Dashboard() {
     <main className={clsx(styles.main)}>
       <div className={clsx(buildingStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl, buildingStyles.title)}>
-          Quản lí phòng
+          Quản lí tầng
         </h1>
         <div className={clsx(buildingStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách phòng</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>Danh sách tầng</h1>
           <ButtonComponent
             href="/home/floor/addFloor?auth=true"
             //   preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(buildingStyles.addBtn, futuna.className)}
           >
-            Tạo tòa nhà
+            Tạo tầng
           </ButtonComponent>
         </div>
         {/* {FloorSortOption.map((value, index) => (
@@ -175,23 +178,14 @@ export default function Dashboard() {
                           Sửa
                         </ButtonComponent>
                         <ButtonComponent
-                          href={`/home/floor/detailFloor/${floor.floor_id}/?auth=true`}
+                        href={`/home/floor/detailFloor/${encodeURIComponent(floor.floor_id)}/?auth=true`}
                           preIcon={<DetailIcon width={16} height={16} />}
                           className={clsx(buildingStyles.cudBtn, buildingStyles.detailBtn)}
                         >
                           Chi tiết
                         </ButtonComponent>
 
-                        <ButtonComponent
-                          onClick={() => deleleHandle(floor.building_id)}
-                          preIcon={<CloseIcon width={16} height={16} />}
-                          className={clsx(
-                            buildingStyles.cudBtn,
-                            buildingStyles.deleteBtn
-                          )}
-                        >
-                          Xóa
-                        </ButtonComponent>
+                        
                       </div>
                     </td>
                   </tr>

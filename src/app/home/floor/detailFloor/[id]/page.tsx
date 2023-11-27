@@ -1,6 +1,6 @@
 "use client";
 import { futuna } from "../../../../../../public/fonts/futura";
-import React, { ChangeEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import styles from "./detailFloor.module.scss";
 import mainStyles from "../../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
@@ -36,10 +36,12 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
   const [apartment, setApartment] = useState<Array<Apartment>>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
+
   const retrieveFloor = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get(`/api/floor/${params.id}`);
+      const id = decodeURIComponent(params.id);
+      const res = await axios.get(`/api/floor/${id}`);
       removeLoadingFilter(document.body!);
       const floorData = res.data as Floor;
       console.log(floorData);
@@ -69,16 +71,16 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
     } else setCheckAll(false);
     setListChecked(newList);
   };
-  const titleTable = ["ID", "Tên", "Số điện thoại", "Email", "Ngày tạo"];
+  const titleTable = ["ID", "Tên", "Mô tả"];
   const deleleHandle = (id: string) => {
     setSelectedId(id);
-    setShowModal(true);
+    setShowModal(true); ``
   };
   const handleConfirmDelete = async (id: string) => {
     console.log(id);
     setShowModal(false);
     try {
-      await axios.post(`/api/floor/${params.id}/deleteApartment`, undefined, {
+      await axios.delete(`/api/floor/${params.id}/deleteApartment`, {
         params: {
           apartmentId: id,
         },
@@ -86,10 +88,18 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
       toastMessage({ type: "success", title: "Delete successfully!" });
       refetch();
     } catch (err) {
-      toastMessage({ type: "errpr", title: "Delete faily!" });
+      toastMessage({ type: "error", title: "Delete failed!" });
       console.log(err);
     }
   };
+  useEffect(() => {
+    if (floor?.apartments) {
+      setApartment(floor.apartments);
+    }
+  }, [floor]);
+  useEffect(() => {
+    retrieveFloor();
+  }, []);
   const handleSave = async () => {
     try {
       const res = await axios.post(
@@ -97,15 +107,15 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
         undefined,
         {
           params: {
-            apartmentId: listChecked,
+            apartmentIds: listChecked,
           },
           paramsSerializer: {
             indexes: null,
           },
         }
       );
-      const updatedBuilding = res.data;
-      if (updatedBuilding.managers) {
+      const updateFloor = res.data;
+      if (updateFloor.apartments) {
       }
       refetch();
       setListChecked([]);
@@ -115,13 +125,21 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
     setShowModalApartment(false);
   };
   const handleShowManagerModal = async () => {
-    const res = await axios.get("/api/apartment/")
-    const data: Apartment[] = res.data;
-    const newData = data.filter((item) => item.floorId === null);
-    setApartment(newData);
-    setShowModalApartment(true);
+    const page = 1;
+    try {
+      const res = await axios.get(`/api/apartment?page=${page}`);
+      console.log('API response:', res);
+      const data: Apartment[] = res.data;
+      const newData = data.filter((item) => item.floorId !== null);
+      console.log('Filtered apartments:', newData);
+      setApartment(newData);
+      console.log('Apartment state after update:', apartment);
+      setShowModalApartment(true);
+    } catch (error) {
+      console.log('API error:', error);
+    }
   };
-  const { refetch } = useQuery("detail-floor", retrieveFloor, {
+  const { refetch } = useQuery("floor", retrieveFloor, {
     staleTime: Infinity,
   });
   return (
@@ -152,6 +170,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
                 <label className="col-2 ">Số phòng:</label>
                 <span className="col-10">{" " + floor?.max_apartment}</span>
               </td>
+
             </tr>
           </table>
         </div>
@@ -166,7 +185,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
               Thêm phòng
             </ButtonComponent>
           </div>
-          {floor?.apartment && floor.apartment?.length > 0 ? (
+          {floor?.apartments && floor.apartments?.length > 0 ? (
             <Table
               className={clsx(styles.tableBuilding, futuna.className)}
               striped
@@ -181,17 +200,13 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
                 </tr>
               </thead>
               <tbody>
-                {floor.apartment.map((apartment, index): React.ReactNode => {
+                {floor.apartments.map((apartment, index): React.ReactNode => {
 
                   return (
                     <tr key={index}>
                       <td>{apartment.apartment_id}</td>
-                      <td>{apartment.bathRooms}</td>
-                      <td>{apartment.bedroom}</td>
-                      <td>{apartment.description}</td>
                       <td>{apartment.name}</td>
-                      <td>{apartment.rent}</td>
-
+                      <td>{apartment.description}</td>
 
 
                       <td>
@@ -259,57 +274,57 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
       >
         <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className={styles.titleModal}>
-            Thêm quản lí cho tòa
+            Thêm phòng cho tầng
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={styles.bodyModal}>
           <h3 className={styles.bodyHeader}>Danh sách phòng</h3>
-          <Table
-            className={clsx(buildingStyles.tableBuilding, futuna.className)}
-            striped
-            bordered
-            hover
-            
-          >
-            <thead>
-              <tr>
-                <th style={{ width: 20 }}>
-                  <input
-                    type="checkbox"
-                    checked={checkAll}
-                    onChange={handleCheckAll}
-                  />
-                </th>
-                {titleTable.map((title: String, index) => (
-                  <th key={index}>{title}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {apartment.map((apartment, index): React.ReactNode => {
+          {apartment.length > 0 ? (
+            <Table
+              className={clsx(buildingStyles.tableBuilding, futuna.className)}
+              striped
+              bordered
+              hover
 
-                return (
-                  <tr key={index}>
-                    <td>
-                      <input
-                        value={apartment.apartment_id}
-                        type="checkbox"
-                        onChange={(e) => handleCheck(e.target.value)}
-                        checked={listChecked.includes(apartment.apartment_id)}
-                      />
-                    </td>
-                    <td>{apartment.apartment_id}</td>
-                    <td>{apartment.bathRooms}</td>
-                    <td>{apartment.bedroom}</td>
-                    <td>{apartment.description}</td>
-                    <td>{apartment.name}</td>
-                    <td>{apartment.rent}</td>
-                    {/* <td>{building.manager_id}</td> */}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+            >
+              <thead>
+                <tr>
+                  <th style={{ width: 20 }}>
+                    <input
+                      type="checkbox"
+                      checked={checkAll}
+                      onChange={handleCheckAll}
+                    />
+                  </th>
+                  {titleTable.map((title: String, index) => (
+                    <th key={index}>{title}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {apartment.map((apartment, index): React.ReactNode => {
+
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <input
+                          value={apartment.apartment_id}
+                          type="checkbox"
+                          onChange={(e) => handleCheck(e.target.value)}
+                          checked={listChecked.includes(apartment.apartment_id)}
+                        />
+                      </td>
+                      <td>{apartment.apartment_id}</td>
+                      <td>{apartment.name}</td>
+
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          ) : (
+            <p>Không có căn hộ để hiển thị</p>
+          )}
         </Modal.Body>
         <Modal.Footer className={styles.footerModal}>
           <ButtonComponent className={styles.saveBtn} onClick={handleSave}>

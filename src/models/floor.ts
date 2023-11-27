@@ -5,5 +5,5 @@ export interface Floor {
         building_id: string,
         name: string,
         max_apartment: number,
-        apartment?: Array<Apartment>
+        apartments?: Array<Apartment>
 }

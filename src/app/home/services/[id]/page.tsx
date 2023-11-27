@@ -21,12 +21,18 @@ import ServicePackage from "../../../../components/servicePackage/servicePackage
 import ServicePackageModal from "./addServicePackage";
 import { ToastContainer } from "react-toastify";
 import toastMessage from "../../../../utils/toast";
+import StarRatings from "react-star-ratings";
+import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 
 export default function Page({ params }: { params: { id: string } }) {
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(service);
   const [showModal, setShowModal] = useState(false);
-
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating);
+  };
   const handleModalOpen = () => {
     setShowModal(true);
   };
@@ -112,7 +118,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 />
               </Col>
             </Row>
-
             <Row
               style={{
                 backgroundColor: "rgba(40, 100, 255, 0.1)",
@@ -135,7 +140,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       ></ServicePackage>
                     </Col>
                     {index == data.servicePackages.length - 1 &&
-                    index % 2 == 0 ? (
+                      index % 2 == 0 ? (
                       <Col></Col>
                     ) : (
                       <></>
@@ -145,6 +150,43 @@ export default function Page({ params }: { params: { id: string } }) {
               ) : (
                 <></>
               )}
+            </Row>
+            <Row style={{ marginTop: "20px" }}>
+              <Col>
+                <h3>
+                  <b>Feedback</b>
+                </h3>
+              </Col>
+            </Row>
+            <Row style={{
+              backgroundColor: "rgba(40, 100, 255, 0.1)",
+              border: "1px black solid",
+              borderRadius: "20px",
+              margin: "20px 0px",
+              paddingTop: "20px ",
+            }}
+            >
+              <StarRatings
+                rating={rating}
+                starRatedColor="gold"
+                changeRating={handleRatingChange}
+                numberOfStars={5}
+                starDimension="30px"
+                starSpacing="5px"
+              />
+              <textarea
+                className="form-control"
+                style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "20px", marginRight: "10px", width: "90%" }}
+                placeholder="Comment"
+                rows={5}
+
+              ></textarea>
+
+              <ButtonComponent className={styles.creatBtn1}>
+                Tạo
+              </ButtonComponent>
+
+
             </Row>
           </Container>
         </div>

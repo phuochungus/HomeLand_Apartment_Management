@@ -28,7 +28,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     maxApartment: "",
   });
   const [errors, setErrors] = useState<any>();
-  const [building, setBuilding] = useState<Floor>();
+  const [floor, setFloor] = useState<Floor>();
   const validation = () => {
     let err = {} as FormValue;
 
@@ -79,7 +79,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       const res = await axios.get(`/api/floor/${params.id}`);
       removeLoadingFilter(document.body!);
       const buildingData = res.data as Floor;
-      setBuilding(buildingData);
+      setFloor(buildingData);
    
       const newformValue: any = {
         name: buildingData.name,
@@ -95,7 +95,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     }
   };
   const { isLoading, isError, data, refetch } = useQuery(
-    "building",
+    "floor",
     retrieveBuilding,
     {
       staleTime: Infinity,

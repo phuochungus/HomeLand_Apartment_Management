@@ -1,5 +1,5 @@
 import { Resident } from "./resident";
-
+import { Floor } from "./floor";
 export type Apartment = {
     apartment_id: string ;
     name:string;
@@ -14,5 +14,6 @@ export type Apartment = {
     description: string;
     floorId: string;
     buildingId: string;
-    residents?: Array<Resident>
+    residents?: Array<Resident>;
+    floor?: Floor;
 }

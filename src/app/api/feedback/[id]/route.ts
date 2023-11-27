@@ -1,22 +1,23 @@
 import { endpoint } from "@/constraints/endpoints";
+import { Employee } from "@/models/employee";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest, { params }: { params: any }) {
-  const decodedId = decodeURIComponent(params.id);
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.floor + "/" + decodedId,
+    url: endpoint.feedback + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
     },
   };
-
   const response = await axios
-    .request(config)
+    .request(config)  
     .then((response) => {
       if (response.status == 200) {
-        return NextResponse.json(response.data);
+        const result = response.data;
+        return NextResponse.json(result);
       }
     })
     .catch((error) => {
@@ -34,13 +35,13 @@ export async function PATCH(request: NextRequest, { params }: { params: any }) {
   let config = {
     method: "patch",
     maxBodyLength: Infinity,
-    url: endpoint.floor + "/" + params.id,
+    url: endpoint.employee + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
     },
     data: data,
   };
-
   const response = await axios
     .request(config)
     .then((response) => {
@@ -64,7 +65,11 @@ export async function DELETE(
   let config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: endpoint.floor + "/" + params.id,
+    url: endpoint.employee + "/" + params.id,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + request.cookies.get("token")?.value,
+    },
   };
   const response = await axios
     .request(config)

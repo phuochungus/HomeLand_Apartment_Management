@@ -19,3 +19,13 @@
     border-style: solid;
     border-color: #FF4747 !important;
 }
+.creatBtn1 {
+  margin: 20px auto;
+  background-color: #8faeff;
+  color: var(--white);
+  font-size: 1.25rem;
+  padding: 8px 60px;
+  border-radius: 10px;
+  transition: 0.1s ease;
+  font-family: sans-serif; 
+}
