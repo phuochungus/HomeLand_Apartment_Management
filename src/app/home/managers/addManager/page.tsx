@@ -36,6 +36,7 @@ type FormValue = {
   frontImg: any;
   backImg: any;
   avatarImg?: any;
+  identifyNumber: string;
 };
 const AddManager = () => {
   const [formValue, setFormValue] = useState({
@@ -44,7 +45,7 @@ const AddManager = () => {
     gender: "",
     phoneNumber: "",
     email: "",
-     identifyNumber:""
+    identifyNumber:""
   });
   const [errors, setErrors] = useState<any>();
   const [frontImg, setFrontImg] = useState<any>();
@@ -121,32 +122,32 @@ const AddManager = () => {
     const phonePattern =
       /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
     if (formValue.name === "") {
-      err.name = "Trường họ và tên là bắt buộc!";
+      err.name = "Field name is required!";
     }
     if (formValue.dateOfBirth === "") {
-      err.dateOfBirth = "Trường ngày sinh là bắt buộc!";
+      err.dateOfBirth = "Field date of birth is required!";
     }
     if (formValue.gender === "") {
-      err.gender = "Trường giới tính là bắt buộc!";
+      err.gender = "Field gender is required!";
     }
     if (formValue.identifyNumber === "") {
-      err.name = "Trường căn cước công dân là bắt buộc!";
+      err.identifyNumber = "Field identification number is required!";
     }
       if (formValue.email === "") {
-        err.email = "Trường email là bắt buộc!";
+        err.email = "Field email is required!";
       } else if (!emailPattern.test(formValue.email)) {
-        err.email = "Email không hợp lệ!";
+        err.email = "Email is invalid!";
       }
     if (formValue.phoneNumber === "") {
-      err.phoneNumber = "Trường số điện thoại là bắt buộc!";
+      err.phoneNumber = "Field phone number is required!";
     } else if (!phonePattern.test(formValue.phoneNumber)) {
-      err.phoneNumber = "Số điện thoại không hợp lệ!";
+      err.phoneNumber = "Phone number is invalid!";
     }
     if (!frontImg) {
-      err.frontImg = "Vui lòng chọn ảnh!";
+      err.frontImg = "Please choose photo!";
     }
     if (!backImg) {
-      err.backImg = "Vui lòng chọn ảnh!";
+      err.backImg = "Please choose photo!";
     }
     return err;
   };
@@ -216,7 +217,7 @@ const AddManager = () => {
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
-        <p className={clsx(utilStyles.headingXl, styles.header)}>Tạo người quản lí</p>
+        <p className={clsx(utilStyles.headingXl, styles.header)}>Create Manager</p>
         <div className="d-inline-flex justify-content-between">
           <div className={styles.avatarLayout}>
             {AvatarImage}
@@ -231,7 +232,7 @@ const AddManager = () => {
           <Form className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Họ và tên
+                Name
               </Form.Label>
               <Form.Control
                 size="lg"
@@ -239,7 +240,7 @@ const AddManager = () => {
                 value={formValue.name}
                 onChange={handleChange}
                 type="text"
-                placeholder="Nguyễn Văn A..."
+                placeholder="Nguyen Van A..."
               />
               {errors && errors.name && (
                 <span className={styles.error}>{errors.name}</span>
@@ -248,12 +249,12 @@ const AddManager = () => {
 
             <Form.Group>
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Giới tính
+                Gender
               </Form.Label>
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
                   inline
-                  label="Nam"
+                  label="Male"
                   style={{ fontSize: "1rem" }}
                   name="gender"
                   type="radio"
@@ -264,7 +265,7 @@ const AddManager = () => {
                 <Form.Check
                   inline
                   style={{ fontSize: "1rem" }}
-                  label="Nữ"
+                  label="Female"
                   name="gender"
                   type="radio"
                   onChange={handleChange}
@@ -292,7 +293,7 @@ const AddManager = () => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Số điện thoại
+                Phone Number
               </Form.Label>
               <Form.Control
                 size="lg"
@@ -307,8 +308,8 @@ const AddManager = () => {
               )}
             </Form.Group>
              <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>
-                Số căn cước công dân
+              <Form.Label className={clsx(styles.label,styles.required)}>
+                Identification Number
               </Form.Label>
               <Form.Control
                 size="lg"
@@ -324,7 +325,7 @@ const AddManager = () => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Ngày sinh
+                Date Of Birth
               </Form.Label>
               <Form.Control
                 size="lg"
@@ -341,7 +342,7 @@ const AddManager = () => {
             <div className="d-flex justify-content-around">
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
-                  Ảnh trước CCCD
+                  Front Photo of Identification Number
                 </Form.Label>
                 <Form.Control
                   accept="image/*"
@@ -359,7 +360,7 @@ const AddManager = () => {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
-                  Ảnh sau CCCD
+                Back Photo of Identification Number
                 </Form.Label>
                 <Form.Control
                   accept="image/*"
@@ -378,7 +379,7 @@ const AddManager = () => {
             </div>
 
             <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-              Tạo
+              Create
             </ButtonComponent>
           </Form>
         </div>

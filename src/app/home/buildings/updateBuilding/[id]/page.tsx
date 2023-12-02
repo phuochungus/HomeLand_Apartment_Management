@@ -32,13 +32,13 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     let err = {} as FormValue;
 
     if (formValue.name === "") {
-      err.name = "Trường tên là bắt buộc!";
+      err.name = "Field name is required!";
     }
     if (formValue.address === "") {
-      err.address = "Trường địa chỉ là bắt buộc!";
+      err.address = "Field address is required!";
     }
     if (formValue.maxFloor === "") {
-      err.maxFloor = "Trường số tầng là bắt buộc!";
+      err.maxFloor = "Field max floor is required!";
     }
 
     return err;
@@ -102,12 +102,12 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
-          Cập nhật thông tin tòa nhà
+          Update Building Information
         </p>
 
         <Form className={clsx(styles.form, futuna.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className={styles.label}>Tên</Form.Label>
+            <Form.Label className={styles.label}>Name</Form.Label>
             <Form.Control
               size="lg"
               name="name"
@@ -121,7 +121,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
             )}
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Địa chỉ</Form.Label>
+            <Form.Label className={styles.label}>Address</Form.Label>
             <Form.Control
               size="lg"
               type="text"
@@ -134,7 +134,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
             )}
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Số tầng</Form.Label>
+            <Form.Label className={styles.label}>Max Floor</Form.Label>
             <Form.Control
               size="lg"
               type="text"
@@ -148,7 +148,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
             )}
           </Form.Group>
           <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-            Cập nhật
+           Update
           </ButtonComponent>
         </Form>
       </div>

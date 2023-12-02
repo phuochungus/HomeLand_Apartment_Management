@@ -16,6 +16,7 @@
   border-radius: 8px;
   &:hover {
     background-color: #0744e1;
+    transition: 0.3s linear background-color;
   }
 }
 //per page
@@ -40,17 +41,48 @@
 .cudBtn {
   color: white;
   font-size: 1rem;
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 8px 20px;
+  border-radius: 24px;
+  text-decoration: none;
   + .cudBtn {
     margin-left: 8px;
   }
   text-decoration: none;
 }
 .editBtn {
-  background-color: var(--yellow);
+  margin-right: 16px;
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
   &:hover {
-    background-color: #edad44;
+    .editIcon {
+      stroke: var(--white);
+    }
+    background-color: var(--yellow);
+    color: var(--white);
+    border-color: var(--yellow);
+    transition: 0.5s ease background-color;
+  }
+}
+.editIcon {
+  stroke: var(--text-color);
+
+
+}
+.TrashIcon {  
+  background-color: var(--red);
+  display: flex;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover {
+      background-color: #c92e2e;
+      transition: 0.2s linear background-color;
+      .trash {
+        animation: shake 1s ease-in-out infinite;
+      }
   }
 }
 .deleteBtn {
@@ -58,4 +90,25 @@
   &:hover {
     background-color: #f90e0e;
   }
+}
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.shake-element {
+  animation: shake 0.1s ease-in-out ;
 }

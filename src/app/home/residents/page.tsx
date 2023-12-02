@@ -1,18 +1,20 @@
 "use client";
-import { QueryClient, QueryClientProvider } from "react-query";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import styles from "../page.module.css";
 import residentStyles from "./resident.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
+import tableStyles from "../../../styles/table.module.scss";
 import { clsx } from "clsx";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import SearchLayout from "@/components/searchLayout/searchLayout";
+
 import {
   AddResidentIcon,
   CloseIcon,
   EditIcon,
   SortIcon,
+  TrashIcon,
 } from "@/components/icons";
 import { useState, useEffect, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
@@ -71,12 +73,12 @@ export default function Residents() {
     }
   );
   const titleTable = [
-    "ID",
-    "Tên",
-    "Tài khoản",
-    "Căn hộ",
-    "Số điện thoại",
-    "Ngày tạo",
+    "Name",
+    "Account",
+    "Apartment",
+    "Phone Number",
+    "Create At",
+    "Action",
   ];
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
@@ -112,7 +114,6 @@ export default function Residents() {
     console.log(id);
     setShowModal(false);
     try {
-
       await axios.delete(`/api/resident/${id}`);
       toastMessage({ type: "success", title: "Delete successfully!" });
 
@@ -126,15 +127,15 @@ export default function Residents() {
   return (
     <main className={clsx(styles.main)}>
       <div className={clsx(residentStyles.wrapper, futuna.className)}>
-        <h1 className={clsx(utilStyles.headingXl)}>Quản lí cư dân</h1>
+        <h1 className={clsx(utilStyles.headingXl)}>Resident Management</h1>
         <div className={clsx(residentStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách cư dân</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>List Of Residents </h1>
           <ButtonComponent
             href="/home/residents/addResident?auth=true"
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
-            Tạo cư dân
+            Create Resident
           </ButtonComponent>
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
@@ -156,22 +157,18 @@ export default function Residents() {
           <SearchLayout
             onKeydown={handleSearch}
             iconClick={searchIconClick}
-            placeHolder="Tìm dân cư..."
+            placeHolder="Search resident..."
             ref={searchRef}
           />
         </div>
         <div className="w-100 mt-5">
-          <Table
-            className={clsx(residentStyles.tableResident, futuna.className)}
-            striped
-            bordered
-            hover
-          >
+          <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
                 {titleTable.map((title: String, index) => (
                   <th key={index}>
-                    {title} <SortIcon width={12} height={12} />
+                    {title}
+                    {/* <SortIcon width={12} height={12} /> */}
                   </th>
                 ))}
               </tr>
@@ -179,29 +176,56 @@ export default function Residents() {
             <tbody>
               {residents.map((resident, index): ReactNode => {
                 const time = new Date(resident.created_at);
-                const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                const createAt = format(time, "dd-MM-yyyy HH:mm:ss");
 
                 return (
                   <tr key={index}>
-                    <td>{resident.id}</td>
-                    <td>{resident.profile.name}</td>
-                    <td>{resident.payment_info}</td>
-                    <td>{resident.stay_at && resident.stay_at.name}</td>
-                    <td>{resident.profile.phone_number}</td>
-                    <td>{createAt}</td>
+                    <td>
+                      <span style={{ fontWeight: 700 }}>
+                        {resident.profile.name}
+                      </span>
+                    </td>
+                    <td>
+                      <span>{resident.payment_info}</span>
+                    </td>
+                    <td>
+                      <span>{resident.stay_at && resident.stay_at.name}</span>
+                    </td>
+                    <td>
+                      <span>{resident.profile.phone_number}</span>
+                    </td>
+                    <td>
+                      <span>{createAt}</span>
+                    </td>
                     <td style={{ width: 20 }}>
-                      <div className="d-flex">
+                      <div className="d-flex align-items-center">
                         <ButtonComponent
-                          preIcon={<EditIcon width={16} height={16} />}
+                          preIcon={
+                            <EditIcon
+                              className={residentStyles.editIcon}
+                              width={16}
+                              height={16}
+                            />
+                          }
                           className={clsx(
                             residentStyles.cudBtn,
                             residentStyles.editBtn
                           )}
                           href={`/home/residents/updateResident/${resident.id}/?auth=true`}
                         >
-                          Sửa
+                          Edit
                         </ButtonComponent>
-                        <ButtonComponent
+                        <div
+                          onClick={() => deleleHandle(resident.id)}
+                          className={residentStyles.TrashIcon}
+                        >
+                          <TrashIcon
+                            className={residentStyles.trash}
+                            width={16}
+                            height={16}
+                          />
+                        </div>
+                        {/* <ButtonComponent
                           onClick={() => deleleHandle(resident.id)}
                           preIcon={<CloseIcon width={16} height={16} />}
                           className={clsx(
@@ -210,14 +234,14 @@ export default function Residents() {
                           )}
                         >
                           Xóa
-                        </ButtonComponent>
+                        </ButtonComponent> */}
                       </div>
                     </td>
                   </tr>
                 );
               })}
             </tbody>
-          </Table>
+          </table>
         </div>
       </div>
       <ModalComponent

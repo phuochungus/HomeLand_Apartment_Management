@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import utilStyles from "@/styles/utils.module.scss";
 import styles from "./complain.module.scss";
-import modalStyles from '../../../styles/modal.module.scss'
+import modalStyles from '../../../styles/modal.module.scss';
+import tableStyles from '../../../styles/table.module.scss';
 import mainStyles from "../page.module.css";
 import { futuna } from "../../../../public/fonts/futura";
 import clsx from "clsx";
@@ -128,7 +129,7 @@ const Complain = () => {
           <h1 className={clsx(utilStyles.headingLg)}>Complain List</h1>
         </div>
         <div className="w-100 mt-5">
-          <table className={clsx(styles.table, futuna.className)}>
+          <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
                 {titleTable.map((title: String, index) => (

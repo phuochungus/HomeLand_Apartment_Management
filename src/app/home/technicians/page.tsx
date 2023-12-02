@@ -2,6 +2,7 @@
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import styles from "../page.module.css";
 import residentStyles from "../residents/resident.module.scss";
+import tableStyles from '../../../styles/table.module.scss'
 import utilStyles from "@/styles/utils.module.scss";
 import { clsx } from "clsx";
 import Table from "react-bootstrap/Table";
@@ -12,6 +13,7 @@ import {
   CloseIcon,
   EditIcon,
   SortIcon,
+  TrashIcon,
 } from "@/components/icons";
 import { useState, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
@@ -23,6 +25,7 @@ import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { ToastContainer } from "react-toastify";
 import toastMessage from "@/utils/toast";
 import { Technician } from "@/models/technician";
+import { FaTableTennis } from "react-icons/fa";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
@@ -69,11 +72,12 @@ export default function Residents() {
     }
   );
   const titleTable = [
-    "ID",
-    "Tên",
+    
+    "Name",
     "Email",
-    "Số điện thoại",
-    "Ngày tạo",
+    "Phone Number",
+    "Create At",
+    "Action"
   ];
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
@@ -123,15 +127,15 @@ export default function Residents() {
   return (
     <main className={clsx(styles.main)}>
       <div className={clsx(residentStyles.wrapper, futuna.className)}>
-        <h1 className={clsx(utilStyles.headingXl)}>Quản lí nhân viên kĩ thuật</h1>
+        <h1 className={clsx(utilStyles.headingXl)}>Technical staff management</h1>
         <div className={clsx(residentStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách quản lí</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>List Of Technicians</h1>
           <ButtonComponent
             href="/home/technicians/addTechnician?auth=true"
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
-            Tạo nhân viên kĩ thuật
+            Create Technician
           </ButtonComponent>
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
@@ -153,22 +157,21 @@ export default function Residents() {
           <SearchLayout
             onKeydown={handleSearch}
             iconClick={searchIconClick}
-            placeHolder="Tìm nhân viên kĩ thuật..."
+            placeHolder="Search Technician..."
             ref={searchRef}
           />
         </div>
         <div className="w-100 mt-5">
-          <Table
-            className={clsx(residentStyles.tableResident, futuna.className)}
-            striped
-            bordered
-            hover
+          <table
+            className={clsx(tableStyles.table, futuna.className)}
+            
           >
             <thead>
               <tr>
                 {titleTable.map((title: String, index) => (
                   <th key={index}>
-                    {title} <SortIcon width={12} height={12} />
+                    {title}
+                     {/* <SortIcon width={12} height={12} /> */}
                   </th>
                 ))}
               </tr>
@@ -176,28 +179,38 @@ export default function Residents() {
             <tbody>
               {technicians.map((technician, index): ReactNode => {
                 const time = new Date(technician.created_at);
-                const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                const createAt = format(time, "dd-MM-yyyy HH:mm:ss");
 
                 return (
                   <tr key={index}>
-                    <td>{technician.id}</td>
-                    <td>{technician.profile.name}</td>
+                    
+                    <td style={{fontWeight: 700}}>{technician.profile.name}</td>
                     <td>{technician.account?.email}</td>
                     <td>{technician.profile.phone_number}</td>
                     <td>{createAt}</td>
-                    <td style={{ width: 20 }}>
-                      <div className="d-flex">
+                    <td >
+                      <div className="d-flex align-items-center">
                         <ButtonComponent
-                          preIcon={<EditIcon width={16} height={16} />}
+                          preIcon={<EditIcon className={residentStyles.editIcon} width={16} height={16} />}
                           className={clsx(
                             residentStyles.cudBtn,
                             residentStyles.editBtn
                           )}
                           href={`/home/technicians/updateTechnician/${technician.id}/?auth=true`}
                         >
-                          Sửa
+                          Edit
                         </ButtonComponent>
-                        <ButtonComponent
+                        <div
+                          onClick={() => deleleHandle(technician.id)}
+                          className={residentStyles.TrashIcon}
+                        > 
+                          <TrashIcon
+                            className={residentStyles.trash}
+                            width={16}
+                            height={16}
+                          />
+                        </div>
+                        {/* <ButtonComponent
                           onClick={() => deleleHandle(technician.id)}
                           preIcon={<CloseIcon width={16} height={16} />}
                           className={clsx(
@@ -206,14 +219,14 @@ export default function Residents() {
                           )}
                         >
                           Xóa
-                        </ButtonComponent>
+                        </ButtonComponent> */}
                       </div>
                     </td>
                   </tr>
                 );
               })}
             </tbody>
-          </Table>
+          </table>
         </div>
       </div>
       <ModalComponent
