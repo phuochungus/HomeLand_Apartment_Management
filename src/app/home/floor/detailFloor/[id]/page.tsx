@@ -52,7 +52,6 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
       console.log(error);
     }
   };
-  //handle check
   const handleCheckAll = () => {
     setCheckAll(!checkAll);
     let newList: String[];
@@ -133,13 +132,12 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
       const newData = data.filter((item) => item.floorId !== null);
       console.log('Filtered apartments:', newData);
       setApartment(newData);
-      console.log('Apartment state after update:', apartment);
       setShowModalApartment(true);
     } catch (error) {
       console.log('API error:', error);
     }
   };
-  const { refetch } = useQuery("floor", retrieveFloor, {
+  const { refetch } = useQuery("detail-floor", retrieveFloor, {
     staleTime: Infinity,
   });
   return (

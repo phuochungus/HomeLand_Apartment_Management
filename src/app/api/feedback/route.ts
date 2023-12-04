@@ -29,19 +29,19 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
     });
   return response;
 }
-export async function POST(request: NextRequest, { params }: { params: any }) {
+export async function POST(request: NextRequest) {
   const data = await request.formData();
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: endpoint.feedback + "/" + params.id,
+    url: endpoint.feedback,
     headers: {
       "Content-Type": "multipart/form-data",
       'Authorization': "Bearer " + request.cookies.get("token")?.value,
     },
     data: data,
   };
-  console.log(endpoint.feedback + "/" + params.id)
+  console.log(endpoint.feedback)
   const response = await axios
     .request(config)
     .then((response) => {

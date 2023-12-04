@@ -19,7 +19,7 @@ type FormValue = {
   maxApartment: string;
   apartment_id: string;
 };
-const addFloor = () => {
+const AddFloor = () => {
   const [formValue, setFormValue] = useState({
     name: "",
     building_id: "",
@@ -137,4 +137,4 @@ const addFloor = () => {
   );
 };
 
-export default addFloor;
+export default AddFloor;

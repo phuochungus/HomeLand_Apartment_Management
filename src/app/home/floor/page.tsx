@@ -32,13 +32,13 @@ export default function Dashboard() {
     setSelectedId(id);
     setShowModal(true);
   };
-  const retrieveBuilding = async () => {
+  const retrieveFloor = async () => {
     try {
       loadingFiler(document.body!);
       const res = await axios.get("/api/floor");
       removeLoadingFilter(document.body!);
-      const buildingsData = res.data;
-      setFloor(buildingsData);
+      const floorData = res.data;
+      setFloor(floorData);
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
@@ -47,21 +47,11 @@ export default function Dashboard() {
   };
   const { isLoading, isError, data, refetch } = useQuery(
     "floor",
-    retrieveBuilding,
+    retrieveFloor,
     {
       staleTime: Infinity,
     }
   );
-  const FloorSortOption = [
-    {
-      title: t("building"),
-      selections: ["hello1", "hello2"],
-      building_id: ["some_building_id"],
-      onChange: () => { },
-    },
-  ];
-
-  const buildingId = FloorSortOption[0].building_id;
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
       const res = await axios.get("/api/floor/search", {
@@ -108,31 +98,6 @@ export default function Dashboard() {
             Tạo tầng
           </ButtonComponent>
         </div>
-        {/* {FloorSortOption.map((value, index) => (
-          <div
-            key={index}
-            className={styles.itemContainer}
-            style={{ height: "100%", width: "15%", padding: "0 1rem" }}
-          >
-            <div className={styles.itemTitle}>{value.title}</div>
-            <Form.Select
-              className={styles.itemSelect}
-              aria-label="Default select example"
-              onChange={value.onChange}
-            >
-              {value.selections.map((selection, index) => (
-                <option key={index} value={selection}>
-                  {selection}
-                </option>
-              ))}
-               {value.building_id.map((selection, index) => (
-                <option key={index} value={selection}>
-                  {selection}
-                </option>
-              ))}
-            </Form.Select>
-          </div>
-        ))} */}
         <SearchLayout
           onKeydown={handleSearch}
           iconClick={searchIconClick}
@@ -159,7 +124,6 @@ export default function Dashboard() {
                 return (
                   <tr key={index}>
                     <td>{floor.floor_id}</td>
-
                     <td>{floor.name}</td>
                     <td>{floor.building_id}</td>
                     <td>{floor.max_apartment}</td>
