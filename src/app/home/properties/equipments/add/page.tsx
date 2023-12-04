@@ -5,6 +5,7 @@ import {
   FloatingLabel,
   Form,
   FormControl,
+  FormGroup,
   InputGroup,
   Modal,
   Row,
@@ -135,6 +136,7 @@ export default function AddEquipment() {
   const [selectedFiles, setSelectedFiles] = useState<(File | URL)[]>([]);
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [show, setShow] = useState(-1);
+  const [apartmentAttached, setApartmentAttached] = useState(0);
   const retrieveBuilding = async () => {
     try {
       loadingFiler(document.body!);
@@ -341,7 +343,30 @@ export default function AddEquipment() {
                     </Form.Group>
                   )}
                 </Form.Group>
-                <Form.Group>
+                <FormGroup key={`inline-radio`}>
+                  <Form.Label>Thiết bị này có gắn với căn hộ không?</Form.Label>
+                  <Form.Check
+                    inline
+                    label="Có"
+                    type="radio"
+                    id={`inline-radio-1`}
+                    checked={apartmentAttached == 1}
+                    onClick={() => setApartmentAttached(1)}
+                  />
+                  <Form.Check
+                    inline
+                    label="Không"
+                    type="radio"
+                    id={`inline-radio-2`}
+                    checked={apartmentAttached != 1}
+                    onClick={() => setApartmentAttached(0)}
+                  />
+                </FormGroup>
+                <Form.Group
+                  className={`${styles.expandableFormGroup} ${
+                    apartmentAttached ? styles.open:styles.close
+                  }`}
+                >
                   <Form.Label>Căn hộ</Form.Label>
                   {selectedApartment ? (
                     <InputGroup>

@@ -38,72 +38,72 @@ export default function AddVehicle(): React.ReactNode {
   const inputRef = useRef<HTMLButtonElement>(null);
   const ResidentModel = (): ReactNode => {
     return (
-          <Modal
-            dialogClassName={styles.modal}
-            show={show}
-            style={futuna.style}
-            onHide={() => setShow(false)}
+      <Modal
+        dialogClassName={styles.modal}
+        show={show}
+        style={futuna.style}
+        onHide={() => setShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t("residentsList")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div
+            className={styles.itemContainer}
+            style={{
+              position: "absolute",
+              height: "40px",
+              width: "40%",
+              borderStyle: "none",
+              margin: 0,
+              right: "5%",
+            }}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>{t("residentsList")}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div
-                className={styles.itemContainer}
-                style={{
-                  position: "absolute",
-                  height: "40px",
-                  width: "40%",
-                  borderStyle: "none",
-                  margin: 0,
-                  right: "5%",
-                }}
-              >
-                <SearchLayout
-                  onChange={(e) => {
-                    setResidents( search(data, "id", e.target.value));
-                  }}
-                  placeHolder={t("search_resident")}
-                />
-              </div>
+            <SearchLayout
+              onChange={(e) => {
+                setResidents(search(data, "id", e.target.value));
+              }}
+              placeHolder={t("search_resident")}
+            />
+          </div>
 
-              <Table style={{ width: "100%", marginTop: "50px" }} striped hover>
-                <thead>
-                  <tr>
-                    <th style={{ width: "20%" }}>{t("ID")}</th>
-                    <th style={{ width: "23%" }}>{t("name")}</th>
-                    <th style={{ width: "25%" }}>{t("phone_number")} </th>
-                    <th style={{ width: "10%" }}>{t("apartment")}</th>
-                    <th style={{ width: "22%" }}>{t("create_at")}</th>
+          <Table style={{ width: "100%", marginTop: "50px" }} striped hover>
+            <thead>
+              <tr>
+                <th style={{ width: "20%" }}>{t("ID")}</th>
+                <th style={{ width: "23%" }}>{t("name")}</th>
+                <th style={{ width: "25%" }}>{t("phone_number")} </th>
+                <th style={{ width: "10%" }}>{t("apartment")}</th>
+                <th style={{ width: "22%" }}>{t("create_at")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {residents.map((resident, index): ReactNode => {
+                const time = new Date(resident.created_at);
+                const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                const handleRowClick = () => {
+                  setSelectedRes(resident);
+                  setShow(false);
+                };
+
+                return (
+                  <tr
+                    key={index}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleRowClick()}
+                  >
+                    <td>{resident.id}</td>
+                    <td>{resident.profile && resident.profile.name}</td>
+                    <td>{resident.profile.phone_number}</td>
+                    <td>{resident.stay_at && resident.stay_at.name}</td>
+                    <td>{createAt}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {residents.map((resident, index): ReactNode => {
-                    const time = new Date(resident.created_at);
-                    const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
-                    const handleRowClick = () => {
-                      setSelectedRes(resident);
-                      setShow(false);
-                    };
-
-                    return (
-                      <tr
-                        key={index}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleRowClick()}
-                      >
-                        <td>{resident.id}</td>
-                        <td>{resident.profile && resident.profile.name}</td>
-                        <td>{resident.profile.phone_number}</td>
-                        <td>{resident.stay_at && resident.stay_at.name}</td>
-                        <td>{createAt}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </Modal.Body>
-          </Modal>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Modal.Body>
+      </Modal>
     );
   };
 
@@ -143,7 +143,6 @@ export default function AddVehicle(): React.ReactNode {
     };
   }
   function validateData(): boolean {
-    
     var flag = false;
     if (selectedRes == null) {
       flag = true;
@@ -311,8 +310,8 @@ export default function AddVehicle(): React.ReactNode {
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                  fontWeight:"bold",
-                  fontSize:"2vw"
+                  fontWeight: "bold",
+                  fontSize: "2vw",
                 }}
               >
                 Cư dân
@@ -339,7 +338,7 @@ export default function AddVehicle(): React.ReactNode {
                       Mã cư dân
                     </Form.Label>
 
-                    <InputGroup style={{ width: "100%" }}>
+                    <InputGroup style={{ width: "80%" }}>
                       <Form.Control
                         id="inputId"
                         size="lg"
@@ -354,59 +353,15 @@ export default function AddVehicle(): React.ReactNode {
                         }}
                         value={selectedRes.id}
                       />
-                      <Dropdown as={ButtonGroup}>
-                        <Dropdown.Toggle
-                          split
-                          ref={inputRef}
-                          style={{
-                            background: "white",
-                            color: "black",
-                            borderColor: "#dee2e6",
-                            borderLeftStyle: "none",
-                            margin: "0",
-                            marginRight: "2vw",
-                          }}
-                        ></Dropdown.Toggle>
-                        <Dropdown.Menu
-                          align="end"
-                          style={{ height: "200px", overflowY: "scroll" }}
-                        >
-                          {residents.map((value, index) => (
-                            <Dropdown.Item
-                              key={index}
-                              onClick={() => {
-                                console.log("click");
-                                setSelectedRes(residents[index]);
-                                (
-                                  document.getElementById(
-                                    "inputName"
-                                  ) as HTMLInputElement
-                                ).value = residents[index].profile.name;
-                                (
-                                  document.getElementById(
-                                    "inputId"
-                                  ) as HTMLInputElement
-                                ).value = residents[index].id;
-                                (
-                                  document.getElementById(
-                                    "inputSDT"
-                                  ) as HTMLInputElement
-                                ).value = residents[index].profile.phone_number;
-                              }}
-                            >
-                              {value.id}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                        <Button
-                          style={{ float: "right", borderRadius: "0.5vw" }}
-                          onClick={() => {
-                            setShow(true);
-                          }}
-                        >
-                          Change resident
-                        </Button>
-                      </Dropdown>
+
+                      <Button
+                        style={{ float: "right", borderRadius: "0.5vw" }}
+                        onClick={() => {
+                          setShow(true);
+                        }}
+                      >
+                        Change resident
+                      </Button>
                     </InputGroup>
                   </Form.Group>
                   <Form.Group

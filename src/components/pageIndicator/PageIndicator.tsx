@@ -41,19 +41,25 @@ export default function PageIndicator({
           }}
         ></FaBackward>
         {Array.from(Array(pageLength).keys()).map((value, index) => {
-          return (
-            <div
-              key={index}
-              className={`${styles.pageItem} ${
-                currentPage == index + 1 ? styles.active : ""
-              }`}
-              onClick={() => {
-                if (clickHandler) clickHandler(index + 1);
-              }}
-            >
-              {index + 1}
-            </div>
-          );
+          if (
+            !maxPageButton ||
+            (index <= currentPage + maxPageButton / 2 &&
+              index >= currentPage - maxPageButton / 2)
+          )
+            return (
+              <div
+                key={index}
+                className={`${styles.pageItem} ${
+                  currentPage == index + 1 ? styles.active : ""
+                }`}
+                onClick={() => {
+                  if (clickHandler) clickHandler(index + 1);
+                }}
+              >
+                {index + 1}
+              </div>
+            );
+          else return <></>;
         })}
         <FaForward
           style={{

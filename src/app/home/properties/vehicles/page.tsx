@@ -276,6 +276,8 @@ export default function Vehicles() {
             pageLength={Math.ceil(vehicles.length / showLimit)}
             currentPage={pageNumber}
             clickHandler={handlePageNumberChange}
+            maxPageButton={3}
+
           />
         ) : (
           <div style={{ width: "100%", textAlign: "center" }}>
