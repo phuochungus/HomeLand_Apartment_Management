@@ -21,6 +21,7 @@ import ServicePackage from "../../../../components/servicePackage/servicePackage
 import ServicePackageModal from "./addServicePackage";
 import { ToastContainer } from "react-toastify";
 import toastMessage from "../../../../utils/toast";
+import ServicePackageLayout from "../../../../components/servicePackage/servicePackage";
 
 export default function Page({ params }: { params: { id: string } }) {
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
@@ -32,8 +33,8 @@ export default function Page({ params }: { params: { id: string } }) {
   };
 
   const handleModalClose = async () => {
-    setShowModal(false);
     await refetch();
+    setShowModal(false);
   };
 
   const { isLoading, data, isError, refetch } = useQuery(
@@ -128,11 +129,11 @@ export default function Page({ params }: { params: { id: string } }) {
                     {index % 2 == 0 ? <Row></Row> : <></>}
                     <Col>
                       {" "}
-                      <ServicePackage
-                        name={value.name}
-                        per_unit_price={value.per_unit_price}
-                        expired_date={value.expired_date}
-                      ></ServicePackage>
+                      <ServicePackageLayout
+                        servicePackage={value}
+                        service={data}
+                        handleSuccessModification={refetch}
+                      ></ServicePackageLayout>
                     </Col>
                     {index == data.servicePackages.length - 1 &&
                     index % 2 == 0 ? (
