@@ -228,7 +228,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
             </Table>
           ) : (
             <p style={{ textAlign: "center", marginTop: "100px" }}>
-              Chưa có phòng nào trong tầng!
+              Chưa có phòng nào trong tầng
             </p>
           )}
         </div>
