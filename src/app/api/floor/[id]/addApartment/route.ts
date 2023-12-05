@@ -3,12 +3,12 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest, { params }: { params: any }) {
-  const managerIds = await request.nextUrl.searchParams.getAll("managerIds")
-  console.log(managerIds)
+  const apartmentIds = await request.nextUrl.searchParams.getAll("apartmentIds")
+  console.log(apartmentIds)
   const response = await axios
-    .post(`${endpoint.building}/${params.id}/addManagers`, undefined, {
+    .post(`${endpoint.floor}/${params.id}/addApartment`, undefined, {
       params: {
-        managerIds: managerIds,
+        apartmentIds: apartmentIds,
       },
       paramsSerializer: {
         indexes: null

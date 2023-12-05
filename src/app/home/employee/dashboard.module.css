@@ -1,0 +1,245 @@
+.headingXl {
+        font-size: 3.6rem;
+        color: black;
+        font-family: sans-serif;
+        text-decoration: none;
+        padding-left: 20px;
+}
+
+.headingLg {
+        font-size: 2.4rem;
+        color: black;
+        text-decoration: none;
+        font-family: sans-serif;
+        padding-left: 40px;
+}
+
+.headingMd {
+        background-color: var(--primary);
+        font-family: sans-serif;
+}
+
+.wrapper {
+        width: 100%;
+
+}
+
+.header {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+}
+
+.perPage {
+        display: flex;
+        margin: 0 8px;
+
+}
+
+.dashboardStyles.col {
+        display: flex;
+        align-items: stretch;
+        justify-content: stretch;
+        margin-bottom: 50px;
+}
+
+.dashboardBackground {
+
+        background-Color: "#E8EAEC",
+
+}
+
+
+.search {
+        background-color: aliceblue;
+        border-radius: 20px;
+        color: black;
+        height: 60px;
+        width: 250px;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        border: 2px solid black;
+        margin-left: -90px;
+
+}
+
+.search:hover,
+.search:focus-within {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        font-weight: bold;
+}
+
+.search:focus {
+        outline: none;
+}
+
+.form-control {
+        margin-right: 200px;
+}
+
+.searchContainer {
+        display: flex;
+        align-items: center;
+}
+
+.searchbutton {
+        color: black;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-left: -60px;
+        padding-right: 20px;
+}
+
+
+.modalADE {
+        color: black;
+}
+
+.rowcss {
+        border-color: black;
+}
+
+.formsearch {
+        margin-right: 50px;
+        background-color: aliceblue;
+        border-radius: 20px 20px 20px 20px;
+
+}
+
+
+
+.addBtn {
+        background-color: #0744e1;
+        padding: var(--default-padding-vertical) var(--default-padding-horizontal);
+        border-radius: 8px;
+        margin-right: 10px;
+        margin-left: 140px;
+        color: aliceblue;
+        height: 40px;
+        text-decoration: none;
+}
+
+@media (max-width: 600px) {
+        .addBtn {
+                margin-left: 20px;
+                margin-right: 20px;
+                height: 30px;
+        }
+}
+
+@media (min-width: 600px) and (max-width: 1200px) {
+        .addBtn {
+                margin-right: 20px;
+                margin-left: 20px;
+                height: 35px;
+        }
+
+        .main {
+                margin-right: 20px;
+                margin-left: 20px;
+        }
+}
+
+
+
+
+
+.profile-stat {
+        display: block;
+        margin-bottom: 10px;
+
+}
+
+.text-center {
+        text-align: center;
+}
+.name,
+.birth,
+.address,
+.phonenumber,
+.address {
+        text-align: right;
+        margin-bottom: 20px;
+        text-decoration: none;
+        line-height: 1.4;
+}
+
+.font-weight-light {
+        font-weight: normal;
+        text-decoration: none;
+
+}
+
+.link {
+        text-decoration: none;
+}
+
+a.no-underline {
+        text-decoration: none;
+}
+
+.card {
+        margin: 10px;
+        margin-bottom: 10px;
+        padding: 1px;
+
+}
+
+.ch {
+        text-decoration: none;
+        margin-bottom: 30px;
+}
+
+
+.card {
+
+        transition: box-shadow 0.3s ease-in-out;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+.card:hover {
+        box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.12), 0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 6px 10px -6px rgba(0, 0, 0, 0.25);
+}
+
+
+.col {
+        margin-bottom: 50px;
+
+}
+
+.main {
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: normal;
+        text-decoration: none;
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+
+}
+
+.fluid {
+        margin-left: 10px;
+        margin-right: 10px;
+
+}
+
+.dashboardStyles.carddiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /* if you want to align the cards vertically */
+}
+.phonenumber{
+        margin-bottom: 20px;
+        text-decoration: none;
+        line-height: 1.4;
+        text-align: right;
+}
