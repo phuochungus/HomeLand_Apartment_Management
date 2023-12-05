@@ -3,10 +3,11 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    white-space: nowrap;
 }
 .preIcon {
     margin-right: 8px;
+    display: flex;
+    align-self: center;
 }
 .sufIcon {
     margin-left: 8px;

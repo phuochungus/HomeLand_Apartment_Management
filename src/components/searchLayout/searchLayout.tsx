@@ -1,4 +1,4 @@
-import React, { KeyboardEventHandler, forwardRef } from "react";
+import React, { ChangeEvent, KeyboardEventHandler, forwardRef } from "react";
 import Tippy from "@tippyjs/react/headless";
 import styles from "./searchLayout.module.scss";
 import clsx from "clsx";
@@ -8,6 +8,7 @@ interface Props {
   className?: any;
   placeHolder: string;
   onKeydown?: KeyboardEventHandler<HTMLInputElement>;
+  onChange?: (e:ChangeEvent<HTMLInputElement>) => void;
   iconClick?:() => void
 }
 type Ref = HTMLInputElement;
@@ -29,6 +30,7 @@ const SearchLayout = forwardRef<Ref, Props>((props, ref) => {
         placeholder={props.placeHolder}
         value={valueSearch}
         onChange={(e) => {
+          if(props.onChange) props.onChange(e);
           if (!e.target.value.startsWith(" ")) {
             setValueSearch(e.target.value);
           }

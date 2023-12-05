@@ -73,7 +73,7 @@ export default function Dashboard() {
   //     console.log(err);
   //   }
   // };
-  
+
   const searchIconClick = async () => {
     const res = await axios.get("/api/floor/search", {
       params: {
@@ -123,13 +123,12 @@ export default function Dashboard() {
               {floor.map((floor, index): React.ReactNode => {
                 return (
                   <tr key={index}>
-                    <td>{floor.floor_id}</td>
-                    <td>{floor.name}</td>
-                    <td>{floor.building_id}</td>
-                    <td>{floor.max_apartment}</td>
-                    {/* <td>{building.manager_id}</td> */}
+                    <td style={{ width: "30%" }}>{floor.floor_id}</td>
+                    <td style={{ width: "10%" }}>{floor.name}</td>
+                    <td style={{ width: "20%" }}>{floor.building_id}</td>
+                    <td style={{ width: "20%" }}>{floor.max_apartment}</td>
 
-                    <td style={{ width: 20 }}>
+                    <td style={{ width: "17%" }}>
                       <div className="d-flex">
                         <ButtonComponent
                           preIcon={<EditIcon width={16} height={16} />}
@@ -142,14 +141,14 @@ export default function Dashboard() {
                           Sửa
                         </ButtonComponent>
                         <ButtonComponent
-                        href={`/home/floor/detailFloor/${encodeURIComponent(floor.floor_id)}/?auth=true`}
+                          href={`/home/floor/detailFloor/${encodeURIComponent(floor.floor_id)}/?auth=true`}
                           preIcon={<DetailIcon width={16} height={16} />}
                           className={clsx(buildingStyles.cudBtn, buildingStyles.detailBtn)}
                         >
                           Chi tiết
                         </ButtonComponent>
 
-                        
+
                       </div>
                     </td>
                   </tr>
