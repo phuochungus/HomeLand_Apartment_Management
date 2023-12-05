@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
-import { BuildingIcon, ManagerIcon, TechnicianIcon } from "@/components/icons";
+import { BuildingIcon } from "@/components/icons";
 
 export const sidebarInfo = [
   {
@@ -24,15 +24,47 @@ export const sidebarInfo = [
   },
   {
     title: "Properties",
-    svg: <Image src={Images.Properties} alt="ico" width={30} height={30} />,
+    svg: (
+      <svg
+        width="44"
+        height="44"
+        viewBox="0 0 44 44"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_382_1569)">
+          <path
+            d="M31.1666 27.4997H34.8333V31.1663H31.1666V27.4997ZM31.1666 20.1663H34.8333V23.833H31.1666V20.1663ZM31.1666 12.833H34.8333V16.4997H31.1666V12.833ZM25.1899 12.833L27.4999 14.373V12.833H25.1899Z"
+            fill="black"
+          />
+          <path
+            d="M18.3333 5.5V8.26833L21.9999 10.7067V9.16667H38.4999V34.8333H31.1666V38.5H42.1666V5.5H18.3333Z"
+            fill="black"
+          />
+          <path
+            d="M14.9783 10.4502L27.4999 18.7919V38.5002H1.83325V19.2135L14.9783 10.4502ZM18.3333 34.8335H23.8333V20.4602L14.9783 14.8319L5.49992 20.8635V34.8335H10.9999V23.8335H18.3333V34.8335Z"
+            fill="black"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_382_1569">
+            <rect width="44" height="44" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    ),
     menu: [
       {
-        title: "List apartments",
-        href: "/home/properties",
+        title: "Apartment",
+        href: "/home/properties/apartments",
       },
       {
-        title: "Add apartments",
-        href: "/home/properties/add",
+        title: "Vehicle",
+        href: "/home/properties/vehicles",
+      },
+      {
+        title: "Equipment",
+        href: "/home/properties/equipments",
       },
     ],
     roles: ["admin", "manager"],
@@ -41,8 +73,8 @@ export const sidebarInfo = [
     title: "Services",
     svg: (
       <svg
-        width="30"
-        height="30"
+        width="40"
+        height="40"
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -63,21 +95,33 @@ export const sidebarInfo = [
   },
   {
     title: "Residents",
-    svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
-    roles: ["admin", "manager"],
-  },{
-    title: "Managers",
-    svg: <ManagerIcon width={30} height={30} />,
-    roles: ["admin"],
-  },{
-    title: "Technicians",
-    svg: <TechnicianIcon width={30} height={30} />,
-    roles: ["admin"],
+    svg: (
+      <svg
+        width="42"
+        height="42"
+        viewBox="0 0 42 42"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_382_1560)">
+          <path
+            d="M15.75 24.0625C11.655 24.0625 3.5 26.11 3.5 30.1875V33.25H28V30.1875C28 26.11 19.845 24.0625 15.75 24.0625ZM7.595 29.75C9.065 28.735 12.6175 27.5625 15.75 27.5625C18.8825 27.5625 22.435 28.735 23.905 29.75H7.595ZM15.75 21C19.1275 21 21.875 18.2525 21.875 14.875C21.875 11.4975 19.1275 8.75 15.75 8.75C12.3725 8.75 9.625 11.4975 9.625 14.875C9.625 18.2525 12.3725 21 15.75 21ZM15.75 12.25C17.2025 12.25 18.375 13.4225 18.375 14.875C18.375 16.3275 17.2025 17.5 15.75 17.5C14.2975 17.5 13.125 16.3275 13.125 14.875C13.125 13.4225 14.2975 12.25 15.75 12.25ZM28.07 24.1675C30.1 25.6375 31.5 27.5975 31.5 30.1875V33.25H38.5V30.1875C38.5 26.6525 32.375 24.64 28.07 24.1675ZM26.25 21C29.6275 21 32.375 18.2525 32.375 14.875C32.375 11.4975 29.6275 8.75 26.25 8.75C25.305 8.75 24.43 8.9775 23.625 9.3625C24.7275 10.92 25.375 12.8275 25.375 14.875C25.375 16.9225 24.7275 18.83 23.625 20.3875C24.43 20.7725 25.305 21 26.25 21Z"
+            fill="black"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_382_1560">
+            <rect width="42" height="42" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    ),
+    roles: ["admin", "manager", "resident"],
   },
   {
     title: "Buildings",
     svg: <BuildingIcon width={30} height={30} />,
-    roles: ["admin"],
+    roles: ["admin", "manager"],
 
   },
   {
