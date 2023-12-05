@@ -144,7 +144,7 @@ export default function Vehicles() {
     if (direction) {
       if (!vehicle) return;
       setSelectedVehicle(vehicle);
-      await axios
+      axios
         .get("/api/resident/" + vehicle.residentId)
         .then((res) => setSelectedResident(res.data as Resident))
         .catch((error) => {
@@ -246,7 +246,7 @@ export default function Vehicles() {
           Danh sách yêu cầu đăng ký phương tiện
         </h1>
 
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", justifyContent: 'space-between', }}>
           <div
             className={`${vehicleStyles.show} ${vehicleStyles.transition}`}
             id="vehicleTable"

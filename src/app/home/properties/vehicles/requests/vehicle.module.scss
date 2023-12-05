@@ -87,10 +87,10 @@
   transition-duration: 0.7s;
   transition-property: max-width;
   overflow: hidden;
+  width:100%
 }
 .show {
   max-width: 100%;
-  width:100%;
 }
 .hidden{
   max-width: 0;
