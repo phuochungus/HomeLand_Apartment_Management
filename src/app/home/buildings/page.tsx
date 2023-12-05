@@ -89,7 +89,7 @@ export default function Dashboard() {
           <h1 className={clsx(utilStyles.headingLg)}>Danh sách tòa nhà</h1>
           <ButtonComponent
             href="/home/buildings/addBuilding?auth=true"
-            //   preIcon={<AddResidentIcon width={24} height={24} />}
+            //   preIcon={<AddResidentIcon width={24} height={24}  />}
             className={clsx(buildingStyles.addBtn, futuna.className)}
           >
             Tạo tòa nhà

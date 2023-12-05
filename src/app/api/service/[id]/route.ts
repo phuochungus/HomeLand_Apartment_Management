@@ -21,7 +21,7 @@ export async function GET(
         if (response.status == 200) {
           
           const result: Service = response.data;
-  
+          console.log(result);
           return NextResponse.json(result, {
             status: 200,
           });

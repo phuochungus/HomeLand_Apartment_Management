@@ -7,6 +7,7 @@ export const endpoint = {
   tokenValidate: baseUrl + "/token/validate",
   resident: baseUrl + "/resident",
   apartment: baseUrl + "/apartment",
+  employee: baseUrl + "/employee",
   person: baseUrl + "/person",
   me: baseUrl + "/me",
   building: baseUrl + "/building",
@@ -15,5 +16,8 @@ export const endpoint = {
   manager: baseUrl + "/manager",
   technician: baseUrl + "/technician",
   equipment: baseUrl + "/equipment",
+  floor: baseUrl + "/floor",
   service: baseUrl + "/service",
+  servicePackage: baseUrl + "/service-package",
+  feedback: baseUrl + "/feedback",
 };

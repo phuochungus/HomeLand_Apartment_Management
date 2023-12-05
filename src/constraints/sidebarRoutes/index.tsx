@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
-import { BuildingIcon } from "@/components/icons";
+import { BuildingIcon, ManagerIcon, StaffIcon, TechnicianIcon } from "@/components/icons";
 
 export const sidebarInfo = [
   {
@@ -89,6 +89,11 @@ export const sidebarInfo = [
     roles: ["admin", "manager", "resident"],
   },
   {
+    title: "Employee",
+    svg: <StaffIcon width={30} height={30} />,
+    roles: ["admin", "manager"],
+  },
+  {
     title: "Contracts",
     svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
     roles: ["admin", "manager"],
@@ -142,5 +147,27 @@ export const sidebarInfo = [
     ),
     menu: [],
     roles: ["admin", "manager", "technician"],
+  },
+  {
+    title: "Floor",
+    svg: (
+      <svg
+        width="50"
+        height="50"
+        viewBox="0 -10 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M2 2v18h3v-1H3v-6h3V9h5V8H6V3h15v5h-6v1h6v5h-4v1h4v6H11v-7h-1v5H8v1h2v2h12V2zm3 4H3V5h2zm-2 6v-1h2v1zm2-2H3V9h2zM3 8V7h2v1zm2-4H3V3h2z"
+          fill="black"
+          stroke="black" 
+          stroke-width="1" 
+        />
+        
+      </svg>
+    ),
+    menu: [],
+    roles: [],
   },
 ];
