@@ -203,7 +203,7 @@ const AddEmployee = () => {
 
                                                 toastMessage({ type: "success", title: "Create successfully!" });
                                                 setTimeout(() => {
-                                                        router.push('/home/dashboard?auth=true');
+                                                        router.push('/home/employee?auth=true');
                                                 }, 2000);
                                         })
                                         .catch((e) => {

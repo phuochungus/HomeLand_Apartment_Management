@@ -26,6 +26,7 @@ type FormValue = {
         avatarImg?: any;
         frontImg: any;
         backImg: any;
+        taskInfo: string;
 };
 
 const DetailEmployee = ({ params }: { params: { id: string } }) => {
@@ -41,6 +42,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                 phoneNumber: "",
                 backImg: "",
                 frontImg: "",
+                taskInfo: "",
 
         });
         const deleleHandle = (id: string) => {
@@ -184,6 +186,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                 phoneNumber: employeeData.profile.phone_number,
                                 front_identify_card_photo: employeeData.profile.front_identify_card_photo_URL,
                                 back_identify_card_photo: employeeData.profile.back_identify_card_photo_URL,
+                                taskInfo: employeeData.task_info || "",
                         };
 
 
@@ -272,7 +275,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                                                 unoptimized={true}
                                                                                 src={
                                                                                         employee
-                                                                                                ? employee.profilePictureURL
+                                                                                                ? employee.profile.avatarURL
                                                                                                 : ""
                                                                                 }
                                                                         />
@@ -325,7 +328,36 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                 <Form.Label className={styles.label}>Số điện thoại</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" value={formValue.phoneNumber} onChange={handleChange} name="phoneNumber" />
                                         </Form.Group>
+                                        <Form.Group className={styles.box} >
+                                                <Form.Label className={styles.label}>
+                                                        Công việc
+                                                </Form.Label>
+                                                <Form.Control
+                                                        value={formValue.taskInfo}
+                                                        onChange={handleChange}
+                                                        name="taskInfo"
+                                                        size="lg"
+                                                        type="text"
+                                                        placeholder=""
+                                                />
+                                               
+                                        </Form.Group>
+                                        <Form.Group className={styles.box} >
+                                                <Form.Label className={styles.label}>
+                                                        Số căn cước công dân
+                                                </Form.Label>
+                                                <Form.Control
+                                                        disabled
+                                                        size="lg"
+                                                        type="text"
+                                                        value={
+                                                                employee &&
+                                                                employee.profile.identify_number
+                                                        }
+                                                        placeholder=""
+                                                />
 
+                                        </Form.Group>
                                         <div className={styles.box}>
                                                 <Form.Group className="mb-3">
                                                         <Form.Label className={classNames(styles.label, styles.required)}>
@@ -389,7 +421,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                         />
                                                 </Form.Group>
                                         </div>
-                                      
+
 
                                 </Form>
                         </div>

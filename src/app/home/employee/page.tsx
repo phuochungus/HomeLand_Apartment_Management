@@ -166,7 +166,7 @@ export default function Employee() {
                         alt="..."
                         onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
                         src={
-                          employee.profilePictureURL
+                          employee.profile.avatarURL
                         }
                         // src="..\images\logos\Logo@3x.png"
                         variant="top"
