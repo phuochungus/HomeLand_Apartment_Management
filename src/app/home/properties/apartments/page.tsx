@@ -1,75 +1,81 @@
 "use client";
-import { FaSearch } from "react-icons/fa";
-import styles from "./properties.module.css";
-import { futuna } from "../../../../public/fonts/futura";
-import { Card, Spinner } from "react-bootstrap";
+import styles from "./properties.module.css"
+import { futuna } from "../../../../../public/fonts/futura";
+import { Card, Placeholder, Spinner } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { Apartment } from "@/models/apartment";
 import axios from "axios";
 import { useQuery } from "react-query";
 import SearchBar from "@/components/searchBar/searchBar";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useRef, useState } from "react";
+const apartmentSortOption = [
+  {
+    title: "Building",
+    selections: [],
+    onChange: () => {},
+  },
+  {
+    title: "Floor",
+    selections: [],
+    onChange: () => {},
+  },
+  {
+    title: "Status",
+    selections: [],
+    onChange: () => {},
+  },
+];
+
 export default function Apartments() {
+  const loadingMore = useRef({ isLoading: false, page: 1 });
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
-  var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
-  var page = useMemo(() => {
-    return Math.floor(apartmentList.length / 30) + 1;
-  }, [apartmentList]);
-  const { isLoading, isError, data, refetch } = useQuery(
+  const { isLoading, isError, refetch } = useQuery(
     "apartment",
     () =>
-      axios.get("/api/apartment?page=" + page).then((res) => {
-        setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
-      }),
+      axios
+        .get("/api/apartment?page=" + loadingMore.current.page)
+        .then((res) => {
+          const temp = { ...loadingMore.current };
+          if ((res.data as Apartment[]).length == 0) temp.page = -1;
+          temp.isLoading = false;
+          loadingMore.current = temp;
+          setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
+        }),
     {
       refetchOnWindowFocus: false,
     }
   );
-  const apartmentSortOption = [
-    {
-      title: "Building",
-      selections: [],
-      onChange: () => {},
-    },
-    {
-      title: "Floor",
-      selections: [],
-      onChange: () => {},
-    },
-    {
-      title: "Status",
-      selections: [],
-      onChange: () => {},
-    },
-  ];
+
   async function handleScrollEnd() {
-    if (!loadingMore) {
-      loadingMore = true;
-      await refetch();
-      loadingMore = false;
+    if (!loadingMore.current.isLoading) {
+      const temp = { ...loadingMore.current };
+      temp.isLoading = true;
+      temp.page = temp.page + 1;
+      loadingMore.current = { ...temp };
+      refetch();
     }
   }
-  useEffect(() => {
-    window.addEventListener("scroll", (e) => {
-      const windowHeight =
-        "innerHeight" in window
-          ? window.innerHeight
-          : document.documentElement.offsetHeight;
-      const body = document.body;
-      const html = document.documentElement;
-      const docHeight = Math.max(
-        body.scrollHeight,
-        body.offsetHeight,
-        html.clientHeight,
-        html.scrollHeight,
-        html.offsetHeight
-      );
-      const windowBottom = windowHeight + window.pageYOffset;
-      if (windowBottom + 50 >= docHeight) {
-        handleScrollEnd();
-      }
-    });
-  }, []);
+  window.addEventListener("scroll", (e) => {
+    const windowHeight =
+      "innerHeight" in window
+        ? window.innerHeight
+        : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+    const windowBottom = windowHeight + window.pageYOffset;
+    console.log(windowBottom, docHeight);
+    if (windowBottom + 50 >= docHeight) {
+      console.log("load more");
+      handleScrollEnd();
+    }
+  });
   if (isLoading)
     return (
       <div
@@ -103,9 +109,7 @@ export default function Apartments() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <div
-          className={`${styles.itemContainer} ${styles.searchBarContainer}`}
-        >
+        <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
           <SearchBar className={styles.searchBar}></SearchBar>
         </div>
         {apartmentSortOption.map((value, index) => (
@@ -121,7 +125,7 @@ export default function Apartments() {
       <div className={styles.grid}>
         {apartmentList.map((value, index) => ApartmentCard(value))}
       </div>
-      {loadingMore ? (
+      {loadingMore.current.isLoading && loadingMore.current.page > 0 ? (
         <div
           style={{
             width: "100%",
@@ -130,9 +134,7 @@ export default function Apartments() {
             justifyContent: "center",
             marginTop: "20px",
           }}
-        >
-          <Spinner></Spinner>
-        </div>
+        ></div>
       ) : (
         <></>
       )}
@@ -185,7 +187,11 @@ const ApartmentCard = (value: Apartment): React.ReactNode => {
       className={`${futuna.className} ${styles.gridItem}`}
       style={{ borderRadius: "10px", overflow: "hidden" }}
     >
-      <Card.Img variant="top" src={value.images[0]} />
+      <Suspense
+        fallback={<Placeholder as={Card.Img} animation="glow"></Placeholder>}
+      >
+        <Card.Img variant="top" src={value.images[0]} />
+      </Suspense>
       <Card.Body
         style={{
           display: "flex",

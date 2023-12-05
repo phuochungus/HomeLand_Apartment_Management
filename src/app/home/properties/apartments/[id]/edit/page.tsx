@@ -8,8 +8,8 @@ import {
   Modal,
   Spinner,
 } from "react-bootstrap";
-import styles from "./add.module.css";
-import { futuna } from "../../../../../public/fonts/futura";
+import styles from "./edit.module.css";
+import { futuna } from "../../../../../../../public/fonts/futura";
 import {
   FaBed,
   FaCheckCircle,
@@ -21,12 +21,14 @@ import {
   FaUpload,
 } from "react-icons/fa";
 import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
-import { Person } from "@/models/person";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchBar from "@/components/searchBar/searchBar";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
+import { Resident } from "@/models/resident";
+import { Apartment } from "@/models/apartment";
+import { useRouter } from "next/navigation";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
@@ -74,39 +76,69 @@ function validateData() {
   });
   return flag;
 }
-async function addImage(data: FormData, fileList: string[]) {
+async function addImage(data: FormData, fileList: (File | URL)[]) {
   for await (const iterator of fileList) {
-    const blob = await fetch(iterator).then(async (r) => {
-      return await r.blob();
-    });
-    const file = new File(
-      [blob],
-      fileList.indexOf(iterator) + "." + blob.type.split("/")[1]
-    );
-    data.append("images", file);
+    if (iterator instanceof URL) data.append("images", iterator.href);
+    else data.append("images", iterator);
   }
 }
-export default function AddApartment() {
+export default function EditApartment({ params }: { params: { id: string } }) {
   const [show, setShow] = useState(false);
   function handleClose() {
     setShow(false);
   }
-  const [selectedResidentLists, setSelectedList] = useState<Person[]>([]);
-  const [residentLists, setResidentLists] = useState<Person[]>([]);
-  const { isLoading, isError, data } = useQuery("resident", () =>
+  const [selectedResidentLists, setSelectedList] = useState<Resident[]>([]);
+  const [residentLists, setResidentLists] = useState<Resident[]>([]);
+  const fileList = useRef<(File | URL)[]>([]);
+  const router = useRouter();
+  const residentQuery = useQuery("resident", () =>
     axios.get("/api/resident").then((res) => {
-      setResidentLists(res.data as Person[]);
-      return res.data as Person[];
+      setResidentLists(res.data as Resident[]);
+      return res.data as Resident[];
     })
   );
-
+  const apartmentQuery = useQuery(
+    "apartmentDetail",
+      () => axios.get("/api/apartment/" + params.id).then((res) => {
+        const apartment = res.data as Apartment;
+        const temp: (File | URL)[] = [];
+        apartment.images.forEach((element) => {
+          temp.push(new URL(element));
+        });
+        fileList.current = [...temp];
+        const field = [
+          "name",
+          "width",
+          "length",
+          "bedroom",
+          "bathroom",
+          "description",
+        ];
+        field.forEach((element) => {
+          const inputElement = document.getElementById(
+            element
+          ) as HTMLInputElement;
+          if (inputElement)
+            inputElement.value =
+              (apartment[element as keyof Apartment])!.toString();
+        });
+        if (apartment.residents) setSelectedList(apartment.residents);
+        return apartment;
+      })
+    ,
+    { refetchOnWindowFocus: false}
+  );
+  function handleFileChange(files: (File | URL)[]) {
+    fileList.current = files;
+    console.log(fileList.current.length);
+  }
   async function handleSubmit() {
     loadingFiler(document.body!);
     if (!validateData()) {
+      removeLoadingFilter(document.body!);
       return;
     }
     const data = new FormData();
-    const fileList = getImageList();
     data.append(
       "name",
       (document.getElementById("name") as HTMLInputElement).value
@@ -138,43 +170,68 @@ export default function AddApartment() {
     selectedResidentLists.forEach((element) => {
       data.append("residentIds", element.id);
     });
-    await addImage(data, fileList).then(() => {
+    await addImage(data, fileList.current).then(() => {
       let config = {
-        method: "post",
+        method: "patch",
         maxBodyLength: Infinity,
-        url: "/api/apartment",
+        url: "/api/apartment/" + params.id,
         data: data,
       };
-      console.log(data.get("images"));
       axios
         .request(config)
         .then((res) => {
-          alert("Done create");
+          alert("Done update apartment " + params.id);
+          router.back();
         })
         .catch((err) => {
           alert(err.response.data);
         });
     });
-    removeLoadingFilter(document.body!)
+    removeLoadingFilter(document.body!);
   }
   function searchtest(params: string) {
-    setResidentLists(search(data!, "name", params));
+    setResidentLists(search(residentQuery.data!, "name", params));
   }
-  function onCheck(param: Person) {
+  function onCheck(param: Resident) {
     const temp = selectedResidentLists;
     if (!temp.includes(param)) {
       temp.push(param);
       setSelectedList(temp);
     }
   }
-  function onUnCheck(param: Person) {
+  function onUnCheck(param: Resident) {
     const temp = selectedResidentLists;
     if (temp.includes(param)) {
       temp.splice(temp.indexOf(param));
       setSelectedList(temp);
     }
   }
-  if (isLoading)
+  useEffect(() => {
+    if(apartmentQuery.data)
+    {
+      const apartment = apartmentQuery.data!
+      const field = [
+        "name",
+        "width",
+        "length",
+        "bedroom",
+        "bathroom",
+        "description",
+      ];
+      field.forEach((element) => {
+        const inputElement = document.getElementById(
+          element
+        ) as HTMLInputElement;
+        if (inputElement)
+          inputElement.value =
+            (apartment[element as keyof Apartment])!.toString();
+      });
+      if (apartment.residents) setSelectedList(apartment.residents);
+    }
+    else
+      apartmentQuery.refetch();
+  }, [apartmentQuery]);  
+  if (residentQuery.isLoading || apartmentQuery.isLoading)
     return (
       <div
         style={{
@@ -190,7 +247,7 @@ export default function AddApartment() {
         <Spinner></Spinner>
       </div>
     );
-  if (isError)
+  if (residentQuery.error || apartmentQuery.error)
     return (
       <div
         style={{
@@ -222,7 +279,10 @@ export default function AddApartment() {
             style={{ width: "30%" }}
           ></Form.Control>
           <div style={{ width: "100%", height: "20px" }}></div>
-          <DragDropFileInput>
+          <DragDropFileInput
+            onChange={handleFileChange}
+            initFileList={fileList.current}
+          >
             <div
               className={styles.uploadIcon}
               style={{
@@ -558,11 +618,11 @@ export default function AddApartment() {
   );
 }
 const ModalResidentItem = (
-  value: Person,
+  value: Resident,
   index: number,
   selected: boolean,
-  onCheck: (param: Person) => void,
-  onUnCheck: (param: Person) => void
+  onCheck: (param: Resident) => void,
+  onUnCheck: (param: Resident) => void
 ) => {
   return (
     <div
@@ -583,9 +643,9 @@ const ModalResidentItem = (
             else onUnCheck(value);
           }}
         />
-        {value.avatar ? (
+        {value.account ? (
           <Image
-            src={value.avatar}
+            src={value.profile.avatarURL}
             alt="ava"
             style={{
               width: "2rem",
@@ -595,12 +655,23 @@ const ModalResidentItem = (
             }}
           ></Image>
         ) : (
-          <FaPersonBooth style={{ marginRight: "10px" }} />
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 16 16"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ marginRight: "1vw" }}
+          >
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+          </svg>
         )}
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div>{value.id}</div>
-          <div>{value.name}</div>
+          <div>{value.profile.name}</div>
         </div>
       </div>
       <button>
@@ -610,9 +681,9 @@ const ModalResidentItem = (
   );
 };
 const ResidentItem = (
-  value: Person,
+  value: Resident,
   index: number,
-  onRemove: (param: Person) => void
+  onRemove: (param: Resident) => void
 ) => {
   return (
     <div
@@ -629,9 +700,9 @@ const ResidentItem = (
             marginRight: "20px",
           }}
         >
-          {value.avatar ? (
+          {value.account ? (
             <Image
-              src={value.avatar}
+              src={value.profile.avatarURL}
               alt="ava"
               style={{
                 width: "2rem",
@@ -641,11 +712,21 @@ const ResidentItem = (
               }}
             ></Image>
           ) : (
-            <FaPersonBooth style={{ marginRight: "10px" }} />
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 16 16"
+              height="2em"
+              width="2em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
+            </svg>
           )}
         </div>
         <div>
-          <div>{value.name}</div>
+          <div>{value.profile.name}</div>
           <div>{value.id}</div>
         </div>
       </div>

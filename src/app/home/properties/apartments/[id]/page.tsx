@@ -14,10 +14,9 @@ import {
   Table,
 } from "react-bootstrap";
 import Furniture from "@/components/apartmentDetail/furniture";
-import { futuna } from "../../../../../public/fonts/futura";
+import { futuna } from "../../../../../../public/fonts/futura";
 import Resident from "@/components/apartmentDetail/resident";
-import { useEffect, useState } from "react";
-import { endpoint } from "@/constraints/endpoints";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Resident as ResidentModel } from "@/models/resident";
@@ -26,7 +25,6 @@ import clsx from "clsx";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { format } from "date-fns";
 import { Resident as ResidentType } from "@/models/resident";
-import Apartments from "../page";
 export default function Page({ params }: { params: { id: string } }) {
   // let apartment:Apartment= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(apartment);
@@ -40,7 +38,6 @@ export default function Page({ params }: { params: { id: string } }) {
       .get("/api/apartment/" + params.id)
       .then((res) => res.data as Apartment)
   );
-  console.log(data);
   const titleTable = ["ID", "Tên", "Số điện thoại", "Ngày tạo"];
   const furnitureInfo = [
     {
@@ -81,7 +78,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </svg>
       ),
-      value: (data?.bathRooms ?? "0").toString(),
+      value: (data?.bathroom ?? "0").toString(),
     },
     {
       title: "Square Area",
@@ -189,7 +186,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <h3>
                   <b>{data.name}</b>
                 </h3>
-                <p className="">{data.address}</p>
+                {/* <p className="">{data.}</p> */}
               </Col>
               <Col className="text-end">
                 <Button variant="warning">Edit</Button>{" "}
@@ -390,7 +387,6 @@ export default function Page({ params }: { params: { id: string } }) {
             flexWrap: "wrap",
           }}
         >
-          <Spinner></Spinner>
         </div>
       </main>
     );
