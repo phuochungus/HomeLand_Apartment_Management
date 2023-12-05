@@ -1,0 +1,45 @@
+.dropdownItem {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    padding-left: 10px;
+    margin-bottom: 0.2rem;
+    width: 100%;
+}
+
+.dropdownItem:hover {
+    background-color: #2864FF;
+    color: white;
+}
+
+.infoButton {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: fit-content;
+    background-color: white;
+    padding: 10px;
+    border-style: solid;
+    border-radius: 2rem;
+}
+
+.infoDetail {
+    display: flex;
+    align-self: center;
+    transition-property: max-width;
+    transition-duration: 1.3s;
+    max-width: 0vw;
+    overflow: hidden;
+}
+
+.infoButton:hover {
+    .infoDetail {
+        max-width: 200px;
+    }
+}
+
+.infoButton:focus-within {
+    .infoDetail {
+        max-width: 200px;
+    }
+}

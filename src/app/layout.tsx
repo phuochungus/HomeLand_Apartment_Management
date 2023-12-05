@@ -1,27 +1,6 @@
-"use client";
-
-import CustomHeader from '@/components/customHeader/customHeader'
-import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
-
-import './globals.css'
-import { useEffect } from 'react';
-import { ringift } from '../../public/fonts/Ringift';
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-
-  useEffect(() => {
-    require("bootstrap/dist/js/bootstrap.bundle.min.js");
-  }, []);
-  const ringgift_font = ringift;
-
-  return (
-    <html lang="en">
-      <body className={ringgift_font.className}><CustomHeader></CustomHeader>{children}</body>
-    </html>
-  )
+"use client"
+import "./globals.css";
+import "./i18next";
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <body>{children}</body>;
 }
-  

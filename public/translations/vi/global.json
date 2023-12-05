@@ -1,0 +1,24 @@
+{
+  "header": { "message": "Chao mung den Pet Store Deluxe" },
+  "home": {
+    "body": "Mot shop ho tro ban abc"
+  },
+  "building":"Toà nhà",
+  "floor":"Tầng",
+  "apartment": "Căn hộ",
+  "see_all_contract":"Danh sách hợp đồng",
+  "phone_number": "Số Điện Thoại",
+  "name": "Tên",
+  "create_at": "Ngày tạo",
+  "expire_at": "Ngày hết hạn",
+  "search_contract": "Tìm hợp đồng của cư dân",
+  "status":"Trạng thái",
+  "add_contract":"Tạo hợp đồng",
+  "resident":"Cư dân",
+  "residentsList":"Danh sách cư dân",
+  "search_resident":"Tìm cư dân",
+  "birthday":"Ngày sinh",
+  "gender":"Giới tính",
+  "male":"Nam",
+  "female":"Nữ"
+}
