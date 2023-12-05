@@ -9,7 +9,7 @@ export const endpoint = {
   manager: baseUrl + "/manager",
   technician: baseUrl + "/technician",
   apartment: baseUrl + "/apartment",
-    employee: baseUrl + "/employee",
+  employee: baseUrl + "/employee",
   person: baseUrl + "/person",
   me: baseUrl + "/me",
   building: baseUrl + "/building",

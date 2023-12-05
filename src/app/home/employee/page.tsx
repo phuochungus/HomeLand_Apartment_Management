@@ -27,7 +27,7 @@ import { profile } from "console";
 import SearchLayout from "@/components/searchLayout1/searchLayout";
 import { useRouter } from "next/router";
 
-export default function Dashboard() {
+export default function Employee() {
   const [isSearchResult, setIsSearchResult] = useState(false);
  
   const [selectedId, setSelectedId] = useState("");
@@ -129,7 +129,7 @@ export default function Dashboard() {
           <h1 className={classNames(dashboardStyles.headingLg)}>Danh sách nhân viên</h1>
           <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
 
-            <ButtonComponent href="/home/dashboard/addemployee?auth=true" className={classNames(dashboardStyles.addBtn)}>
+            <ButtonComponent href="/home/employee/addemployee?auth=true" className={classNames(dashboardStyles.addBtn)}>
               Tạo
             </ButtonComponent>
 
@@ -155,7 +155,7 @@ export default function Dashboard() {
               }
               return (
                 <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
-                  <Link href={`/home/dashboard/${employee.id}/?auth=true`} className={dashboardStyles.link}>
+                  <Link href={`/home/employee/${employee.id}/?auth=true`} className={dashboardStyles.link}>
                     <Card style={customCardStyle}
                       onMouseEnter={() => setHoveredCard(idx)}
                       onMouseLeave={() => setHoveredCard(null)}

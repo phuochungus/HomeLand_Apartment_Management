@@ -29,6 +29,7 @@ type FormValue = {
         avatarImg?: any;
         frontImg: any;
         backImg: any;
+        taskInfo: string;
 };
 const AddEmployee = () => {
 
@@ -56,6 +57,8 @@ const AddEmployee = () => {
                 dateOfBirth: "",
                 gender: "",
                 phoneNumber: "",
+                taskInfo: "",
+                identifyNumber: ""
         });
 
         const [avatar, setAvatar] = useState<any>();
@@ -141,6 +144,9 @@ const AddEmployee = () => {
                 if (!backImg) {
                         err.backImg = "Vui lòng chọn ảnh!";
                 }
+                if (formValue.identifyNumber === "") {
+                        err.name = "Trường căn cước công dân là bắt buộc!";
+                      }
                 return err;
         };
         const handleChange = useCallback(
@@ -167,6 +173,8 @@ const AddEmployee = () => {
                         form.append("phone_number", formValue.phoneNumber);
                         form.append("front_identify_card_photo", frontImg);
                         form.append("back_identify_card_photo", backImg);
+                        form.append("task_info", formValue.taskInfo);
+                        form.append("identify_number", formValue.identifyNumber);
                         if (avatar) {
                                 console.log(avatar);
                                 form.append("profile_picture", avatar);
@@ -182,6 +190,8 @@ const AddEmployee = () => {
                                                         dateOfBirth: "",
                                                         gender: "",
                                                         phoneNumber: "",
+                                                        taskInfo: "",
+                                                        identifyNumber: "",
 
 
                                                 });
@@ -258,30 +268,30 @@ const AddEmployee = () => {
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>Giới tính</Form.Label>
 
-                                     
-                                        <div key={`inline-radio`} className={styles.box}>
 
-                                                <Form.Check
-                                                        inline
-                                                        label="Nam"
-                                                        name="gender"
-                                                        value="male"
-                                                        onChange={handleChange}
-                                                        type='radio'
-                                                        id={`inline-radio-1`}
-                                                />
-                                                <Form.Check
-                                                        inline
-                                                        label="Nữ"
-                                                        name="gender"
-                                                        type='radio'
-                                                        value="female"
-                                                        onChange={handleChange}
-                                                        id={`inline-radio-2`}
-                                                />
-                                                
-                                        </div>
-                                        {errors && errors.gender && (
+                                                <div key={`inline-radio`} className={styles.box}>
+
+                                                        <Form.Check
+                                                                inline
+                                                                label="Nam"
+                                                                name="gender"
+                                                                value="male"
+                                                                onChange={handleChange}
+                                                                type='radio'
+                                                                id={`inline-radio-1`}
+                                                        />
+                                                        <Form.Check
+                                                                inline
+                                                                label="Nữ"
+                                                                name="gender"
+                                                                type='radio'
+                                                                value="female"
+                                                                onChange={handleChange}
+                                                                id={`inline-radio-2`}
+                                                        />
+
+                                                </div>
+                                                {errors && errors.gender && (
                                                         <span className={styles.error}>{errors.gender}</span>
                                                 )}
                                         </Form.Group>
@@ -290,6 +300,36 @@ const AddEmployee = () => {
                                                 <Form.Control size="lg" type="text" placeholder="" name="phoneNumber" value={formValue.phoneNumber} onChange={handleChange} />
                                                 {errors && errors.phoneNumber && (
                                                         <span className={styles.error}>{errors.phoneNumber}</span>
+                                                )}
+                                        </Form.Group>
+                                        <Form.Group className={styles.box}>
+                                                <Form.Label className={styles.label}>
+                                                        Công việc
+                                                </Form.Label>
+                                                <Form.Control
+                                                        size="lg"
+                                                        type="text"
+                                                        name="taskInfo"
+                                                        onChange={handleChange}
+                                                        value={formValue.taskInfo}
+                                                        placeholder=""
+                                                />
+
+                                        </Form.Group>
+                                        <Form.Group className={styles.box}>
+                                                <Form.Label className={styles.label}>
+                                                        Số căn cước công dân
+                                                </Form.Label>
+                                                <Form.Control
+                                                        size="lg"
+                                                        type="text"
+                                                        name="identifyNumber"
+                                                        onChange={handleChange}
+                                                        value={formValue.identifyNumber}
+                                                        placeholder=""
+                                                />
+                                                {errors && errors.identifyNumber && (
+                                                        <span className={styles.error}>{errors.identifyNumber}</span>
                                                 )}
                                         </Form.Group>
                                         <div className={styles.box}>

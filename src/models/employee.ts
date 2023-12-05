@@ -7,5 +7,5 @@ export type Employee = {
         profile: Profile;
         created_at: Date;
         deleted_at?: Date;
-      
+        task_info?: string,
 }
