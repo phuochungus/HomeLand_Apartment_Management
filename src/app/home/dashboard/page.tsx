@@ -4,6 +4,7 @@ import styles from "../page.module.css";
 import { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
+import { UserProfile } from "@/libs/UserProfile";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
   useEffect(() => {
@@ -63,6 +64,8 @@ export default function Dashboard() {
 
   return (
     <main className={styles.main}>
+      
+
       <div className={styles.chart}>
         <canvas id="ticket-chart"></canvas>
       </div>

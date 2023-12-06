@@ -2,6 +2,7 @@ import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 import { endpoint } from '@/constraints/endpoints';
 import { Apartment } from '@/models/apartment';
+import { Resident } from '@/models/resident';
 
 export async function POST(request: NextRequest) {
   let body = await request.formData()
@@ -23,13 +24,14 @@ export async function POST(request: NextRequest) {
         length: element.length,
         name: element.name,
         rent: element.rent,
-        bathRooms: element.number_of_bedroom,
+        bathroom: element.number_of_bathroom,
         bedroom: element.number_of_bedroom,
         images: element.imageURLs,
         status: element.status,
         description: element.description,
         floorId: element.floor_id,
-        buildingId: element.building_id
+        buildingId: element.building_id,
+        resident: response.data.resident as Resident[]
       } as Apartment
       return NextResponse.json(temp, {
         status: 201,
@@ -44,7 +46,7 @@ export async function GET(request: NextRequest) {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: endpoint.apartment + (page != null ? "?page=" + page : ""),
+    url: endpoint.apartment + (page != null ? "?page=" + page : ""), 
     headers: {
       'Authorization': "Bearer " + request.cookies.get("token")?.value,
       'Content-Type': 'application/json',
@@ -60,13 +62,14 @@ export async function GET(request: NextRequest) {
           length: element.length,
           name: element.name,
           rent: element.rent,
-          bathRooms: element.number_of_bedroom,
+          bathroom: element.number_of_bathroom,
           bedroom: element.number_of_bedroom,
           images: element.imageURLs,
           status: element.status,
           description: element.description,
           floorId: element.floor_id,
-          buildingId: element.building_id
+          buildingId: element.building_id,
+          resident: response.data.resident as Resident[]
         } as Apartment
         result.push(temp)
       });

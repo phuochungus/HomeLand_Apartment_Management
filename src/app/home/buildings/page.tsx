@@ -154,7 +154,7 @@ export default function Building() {
           <h1 className={clsx(utilStyles.headingLg)}>List Of Building</h1>
           <ButtonComponent
             href="/home/buildings/addBuilding?auth=true"
-            //   preIcon={<AddResidentIcon width={24} height={24} />}
+            //   preIcon={<AddResidentIcon width={24} height={24}  />}
             className={clsx(buildingStyles.addBtn, futuna.className)}
           >
             Create Building

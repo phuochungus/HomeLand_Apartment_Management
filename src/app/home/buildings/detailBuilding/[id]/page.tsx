@@ -26,9 +26,7 @@ import {
 import ModalComponent from "@/components/Modal/Modal";
 import { format } from "date-fns";
 import { Manager } from "@/models/manager";
-import qs from "qs";
-import { NULL } from "sass";
-import { url } from "inspector";
+
 const DetailBuilding = ({ params }: { params: { id: string } }) => {
   // init modal add manager
   const [showModalManager, setShowModalManager] = useState(false);

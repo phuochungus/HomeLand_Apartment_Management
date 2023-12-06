@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
-import { BuildingIcon, ManagerIcon, TechnicianIcon } from "@/components/icons";
+import { BuildingIcon, ManagerIcon, StaffIcon, TechnicianIcon } from "@/components/icons";
 
 export const sidebarInfo = [
   {
@@ -26,15 +26,47 @@ export const sidebarInfo = [
   {
     title: "Properties",
     path: "properties",
-    svg: <Image src={Images.Properties} alt="ico" width={30} height={30} />,
+    svg: (
+      <svg
+        width="44"
+        height="44"
+        viewBox="0 0 44 44"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_382_1569)">
+          <path
+            d="M31.1666 27.4997H34.8333V31.1663H31.1666V27.4997ZM31.1666 20.1663H34.8333V23.833H31.1666V20.1663ZM31.1666 12.833H34.8333V16.4997H31.1666V12.833ZM25.1899 12.833L27.4999 14.373V12.833H25.1899Z"
+            fill="black"
+          />
+          <path
+            d="M18.3333 5.5V8.26833L21.9999 10.7067V9.16667H38.4999V34.8333H31.1666V38.5H42.1666V5.5H18.3333Z"
+            fill="black"
+          />
+          <path
+            d="M14.9783 10.4502L27.4999 18.7919V38.5002H1.83325V19.2135L14.9783 10.4502ZM18.3333 34.8335H23.8333V20.4602L14.9783 14.8319L5.49992 20.8635V34.8335H10.9999V23.8335H18.3333V34.8335Z"
+            fill="black"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_382_1569">
+            <rect width="44" height="44" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    ),
     menu: [
       {
-        title: "List apartments",
-        href: "/home/properties",
+        title: "Apartment",
+        href: "/home/properties/apartments",
       },
       {
-        title: "Add apartments",
-        href: "/home/properties/add",
+        title: "Vehicle",
+        href: "/home/properties/vehicles",
+      },
+      {
+        title: "Equipment",
+        href: "/home/properties/equipments",
       },
     ],
     roles: ["admin", "manager"],
@@ -44,8 +76,8 @@ export const sidebarInfo = [
     path: "service",
     svg: (
       <svg
-        width="30"
-        height="30"
+        width="40"
+        height="40"
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +90,11 @@ export const sidebarInfo = [
     ),
     menu: [],
     roles: ["admin", "manager", "resident"],
+  },
+  {
+    title: "Employee",
+    svg: <StaffIcon width={30} height={30} />,
+    roles: ["admin", "manager"],
   },
   {
     title: "Contracts",
@@ -166,5 +203,26 @@ export const sidebarInfo = [
     menu: [],
     roles: ["admin", "manager", "technician"],
   },
- 
+  {
+    title: "Floor",
+    svg: (
+      <svg
+        width="50"
+        height="50"
+        viewBox="0 -10 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M2 2v18h3v-1H3v-6h3V9h5V8H6V3h15v5h-6v1h6v5h-4v1h4v6H11v-7h-1v5H8v1h2v2h12V2zm3 4H3V5h2zm-2 6v-1h2v1zm2-2H3V9h2zM3 8V7h2v1zm2-4H3V3h2z"
+          fill="black"
+          stroke="black" 
+          stroke-width="1" 
+        />
+        
+      </svg>
+    ),
+    menu: [],
+    roles: [],
+  },
 ];

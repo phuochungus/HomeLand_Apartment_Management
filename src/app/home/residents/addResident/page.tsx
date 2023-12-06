@@ -203,6 +203,7 @@ const AddResident = () => {
           })
           .catch((e) => {
             removeLoadingFilter(document.body!);
+            console.log(e);
             toastMessage({ type: "error", title: "Create faily!" });
           });
       } catch (e) {
@@ -399,7 +400,7 @@ const AddResident = () => {
             <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
               Create
             </ButtonComponent>
-          </Form>
+          </Form> 
         </div>
       </div>
       <ToastContainer

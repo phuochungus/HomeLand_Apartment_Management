@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-import React from 'react'
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import styles from './Modal.module.scss'
-import { futuna } from '../../../public/fonts/futura';
+import clsx from "clsx";
+import React from "react";
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import styles from "./Modal.module.scss";
+import { futuna } from "../../../public/fonts/futura";
 
 const ModalComponent = ({show, setShow, title, content = 'When deleted, the data is still stored in the database.', handleConfirm} : {
     show:boolean,
@@ -33,4 +33,4 @@ const ModalComponent = ({show, setShow, title, content = 'When deleted, the data
   )
 }
 
-export default ModalComponent
+export default ModalComponent;
