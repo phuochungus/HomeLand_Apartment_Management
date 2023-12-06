@@ -288,7 +288,8 @@ export default function Page({ params }: { params: { id: string } }) {
                         phone_number={resident.profile.phone_number}
                       ></Resident>
                     </Col>
-                    {index == residentInfo.length - 1 && index % 2 == 0 ? (
+                    {index === (data?.residents?.length ?? 0) - 1 &&
+                    index % 2 === 0 ? (
                       <Col></Col>
                     ) : (
                       <></>

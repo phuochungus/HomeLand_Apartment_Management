@@ -196,9 +196,8 @@ export default function DragDropFileInput({
       />
       <div
         id={id ?? (imageid ? imageid + "_container" : "")}
-        className={`${dragActive ? styles.dragActive : ""} ${className} ${
-          styles.labelFileUpload
-        }`}
+        className={`${dragActive ? styles.dragActive : ""} ${className} ${styles.labelFileUpload
+          }`}
       >
         <div
           style={{

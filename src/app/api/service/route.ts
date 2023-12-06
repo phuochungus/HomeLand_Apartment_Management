@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     data: body,
     headers: {
       Authorization: "Bearer " + request.cookies.get("token")?.value,
-      "Content-Type": "application/json",
+      "Content-Type": `multipart/form-data`,
     },
   };
   const response = await axios

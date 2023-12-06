@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: endpoint.apartment + (page != null ? "?page=" + page : ""),
+    url: endpoint.apartment + (page != null ? "?page=" + page : ""), 
     headers: {
       'Authorization': "Bearer " + request.cookies.get("token")?.value,
       'Content-Type': 'application/json',
