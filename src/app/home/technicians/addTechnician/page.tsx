@@ -186,6 +186,7 @@ const AddTechnician = () => {
       }
       try {
         loadingFiler(document.body!);
+        console.log(form)
         await axios
           .post("/api/technician", form)
           .then((response) => {

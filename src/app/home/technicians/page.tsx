@@ -2,8 +2,9 @@
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import styles from "../page.module.css";
 import residentStyles from "../residents/resident.module.scss";
-import tableStyles from '../../../styles/table.module.scss'
+import tableStyles from "../../../styles/table.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
+import pageStyles from "@/styles/page.module.scss";
 import { clsx } from "clsx";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
@@ -32,18 +33,21 @@ export default function Residents() {
   const [technicians, setTechnicians] = useState<Array<Technician>>([]);
   const [selectedId, setSelectedId] = useState("");
   const searchRef = createRef<HTMLInputElement>();
+  //pagination
+  const [totalPages, setTotalPages] = useState(0);
+  const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const listOptions = [
     {
-      value: 10,
+      value: 1,
     },
     {
-      value: 20,
+      value: 2,
     },
     {
-      value: 50,
+      value: 3,
     },
     {
-      value: 100,
+      value: 4,
     },
   ];
   const deleleHandle = (id: string) => {
@@ -55,8 +59,32 @@ export default function Residents() {
       loadingFiler(document.body!);
       const res = await axios.get("/api/technician");
       removeLoadingFilter(document.body!);
-      setTechnicians(res.data);
+      const data = res.data;
+      setTechnicians(data.items);
+      setTotalPages(data.meta.totalPages);
 
+      return res.data;
+    } catch (error) {
+      removeLoadingFilter(document.body!);
+
+      console.log(error);
+    }
+  };
+  const pagination = async (page?: number, limit?: number) => {
+    try {
+      console.log(page, limit);
+      loadingFiler(document.body!);
+      const res = await axios.get("/api/technician", {
+        params: {
+          page,
+          limit,
+        },
+      });
+      removeLoadingFilter(document.body!);
+      const data = res.data;
+      setTechnicians(data.items);
+      console.log(totalPages);
+      setTotalPages(data.meta.totalPages);
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
@@ -68,17 +96,11 @@ export default function Residents() {
     "technicians",
     retrieveTechnicians,
     {
-      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      retry: false,
     }
   );
-  const titleTable = [
-    
-    "Name",
-    "Email",
-    "Phone Number",
-    "Create At",
-    "Action"
-  ];
+  const titleTable = ["Name", "Email", "Phone Number", "Create At", "Action"];
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
       console.log("hah");
@@ -113,7 +135,6 @@ export default function Residents() {
     console.log(id);
     setShowModal(false);
     try {
-
       await axios.delete(`/api/technician/${id}`);
       toastMessage({ type: "success", title: "Delete successfully!" });
 
@@ -123,11 +144,32 @@ export default function Residents() {
       console.log(err);
     }
   };
-
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleSetActive = (count: any) => {
+    const limit: number = parseInt(count);
+    setCurrentPage(1);
+    setMaxPageDisplay(count);
+    pagination(1, limit);
+  };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+      pagination(currentPage - 1, maxPageDisplay);
+    }
+  };
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+      pagination(currentPage + 1, maxPageDisplay);
+    }
+  };
   return (
     <main className={clsx(styles.main)}>
       <div className={clsx(residentStyles.wrapper, futuna.className)}>
-        <h1 className={clsx(utilStyles.headingXl)}>Technical staff management</h1>
+        <h1 className={clsx(utilStyles.headingXl)}>
+          Technical staff management
+        </h1>
         <div className={clsx(residentStyles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>List Of Technicians</h1>
           <ButtonComponent
@@ -142,10 +184,20 @@ export default function Residents() {
           <div className={clsx(residentStyles.perPage)}>
             <span>Show</span>
             <span>
-              <Form.Select aria-label="Default select example">
+              <Form.Select
+                onChange={(e) => handleSetActive(e.target.value)}
+                aria-label="Default select example"
+              >
                 {listOptions.map(
                   (option, index): JSX.Element => (
-                    <option key={index} value={index}>
+                    <option
+                      className={clsx({
+                        [residentStyles.active]:
+                          maxPageDisplay === option.value,
+                      })}
+                      key={index}
+                      value={option.value}
+                    >
                       {option.value}
                     </option>
                   )
@@ -161,17 +213,31 @@ export default function Residents() {
             ref={searchRef}
           />
         </div>
-        <div className="w-100 mt-5">
-          <table
-            className={clsx(tableStyles.table, futuna.className)}
-            
+        <div className={pageStyles.pageContainer}>
+          <ButtonComponent
+            onClick={handlePrevPage}
+            className={pageStyles.changePageBtn}
           >
+            Previous
+          </ButtonComponent>
+          <p>
+            {currentPage}/{totalPages}
+          </p>
+          <ButtonComponent
+            onClick={handleNextPage}
+            className={pageStyles.changePageBtn}
+          >
+            Next
+          </ButtonComponent>
+        </div>
+        <div className="w-100 mt-5">
+          <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
                 {titleTable.map((title: String, index) => (
                   <th key={index}>
                     {title}
-                     {/* <SortIcon width={12} height={12} /> */}
+                    {/* <SortIcon width={12} height={12} /> */}
                   </th>
                 ))}
               </tr>
@@ -183,15 +249,22 @@ export default function Residents() {
 
                 return (
                   <tr key={index}>
-                    
-                    <td style={{fontWeight: 700}}>{technician.profile.name}</td>
+                    <td style={{ fontWeight: 700 }}>
+                      {technician.profile.name}
+                    </td>
                     <td>{technician.account?.email}</td>
                     <td>{technician.profile.phone_number}</td>
                     <td>{createAt}</td>
-                    <td >
+                    <td>
                       <div className="d-flex align-items-center">
                         <ButtonComponent
-                          preIcon={<EditIcon className={residentStyles.editIcon} width={16} height={16} />}
+                          preIcon={
+                            <EditIcon
+                              className={residentStyles.editIcon}
+                              width={16}
+                              height={16}
+                            />
+                          }
                           className={clsx(
                             residentStyles.cudBtn,
                             residentStyles.editBtn
@@ -203,7 +276,7 @@ export default function Residents() {
                         <div
                           onClick={() => deleleHandle(technician.id)}
                           className={residentStyles.TrashIcon}
-                        > 
+                        >
                           <TrashIcon
                             className={residentStyles.trash}
                             width={16}
