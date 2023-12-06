@@ -15,7 +15,8 @@ import {
   CloseIcon,
   EditIcon,
   SortIcon,
-  TrashIcon,
+  TrashIcon
+  
 } from "@/components/icons";
 import { useState, useEffect, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";

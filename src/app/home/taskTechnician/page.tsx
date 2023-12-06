@@ -220,11 +220,11 @@ const TaskTechnician = () => {
                 const resident: Resident = task.complain.resident;
                 return (
                   <tr key={index}>
-                    <td width="22%">{createAt}</td>
-                    <td width="33%">{task.complain.content}</td>
+                    <td width="20%">{createAt}</td>
+                    <td width="30%">{task.complain.content}</td>
                     <td width="20%">{task.assigner.account.email}</td>
 
-                    <td width="10%">
+                    <td width="5%">
                       <span
                         className={clsx(styles.status, {
                           [styles.done]: status === "done",
@@ -236,7 +236,7 @@ const TaskTechnician = () => {
                         {status}
                       </span>
                     </td>
-                    <td width="5%">
+                    <td width="20%">
                       {task.invoice ? (
                         <ButtonComponent
                           preIcon={<BillIcon width={16} height={16} />}
@@ -259,7 +259,7 @@ const TaskTechnician = () => {
                       )}
                     </td>
 
-                    <td style={{ textAlign: "center" }} width="10%">
+                    <td style={{ textAlign: "center" }} width="5%">
                       <Tippy
                         placement="right-start"
                         offset={[0, 0]}

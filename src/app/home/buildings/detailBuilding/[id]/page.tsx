@@ -3,12 +3,12 @@ import React, { ChangeEvent, useCallback, useState } from "react";
 import styles from "./detailBuilding.module.scss";
 import mainStyles from "../../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
+import residentStyles from '@/app/home/residents/resident.module.scss'
+import pageStyles from '@/styles/page.module.scss';
 import buildingStyles from "../../building.module.scss";
 import Form from "react-bootstrap/Form";
 import clsx from "clsx";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
-import Image from "next/image";
-import ToastComponent from "@/components/ToastComponent/ToastComponent";
 import { futuna } from "../../../../../../public/fonts/futura";
 import axios from "axios";
 import { Building } from "@/models/building";
@@ -16,7 +16,7 @@ import { useQuery } from "react-query";
 import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { ToastContainer } from "react-toastify";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, Modal, Table} from "react-bootstrap";
 import {
   AddResidentIcon,
   CloseIcon,
@@ -36,6 +36,23 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
   const [managers, setManagers] = useState<Array<Manager>>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
+  const listOptions = [
+    {
+      value: 10,
+    },
+    {
+      value: 20,
+    },
+    {
+      value: 50,
+    },
+    {
+      value: 100,
+    },
+  ];
+   //pagination
+   const [totalPages, setTotalPages] = useState(0);
+   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const retrieveBuilding = async () => {
     try {
       loadingFiler(document.body!);
@@ -47,6 +64,28 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
+      console.log(error);
+    }
+  };
+  const pagination = async (page?: number, limit?: number) => {
+    try {
+      console.log(page, limit);
+      loadingFiler(document.body!);
+      const res = await axios.get("/api/manager", {
+        params: {
+          page,
+          limit,
+        },
+      });
+      removeLoadingFilter(document.body!);
+      const data = res.data;
+      setManagers(data.items);
+      console.log(totalPages);
+      setTotalPages(data.meta.totalPages);
+      return res.data;
+    } catch (error) {
+      removeLoadingFilter(document.body!);
+
       console.log(error);
     }
   };
@@ -116,14 +155,34 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
   };
   const handleShowManagerModal = async () => {
     const res = await axios.get("/api/manager");
-    const data: Manager[] = res.data;
-    const newData = data.filter((item) => item.building === null);
-    setManagers(newData);
+    const data = res.data;
+      setManagers(data.items);
+       setTotalPages(data.meta.totalPages);
     setShowModalManager(true);
   };
   const { refetch } = useQuery("detail-building", retrieveBuilding, {
     staleTime: Infinity,
   });
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleSetActive = (count: any) => {
+    const limit: number = parseInt(count);
+    setCurrentPage(1);
+    setMaxPageDisplay(count);
+    pagination(1, limit);
+  };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+      pagination(currentPage - 1, maxPageDisplay);
+    }
+  };
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+      pagination(currentPage + 1, maxPageDisplay);
+    }
+  };
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
@@ -263,7 +322,54 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
         </Modal.Header>
         <Modal.Body className={styles.bodyModal}>
           <h3 className={styles.bodyHeader}>List Of Manager</h3>
+          <div className="d-flex w-100 mt-3 align-items-center justify-content-between">
+          <div style={{marginTop: 0}} className={pageStyles.pageContainer}>
+          <ButtonComponent
+            onClick={handlePrevPage}
+            className={pageStyles.changePageBtn}
+          >
+            Previous
+          </ButtonComponent>
+          <p>
+            {currentPage}/{totalPages}
+          </p>
+          <ButtonComponent
+            onClick={handleNextPage}
+            className={pageStyles.changePageBtn}
+          >
+            Next
+          </ButtonComponent>
+        </div>
+          <div className={clsx(residentStyles.perPage)}>
+            <span>Show</span>
+            <span>
+              <Form.Select
+                onChange={(e) => handleSetActive(e.target.value)}
+                aria-label="Default select example"
+              >
+                {listOptions.map(
+                  (option, index): JSX.Element => (
+                    <option
+                      className={clsx({
+                        [residentStyles.active]:
+                          maxPageDisplay === option.value,
+                      })}
+                      key={index}
+                      value={option.value}
+                    >
+                      {option.value}
+                    </option>
+                  )
+                )}
+              </Form.Select>
+            </span>
+            <span>Entries</span>
+          </div>
+
+         
+        </div>
           <Table
+          style={{marginTop:20}}
             className={clsx(buildingStyles.tableBuilding, futuna.className)}
             striped
             bordered

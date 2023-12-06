@@ -4,10 +4,12 @@ import utilStyles from "@/styles/utils.module.scss";
 import styles from "./complain.module.scss";
 import modalStyles from '../../../styles/modal.module.scss';
 import tableStyles from '../../../styles/table.module.scss';
+import residentStyles from '@/app/home/residents/resident.module.scss'
+import pageStyles from '@/styles/page.module.scss';
 import mainStyles from "../page.module.css";
 import { futuna } from "../../../../public/fonts/futura";
 import clsx from "clsx";
-import { Modal, Table } from "react-bootstrap";
+import { Form, Modal, Table } from "react-bootstrap";
 import { Complain, complainStatus } from "@/models/complain";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { AssignIcon, CloseIcon, DetailIcon, EditIcon, RejectIcon } from "@/components/icons";
@@ -33,7 +35,23 @@ const Complain = () => {
     "Create at",
     "Action",
   ];
-
+  const listOptions = [
+    {
+      value: 10,
+    },
+    {
+      value: 20,
+    },
+    {
+      value: 50,
+    },
+    {
+      value: 100,
+    },
+  ];
+   //pagination
+   const [totalPages, setTotalPages] = useState(0);
+   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const titleAssign = ["ID", "Tên", "Số điện thoại", "Email", "Ngày tạo"];
   const [complains, setComplains] = useState<Array<Complain>>([]);
   const [showModal, setShowModal] = useState(false);
@@ -57,12 +75,35 @@ const Complain = () => {
       console.log(err);
     }
   };
+  const pagination = async (page?: number, limit?: number) => {
+    try {
+      console.log(page, limit);
+      loadingFiler(document.body!);
+      const res = await axios.get("/api/technician", {
+        params: {
+          page,
+          limit,
+        },
+      });
+      removeLoadingFilter(document.body!);
+      const data = res.data;
+      setTechnicians(data.items);
+      console.log(totalPages);
+      setTotalPages(data.meta.totalPages);
+      return res.data;
+    } catch (error) {
+      removeLoadingFilter(document.body!);
+
+      console.log(error);
+    }
+  };
     //handle check
    
     const handleShowTechnicianModal = async (id:string) => {
       const res = await axios.get("/api/technician");
-      const data: Technician[] = res.data;
-      setTechnicians(data);
+      const data = res.data;
+      setTechnicians(data.items);
+       setTotalPages(data.meta.totalPages);
     setSelectedId(id);
 
       setShowModalAssign(true);
@@ -118,7 +159,26 @@ const Complain = () => {
     "complains",
     retrieveComplains
   );
-
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleSetActive = (count: any) => {
+    const limit: number = parseInt(count);
+    setCurrentPage(1);
+    setMaxPageDisplay(count);
+    pagination(1, limit);
+  };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+      pagination(currentPage - 1, maxPageDisplay);
+    }
+  };
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+      pagination(currentPage + 1, maxPageDisplay);
+    }
+  };
   return (
     <main className={clsx(mainStyles.main)}>
       <div className={clsx(styles.wrapper, futuna.className)}>
@@ -177,7 +237,7 @@ const Complain = () => {
                     <td>{createAt}</td>
 
                     <td style={{ width: 200 }}>
-                      <div className="d-flex">
+                      <div className="d-flex align-items-center justify-content-between">
                       {complain.task?<ButtonComponent
                           preIcon={<AssignIcon width={16} height={16} />}
                           className={clsx(styles.cudBtn, styles.assignedBtn)}
@@ -253,7 +313,54 @@ const Complain = () => {
         </Modal.Header>
         <Modal.Body className={modalStyles.bodyModal}>
           <h3 className={modalStyles.bodyHeader}>Technician List</h3>
+          <div className="d-flex w-100 mt-3 align-items-center justify-content-between">
+          <div style={{marginTop: 0}} className={pageStyles.pageContainer}>
+          <ButtonComponent
+            onClick={handlePrevPage}
+            className={pageStyles.changePageBtn}
+          >
+            Previous
+          </ButtonComponent>
+          <p>
+            {currentPage}/{totalPages}
+          </p>
+          <ButtonComponent
+            onClick={handleNextPage}
+            className={pageStyles.changePageBtn}
+          >
+            Next
+          </ButtonComponent>
+        </div>
+          <div className={clsx(residentStyles.perPage)}>
+            <span>Show</span>
+            <span>
+              <Form.Select
+                onChange={(e) => handleSetActive(e.target.value)}
+                aria-label="Default select example"
+              >
+                {listOptions.map(
+                  (option, index): JSX.Element => (
+                    <option
+                      className={clsx({
+                        [residentStyles.active]:
+                          maxPageDisplay === option.value,
+                      })}
+                      key={index}
+                      value={option.value}
+                    >
+                      {option.value}
+                    </option>
+                  )
+                )}
+              </Form.Select>
+            </span>
+            <span>Entries</span>
+          </div>
+
+         
+        </div>
           <table
+          style={{marginTop: 20}}
             className={clsx(modalStyles.table, futuna.className)}
           >
             <thead>
