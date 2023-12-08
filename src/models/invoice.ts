@@ -9,4 +9,5 @@ export type Invoice = {
   expired_at: Date;
   servicePackage: ServicePackage;
   buyer: Resident;
+  created_at: Date;
 };

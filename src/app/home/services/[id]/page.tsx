@@ -10,6 +10,7 @@ import {
   Image,
   Row,
   Spinner,
+  Table,
 } from "react-bootstrap";
 import Furniture from "../../../../components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
@@ -26,16 +27,22 @@ import StarRatings from "react-star-ratings";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { Feedback } from "@/models/feedback";
-import { Value } from "sass";import ServicePackageLayout from "../../../../components/servicePackage/servicePackage";
+import { Value } from "sass";
+import ServicePackageLayout from "../../../../components/servicePackage/servicePackage";
+import { UserProfile } from "../../../../libs/UserProfile";
+import { Invoice } from "../../../../models/invoice";
+import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export default function Page({ params }: { params: { id: string } }) {
-
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(service);
   type FormValue = {
     rating: string;
     comment: string;
   };
+  const [t, i18n] = useTranslation();
+
   const [formValue, setFormValue] = useState({
     rating: "",
     comment: "",
@@ -44,7 +51,7 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await axios.get('/api/feedback');
+        const response = await axios.get("/api/feedback");
         setFeedbackData(response.data);
       } catch (err) {
         console.error(err);
@@ -74,8 +81,8 @@ export default function Page({ params }: { params: { id: string } }) {
   const [feedback_id, setFeedbackId] = useState<string | null>(null);
   const createHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('createHandle called');
-    console.log('formValue:', formValue);
+    console.log("createHandle called");
+    console.log("formValue:", formValue);
     const err = validation();
     setErrors(err);
     if (Object.keys(err).length === 0) {
@@ -98,10 +105,13 @@ export default function Page({ params }: { params: { id: string } }) {
   };
   const [showModal, setShowModal] = useState(false);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
-    setFormValue(prevState => ({ ...prevState, rating: newRating.toString() }));
+    setFormValue((prevState) => ({
+      ...prevState,
+      rating: newRating.toString(),
+    }));
   };
   const handleModalOpen = () => {
     setShowModal(true);
@@ -116,6 +126,18 @@ export default function Page({ params }: { params: { id: string } }) {
     "service",
     () =>
       axios.get("/api/service/" + params.id).then((res) => res.data as Service),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  const [invoices, setInvoice] = useState<Invoice[]>([]);
+
+  useQuery(
+    "invoice",
+    () =>
+      axios.get("/api/invoice" + "?serviceId=" + params.id).then((res) => {
+        setInvoice(res.data as Invoice[]);
+      }),
     {
       refetchOnWindowFocus: false,
     }
@@ -179,7 +201,12 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
               </Col>
               <Col md="auto">
-                <Button onClick={handleModalOpen}>Add</Button>
+                {UserProfile.getRole() != "resident" ? (
+                  <Button onClick={handleModalOpen}>Add</Button>
+                ) : (
+                  <></>
+                )}
+
                 <ServicePackageModal
                   show={showModal}
                   successMessage="Add service package successfully!"
@@ -190,8 +217,6 @@ export default function Page({ params }: { params: { id: string } }) {
             </Row>
             <Row
               style={{
-                backgroundColor: "rgba(40, 100, 255, 0.1)",
-                border: "1px black solid",
                 borderRadius: "20px",
                 margin: "20px 0px",
                 paddingTop: "20px ",
@@ -210,7 +235,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       ></ServicePackageLayout>
                     </Col>
                     {index == data.servicePackages.length - 1 &&
-                      index % 2 == 0 ? (
+                    index % 2 == 0 ? (
                       <Col></Col>
                     ) : (
                       <></>
@@ -221,6 +246,83 @@ export default function Page({ params }: { params: { id: string } }) {
                 <></>
               )}
             </Row>
+            {UserProfile.getRole() == "resident" && invoices.length != 0 ? (
+              <>
+                {" "}
+                <Row style={{ marginTop: "20px" }}>
+                  <Col>
+                    <h3>
+                      <b>Purchase History</b>
+                    </h3>
+                  </Col>
+                </Row>
+                <Row
+                  style={{
+                    borderRadius: "20px",
+                    margin: "20px 0px",
+                    paddingTop: "20px ",
+                  }}
+                >
+                  <Table responsive="sm">
+                    <thead>
+                      <tr style={{ width: "100%" }}>
+                        <th>{t("ID")}</th>
+                        <th>{t("Service Package Name")}</th>
+                        <th>{t("price")}</th>
+                        <th>{t("create_at")}</th>
+                        <th>{t("expire_at")}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {invoices ? (
+                        invoices.map((value, index) => (
+                          <tr key={index} style={{ cursor: "pointer" }}>
+                            <td>{value.invoice_id}</td>
+                            <td>{value.servicePackage.name}</td>
+                            <td>{value.total} VND</td>
+
+                            <td>
+                              {format(
+                                new Date(value.created_at),
+                                "HH:mm:ss yyyy-MM-dd"
+                              )}
+                            </td>
+                            <td>
+                              {format(
+                                new Date(value.expired_at),
+                                "HH:mm:ss dd/MM/yyyy"
+                              )}
+                            </td>
+                            <td style={{ width: 100 }}>
+                              <div className="d-flex">
+                                <Button
+                                  onClick={() => {
+                                    // router.push(
+                                    //   "/home/contracts/updateContract/" +
+                                    //     value.contract_id +
+                                    //     "?auth=true"
+                                    // );
+                                  }}
+                                  variant="warning"
+                                >
+                                  Chi tiet
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </tbody>
+                  </Table>
+                </Row>
+              </>
+            ) : (
+              <></>
+            )}
+
             <Row style={{ marginTop: "20px" }}>
               <Col>
                 <h3>
@@ -229,17 +331,21 @@ export default function Page({ params }: { params: { id: string } }) {
               </Col>
             </Row>
             <Col md="auto">
-            <ButtonComponent href="/home/feedback?auth=true" className={styles.creatBtn1}>
-              Commnent
-            </ButtonComponent>
-              </Col>
-            <Row style={{
-              backgroundColor: "rgba(40, 100, 255, 0.1)",
-              border: "1px black solid",
-              borderRadius: "20px",
-              margin: "20px 0px",
-              paddingTop: "20px ",
-            }}
+              <ButtonComponent
+                href="/home/feedback?auth=true"
+                className={styles.creatBtn1}
+              >
+                Commnent
+              </ButtonComponent>
+            </Col>
+            <Row
+              style={{
+                backgroundColor: "rgba(40, 100, 255, 0.1)",
+                border: "1px black solid",
+                borderRadius: "20px",
+                margin: "20px 0px",
+                paddingTop: "20px ",
+              }}
             >
               <StarRatings
                 rating={rating}
@@ -273,11 +379,12 @@ export default function Page({ params }: { params: { id: string } }) {
                   <span className={styles.error}>{errors.comment}</span>
                 )}
               </Form.Group>
-              <ButtonComponent onClick={createHandle} className={styles.creatBtn1}>
+              <ButtonComponent
+                onClick={createHandle}
+                className={styles.creatBtn1}
+              >
                 Tạo
               </ButtonComponent>
-
-
             </Row>
           </Container>
           {feedbackData.map((feedback, index) => (
@@ -286,7 +393,6 @@ export default function Page({ params }: { params: { id: string } }) {
               <p>Comment: {feedback.comment}</p>
             </div>
           ))}
-          
         </div>
         <ToastContainer
           position="top-right"

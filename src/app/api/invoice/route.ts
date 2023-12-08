@@ -2,6 +2,7 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { endpoint } from "@/constraints/endpoints";
 import { Service } from "@/models/service";
+import { Invoice } from "../../../models/invoice";
 
 export async function POST(request: NextRequest) {
   let body = await request.formData();
@@ -36,11 +37,12 @@ export async function POST(request: NextRequest) {
   return response;
 }
 export async function GET(request: NextRequest) {
-  const page = request.nextUrl.searchParams.get("page");
+  const serviceId = request.nextUrl.searchParams.get("serviceId");
+  console.log(serviceId);
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.invoice + (page != null ? "?page=" + page : ""),
+    url: endpoint.invoice + (serviceId != null ? "?serviceId=" + serviceId : ""),
     headers: {
       Authorization: "Bearer " + request.cookies.get("token")?.value,
       "Content-Type": "application/json",
@@ -50,20 +52,25 @@ export async function GET(request: NextRequest) {
     .request(config)
     .then((response) => {
       if (response.status == 200) {
-        const result: Service[] = [];
-        response.data.data.forEach((element: Service) => {
+        const result: Invoice[] = [];
+        response.data.forEach((element: Invoice) => {
           result.push(element);
         });
+        console.log(result);
         return NextResponse.json(result, {
           status: 200,
         });
       }
     })
     .catch((error) => {
+      console.log(error);
+       
       return NextResponse.json(error.response.data.message, {
         status: error.response.status,
         statusText: error.response.statusText,
       });
     });
+    console.log(response);
+  
   return response;
 }

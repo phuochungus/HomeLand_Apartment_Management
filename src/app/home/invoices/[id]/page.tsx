@@ -20,6 +20,7 @@ import { ToastContainer } from "react-toastify";
 import toastMessage from "../../../../utils/toast";
 import { Invoice } from "../../../../models/invoice";
 import { useRouter } from "next/router";
+import { format } from "date-fns";
 export default function Page({ params }: { params: { id: string } }) {
   const [showModal, setShowModal] = useState(false);
 
@@ -40,7 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
-
+  
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
@@ -60,6 +61,58 @@ export default function Page({ params }: { params: { id: string } }) {
                 <p>{`Expired Date: ${data.servicePackage.expired_date} days`}</p>
                 {/* <p>{`Expired At: ${format(expirationDate, "dd-MM-yyyy")}`}</p> */}
                 <p>{`Per Unit Price: $${data.servicePackage.per_unit_price}`}</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <h2>Thông tin đơn hàng</h2>
+                <ul>
+                  <li>Mã đơn hàng: {data.invoice_id}</li>
+                  <li>
+                    Ngày tạo:{" "}
+                    {format(new Date(data.created_at), "yyyy-MM-dd HH:mm:ss")}
+                  </li>
+                  <li>Người mua: {data.buyer.profile.name}</li>
+                  <li>Gói dịch vụ: {data.servicePackage.name}</li>
+                  <li>
+                    Hạn sử dụng:{" "}
+                    {format(new Date(data.expired_at), "yyyy-MM-dd HH:mm:ss")}
+                  </li>
+                  <li>Số lượng: {data.amount}</li>
+                  <li>Giá mỗi đơn vị: {data.servicePackage.per_unit_price}</li>
+                  <li>Tổng tiền: {data.total}</li>
+                  <li>Đã thanh toán: {data.amount}</li>
+                  <li>Còn lại: {data.total - data.amount}</li>
+                </ul>
+              </Col>
+              <Col md={6}>
+                <h2>Thông tin gói dịch vụ</h2>
+                <ul>
+                  <li>ID: {data.servicePackage.servicePackage_id}</li>
+                  <li>Dịch vụ: {data.servicePackage.service_id}</li>
+                  <li>
+                    Ngày tạo:{" "}
+                    {format(new Date(data.created_at), "yyyy-MM-dd HH:mm:ss")}
+                  </li>
+                  <li>
+                    Hạn sử dụng (ngày): {data.servicePackage.expired_date}
+                  </li>
+                </ul>
+
+                <h2>Thông tin người mua</h2>
+                <ul>
+                  <li>ID: {data.buyer.id}</li>
+                  <li>Vai trò: {data.buyer.role}</li>
+                  {/* <li>Ngày tạo: {data.buyer.created_at}</li> */}
+                  <li>Số điện thoại: {data.buyer.profile.phone_number}</li>
+                  <li>
+                    Ngày sinh:{" "}
+                    {format(
+                      new Date(data.buyer.profile.date_of_birth),
+                      "yyyy-MM-dd HH:mm:ss"
+                    )}
+                  </li>
+                </ul>
               </Col>
             </Row>
           </Container>

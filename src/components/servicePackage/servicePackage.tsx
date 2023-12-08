@@ -44,13 +44,9 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
     // }
     const data = new FormData();
     data.append("servicePackage_id", props.servicePackage.servicePackage_id);
-    data.append("buyer_id", "RESIDENT");
     data.append("amount", "1000");
     data.append("baseLink", baseUrl);
-    data.append(
-      "redirectUrl",
-      URL
-    );
+    data.append("redirectUrl", URL);
     data.append(
       "orderInfo",
       "Pay for " +
@@ -91,7 +87,14 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
   };
 
   return (
-    <Container style={{ marginBottom: "20px" }}>
+    <Container
+      style={{
+        backgroundColor: "rgba(40, 100, 255, 0.1)",
+        marginBottom: "20px",
+        borderRadius: "20px",
+        padding: "5px 20px"
+      }}
+    >
       <Row className="align-items-center">
         {/* <Col md="auto">
           <div style={{ width: "80px", borderRadius: "50%" }}>{props.img}</div>
