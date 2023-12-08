@@ -116,7 +116,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
   };
   const handleShowManagerModal = async () => {
     const res = await axios.get("/api/manager");
-    const data: Manager[] = res.data;
+    const data: Manager[] = res.data.items;
     const newData = data.filter((item) => item.building === null);
     setManagers(newData);
     setShowModalManager(true);

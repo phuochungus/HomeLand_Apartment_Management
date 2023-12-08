@@ -54,7 +54,7 @@ export default function Residents() {
       loadingFiler(document.body!);
       const res = await axios.get("/api/resident");
       removeLoadingFilter(document.body!);
-      setResidents(res.data);
+      setResidents(res.data.items);
       console.log(res.data);
       return res.data;
     } catch (error) {

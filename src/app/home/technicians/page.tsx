@@ -85,7 +85,7 @@ export default function Residents() {
           },
         });
         console.log(res.data);
-        setTechnicians(res.data);
+        setTechnicians(res.data.items);
       } catch (e) {
         alert(e);
       }

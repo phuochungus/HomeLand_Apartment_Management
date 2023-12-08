@@ -89,7 +89,7 @@ export default function Residents() {
           },
         });
         console.log(res.data);
-        setManagers(res.data);
+        setManagers(res.data.items);
       } catch (e) {
         alert(e);
       }

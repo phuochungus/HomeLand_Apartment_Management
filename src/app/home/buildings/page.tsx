@@ -35,7 +35,7 @@ export default function Dashboard() {
       loadingFiler(document.body!);
       const res = await axios.get("/api/building");
       removeLoadingFilter(document.body!);
-      const buildingsData = res.data;
+      const buildingsData = res.data.items;
       setBuildings(buildingsData);
       return res.data;
     } catch (error) {
