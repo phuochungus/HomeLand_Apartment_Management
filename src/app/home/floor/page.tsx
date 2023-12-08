@@ -1,5 +1,7 @@
 "use client";
 import { useTranslation } from "react-i18next";
+import classNames from 'classnames';
+import residentStyles from "@/app/home/residents/resident.module.scss";
 import styles from "../page.module.css";
 import buildingStyles from "./floor.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
@@ -15,6 +17,7 @@ import { CloseIcon, DetailIcon, EditIcon } from "@/components/icons";
 import { format } from "date-fns";
 import { Building } from "@/models/building";
 import { Floor } from "@/models/floor";
+import pageStyles from "@/styles/page.module.scss";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Link } from "react-bootstrap/lib/Navbar";
@@ -28,6 +31,22 @@ export default function Dashboard() {
   const [selectedId, setSelectedId] = useState("");
   const searchRef = createRef<HTMLInputElement>();
   const titleTable = ["ID", "Tầng", "Tòa", "Số phòng"];
+  const [totalPages, setTotalPages] = useState(0);
+  const [maxPageDisplay, setMaxPageDisplay] = useState(10);
+  const listOptions = [
+    {
+      value: 10,
+    },
+    {
+      value: 20,
+    },
+    {
+      value: 50,
+    },
+    {
+      value: 100,
+    },
+  ];
   const deleleHandle = (id: string) => {
     setSelectedId(id);
     setShowModal(true);
@@ -38,10 +57,34 @@ export default function Dashboard() {
       const res = await axios.get("/api/floor");
       removeLoadingFilter(document.body!);
       const floorData = res.data;
-      setFloor(floorData);
+      const data = res.data;
+      setFloor(data.items);
+      setTotalPages(data.meta.totalPages);
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
+      console.log(error);
+    }
+  };
+  const pagination = async (page?: number, limit?: number) => {
+    try {
+      console.log(page, limit);
+      loadingFiler(document.body!);
+      const res = await axios.get("/api/floor", {
+        params: {
+          page,
+          limit,
+        },
+      });
+      removeLoadingFilter(document.body!);
+      const data = res.data;
+      setFloor(data.items);
+      console.log(totalPages);
+      setTotalPages(data.meta.totalPages);
+      return res.data;
+    } catch (error) {
+      removeLoadingFilter(document.body!);
+
       console.log(error);
     }
   };
@@ -73,7 +116,25 @@ export default function Dashboard() {
   //     console.log(err);
   //   }
   // };
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleSetActive = (count: any) => {
+    const limit: number = parseInt(count);
+    setCurrentPage(1);
+    setMaxPageDisplay(count);
+    pagination(1, limit);
+  };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+      pagination(currentPage - 1, maxPageDisplay);
+    }
+  };
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+      pagination(currentPage + 1, maxPageDisplay);
+    }
+  };
   const searchIconClick = async () => {
     const res = await axios.get("/api/floor/search", {
       params: {
@@ -98,13 +159,41 @@ export default function Dashboard() {
             Tạo tầng
           </ButtonComponent>
         </div>
-        <SearchLayout
-          onKeydown={handleSearch}
-          iconClick={searchIconClick}
-          className={buildingStyles.searchLayout}
-          placeHolder="Tìm tầng..."
-          ref={searchRef}
-        />
+        <div className="d-flex w-100 mt-3 justify-content-between">
+          <div className={clsx(residentStyles.perPage)}>
+            <span>Show</span>
+            <span>
+              <Form.Select
+                onChange={(e) => handleSetActive(e.target.value)}
+                aria-label="Default select example"
+              >
+                {listOptions.map(
+                  (option, index): JSX.Element => (
+                    <option
+                      className={clsx({
+                        [residentStyles.active]:
+                          maxPageDisplay === option.value,
+                      })}
+                      key={index}
+                      value={option.value}
+                    >
+                      {option.value}
+                    </option>
+                  )
+                )}
+              </Form.Select>
+            </span>
+            <span>Entries</span>
+          </div>
+          <SearchLayout
+            onKeydown={handleSearch}
+            iconClick={searchIconClick}
+            className={buildingStyles.searchLayout}
+            placeHolder="Tìm tầng..."
+            ref={searchRef}
+          />
+        </div>
+
         <div className="w-100 mt-5">
           <Table
             className={clsx(buildingStyles.tableBuilding, futuna.className)}
@@ -152,10 +241,31 @@ export default function Dashboard() {
                       </div>
                     </td>
                   </tr>
+
                 );
+
               })}
             </tbody>
           </Table>
+          <div className="d-flex w-100 mt-3 justify-content-center align-items-center">
+            <div className={classNames(pageStyles.pageContainer, styles.changePageBtn)}>
+              <ButtonComponent
+                onClick={handlePrevPage}
+                className={pageStyles.changePageBtn}
+              >
+                Previous
+              </ButtonComponent>
+              <p>
+                {currentPage}/{totalPages}
+              </p>
+              <ButtonComponent
+                onClick={handleNextPage}
+                className={pageStyles.changePageBtn}
+              >
+                Next
+              </ButtonComponent>
+            </div>
+          </div>
         </div>
       </div>
       {/* <ModalComponent

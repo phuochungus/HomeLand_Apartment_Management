@@ -6,7 +6,7 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.feedback + "/" + params.id,
+    url: endpoint.feedback,
     headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + request.cookies.get("token")?.value,

@@ -3,17 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { endpoint } from "@/constraints/endpoints";
 import { cookies } from "next/headers";
 export async function GET(request: NextRequest) {
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url: endpoint.floor,
-    headers: {
-      "Content-Type": "application/json",
-      'Authorization': "Bearer " + request.cookies.get("token")?.value,
-    },
-  };
+  const limit = request.nextUrl.searchParams.get("limit");
+  const page = request.nextUrl.searchParams.get("page");
   const response = await axios
-    .request(config)
+    .get(endpoint.floor, {
+      params: {
+        limit,
+        page
+      }
+    })
     .then((response) => {
       if (response.status == 200) {
         return NextResponse.json(response.data);

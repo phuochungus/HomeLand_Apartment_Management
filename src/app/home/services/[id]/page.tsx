@@ -17,7 +17,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { endpoint } from "@/constraints/endpoints";
 import { useQuery } from "react-query";
 import axios from "axios";
-import Resident from "../../../../components/apartmentDetail/resident";
 import ServicePackage from "../../../../components/servicePackage/servicePackage";
 import ServicePackageModal from "./addServicePackage";
 import { ToastContainer } from "react-toastify";
@@ -26,7 +25,9 @@ import StarRatings from "react-star-ratings";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { Feedback } from "@/models/feedback";
+import { Resident } from "@/models/resident";
 import { Value } from "sass";
+import { UserProfile } from "@/libs/UserProfile";
 export default function Page({ params }: { params: { id: string } }) {
 
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
@@ -34,10 +35,14 @@ export default function Page({ params }: { params: { id: string } }) {
   type FormValue = {
     rating: string;
     comment: string;
+    service_id: string;
+    resident_id: string;
   };
   const [formValue, setFormValue] = useState({
     rating: "",
     comment: "",
+    service_id: params.id,
+    resident_id: "",
   });
   const [feedbackData, setFeedbackData] = useState<Feedback[]>([]);
   useEffect(() => {
@@ -47,11 +52,25 @@ export default function Page({ params }: { params: { id: string } }) {
         setFeedbackData(response.data);
       } catch (err) {
         console.error(err);
+         console.log(err);
       }
     };
 
     fetchFeedback();
   }, []);
+  const retrieveFeedback = async () => {
+    try {
+      loadingFiler(document.body!);
+      const res = await axios.get('/api/feedback');
+      removeLoadingFilter(document.body!);
+      const floorData = res.data;
+      setFeedbackData(floorData);
+      return res.data;
+    } catch (error) {
+      removeLoadingFilter(document.body!);
+      console.log(error);
+    }
+  };
   const [errors, setErrors] = useState<any>();
   const validation = () => {
     let err = {} as FormValue;
@@ -69,7 +88,9 @@ export default function Page({ params }: { params: { id: string } }) {
     const newObj = { ...formValue, [e.target.name]: e.target.value };
     setFormValue(newObj);
   };
-
+  const addFeedback = (newFeedback: Feedback) => {
+    setFeedbackData(prevFeedbackData => [...prevFeedbackData, newFeedback]);
+  };
   const [feedback_id, setFeedbackId] = useState<string | null>(null);
   const createHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,13 +100,21 @@ export default function Page({ params }: { params: { id: string } }) {
     setErrors(err);
     if (Object.keys(err).length === 0) {
       const form = new FormData();
+      const user = UserProfile.getProfile();
       form.append("rating", formValue.rating);
       form.append("comment", formValue.comment);
-
+      form.append("service_id", formValue.service_id);
+      form.append("resident_id", user.id);
       try {
         loadingFiler(document.body!);
         await axios.post(`/api/feedback/`, form);
-        setFormValue({ rating: "", comment: "" });
+        addFeedback({
+          rating: formValue.rating, comment: formValue.comment,
+          feedback_id: "",
+          resident_id: user.id,
+          service_id: ""
+        });
+        setFormValue({ rating: "", comment: "", resident_id: "", service_id: "" });
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Create successfully!" });
       } catch (e) {
@@ -119,7 +148,13 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
-
+  const { } = useQuery(
+    "feedback",
+    retrieveFeedback,
+    {
+      staleTime: Infinity,
+    }
+  );
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
@@ -227,11 +262,11 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
               </Col>
             </Row>
-            <Col md="auto">
+            {/* <Col md="auto">
             <ButtonComponent href="/home/feedback?auth=true" className={styles.creatBtn1}>
               Commnent
             </ButtonComponent>
-              </Col>
+              </Col> */}
             <Row style={{
               backgroundColor: "rgba(40, 100, 255, 0.1)",
               border: "1px black solid",
@@ -277,15 +312,35 @@ export default function Page({ params }: { params: { id: string } }) {
               </ButtonComponent>
 
 
+
             </Row>
+            <Row style={{ marginTop: "20px" }}>
+              <Col>
+                <h3>
+                  <b>Comment</b>
+                </h3>
+              </Col>
+            </Row>
+            {feedbackData.map((feedback, index) => (
+              <Row
+                key={index}
+                style={{
+                  backgroundColor: "rgba(40, 100, 255, 0.1)",
+                  border: "1px black solid",
+                  borderRadius: "20px",
+                  margin: "20px 0px",
+                  paddingTop: "20px",
+                }}
+              >
+                <div>
+                  <p>Resident: {feedback.resident_id}</p>
+                  <p>Rating: {feedback.rating}</p>
+                  <p>Comment: {feedback.comment}</p>
+                </div>
+              </Row>
+            ))}
           </Container>
-          {feedbackData.map((feedback, index) => (
-            <div key={index}>
-              <p>Rating: {feedback.rating}</p>
-              <p>Comment: {feedback.comment}</p>
-            </div>
-          ))}
-          
+
         </div>
         <ToastContainer
           position="top-right"
