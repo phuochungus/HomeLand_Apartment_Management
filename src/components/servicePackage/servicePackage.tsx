@@ -44,7 +44,8 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
     // }
     const data = new FormData();
     data.append("servicePackage_id", props.servicePackage.servicePackage_id);
-    data.append("amount", "1000");
+    data.append("buyer_id", "RESIDENT");
+    data.append("amount", "1");
     data.append("baseLink", baseUrl);
     data.append("redirectUrl", URL);
     data.append(

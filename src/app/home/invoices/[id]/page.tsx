@@ -46,23 +46,7 @@ export default function Page({ params }: { params: { id: string } }) {
     return (
       <main className={styles.main} style={futuna.style}>
         <div>
-          <Container>
-            <Row className="align-items-center">
-              <Col md="auto" className="align-self-stretch">
-                <Image
-                  loading="lazy"
-                  width={250}
-                  rounded
-                  src={`https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn`}
-                />
-              </Col>
-              <Col className="align-self-stretch">
-                <p>{data.servicePackage.name}</p>
-                <p>{`Expired Date: ${data.servicePackage.expired_date} days`}</p>
-                {/* <p>{`Expired At: ${format(expirationDate, "dd-MM-yyyy")}`}</p> */}
-                <p>{`Per Unit Price: $${data.servicePackage.per_unit_price}`}</p>
-              </Col>
-            </Row>
+          <Container style={{ padding:"20px"}}>
             <Row>
               <Col md={6}>
                 <h2>Thông tin đơn hàng</h2>
@@ -70,20 +54,19 @@ export default function Page({ params }: { params: { id: string } }) {
                   <li>Mã đơn hàng: {data.invoice_id}</li>
                   <li>
                     Ngày tạo:{" "}
-                    {format(new Date(data.created_at), "yyyy-MM-dd HH:mm:ss")}
+                    {format(new Date(data.created_at), "HH:mm:ss dd-MM-yyyy")}
                   </li>
                   <li>Người mua: {data.buyer.profile.name}</li>
                   <li>Gói dịch vụ: {data.servicePackage.name}</li>
                   <li>
                     Hạn sử dụng:{" "}
-                    {format(new Date(data.expired_at), "yyyy-MM-dd HH:mm:ss")}
+                    {format(new Date(data.expired_at), "HH:mm:ss dd-MM-yyyy")}
                   </li>
                   <li>Số lượng: {data.amount}</li>
+                  
                   <li>Giá mỗi đơn vị: {data.servicePackage.per_unit_price}</li>
                   <li>Tổng tiền: {data.total}</li>
-                  <li>Đã thanh toán: {data.amount}</li>
-                  <li>Còn lại: {data.total - data.amount}</li>
-                </ul>
+                 </ul>
               </Col>
               <Col md={6}>
                 <h2>Thông tin gói dịch vụ</h2>
@@ -92,7 +75,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   <li>Dịch vụ: {data.servicePackage.service_id}</li>
                   <li>
                     Ngày tạo:{" "}
-                    {format(new Date(data.created_at), "yyyy-MM-dd HH:mm:ss")}
+                    {format(new Date(data.created_at), "HH:mm:ss dd-MM-yyyy")}
                   </li>
                   <li>
                     Hạn sử dụng (ngày): {data.servicePackage.expired_date}
@@ -103,13 +86,13 @@ export default function Page({ params }: { params: { id: string } }) {
                 <ul>
                   <li>ID: {data.buyer.id}</li>
                   <li>Vai trò: {data.buyer.role}</li>
-                  {/* <li>Ngày tạo: {data.buyer.created_at}</li> */}
+                  <li>Tên: {data.buyer.profile.name}</li>
                   <li>Số điện thoại: {data.buyer.profile.phone_number}</li>
                   <li>
                     Ngày sinh:{" "}
                     {format(
                       new Date(data.buyer.profile.date_of_birth),
-                      "yyyy-MM-dd HH:mm:ss"
+                      "dd-MM-yyyy"
                     )}
                   </li>
                 </ul>

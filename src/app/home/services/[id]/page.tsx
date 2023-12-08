@@ -33,6 +33,7 @@ import { UserProfile } from "../../../../libs/UserProfile";
 import { Invoice } from "../../../../models/invoice";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { id: string } }) {
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
@@ -47,6 +48,8 @@ export default function Page({ params }: { params: { id: string } }) {
     rating: "",
     comment: "",
   });
+  const router = useRouter();
+
   const [feedbackData, setFeedbackData] = useState<Feedback[]>([]);
   useEffect(() => {
     const fetchFeedback = async () => {
@@ -298,11 +301,11 @@ export default function Page({ params }: { params: { id: string } }) {
                               <div className="d-flex">
                                 <Button
                                   onClick={() => {
-                                    // router.push(
-                                    //   "/home/contracts/updateContract/" +
-                                    //     value.contract_id +
-                                    //     "?auth=true"
-                                    // );
+                                    router.push(
+                                      "/home/invoices/" +
+                                        value.invoice_id +
+                                        "?auth=true"
+                                    );
                                   }}
                                   variant="warning"
                                 >
