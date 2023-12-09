@@ -12,11 +12,11 @@ import {
   Table,
 } from "react-bootstrap";
 import styles from "./addEquipment.module.css";
-import { futuna } from "../../../../../../public/fonts/futura";
+import { futuna } from "../../../../../../../public/fonts/futura";
 import DragDropFileInput from "@/components/dragDropFileInput/drapDropFileInput";
 import { FaUpload } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
-import { MouseEvent, ReactNode, useState } from "react";
+import { MouseEvent, ReactNode, useEffect, useState } from "react";
 import SearchLayout from "@/components/searchLayout/searchLayout";
 import { Building } from "@/models/building";
 import { Apartment } from "@/models/apartment";
@@ -25,6 +25,7 @@ import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import axios from "axios";
 import { Resident } from "@/models/resident";
 import toastMessage from "@/utils/toast";
+import { Equipment } from "@/models/equipment";
 function missingField(element: HTMLElement) {
   element.className = element.className.split("missing")[0];
   element.className += " " + styles.missing;
@@ -125,8 +126,8 @@ const CustomInfoModel = ({
     </Modal>
   );
 };
-export default function AddEquipment() {
-  const [selectedBuilding, setSelectedbuilding] = useState<
+export default function AddEquipment({ params }: { params: { id: string } }) {
+  const [selectedBuilding, setSelectedBuilding] = useState<
     Building | undefined
   >(undefined);
   const [buildings, setBuildings] = useState<Building[]>([]);
@@ -136,7 +137,7 @@ export default function AddEquipment() {
   const [selectedFiles, setSelectedFiles] = useState<(File | URL)[]>([]);
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [show, setShow] = useState(-1);
-  const [apartmentAttached, setApartmentAttached] = useState(0);
+  const [apartmentAttached, setApartmentAttached] = useState(false);
   const retrieveBuilding = async () => {
     try {
       loadingFiler(document.body!);
@@ -166,11 +167,40 @@ export default function AddEquipment() {
       refetchOnWindowFocus: false,
     }
   );
+  useEffect(() => {
+    axios
+      .get("/api/equipment/" + params.id)
+      .then((res) => {
+        const data = res.data as Equipment;
+        (document.getElementById("name") as HTMLInputElement).value = data.name;
+        (document.getElementById("status") as HTMLSelectElement).value =
+          data.status;
+        (document.getElementById("description") as HTMLSelectElement).value =
+          data.description;
+        if (data.building_id)
+          setSelectedBuilding(
+            search(buildings, "building_id", data.building_id)[0]
+          );
+        else setSelectedBuilding(undefined);
+        if (data.apartment_id) {
+          setApartmentAttached(true);
+          setSelectedApartment(
+            search(apartments, "apartment_id", data.apartment_id)[0]
+          );
+        } else setSelectedApartment(undefined);
+        let urlList: (File | URL)[] = [];
+        data.imageURLs.forEach((value, index) => urlList.push(new URL(value)));
+        setSelectedFiles([...urlList]);
+      })
+      .catch((err) => {
+        console.log("error");
+      });
+  }, [apartments, buildings]);
   function handleOnSelectApartment(apartment: Apartment) {
     const searchResult = search(buildings, "building_id", apartment.buildingId);
     if (searchResult.length > 0) {
       if (!selectedBuilding) {
-        setSelectedbuilding(searchResult[0]);
+        setSelectedBuilding(searchResult[0]);
         setSelectedApartment(apartment);
       } else {
         setSelectedApartment(apartment);
@@ -183,7 +213,7 @@ export default function AddEquipment() {
       });
   }
   function onSelectBuilding(building: Building) {
-    setSelectedbuilding(building);
+    setSelectedBuilding(building);
     setShow(-1);
   }
   function validateData() {
@@ -228,6 +258,10 @@ export default function AddEquipment() {
       "status",
       (document.getElementById("status") as HTMLSelectElement).value
     );
+    data.append(
+      "description",
+      (document.getElementById("description") as HTMLSelectElement).value
+    );
     if (selectedApartment) {
       data.append("apartment_id", selectedApartment.apartment_id);
     } else if (selectedBuilding)
@@ -235,9 +269,12 @@ export default function AddEquipment() {
 
     await addImage(data, selectedFiles).then(() => {
       axios
-        .post("/api/equipment", data)
+        .patch("/api/equipment/" + params.id, data)
         .then((res) => {
-          toastMessage({ type: "success", title: "Tạo thiết bị thành công!" });
+          toastMessage({
+            type: "success",
+            title: "Cập nhật thiết bị thành công!",
+          });
           removeLoadingFilter(document.body!);
         })
         .catch((err) => {
@@ -249,7 +286,6 @@ export default function AddEquipment() {
         });
     });
   }
-
   return (
     <>
       <div className={`${styles.container} ${futuna.className}`}>
@@ -284,6 +320,7 @@ export default function AddEquipment() {
             <DragDropFileInput
               onChange={handleFileChange}
               id="label-file-upload"
+              initFileList={selectedFiles}
             >
               <div
                 className={styles.uploadIcon}
@@ -305,6 +342,7 @@ export default function AddEquipment() {
               <Col>
                 <Form.Label>Mô tả</Form.Label>
                 <Form.Control
+                  id="description"
                   as={"textarea"}
                   type="text"
                   aria-multiline={true}
@@ -328,7 +366,7 @@ export default function AddEquipment() {
                         value={selectedBuilding.building_id}
                       ></Form.Control>
 
-                      <Button onClick={() => setSelectedbuilding(undefined)}>
+                      <Button onClick={() => setSelectedBuilding(undefined)}>
                         X
                       </Button>
                     </InputGroup>
@@ -350,21 +388,21 @@ export default function AddEquipment() {
                     label="Có"
                     type="radio"
                     id={`inline-radio-1`}
-                    checked={apartmentAttached == 1}
-                    onClick={() => setApartmentAttached(1)}
+                    checked={apartmentAttached}
+                    onClick={() => setApartmentAttached(true)}
                   />
                   <Form.Check
                     inline
                     label="Không"
                     type="radio"
                     id={`inline-radio-2`}
-                    checked={apartmentAttached != 1}
-                    onClick={() => setApartmentAttached(0)}
+                    checked={!apartmentAttached}
+                    onClick={() => setApartmentAttached(false)}
                   />
                 </FormGroup>
                 <Form.Group
                   className={`${styles.expandableFormGroup} ${
-                    apartmentAttached ? styles.open:styles.close
+                    apartmentAttached ? styles.open : styles.close
                   }`}
                 >
                   <Form.Label>Căn hộ</Form.Label>
@@ -402,7 +440,7 @@ export default function AddEquipment() {
             }}
           >
             <Button onClick={handleSubmit} className={styles.creatBtn}>
-              Tạo thiết bị
+              Cập nhật thiết bị
             </Button>
           </Form.Group>
         </Form>
