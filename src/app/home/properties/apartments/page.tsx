@@ -1,50 +1,148 @@
 "use client";
-import styles from "./properties.module.css"
+import styles from "./properties.module.css";
 import { futuna } from "../../../../../public/fonts/futura";
 import { Card, Placeholder, Spinner } from "react-bootstrap";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Apartment } from "@/models/apartment";
 import axios from "axios";
 import { useQuery } from "react-query";
 import SearchBar from "@/components/searchBar/searchBar";
-import { Suspense, useRef, useState } from "react";
-const apartmentSortOption = [
-  {
-    title: "Building",
-    selections: [],
-    onChange: () => {},
-  },
-  {
-    title: "Floor",
-    selections: [],
-    onChange: () => {},
-  },
-  {
-    title: "Status",
-    selections: [],
-    onChange: () => {},
-  },
-];
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Building } from "@/models/building";
+import ButtonComponent from "@/components/buttonComponent/buttonComponent";
+import { AddResidentIcon } from "@/components/icons";
+import { search } from "@/libs/utils";
+interface Option {
+  title: string;
+  selections: string[];
+  fieldName: string;
+  onChange: (value: number) => void;
+  data: string[];
+}
+const getSortOption = async ({
+  onChange,
+}: {
+  onChange: (index: number, value: number) => void;
+}) => {
+  let apartmentSortOption = [
+    {
+      title: "Building",
+      selections: ["Tất cả"],
+      data: ["all"],
+      fieldName: "buildingId",
+      onChange: (value: number) => onChange(0, value),
+    },
+    {
+      title: "Floor",
+      selections: ["Tất cả"],
+      data: ["all"],
+      fieldName: "floorId",
+      onChange: (value: number) => onChange(1, value),
+    },
+    {
+      title: "Status",
+      selections: ["None", "ACTIVE", "INACTIVE"],
+      data: ["all", "active", "inactive"],
+      fieldName: "status",
+      onChange: (value: number) => onChange(2, value),
+    },
+  ] as Option[];
 
+  await Promise.all([
+    axios.get("/api/building").then((res) => {
+      (res.data as Building[]).map((value, index) => {
+        apartmentSortOption[0].selections.push(value.name);
+        apartmentSortOption[0].data.push(value.building_id);
+      });
+    }),
+    axios.get("/api/floor").then((res) => {
+      (res.data as Building[]).map((value, index) =>
+        apartmentSortOption[1].selections.push(value.name)
+      );
+    }),
+  ]);
+  return apartmentSortOption;
+};
+// eslint-disable-next-line @next/next/no-async-client-component
 export default function Apartments() {
+  const pathName = usePathname();
+  const user = JSON.parse(localStorage.getItem("user") ?? "{}");
+  //Handle if middleware not working
+  const router = useRouter();
+  if (!user.id) router.push("/home");
   const loadingMore = useRef({ isLoading: false, page: 1 });
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
-  const { isLoading, isError, refetch } = useQuery(
+  const [apartmentSortOption, setApartmentSortOption] = useState<Option[]>([
+    {
+      title: "Building",
+      selections: ["Tất cả"],
+      data: ["all"],
+      fieldName: "buildingId",
+      onChange: () => {},
+    },
+    {
+      title: "Floor",
+      selections: ["Tất cả"],
+      data: ["all"],
+      fieldName: "floorId",
+      onChange: () => {},
+    },
+    {
+      title: "Status",
+      selections: ["ACTIVE", "INACTIVE"],
+      data: ["active", "inactive"],
+      fieldName: "status",
+      onChange: () => {},
+    },
+  ]);
+  const [sortOptionList, setSortOptionList] = useState<number[]>([0, 0, 0]);
+  const { isLoading, isError, data, refetch } = useQuery(
     "apartment",
-    () =>
-      axios
+    async () => {
+      return await axios
         .get("/api/apartment?page=" + loadingMore.current.page)
         .then((res) => {
           const temp = { ...loadingMore.current };
           if ((res.data as Apartment[]).length == 0) temp.page = -1;
           temp.isLoading = false;
           loadingMore.current = temp;
-          setApartmentList([...apartmentList, ...(res.data as Apartment[])]);
-        }),
+          let result = [...apartmentList, ...(res.data as Apartment[])];
+          setSortOptionList([...sortOptionList]);
+          return result;
+        });
+    },
+
     {
       refetchOnWindowFocus: false,
     }
   );
+  function handleChange(index: number, value: number): void {
+    let temp = [...sortOptionList];
+    temp[index] = value;
+    setSortOptionList([...temp]);
+  }
+  useEffect(() => {
+    getSortOption({ onChange: handleChange }).then((res) => {
+      setApartmentSortOption(res);
+    });
+  }, []);
+  useEffect(() => {
+    if(!data)
+      return;
+    let result = [...data];
+    if (apartmentSortOption)
+      sortOptionList.forEach((value, index) => {
+        if (apartmentSortOption[index].data[value] != "all")
+          result = search(
+            result,
+            apartmentSortOption[index].fieldName,
+            apartmentSortOption[index].data[value]
+          );
+          console.log(apartmentSortOption[index].data[value])
+      });
+    console.log(result)
+    setApartmentList([...result]);
+  }, [sortOptionList]);
 
   async function handleScrollEnd() {
     if (!loadingMore.current.isLoading) {
@@ -70,7 +168,6 @@ export default function Apartments() {
       html.offsetHeight
     );
     const windowBottom = windowHeight + window.pageYOffset;
-    console.log(windowBottom, docHeight);
     if (windowBottom + 50 >= docHeight) {
       console.log("load more");
       handleScrollEnd();
@@ -108,24 +205,37 @@ export default function Apartments() {
     );
   return (
     <main className={styles.main}>
+      {(user.role == "admin" || user.role == "manager") && (
+        <div style={{ width: "100%", marginBottom: "1vw" }}>
+          <ButtonComponent
+            href={`${pathName}/add`}
+            preIcon={<AddResidentIcon width={24} height={24} />}
+            className={styles.addBtn}
+          >
+            Tạo căn hộ
+          </ButtonComponent>
+        </div>
+      )}
+
       <div className={styles.container}>
         <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
           <SearchBar className={styles.searchBar}></SearchBar>
         </div>
-        {apartmentSortOption.map((value, index) => (
-          <div
-            key={index}
-            className={styles.itemContainer}
-            style={{ height: "100%", width: "20%", padding: "0 1rem" }}
-          >
-            {FilterButton(value)}
-          </div>
-        ))}
+        {apartmentSortOption &&
+          apartmentSortOption.map((value, index) => (
+            <div
+              key={index}
+              className={styles.itemContainer}
+              style={{ height: "100%", width: "20%", padding: "0 1rem" }}
+            >
+              {FilterButton(value)}
+            </div>
+          ))}
       </div>
       <div className={styles.grid}>
         {apartmentList.map((value, index) => ApartmentCard(value))}
       </div>
-      {loadingMore.current.isLoading && loadingMore.current.page > 0 ? (
+      {loadingMore.current.isLoading && loadingMore.current.page > 0 && (
         <div
           style={{
             width: "100%",
@@ -135,30 +245,35 @@ export default function Apartments() {
             marginTop: "20px",
           }}
         ></div>
-      ) : (
-        <></>
       )}
     </main>
   );
 }
-
 const FilterButton = ({
   title,
   selections,
   onChange,
 }: {
   title: string;
-  selections: [] | never[];
-  onChange: Function;
+  selections: any[];
+  onChange: (value: number) => void;
 }): React.ReactNode => {
   return (
     <div className={`${styles.filter} ${futuna.className}`}>
       <p>{title}</p>
       <div>
         {selections.length != 0 ? (
-          <select name={title} id={title} onChange={() => onChange()}>
+          <select
+            name={title}
+            id={title}
+            onChange={(e) => {
+              e.preventDefault();
+              onChange(Number.parseInt(e.target.value));
+            }}
+            style={{ borderStyle: "hidden" }}
+          >
             {selections.map((value, index) => (
-              <option key={index} value={value}>
+              <option key={index} value={index}>
                 {value}
               </option>
             ))}
@@ -173,17 +288,13 @@ const FilterButton = ({
 
 const ApartmentCard = (value: Apartment): React.ReactNode => {
   const router = useRouter();
-
+  const pathName = usePathname();
   function handleRouting(route: string): void {
-    router.push(route);
+    router.push(pathName + `/${route}`);
   }
   return (
     <Card
-      onClick={() =>
-        handleRouting(
-          "/home/" + "properties/" + value.apartment_id + "?auth=true"
-        )
-      }
+      onClick={() => handleRouting(value.apartment_id + "?auth=true")}
       className={`${futuna.className} ${styles.gridItem}`}
       style={{ borderRadius: "10px", overflow: "hidden" }}
     >
@@ -208,3 +319,6 @@ const ApartmentCard = (value: Apartment): React.ReactNode => {
     </Card>
   );
 };
+function setBuildings(buildingsData: any) {
+  throw new Error("Function not implemented.");
+}

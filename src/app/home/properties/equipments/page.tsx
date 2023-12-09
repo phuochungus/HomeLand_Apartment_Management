@@ -34,6 +34,7 @@ import PageIndicator from "@/components/pageIndicator/PageIndicator";
 import { SortOrder } from "@/models/enums";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { Equipment } from "@/models/equipment";
+import { Carousel, CarouselItem, Image } from "react-bootstrap";
 const listOptions = [
   {
     value: 10,
@@ -64,6 +65,7 @@ export default function Vehicles() {
   const deleleHandle = (id: string) => {
     setSelectedId(id);
     setShowModal(true);
+
   };
   const retrieveResidents = async () => {
     try {
@@ -85,10 +87,10 @@ export default function Vehicles() {
     }
   );
   const titleTable = [
-    { name: "ID", field: "id" },
     { name: "Tên thiết bị", field: "name" },
     { name: "Tình trạng", field: "status" },
     { name: "Căn hộ / Tòa nhà lắp đặt", field: "apartment_id" },
+    { name: "Ngày khởi tạo", field: "created_at" },
   ];
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     console.log(data);
@@ -108,6 +110,7 @@ export default function Vehicles() {
         toastMessage({ type: "error", title: "Delete failed!" });
         console.log(err);
       });
+    refetch()
     removeLoadingFilter(document.body!);
   };
   const handleShowLimit = (event: React.ChangeEvent) => {
@@ -123,9 +126,9 @@ export default function Vehicles() {
       ...vehicles.sort(
         (a, b) =>
           -order *
-          a[title as keyof Equipment]!
-            .toString()
-            .localeCompare(b[title as keyof Equipment]!.toString())
+          a[title as keyof Equipment]!.toString().localeCompare(
+            b[title as keyof Equipment]!.toString()
+          )
       ),
     ]);
     setSortField(title);
@@ -175,7 +178,6 @@ export default function Vehicles() {
         <div className="w-100 mt-5">
           <Table
             className={clsx(equipmentStyles.tableResident, futuna.className)}
-            striped
             bordered
             hover
           >
@@ -204,53 +206,104 @@ export default function Vehicles() {
                 )
                 .map((equipment, index): ReactNode => {
                   return (
-                    <tr key={index}>
-                      <td>{equipment.id}</td>
-                      <td>{equipment.name}</td>
-                      <td>{equipment.status}</td>
-                      <td>{equipment.apartment_id || equipment.building_id}</td>
-                      <td
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "center",
+                    <>
+                      <tr
+                        key={index}
+                        className={styles.zebraTable}
+                        onClick={(e) => {
+                          if (
+                            !e.currentTarget.className.includes(styles.active)
+                          )
+                            e.currentTarget.className += ` ${styles.active}`;
+                          else
+                            e.currentTarget.className =
+                              e.currentTarget.className.split(styles.active)[0];
                         }}
                       >
-                        <div className="d-flex">
-                          <ButtonComponent
-                            preIcon={<EditIcon width={16} height={16} />}
-                            className={clsx(
-                              equipmentStyles.cudBtn,
-                              equipmentStyles.editBtn
-                            )}
-                            href={`add`}
-                          >
-                            Sửa
-                          </ButtonComponent>
-                          <ButtonComponent
-                            preIcon={
-                              <FaFacebookMessenger width={16} height={16} />
-                            }
-                            className={clsx(
-                              equipmentStyles.cudBtn,
-                              equipmentStyles.notiBtn
-                            )}
-                          >
-                            Send notification
-                          </ButtonComponent>
-                          <ButtonComponent
-                            onClick={() => deleleHandle(equipment.id)}
-                            preIcon={<CloseIcon width={16} height={16} />}
-                            className={clsx(
-                              equipmentStyles.cudBtn,
-                              equipmentStyles.deleteBtn
-                            )}
-                          >
-                            Xóa
-                          </ButtonComponent>
-                        </div>
-                      </td>
-                    </tr>
+                        <td>{equipment.name}</td>
+                        <td>{equipment.status}</td>
+                        <td>
+                          {equipment.apartment_id || equipment.building_id}
+                        </td>
+                        <td>{equipment.created_at}</td>
+                      </tr>
+                      <tr className={`${styles.rowDetail} `}>
+                        <td colSpan={titleTable.length}>
+                          <div className="d-flex">
+                            <div style={{ width: "50%" }}>
+                              <Carousel fade>
+                                {equipment.imageURLs.map((value, index) => (
+                                  <CarouselItem key={index}>
+                                    {" "}
+                                    <Image
+                                      loading="lazy"
+                                      className=" img-fluid h-100 w-100"
+                                      src={value}
+                                      alt="images"
+                                      rounded
+                                    ></Image>
+                                  </CarouselItem>
+                                ))}
+                              </Carousel>
+                            </div>
+                            <div style={{ width: "50%" }}>
+                              <div
+                                className="d-flex"
+                                style={{
+                                  width: "100%",
+                                  flexDirection: "row-reverse",
+                                }}
+                              >
+                                <ButtonComponent
+                                  preIcon={<EditIcon width={16} height={16} />}
+                                  className={clsx(
+                                    equipmentStyles.cudBtn,
+                                    equipmentStyles.editBtn
+                                  )}
+                                  href={`${path}/edit/` + equipment.id}
+                                >
+                                  Sửa
+                                </ButtonComponent>
+                                <div style={{ width: "1vw", height: "100%" }} />
+                                <ButtonComponent
+                                  onClick={() => deleleHandle(equipment.id)}
+                                  preIcon={<CloseIcon width={16} height={16} />}
+                                  className={clsx(
+                                    equipmentStyles.cudBtn,
+                                    equipmentStyles.deleteBtn
+                                  )}
+                                >
+                                  Xóa
+                                </ButtonComponent>
+                              </div>
+                              <div
+                                style={{ textAlign: "left", fontSize: "1.2vw" }}
+                              >
+                                <p>{`Mã thiết bị: ${equipment.id}`}</p>
+                                <p>{`Tên thiết bị: ${equipment.name}`}</p>
+                                <div style={{ display: "flex", padding:"0" }}>
+                                  {equipment.building_id && (
+                                    <p>{`Tòa nhà: ${equipment.building_id}`}</p>
+                                  )}
+                                  {equipment.floor_id && (
+                                    <p>{`Tầng: ${equipment.floor_id}`}</p>
+                                  )}
+                                </div>
+                                {equipment.apartment_id && (
+                                  <p>{`Căn hộ: ${equipment.apartment_id}`}</p>
+                                )}
+                                <p>{`Ngày tạo: ${equipment.created_at}`}</p>
+                                {equipment.deleted_at && (
+                                  <p>{`Xóa ngày: ${equipment.deleted_at}`}</p>
+                                )}
+                                <p>{`Tình trạng: ${equipment.status}`}</p>
+                                <p>{`Mô tả: ${equipment.description}`}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </>
                   );
                 })}
             </tbody>

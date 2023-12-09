@@ -32,8 +32,11 @@
 
 .sidebarBody {
     margin-top: 3rem;
-}
 
+}
+.hideScrollbar::-webkit-scrollbar{
+    display: none;
+}
 button.sidebarButton{
     position: relative;
     height: 4rem;
