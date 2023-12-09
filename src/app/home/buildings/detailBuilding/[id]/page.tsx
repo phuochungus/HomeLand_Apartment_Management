@@ -3,8 +3,8 @@ import React, { ChangeEvent, useCallback, useState } from "react";
 import styles from "./detailBuilding.module.scss";
 import mainStyles from "../../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
-import residentStyles from '@/app/home/residents/resident.module.scss'
-import pageStyles from '@/styles/page.module.scss';
+import residentStyles from "@/app/home/residents/resident.module.scss";
+import pageStyles from "@/styles/page.module.scss";
 import buildingStyles from "../../building.module.scss";
 import Form from "react-bootstrap/Form";
 import clsx from "clsx";
@@ -16,7 +16,8 @@ import { useQuery } from "react-query";
 import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { ToastContainer } from "react-toastify";
-import { Button, Modal, Table} from "react-bootstrap";
+import { Button, Modal, Table } from "react-bootstrap";
+import Spinner from 'react-bootstrap/Spinner';
 import {
   AddResidentIcon,
   CloseIcon,
@@ -36,6 +37,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
   const [managers, setManagers] = useState<Array<Manager>>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(false);
   const listOptions = [
     {
       value: 10,
@@ -50,9 +52,9 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
       value: 100,
     },
   ];
-   //pagination
-   const [totalPages, setTotalPages] = useState(0);
-   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
+  //pagination
+  const [totalPages, setTotalPages] = useState(0);
+  const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const retrieveBuilding = async () => {
     try {
       loadingFiler(document.body!);
@@ -131,6 +133,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
   };
   const handleSave = async () => {
     try {
+      setLoading(true);
       const res = await axios.post(
         `/api/building/${params.id}/addManagers`,
         undefined,
@@ -148,7 +151,10 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
       }
       refetch();
       setListChecked([]);
+      toastMessage({type:'success', title:'Add successfully'})
     } catch (e: any) {
+      toastMessage({type:'error', title:'Add failed'})
+      setLoading(false);
       throw new Error(e.message);
     }
     setShowModalManager(false);
@@ -156,9 +162,10 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
   const handleShowManagerModal = async () => {
     const res = await axios.get("/api/manager");
     const data = res.data;
-      setManagers(data.items);
-       setTotalPages(data.meta.totalPages);
-    setShowModalManager(true);
+    const newData = data.items.filter((item:Manager) => item.building === null);
+    setManagers(newData);
+    setTotalPages(data.meta.totalPages);
+    setShowModalManager(true);  
   };
   const { refetch } = useQuery("detail-building", retrieveBuilding, {
     staleTime: Infinity,
@@ -273,7 +280,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
             </Table>
           ) : (
             <p style={{ textAlign: "center", marginTop: "100px" }}>
-             There is currently no manager in the building!
+              There is currently no manager in the building!
             </p>
           )}
         </div>
@@ -323,53 +330,51 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
         <Modal.Body className={styles.bodyModal}>
           <h3 className={styles.bodyHeader}>List Of Manager</h3>
           <div className="d-flex w-100 mt-3 align-items-center justify-content-between">
-          <div style={{marginTop: 0}} className={pageStyles.pageContainer}>
-          <ButtonComponent
-            onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
-          >
-            Previous
-          </ButtonComponent>
-          <p>
-            {currentPage}/{totalPages}
-          </p>
-          <ButtonComponent
-            onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
-          >
-            Next
-          </ButtonComponent>
-        </div>
-          <div className={clsx(residentStyles.perPage)}>
-            <span>Show</span>
-            <span>
-              <Form.Select
-                onChange={(e) => handleSetActive(e.target.value)}
-                aria-label="Default select example"
+            <div style={{ marginTop: 0 }} className={pageStyles.pageContainer}>
+              <ButtonComponent
+                onClick={handlePrevPage}
+                className={pageStyles.changePageBtn}
               >
-                {listOptions.map(
-                  (option, index): JSX.Element => (
-                    <option
-                      className={clsx({
-                        [residentStyles.active]:
-                          maxPageDisplay === option.value,
-                      })}
-                      key={index}
-                      value={option.value}
-                    >
-                      {option.value}
-                    </option>
-                  )
-                )}
-              </Form.Select>
-            </span>
-            <span>Entries</span>
+                Previous
+              </ButtonComponent>
+              <p>
+                {currentPage}/{totalPages}
+              </p>
+              <ButtonComponent
+                onClick={handleNextPage}
+                className={pageStyles.changePageBtn}
+              >
+                Next
+              </ButtonComponent>
+            </div>
+            <div className={clsx(residentStyles.perPage)}>
+              <span>Show</span>
+              <span>
+                <Form.Select
+                  onChange={(e) => handleSetActive(e.target.value)}
+                  aria-label="Default select example"
+                >
+                  {listOptions.map(
+                    (option, index): JSX.Element => (
+                      <option
+                        className={clsx({
+                          [residentStyles.active]:
+                            maxPageDisplay === option.value,
+                        })}
+                        key={index}
+                        value={option.value}
+                      >
+                        {option.value}
+                      </option>
+                    )
+                  )}
+                </Form.Select>
+              </span>
+              <span>Entries</span>
+            </div>
           </div>
-
-         
-        </div>
           <Table
-          style={{marginTop:20}}
+            style={{ marginTop: 20 }}
             className={clsx(buildingStyles.tableBuilding, futuna.className)}
             striped
             bordered
@@ -420,6 +425,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
             Save
           </ButtonComponent>
         </Modal.Footer>
+        {loading && showModalManager && <Spinner className={utilStyles.spinner}   animation="border" />}
       </Modal>
     </main>
   );

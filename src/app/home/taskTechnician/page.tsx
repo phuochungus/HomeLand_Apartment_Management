@@ -378,7 +378,7 @@ const TaskTechnician = () => {
             className={modalStyles.saveBtn}
             onClick={() => createInvoiceHandler(selectedId)}
           >
-            Create Invoice
+            Create
           </ButtonComponent>
         </Modal.Footer>
       </Modal>

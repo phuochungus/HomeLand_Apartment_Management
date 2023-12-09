@@ -26,6 +26,8 @@ import toastMessage from "@/utils/toast";
 import { Technician } from "@/models/technician";
 import { UserProfile } from "@/libs/UserProfile";
 import { Task } from "@/models/task";
+import Spinner from 'react-bootstrap/Spinner';
+import { Manager } from "@/models/manager";
 
 const Complain = () => {
   const titleTable = [
@@ -55,6 +57,7 @@ const Complain = () => {
   const titleAssign = ["ID", "Tên", "Số điện thoại", "Email", "Ngày tạo"];
   const [complains, setComplains] = useState<Array<Complain>>([]);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
  
   const [technicians, setTechnicians] = useState<Array<Technician>>([]);
   const [checked, setChecked] = useState("");
@@ -123,6 +126,7 @@ const Complain = () => {
         const user = UserProfile.getProfile();
         form.append("complain_id", selectedId);
         form.append("assigner_id", user.id);
+        setLoading(true);
         const res = await axios.post(
           `/api/task`,
           form,
@@ -135,16 +139,21 @@ const Complain = () => {
         );
         refetch();
         setChecked("");
+       // setLoading(false);
+        toastMessage({type:'success', title:'Assign successfully'})
       } catch (e: any) {
+        toastMessage({type:'error', title:'Assign failed'})
+        setLoading(false);
         throw new Error(e.message);
       }
-    
+      
       setShowModalAssign(false);
     };
   const retrieveComplains = async () => {
     try {
+      const user = UserProfile.getProfile();
       loadingFiler(document.body!);
-      const res = await axios.get("/api/complain");
+      const res = await axios.get(`/api/complain/building/${user.id}`);
       removeLoadingFilter(document.body!);
       const complainsData: Array<Complain> = res.data;
       const data = complainsData.filter(complain => complain.status !== complainStatus.REJECTED)
@@ -404,7 +413,10 @@ const Complain = () => {
             Save
           </ButtonComponent>
         </Modal.Footer>
+        {loading && showModalAssign && <Spinner className={utilStyles.spinner}   animation="border" />}
       </Modal>
+    
+
     </main>
   );
 };
