@@ -85,10 +85,10 @@ export default function Vehicles() {
     }
   );
   const titleTable = [
-    { name: "ID", field: "id" },
     { name: "Tên thiết bị", field: "name" },
     { name: "Tình trạng", field: "status" },
     { name: "Căn hộ / Tòa nhà lắp đặt", field: "apartment_id" },
+    { name: "Ngày khởi tạo", field: "created_at"}
   ];
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     console.log(data);
@@ -205,10 +205,10 @@ export default function Vehicles() {
                 .map((equipment, index): ReactNode => {
                   return (
                     <tr key={index}>
-                      <td>{equipment.id}</td>
                       <td>{equipment.name}</td>
                       <td>{equipment.status}</td>
                       <td>{equipment.apartment_id || equipment.building_id}</td>
+                      <td>{equipment.created_at}</td>
                       <td
                         style={{
                           width: "100%",
@@ -223,20 +223,9 @@ export default function Vehicles() {
                               equipmentStyles.cudBtn,
                               equipmentStyles.editBtn
                             )}
-                            href={`add`}
+                            href={`${path}/edit/` + equipment.id}
                           >
                             Sửa
-                          </ButtonComponent>
-                          <ButtonComponent
-                            preIcon={
-                              <FaFacebookMessenger width={16} height={16} />
-                            }
-                            className={clsx(
-                              equipmentStyles.cudBtn,
-                              equipmentStyles.notiBtn
-                            )}
-                          >
-                            Send notification
                           </ButtonComponent>
                           <ButtonComponent
                             onClick={() => deleleHandle(equipment.id)}

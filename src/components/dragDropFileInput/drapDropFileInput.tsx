@@ -2,6 +2,7 @@ import React, {
   ChangeEvent,
   ReactElement,
   ReactNode,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -9,13 +10,14 @@ import styles from "./dragdrop.module.css";
 import { Image, Stack } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import image from "react-bootstrap";
+import { TrashIcon } from "../icons";
 export default function DragDropFileInput({
   id,
   imageid,
   children,
   className = "",
   onChange,
-  initFileList,
+  initFileList = [],
   imageContainer,
   multiFile = true,
 }: {
@@ -32,8 +34,11 @@ export default function DragDropFileInput({
   // drag state
   const [dragActive, setDragActive] = useState(false);
   const [fileLists, setFileLists] = useState<(File | URL)[]>(
-    initFileList ?? []
+    [...initFileList]
   );
+  useEffect(() => {
+    setFileLists([...initFileList])
+  },[initFileList])
   // ref
   const inputRef = useRef<HTMLInputElement>(null);
   // handle drag events
@@ -116,7 +121,7 @@ export default function DragDropFileInput({
                   ? element.href
                   : URL.createObjectURL(element as Blob)
               }
-              alt="Bien so xe"
+              alt="dropImage"
               width={0}
               height={0}
               style={{ width: "100%", height: "100%" }}
@@ -169,7 +174,7 @@ export default function DragDropFileInput({
               setFileLists(temp);
             }}
           >
-            <FaTrash></FaTrash>
+            <TrashIcon/>
           </button>
         </Stack>
       );
@@ -189,7 +194,6 @@ export default function DragDropFileInput({
         ref={inputRef}
         type="file"
         accept="image/*"
-        //id={id ?? (imageid ? imageid + "_container" : "")}
         multiple={multiFile}
         onChange={handleChange}
         style={{ display: "none", visibility: "hidden" }}
@@ -217,7 +221,6 @@ export default function DragDropFileInput({
                   cursor: "pointer",
                   marginTop: "0.2vw",
                   display: "flex",
-
                   justifyContent: "center",
                 }}
                 className={styles.activeText}

@@ -16,7 +16,6 @@ export const InfoButton = ({
   buttonBody?: JSX.Element[] | never[] | JSX.Element;
 }) => {
   const router = useRouter();
-  const [showDropDown, setShowDropDown] = useState(false);
   const [profile, setProfile] = useState<Profile | undefined>(undefined);
   useEffect(() => {
     axios
@@ -36,7 +35,6 @@ export const InfoButton = ({
           justifyContent: "center",
           alignContent: "center",
         }}
-        onClick={() => setShowDropDown(!showDropDown)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +43,6 @@ export const InfoButton = ({
           fill="currentColor"
           className="bi bi-person-circle"
           viewBox="0 0 16 16"
-          style={{ margin: "auto 5px" }}
         >
           <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
           <path
@@ -88,17 +85,19 @@ export const InfoButton = ({
   return (
     <Dropdown
       style={{ display: "flex", alignContent: "center", flexWrap: "wrap" }}
+      className={styles.hoverContainer}
     >
       <DropdownToggle as={dropdownButton} />
       {/* <DropdownToggle/> */}
 
       <DropdownMenu
-        show={showDropDown}
+        show={true}
         style={{
           position: "absolute",
           inset: "0px 0px auto auto",
           transform: "translate3d(-10px, 55px, 0px)",
         }}
+        className={styles.hoverContent}
       >
         <div
           style={{

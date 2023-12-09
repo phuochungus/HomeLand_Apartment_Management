@@ -32,14 +32,23 @@
     overflow: hidden;
 }
 
-.infoButton:hover {
-    .infoDetail {
-        max-width: 200px;
-    }
+.hoverContent {
+    transition: max-height 1.3s, visibility 0s 0s;
+    max-height: 0;
+    height: fit-content;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    visibility: hidden;
 }
 
-.infoButton:focus-within {
-    .infoDetail {
+.hoverContainer:hover {
+    .infoButton .infoDetail {
         max-width: 200px;
+    }
+
+    .hoverContent {
+        max-height: 100px;
+        visibility: visible;
     }
 }
