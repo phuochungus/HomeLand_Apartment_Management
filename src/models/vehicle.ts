@@ -1,11 +1,11 @@
 import { Resident } from "./resident";
 
-export interface Vehicle {
-    id: String,
-    status: String,
-    licensePlate: String,
-    frontRegistrationPhotoURL: String,
-    backRegistrationPhotoURL: String,
-    licensePlatePhotoURL: String,
-    resident: Resident
-  }
+export type Vehicle = {
+    id: string ;
+    status:string;
+    licensePlate: string;
+    frontRegistrationPhotoURL:string;
+    backRegistrationPhotoURL:string;
+    licensePlatePhotoURL:string;
+    residentId: string;
+}

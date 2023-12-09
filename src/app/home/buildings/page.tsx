@@ -11,7 +11,7 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import ModalComponent from "@/components/Modal/Modal";
 import SearchLayout from "@/components/searchLayout/searchLayout";
-import { CloseIcon, EditIcon } from "@/components/icons";
+import { CloseIcon, DetailIcon, EditIcon } from "@/components/icons";
 import { format } from "date-fns";
 import { Building } from "@/models/building";
 import { useQuery } from "react-query";
@@ -89,7 +89,7 @@ export default function Dashboard() {
           <h1 className={clsx(utilStyles.headingLg)}>Danh sách tòa nhà</h1>
           <ButtonComponent
             href="/home/buildings/addBuilding?auth=true"
-            //   preIcon={<AddResidentIcon width={24} height={24} />}
+            //   preIcon={<AddResidentIcon width={24} height={24}  />}
             className={clsx(buildingStyles.addBtn, futuna.className)}
           >
             Tạo tòa nhà
@@ -120,13 +120,13 @@ export default function Dashboard() {
               {buildings.map((building, index): React.ReactNode => {
                 return (
                   <tr key={index}>
-                    <td>{building.building_id}</td>
+                    <td><span>{building.building_id}</span></td>
                     <td>{building.name}</td>
                     <td>{building.address}</td>
                     <td>{building.max_floor}</td>
                     {/* <td>{building.manager_id}</td> */}
 
-                    <td style={{ width: 20 }}>
+                    <td style={{ width: 200 }}>
                       <div className="d-flex">
                         <ButtonComponent
                           preIcon={<EditIcon width={16} height={16} />}
@@ -137,6 +137,16 @@ export default function Dashboard() {
                           href={`/home/buildings/updateBuilding/${building.building_id}/?auth=true`}
                         >
                           Sửa
+                        </ButtonComponent>
+                        <ButtonComponent
+                          href={`/home/buildings/detailBuilding/${building.building_id}/?auth=true`}
+                          preIcon={<DetailIcon width={16} height={16} />}
+                          className={clsx(
+                            buildingStyles.cudBtn,
+                            buildingStyles.detailBtn
+                          )}
+                        >
+                          chi tiết
                         </ButtonComponent>
                         <ButtonComponent
                           onClick={() => deleleHandle(building.building_id)}

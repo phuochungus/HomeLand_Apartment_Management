@@ -1,1 +1,3 @@
-export enum SortOrder {ASCEND = 1, DESCEND = 0}
+export enum SortOrder {
+    ASCEND = 1, DESCEND = -1
+}

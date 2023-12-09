@@ -15,15 +15,17 @@ export async function validateToken(token: string | undefined): Promise<boolean>
     return result;
 }
 
-export function loadingFiler(container: HTMLElement) {
+export function loadingFiler(container: HTMLElement | null) {
     //document: The current HTMl, usage: Create new HTML => Loading Div with spinner
     //container: The HTML element to put the loading inside,
+    if(!container)
+        container = document.body!
     window.scroll({ top: 0 })
     var div = document.createElement("div");
     div.className = "loadingFilter";
     div.style.backgroundColor = "black";
     div.style.width = "100%";
-    div.style.height = "100vh";
+    div.style.height = "100%";
     div.style.opacity = "0.2";
     div.style.position = "absolute";
     div.style.display = "flex";
@@ -36,7 +38,9 @@ export function loadingFiler(container: HTMLElement) {
     div.appendChild(spinner);
     container.appendChild(div);
 }
-export function removeLoadingFilter(container: HTMLElement) {
+export function removeLoadingFilter(container: HTMLElement | null) {
+    if(!container)
+        container = document.body!;
     var temp = container.getElementsByClassName("loadingFilter")
     if (temp.length == 0)
         return

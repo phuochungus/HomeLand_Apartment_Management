@@ -25,13 +25,15 @@ import toastMessage from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 type FormValue = {
+  gender: string;
   phoneNumber: string;
   paymentInfo: string;
   email: string | undefined;
-  avatarImg?: any;
+  avatarURL?: any;
 };
 const UpdateResident = ({ params }: { params: { id: string } }) => {
   const [formValue, setFormValue] = useState({
+    gender: "",
     phoneNumber: "",
     paymentInfo: "",
     email: undefined,
@@ -41,7 +43,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
 
   const [avatar, setAvatar] = useState<any>();
   const avatarRef = useRef<HTMLInputElement>(null);
-  let avatar_photo = resident?.profile.avatar_photo as string;
+  let avatar_photo = resident?.profile?.avatarURL as string;
   const validation = () => {
     let err = {} as FormValue;
     const emailPattern =
@@ -55,36 +57,36 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         err.email = "Email không hợp lệ!";
       }
     }
-
+    if (formValue.gender === "") {
+      err.gender = "Trường giới tính là bắt buộc!";
+    }
     if (formValue.phoneNumber === "") {
       err.phoneNumber = "Trường số điện thoại là bắt buộc!";
     } else if (!phonePattern.test(formValue.phoneNumber)) {
       err.phoneNumber = "Số điện thoại không hợp lệ!";
     }
-    if (formValue.paymentInfo === "") {
-      err.paymentInfo = "Thông tin thanh toán là bắt buộc!";
-    }
+    
 
     return err;
   };
   const retrieveResident = async () => {
     try {
-      loadingFiler(document.body!)
+      loadingFiler(document.body!);
       const res = await axios.get(`/api/resident/${params.id}`);
-      removeLoadingFilter(document.body!)
+      removeLoadingFilter(document.body!);
       const residentData = res.data as Resident;
       setResident(residentData);
       const newformValue: any = {
+        gender: residentData.profile.gender,
         phoneNumber: residentData.profile.phone_number,
         paymentInfo: residentData.payment_info || "",
         email: residentData.account ? residentData.account.email : undefined,
       };
-    
 
       setFormValue(newformValue);
       return res.data;
     } catch (error) {
-      removeLoadingFilter(document.body!)
+      removeLoadingFilter(document.body!);
       console.log(error);
     }
   };
@@ -95,26 +97,33 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
       staleTime: Infinity,
     }
   );
+  
   const updateHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const err = validation();
     setErrors(err);
     if (Object.keys(err).length === 0) {
       try {
-        
-        const data: any = {
-          phone_number: formValue.phoneNumber,
-          payment_info: formValue.paymentInfo,
-        };
+        const form = new FormData();
+        form.append("gender", formValue.gender);
+        form.append("phone_number", formValue.phoneNumber);
         if (formValue.email) {
-          data.email = formValue.email;
+          form.append("email", formValue.email);
         }
+        if (formValue.paymentInfo) {
+          form.append("payment_info", formValue.paymentInfo);
+        }
+        if(avatar){
+          form.append("avatar_photo", avatar);
+        }
+        // form.append("avatar_photo", avatar);
+        form.append("_method", "PATCH");
         loadingFiler(document.body!);
-        await axios.patch(`/api/resident/${params.id}`, JSON.stringify(data));
-        removeLoadingFilter(document.body!)
+        await axios.post(`/api/resident/${params.id}`, form);
+        removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Update successfully!" });
       } catch (error) {
-        removeLoadingFilter(document.body!)
+        removeLoadingFilter(document.body!);
         console.log(error);
         toastMessage({ type: "error", title: "Update faily!" });
       }
@@ -135,18 +144,19 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     const file = e.target.files[0];
     setAvatar(file);
   };
-  // const AvatarImage = useMemo(() => {
-  //   return (
-  //     <Image
-  //     onClick={handleAvatarClick}
-  //     fill
-  //     style={{ borderRadius: "3%" }}
-  //     alt=""
-
-  //     src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
-  //   />
-  //   );
-  // }, [avatar, avatar_photo]);
+  const AvatarImage = useMemo(() => {
+    return (
+      <Image
+      onClick={handleAvatarClick}
+      fill
+      style={{ borderRadius: "3%" }}
+      alt=""
+      onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+      unoptimized={true}
+      src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
+    />
+    );
+  }, [avatar, avatar_photo]);
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
@@ -154,7 +164,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
           Chỉnh sửa thông tin cư dân
         </p>
         <div className="d-inline-flex justify-content-between">
-          {/* <div className={styles.avatarLayout}>
+          <div className={styles.avatarLayout}>
             {AvatarImage}
             <input
               onChange={handleChangeAvatar}
@@ -162,10 +172,12 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               ref={avatarRef}
               style={{ display: "none" }}
             />
-          </div> */}
+          </div>
           <Form method="post" className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label className={clsx(styles.label, styles.required)}>Họ và tên</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Họ và tên
+              </Form.Label>
               <Form.Control
                 value={resident && resident.profile.name}
                 size="lg"
@@ -175,27 +187,29 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label className={clsx(styles.label, styles.required)}>Giới tính</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Giới tính
+              </Form.Label>
 
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
-                  checked={resident && resident.profile.gender === "male"}
                   inline
                   label="Nam"
+                  checked={formValue.gender === 'male'}
                   style={{ fontSize: "1rem" }}
-                  name="group1"
+                  onChange={handleChange}
+                  name="gender"
                   type="radio"
                   value="male"
-                  disabled
                   id={`inline-radio-1`}
                 />
                 <Form.Check
                   inline
                   label="Nữ"
-                  disabled
+                  checked={formValue.gender === 'female'}
                   style={{ fontSize: "1rem" }}
-                  checked={resident && resident.profile.gender === "female"}
-                  name="group1"
+                  onChange={handleChange}
+                  name="gender"
                   type="radio"
                   value="female"
                   id={`inline-radio-2`}
@@ -220,7 +234,9 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             )}
 
             <Form.Group className="mb-3">
-              <Form.Label className={clsx(styles.label, styles.required)}>Số điện thoại</Form.Label>
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Số điện thoại
+              </Form.Label>
               <Form.Control
                 value={formValue.phoneNumber}
                 onChange={handleChange}
@@ -250,7 +266,25 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={clsx(styles.label, styles.required)}>Ngày sinh</Form.Label>
+              <Form.Label className={styles.label}>
+                Số căn cước công dân
+              </Form.Label>
+              <Form.Control
+                disabled
+                size="lg"
+                type="text"
+                  value={
+                  resident &&
+                  resident.profile.identify_number
+                }
+                placeholder=""
+              />
+             
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className={clsx(styles.label, styles.required)}>
+                Ngày sinh
+              </Form.Label>
               <Form.Control
                 value={
                   resident &&
@@ -264,7 +298,9 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             </Form.Group>
             <div className="d-flex justify-content-around">
               <Form.Group className="mb-3">
-                <Form.Label className={clsx(styles.label, styles.required)}>Ảnh trước CCCD</Form.Label>
+                <Form.Label className={clsx(styles.label, styles.required)}>
+                  Ảnh trước CCCD
+                </Form.Label>
                 <Form.Control
                   accept="image/*"
                   size="lg"
@@ -288,7 +324,9 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label className={clsx(styles.label, styles.required)}>Ảnh sau CCCD</Form.Label>
+                <Form.Label className={clsx(styles.label, styles.required)}>
+                  Ảnh sau CCCD
+                </Form.Label>
                 <Form.Control
                   accept="image/*"
                   size="lg"
@@ -299,6 +337,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
 
                 <Image
                   onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                  
                   className={styles.img}
                   width={80}
                   height={40}
