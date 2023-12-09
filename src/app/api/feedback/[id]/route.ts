@@ -96,7 +96,7 @@ export async function DELETE(
   let config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: endpoint.employee + "/" + params.id,
+    url: endpoint.feedback + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer " + request.cookies.get("token")?.value,

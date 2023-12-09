@@ -11,6 +11,7 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
+import classNames from 'classnames';
 import Furniture from "../../../../components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -28,6 +29,10 @@ import { Feedback } from "@/models/feedback";
 import { Resident } from "@/models/resident";
 import { Value } from "sass";
 import { UserProfile } from "@/libs/UserProfile";
+import { serialize } from "v8";
+import ModalComponent from "@/components/Modal/Modal";
+import { CloseIcon } from "@/components/icons";
+import { set } from "date-fns";
 export default function Page({ params }: { params: { id: string } }) {
 
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
@@ -38,26 +43,45 @@ export default function Page({ params }: { params: { id: string } }) {
     service_id: string;
     resident_id: string;
   };
-  const [formValue, setFormValue] = useState({
+  const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
     comment: "",
     service_id: params.id,
     resident_id: "",
   });
+  const [selectedId, setSelectedId] = useState("");
+  const deleleHandle = (id: string) => {
+    setSelectedId(id);
+    setShowModalDelete(true);
+  };
+  const [residentId, setResidentId] = useState(null);
+  const [serviceId, setServiceId] = useState(null);
+  const [feedback, setFeedback] = useState<Feedback>();
+  useEffect(() => {
+    const userProfile = UserProfile.getProfile();
+    setResidentId(userProfile.id);
+  }, []);
   const [feedbackData, setFeedbackData] = useState<Feedback[]>([]);
   useEffect(() => {
-    const fetchFeedback = async () => {
+    const fetchUserProfile = async () => {
+      const user = await UserProfile.getProfile();
+      setFormValue((prevState) => ({ ...prevState, resident_id: user.id }));
+    };
+
+    fetchUserProfile();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('/api/feedback');
-        setFeedbackData(response.data);
-      } catch (err) {
-        console.error(err);
-         console.log(err);
+        const res = await axios.get(`/api/feedback?service_id=${params.id}`);
+        setFeedbackData(res.data);
+      } catch (error) {
+        console.log(error);
       }
     };
 
-    fetchFeedback();
-  }, []);
+    fetchData();
+  }, [params.id]);
   const retrieveFeedback = async () => {
     try {
       loadingFiler(document.body!);
@@ -84,14 +108,12 @@ export default function Page({ params }: { params: { id: string } }) {
 
     return err;
   };
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newObj = { ...formValue, [e.target.name]: e.target.value };
-    setFormValue(newObj);
-  };
   const addFeedback = (newFeedback: Feedback) => {
-    setFeedbackData(prevFeedbackData => [...prevFeedbackData, newFeedback]);
+    setFeedbackData(prevFeedbackData => [
+      ...prevFeedbackData,
+      { ...formValue, feedback_id: "" } as Feedback,
+    ]);
   };
-  const [feedback_id, setFeedbackId] = useState<string | null>(null);
   const createHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('createHandle called');
@@ -104,7 +126,7 @@ export default function Page({ params }: { params: { id: string } }) {
       form.append("rating", formValue.rating);
       form.append("comment", formValue.comment);
       form.append("service_id", formValue.service_id);
-      form.append("resident_id", user.id);
+      form.append("resident_id", formValue.resident_id);
       try {
         loadingFiler(document.body!);
         await axios.post(`/api/feedback/`, form);
@@ -112,9 +134,9 @@ export default function Page({ params }: { params: { id: string } }) {
           rating: formValue.rating, comment: formValue.comment,
           feedback_id: "",
           resident_id: user.id,
-          service_id: ""
+          service_id: params.id,
         });
-        setFormValue({ rating: "", comment: "", resident_id: "", service_id: "" });
+        setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id });
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Create successfully!" });
       } catch (e) {
@@ -124,7 +146,16 @@ export default function Page({ params }: { params: { id: string } }) {
       }
     }
   };
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const newObj = { ...formValue, [e.target.name]: e.target.value };
+  //   setFormValue(newObj);
+  // };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValue((prevState) => ({ ...prevState, [name]: value }));
+  };
   const [showModal, setShowModal] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const handleRatingChange = (newRating: number) => {
@@ -134,12 +165,21 @@ export default function Page({ params }: { params: { id: string } }) {
   const handleModalOpen = () => {
     setShowModal(true);
   };
-
+  const handleConfirmDelete = async (id: string) => {
+    setShowModalDelete(false);
+    try {
+      await axios.delete(`/api/feedback/${id}`);
+      toastMessage({ type: "success", title: "Delete successfully!" });
+      refetch();
+    } catch (err) {
+      toastMessage({ type: "error", title: "Delete faily!" });
+      console.log(err);
+    }
+  };
   const handleModalClose = async () => {
     setShowModal(false);
     await refetch();
   };
-
   const { isLoading, data, isError, refetch } = useQuery(
     "service",
     () =>
@@ -148,13 +188,24 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
-  const { } = useQuery(
-    "feedback",
-    retrieveFeedback,
-    {
-      staleTime: Infinity,
-    }
-  );
+  // const { } = useQuery(
+  //   "feedback",
+  //   retrieveFeedback,
+  //   {
+  //     staleTime: Infinity,
+  //   }
+  // );
+  useEffect(() => {
+    retrieveFeedback();
+  }, []);
+  // useEffect(() => {
+  //   const fetchUserProfile = async () => {
+  //     const user = await UserProfile.getProfile();
+  //     setFormValue(prevState => ({ ...prevState, resident_id: user.id }));
+  //   };
+  //   fetchUserProfile();
+  //   setFormValue(prevState => ({ ...prevState, service_id: params.id }));
+  // }, []);
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
@@ -267,6 +318,7 @@ export default function Page({ params }: { params: { id: string } }) {
               Commnent
             </ButtonComponent>
               </Col> */}
+
             <Row style={{
               backgroundColor: "rgba(40, 100, 255, 0.1)",
               border: "1px black solid",
@@ -283,16 +335,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 starDimension="30px"
                 starSpacing="5px"
               />
-              {/* <textarea
-                className="form-control"
-                style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "20px", marginRight: "10px", width: "90%" }}
-                placeholder="Comment"
-                rows={5}
-                name="comment"
-                onChange={handleChange}
-                value={formValue.comment} // use the comment state
-
-              ></textarea> */}
               <Form.Group className="mb-3">
                 <Form.Label className={styles.label}>Comment</Form.Label>
                 <Form.Control
@@ -310,9 +352,6 @@ export default function Page({ params }: { params: { id: string } }) {
               <ButtonComponent onClick={createHandle} className={styles.creatBtn1}>
                 Tạo
               </ButtonComponent>
-
-
-
             </Row>
             <Row style={{ marginTop: "20px" }}>
               <Col>
@@ -321,27 +360,54 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
               </Col>
             </Row>
-            {feedbackData.map((feedback, index) => (
-              <Row
-                key={index}
-                style={{
-                  backgroundColor: "rgba(40, 100, 255, 0.1)",
-                  border: "1px black solid",
-                  borderRadius: "20px",
-                  margin: "20px 0px",
-                  paddingTop: "20px",
-                }}
-              >
-                <div>
-                  <p>Resident: {feedback.resident_id}</p>
-                  <p>Rating: {feedback.rating}</p>
-                  <p>Comment: {feedback.comment}</p>
-                </div>
-              </Row>
-            ))}
-          </Container>
+            {feedbackData
+              // .filter(feedback => feedback.service_id === params.id)
+              .map((feedback, index) => (
+                <Row
+                  key={index}
+                  style={{
+                    backgroundColor: "rgba(40, 100, 255, 0.1)",
+                    border: "1px black solid",
+                    borderRadius: "20px",
+                    margin: "20px 0px",
+                    paddingTop: "20px",
+                  }}
+                >
+                  <div>
+                    <p>Resident: {feedback.resident_id}</p>
+                    <p>Resident: {feedback.feedback_id}</p>
+                    <p>Rating: {feedback.rating}</p>
+                    <p>Comment: {feedback.comment}</p>
+                    <p>Service: {feedback.service_id}</p>
+                  </div>
+                  <Col md="auto">
+                    {(UserProfile.getRole() === "resident" && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === "admin" ? (
+                      <ButtonComponent
+                        onClick={() => deleleHandle(feedback.feedback_id)}
+                        className={classNames(
+                          styles.deleteBtn
+                        )}
+                      >
+                        Xóa
+                      </ButtonComponent>
+                    ) : (
+                      <></>
+                    )}
 
+
+                  </Col>
+
+                </Row>
+
+              ))}
+          </Container>
         </div>
+        <ModalComponent
+          show={showModalDelete}
+          title="Có chắc chắn xóa tòa này?"
+          handleConfirm={() => handleConfirmDelete(selectedId)}
+          setShow={setShowModalDelete}
+        />
         <ToastContainer
           position="top-right"
           autoClose={5000}
