@@ -96,17 +96,17 @@ export default function RootLayout({
                         className={`${styles.sidebarButtonMenu} ${futuna.className}`}
                       >
                         {value.menu?.map((value, index) => (
-                          <a
-                            href={value.href}
+                          <button
                             key={index}
                             className={`${
                               pathName == value.href
-                                ? styles.currentItemMenu
+                                ? styles.active
                                 : ""
                             }`}
+                            onClick={() => handleRouting(value.href)}
                           >
                             {value.title}
-                          </a>
+                          </button>
                         ))}
                       </div>
                     </div>

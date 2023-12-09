@@ -38,7 +38,7 @@ export default function DragDropFileInput({
   );
   useEffect(() => {
     setFileLists([...initFileList])
-  },[initFileList])
+  },[])
   // ref
   const inputRef = useRef<HTMLInputElement>(null);
   // handle drag events

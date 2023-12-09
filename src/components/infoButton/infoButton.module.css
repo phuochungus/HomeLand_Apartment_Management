@@ -42,13 +42,13 @@
     visibility: hidden;
 }
 
-.hoverContainer:hover {
-    .infoButton .infoDetail {
-        max-width: 200px;
-    }
+.hoverContainer:hover .infoButton .infoDetail {
+    max-width: 200px;
+}
 
-    .hoverContent {
-        max-height: 100px;
-        visibility: visible;
-    }
+
+
+.hoverContainer:hover .hoverContent {
+    max-height: 100px;
+    visibility: visible;
 }
