@@ -17,6 +17,7 @@ import { FaList } from "react-icons/fa";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProfile } from "@/libs/UserProfile";
+import ChatBox from "@/components/chatBox/ChatBox";
 
 export default function RootLayout({
   children,
@@ -96,17 +97,15 @@ export default function RootLayout({
                         className={`${styles.sidebarButtonMenu} ${futuna.className}`}
                       >
                         {value.menu?.map((value, index) => (
-                          <a
-                            href={value.href}
+                          <button
                             key={index}
                             className={`${
-                              pathName == value.href
-                                ? styles.currentItemMenu
-                                : ""
+                              pathName == value.href ? styles.active : ""
                             }`}
+                            onClick={() => handleRouting(value.href)}
                           >
                             {value.title}
-                          </a>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -148,7 +147,10 @@ export default function RootLayout({
                 auth={searchParam.get("auth") == null ? false : true}
               />
             </div>
-            {children}
+            <div id={"mainContent"}>
+              <ChatBox />
+              {children}
+            </div>
           </div>
         </body>
       </html>

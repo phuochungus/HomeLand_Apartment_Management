@@ -13,13 +13,14 @@
     font-size: 1rem;
 }
 
-.sidebarButtonMenu a {
-    text-decoration: none;
+.sidebarButtonMenu button {
+    text-align: left;
     color: black;
 }
 
-.sidebarButtonMenu a.active {
-    color: blue
+.sidebarButtonMenu button.active {
+    color: blue;
+    text-decoration: underline;
 }
 
 @media screen and (max-width: 1200px) {
@@ -32,8 +33,11 @@
 
 .sidebarBody {
     margin-top: 3rem;
-}
 
+}
+.hideScrollbar::-webkit-scrollbar{
+    display: none;
+}
 button.sidebarButton{
     position: relative;
     height: 4rem;

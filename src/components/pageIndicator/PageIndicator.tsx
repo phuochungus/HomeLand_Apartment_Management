@@ -43,8 +43,8 @@ export default function PageIndicator({
         {Array.from(Array(pageLength).keys()).map((value, index) => {
           if (
             !maxPageButton ||
-            (index <= currentPage + maxPageButton / 2 &&
-              index >= currentPage - maxPageButton / 2)
+            (index + 1 <= currentPage + maxPageButton / 2 &&
+              index + 1 >= currentPage - maxPageButton / 2)
           )
             return (
               <div
