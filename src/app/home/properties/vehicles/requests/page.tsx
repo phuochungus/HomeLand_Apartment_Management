@@ -48,6 +48,7 @@ import {
 } from "react-icons/fa";
 import { Button, Image, Stack } from "react-bootstrap";
 import { Resident } from "@/models/resident";
+import { motion } from "framer-motion";
 const listOptions = [
   {
     value: 10,
@@ -137,55 +138,20 @@ export default function Vehicles() {
     ]);
     setSortField(title);
   }
-  async function handleMoreInfo(
-    vehicle: Vehicle | undefined,
-    direction = true
-  ) {
-    if (direction) {
-      if (!vehicle) return;
-      setSelectedVehicle(vehicle);
-      await axios
-        .get("/api/resident/" + vehicle.residentId)
-        .then((res) => setSelectedResident(res.data as Resident))
-        .catch((error) => {
-          console.log(error);
-          toastMessage({
-            type: "error",
-            title: "Đã có lỗi xảy ra",
-          });
+  async function handleMoreInfo(vehicle: Vehicle | undefined) {
+    setSelectedVehicle(vehicle);
+    if (!vehicle) return;
+    await axios
+      .get("/api/resident/" + vehicle.residentId)
+      .then((res) => setSelectedResident(res.data as Resident))
+      .catch((error) => {
+        console.log(error);
+        toastMessage({
+          type: "error",
+          title: "Đã có lỗi xảy ra",
         });
-      const vehicleTable = document.getElementById("vehicleTable");
-      if (vehicleTable) {
-        vehicleTable.className = vehicleTable.className.replace(
-          vehicleStyles.show,
-          vehicleStyles.hidden
-        );
-      }
-      const vehicleInfo = document.getElementById("vehicleInfo");
-      if (vehicleInfo) {
-        vehicleInfo.className = vehicleInfo.className.replace(
-          vehicleStyles.hidden,
-          vehicleStyles.show
-        );
-      }
-    } else {
-      const vehicleTable = document.getElementById("vehicleTable");
-      if (vehicleTable) {
-        vehicleTable.className = vehicleTable.className.replace(
-          vehicleStyles.hidden,
-          vehicleStyles.show
-        );
-      }
-      const vehicleInfo = document.getElementById("vehicleInfo");
-      if (vehicleInfo) {
-        vehicleInfo.className = vehicleInfo.className.replace(
-          vehicleStyles.show,
-          vehicleStyles.hidden
-        );
-      }
-    }
+      });
   }
-
   function handleZoomIn(e: MouseEvent<HTMLButtonElement>): void {}
 
   async function handleAccept(vehicle: Vehicle | undefined) {
@@ -201,7 +167,7 @@ export default function Vehicles() {
           title: "Chấp nhận yêu cầu thành công",
         });
         setSelectedVehicle(undefined);
-        handleMoreInfo(undefined, false);
+        handleMoreInfo(undefined);
       })
       .catch((error) => {
         toastMessage({
@@ -226,7 +192,7 @@ export default function Vehicles() {
           title: "Chấp nhận yêu cầu thành công.",
         });
         setSelectedVehicle(undefined);
-        handleMoreInfo(undefined, false);
+        handleMoreInfo(undefined);
       })
       .catch((error) => {
         console.log(error);
@@ -247,161 +213,170 @@ export default function Vehicles() {
         </h1>
 
         <div style={{ display: "flex" }}>
-          <div
-            className={`${vehicleStyles.show} ${vehicleStyles.transition}`}
-            id="vehicleTable"
-          >
-            <div className="d-flex w-100 mt-3 justify-content-between">
-              <div className={clsx(vehicleStyles.perPage)}>
-                <span>Show</span>
-                <span>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) => handleShowLimit(e)}
-                  >
-                    {listOptions.map(
-                      (option, index): JSX.Element => (
-                        <option key={index} value={option.value}>
-                          {option.value}
-                        </option>
-                      )
-                    )}
-                  </Form.Select>
-                </span>
-                <span>Entries</span>
+          {!selectecVehicle ? (
+            <motion.div
+              className={`${vehicleStyles.show}`}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              layoutId="detailInfo"
+              id="vehicleTable"
+            >
+              <div className="d-flex w-100 mt-3 justify-content-between">
+                <div className={clsx(vehicleStyles.perPage)}>
+                  <span>Show</span>
+                  <span>
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={(e) => handleShowLimit(e)}
+                    >
+                      {listOptions.map(
+                        (option, index): JSX.Element => (
+                          <option key={index} value={option.value}>
+                            {option.value}
+                          </option>
+                        )
+                      )}
+                    </Form.Select>
+                  </span>
+                  <span>Entries</span>
+                </div>
+                <SearchLayout
+                  onChange={handleSearch}
+                  placeHolder="Tìm phương tiện..."
+                  ref={searchRef}
+                />
               </div>
-              <SearchLayout
-                onChange={handleSearch}
-                placeHolder="Tìm phương tiện..."
-                ref={searchRef}
-              />
-            </div>
-            <div className="w-100 mt-5">
-              <Table
-                className={clsx(vehicleStyles.tableResident, futuna.className)}
-                striped
-                bordered
-                hover
-              >
-                <thead>
-                  <tr>
-                    {titleTable.map((title, index) => (
-                      <th key={index}>
-                        {title.name}{" "}
-                        <SortIcon
-                          width={12}
-                          height={12}
-                          isUsed={sortField == title.field}
-                          onChangeOrder={(order) => {
-                            handleChangeOrder(order, title.field);
-                          }}
-                        />
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {vehicles
-                    .slice(
-                      (pageNumber - 1) * showLimit,
-                      (pageNumber - 1) * showLimit + showLimit - 1
-                    )
-                    .map((vehicle, index): ReactNode => {
-                      return (
-                        <tr key={index}>
-                          <td>{vehicle.id}</td>
-                          <td>{vehicle.licensePlate}</td>
-                          <td>{vehicle.status}</td>
-                          <td>{vehicle.residentId}</td>
-                          <td
-                            style={{
-                              width: "100%",
-                              display: "flex",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <div className="d-flex">
-                              <ButtonComponent
-                                onClick={() => handleAccept(vehicle)}
-                                preIcon={
-                                  <FaArrowCircleRight></FaArrowCircleRight>
-                                }
-                                className={clsx(
-                                  vehicleStyles.cudBtn,
-                                  vehicleStyles.approveBtn
-                                )}
-                              >
-                                Đồng ý
-                              </ButtonComponent>
-                              <ButtonComponent
-                                onClick={() => handleReject(vehicle)}
-                                preIcon={<CloseIcon width={16} height={16} />}
-                                className={clsx(
-                                  vehicleStyles.cudBtn,
-                                  vehicleStyles.deleteBtn
-                                )}
-                              >
-                                Từ chối
-                              </ButtonComponent>
-                              <ButtonComponent
-                                onClick={() => handleMoreInfo(vehicle)}
-                                className={clsx(
-                                  vehicleStyles.cudBtn,
-                                  vehicleStyles.editBtn
-                                )}
-                                sufIcon={<FaArrowRight />}
-                              >
-                                Thông tin
-                              </ButtonComponent>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </Table>
-            </div>
-            {vehicles.length ? (
-              <PageIndicator
-                pageLength={Math.ceil(vehicles.length / showLimit)}
-                currentPage={pageNumber}
-                clickHandler={handlePageNumberChange}
-              />
-            ) : (
-              <div style={{ width: "100%", textAlign: "center" }}>
-                Nothing to show
-              </div>
-            )}
-          </div>
-
-          <div
-            id={"vehicleInfo"}
-            className={`${vehicleStyles.hidden} ${vehicleStyles.transition}`}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button onClick={() => handleMoreInfo(selectecVehicle, false)}>
-                <FaArrowLeft />
-              </button>
-              <div style={{ display: "flex" }}>
-                <ButtonComponent
-                  className={clsx(vehicleStyles.pendingBtn, futuna.className)}
-                  onClick={() => handleAccept(selectecVehicle)}
-                >
-                  Đồng ý
-                </ButtonComponent>
-                <div style={{ width: "1vw" }} />
-                <ButtonComponent
-                  onClick={() => handleReject(selectecVehicle)}
+              <div className="w-100 mt-5">
+                <Table
                   className={clsx(
-                    vehicleStyles.cudBtn,
-                    vehicleStyles.deleteBtn
+                    vehicleStyles.tableResident,
+                    futuna.className
                   )}
+                  striped
+                  bordered
+                  hover
                 >
-                  Từ chối
-                </ButtonComponent>
+                  <thead>
+                    <tr>
+                      {titleTable.map((title, index) => (
+                        <th key={index}>
+                          {title.name}{" "}
+                          <SortIcon
+                            width={12}
+                            height={12}
+                            isUsed={sortField == title.field}
+                            onChangeOrder={(order) => {
+                              handleChangeOrder(order, title.field);
+                            }}
+                          />
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vehicles
+                      .slice(
+                        (pageNumber - 1) * showLimit,
+                        (pageNumber - 1) * showLimit + showLimit - 1
+                      )
+                      .map((vehicle, index): ReactNode => {
+                        return (
+                          <tr key={index}>
+                            <td>{vehicle.id}</td>
+                            <td>{vehicle.licensePlate}</td>
+                            <td>{vehicle.status}</td>
+                            <td>{vehicle.residentId}</td>
+                            <td
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <div className="d-flex">
+                                <ButtonComponent
+                                  onClick={() => handleAccept(vehicle)}
+                                  preIcon={
+                                    <FaArrowCircleRight></FaArrowCircleRight>
+                                  }
+                                  className={clsx(
+                                    vehicleStyles.cudBtn,
+                                    vehicleStyles.approveBtn
+                                  )}
+                                >
+                                  Đồng ý
+                                </ButtonComponent>
+                                <ButtonComponent
+                                  onClick={() => handleReject(vehicle)}
+                                  preIcon={<CloseIcon width={16} height={16} />}
+                                  className={clsx(
+                                    vehicleStyles.cudBtn,
+                                    vehicleStyles.deleteBtn
+                                  )}
+                                >
+                                  Từ chối
+                                </ButtonComponent>
+                                <ButtonComponent
+                                  onClick={() => handleMoreInfo(vehicle)}
+                                  className={clsx(
+                                    vehicleStyles.cudBtn,
+                                    vehicleStyles.editBtn
+                                  )}
+                                  sufIcon={<FaArrowRight />}
+                                >
+                                  Thông tin
+                                </ButtonComponent>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </Table>
               </div>
-            </div>
-            {selectecVehicle ? (
+              {vehicles.length ? (
+                <PageIndicator
+                  pageLength={Math.ceil(vehicles.length / showLimit)}
+                  currentPage={pageNumber}
+                  clickHandler={handlePageNumberChange}
+                />
+              ) : (
+                <div style={{ width: "100%", textAlign: "center" }}>
+                  Nothing to show
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              id={"vehicleInfo"}
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              layoutId="detailInfo"
+              className={`${vehicleStyles.show}`}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <button onClick={() => handleMoreInfo(undefined)}>
+                  <FaArrowLeft />
+                </button>
+                <div style={{ display: "flex" }}>
+                  <ButtonComponent
+                    className={clsx(vehicleStyles.pendingBtn, futuna.className)}
+                    onClick={() => handleAccept(selectecVehicle)}
+                  >
+                    Đồng ý
+                  </ButtonComponent>
+                  <div style={{ width: "1vw" }} />
+                  <ButtonComponent
+                    onClick={() => handleReject(selectecVehicle)}
+                    className={clsx(
+                      vehicleStyles.cudBtn,
+                      vehicleStyles.deleteBtn
+                    )}
+                  >
+                    Từ chối
+                  </ButtonComponent>
+                </div>
+              </div>
               <div style={{ padding: "1vw" }}>
                 <div style={{ display: "flex" }}>
                   {" "}
@@ -473,10 +448,8 @@ export default function Vehicles() {
                   </div>
                 </div>
               </div>
-            ) : (
-              <></>
-            )}
-          </div>
+            </motion.div>
+          )}
         </div>
       </div>
       <ModalComponent

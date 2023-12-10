@@ -69,13 +69,13 @@ export default function Vehicles() {
   };
   const retrieveResidents = async () => {
     try {
-      loadingFiler(document.body!);
+      loadingFiler(document.getElementById("mainContent"));
       const res = await axios.get("/api/equipment");
-      removeLoadingFilter(document.body!);
+      removeLoadingFilter(document.getElementById("mainContent"));
       setVehicles(res.data);
       return res.data;
     } catch (error) {
-      removeLoadingFilter(document.body!);
+      removeLoadingFilter(document.getElementById("mainContent"));
       console.log(error);
     }
   };
@@ -98,7 +98,7 @@ export default function Vehicles() {
     else setVehicles(search(data, "licensePlate", e.currentTarget.value));
   };
   const handleConfirmDelete = async (id: string) => {
-    loadingFiler(document.body!);
+    loadingFiler(document.getElementById("mainContent"));
     setShowModal(false);
     await axios
       .delete(`/api/equipment/${id}`)

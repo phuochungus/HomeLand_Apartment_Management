@@ -67,15 +67,15 @@ export default function Vehicles() {
   };
   const retrieveResidents = async () => {
     try {
-      loadingFiler(document.body!);
+      loadingFiler(document.getElementById("mainContent"));
       const res = await axios.get("/api/vehicle");
-      removeLoadingFilter(document.body!);
+      removeLoadingFilter(document.getElementById("mainContent"));
       var data = res.data;
       if (user.role == "resident") data = search(data, "residentId", user.id);
       setVehicles(data);
       return data;
     } catch (error) {
-      removeLoadingFilter(document.body!);
+      removeLoadingFilter(document.getElementById("mainContent"));
       console.log(error);
     }
   };
@@ -98,7 +98,7 @@ export default function Vehicles() {
     else setVehicles(search(data, "licensePlate", e.currentTarget.value));
   };
   const handleConfirmDelete = async (id: string) => {
-    loadingFiler(document.body!);
+    loadingFiler(document.getElementById("mainContent"));
     setShowModal(false);
     await axios
       .delete(`/api/vehicle/${id}`)
@@ -110,7 +110,7 @@ export default function Vehicles() {
         toastMessage({ type: "error", title: "Delete failed!" });
         console.log(err);
       });
-    removeLoadingFilter(document.body!);
+    removeLoadingFilter(document.getElementById("mainContent"));
   };
   const handleShowLimit = (event: React.ChangeEvent) => {
     event.preventDefault();

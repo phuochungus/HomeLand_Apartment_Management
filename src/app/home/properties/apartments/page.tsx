@@ -12,6 +12,8 @@ import { Building } from "@/models/building";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { AddResidentIcon } from "@/components/icons";
 import { search } from "@/libs/utils";
+import { motion } from "framer-motion";
+import { Floor } from "@/models/floor";
 interface Option {
   title: string;
   selections: string[];
@@ -56,21 +58,22 @@ const getSortOption = async ({
       });
     }),
     axios.get("/api/floor").then((res) => {
-      (res.data as Building[]).map((value, index) =>
+      (res.data.items as Floor[]).map((value, index) =>
         apartmentSortOption[1].selections.push(value.name)
       );
     }),
   ]);
+  console.log(apartmentSortOption)
   return apartmentSortOption;
 };
 // eslint-disable-next-line @next/next/no-async-client-component
 export default function Apartments() {
-  const pathName = usePathname();
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
   //Handle if middleware not working
   const router = useRouter();
   if (!user.id) router.push("/home");
   const loadingMore = useRef({ isLoading: false, page: 1 });
+  const searchParam = useRef('');
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
   const [apartmentSortOption, setApartmentSortOption] = useState<Option[]>([
     {
@@ -140,9 +143,10 @@ export default function Apartments() {
           );
           console.log(apartmentSortOption[index].data[value])
       });
-    console.log(result)
+    if(searchParam.current != "")
+      result = search(result, "name", searchParam)
     setApartmentList([...result]);
-  }, [sortOptionList]);
+  }, [sortOptionList, searchParam.current]);
 
   async function handleScrollEnd() {
     if (!loadingMore.current.isLoading) {
@@ -175,7 +179,7 @@ export default function Apartments() {
   });
   if (isLoading)
     return (
-      <div
+      <motion.div
         style={{
           display: "flex",
           width: "100%",
@@ -187,11 +191,14 @@ export default function Apartments() {
         }}
       >
         <Spinner></Spinner>
-      </div>
+      </motion.div>
     );
   if (isError)
     return (
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 40 }}
         style={{
           width: "100%",
           height: "100%",
@@ -201,25 +208,22 @@ export default function Apartments() {
         }}
       >
         Co loi
-      </div>
+      </motion.div>
     );
-  return (
-    <main className={styles.main}>
-      {(user.role == "admin" || user.role == "manager") && (
-        <div style={{ width: "100%", marginBottom: "1vw" }}>
-          <ButtonComponent
-            href={`${pathName}/add`}
-            preIcon={<AddResidentIcon width={24} height={24} />}
-            className={styles.addBtn}
-          >
-            Tạo căn hộ
-          </ButtonComponent>
-        </div>
-      )}
+  function handleSearch(params: string): void {
+    searchParam.current = params
+  }
 
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 40 }}
+      className={styles.main}
+    >
       <div className={styles.container}>
         <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
-          <SearchBar className={styles.searchBar}></SearchBar>
+          <SearchBar className={styles.searchBar} placeholder="Search by name...." onSearch={handleSearch}></SearchBar>
         </div>
         {apartmentSortOption &&
           apartmentSortOption.map((value, index) => (
@@ -246,7 +250,7 @@ export default function Apartments() {
           }}
         ></div>
       )}
-    </main>
+    </motion.div>
   );
 }
 const FilterButton = ({
