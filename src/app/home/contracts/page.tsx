@@ -28,7 +28,7 @@ export default function Contracts() {
     "contract",
     () =>
       axios.get("/api/contract?page=" + page).then((res) => {
-        setContractList([...ContractList, ...(res.data as Contract[])]);
+        setContractList(res.data as Contract[]);
       }),
     {
       refetchOnWindowFocus: false,
@@ -191,6 +191,7 @@ export default function Contracts() {
             <th>{t("name")}</th>
             <th>{t("phone_number")}</th>
             <th>{t("apartment")}</th>
+            <th>{t("status")}</th>
             <th>{t("create_at")}</th>
             <th>{t("expire_at")}</th>
             <th></th>
@@ -204,18 +205,19 @@ export default function Contracts() {
                 <td>{value.resident.profile.name}</td>
                 <td>{value.resident.profile.phone_number}</td>
                 <td>{value.apartment.name}</td>
+                <td>{value.status}</td>
                 <td>
-                  {format(new Date(value.created_at), "yyyy-MM-dd HH:mm:ss")}
+                  {format(new Date(value.created_at), "HH:mm:ss dd-MM-yyyy")}
                 </td>
                 <td>
-                  {format(new Date(value.expire_at), "yyyy-MM-dd HH:mm:ss")}
+                  {value.expire_at?format(new Date(value.expire_at), "HH:mm:ss dd-MM-yyyy"):null}
                 </td>{" "}
                 <td style={{ width: 20 }}>
                   <div className="d-flex">
                     <Button
                       onClick={() => {
                         router.push(
-                          "/home/contracts/updateContract/" +
+                          "/home/contracts/update/" +
                             value.contract_id +
                             "?auth=true"
                         );
