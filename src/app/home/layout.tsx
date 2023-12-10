@@ -148,7 +148,6 @@ export default function RootLayout({
                 auth={searchParam.get("auth") == null ? false : true}
               />
             </div>
-
             {children}
           </div>
         </body>
