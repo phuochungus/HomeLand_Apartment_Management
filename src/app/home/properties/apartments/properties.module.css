@@ -9,6 +9,21 @@
 
 }
 
+.addBtn {
+    background-color: var(--primary);
+    color: var(--white);
+    font-size: 1rem;
+    text-decoration: none;
+    padding: var(--default-padding-vertical) var(--default-padding-horizontal);
+    border-radius: 8px;
+    float: right;
+    width: 15vw;
+}
+
+.addBtn:hover {
+    background-color: #0744e1;
+}
+
 .main {
     display: flex;
     flex-direction: column;
@@ -22,12 +37,14 @@
     border-left-width: 2px;
     margin-left: 1rem;
 }
-.searchBarContainer{
+
+.searchBarContainer {
     height: 100%;
     width: 40%;
     border-style: none;
     padding: 10px 0;
 }
+
 .main .container .itemContainer .searchBar {
     width: 100%;
     height: 100%;
@@ -45,7 +62,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100%
+    height: 100%;
 }
 
 .filter p {
@@ -110,9 +127,10 @@
 }
 
 @media screen and (max-width: 700px) {
-    .grid{
+    .grid {
         grid-template-columns: auto;
     }
+
     .container {
         height: 15vw
     }
@@ -131,7 +149,7 @@
         width: 100%
     }
 
-    .main>.container>div{
+    .main>.container>div {
         display: none;
         visibility: hidden;
     }
