@@ -330,6 +330,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <StarRatings
                 rating={rating}
                 starRatedColor="gold"
+                starHoverColor="gold"
                 changeRating={handleRatingChange}
                 numberOfStars={5}
                 starDimension="30px"
@@ -361,7 +362,7 @@ export default function Page({ params }: { params: { id: string } }) {
               </Col>
             </Row>
             {feedbackData
-              // .filter(feedback => feedback.service_id === params.id)
+              .filter(feedback => feedback.service_id === params.id)
               .map((feedback, index) => (
                 <Row
                   key={index}
@@ -375,7 +376,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 >
                   <div>
                     <p>Resident: {feedback.resident_id}</p>
-                    <p>Resident: {feedback.feedback_id}</p>
                     <p>Rating: {feedback.rating}</p>
                     <p>Comment: {feedback.comment}</p>
                     <p>Service: {feedback.service_id}</p>
