@@ -18,3 +18,9 @@
 .noScrollBar::-webkit-scrollbar {
     display: none ;
 }
+.line{
+    width: 0.8vw;
+    height: 3px;
+    border-bottom: 1px solid grey;
+    align-self: center;
+    }

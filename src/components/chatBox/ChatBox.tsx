@@ -95,16 +95,26 @@ export default function ChatBox(): React.ReactNode {
       >
         <MainContainer
           className={futuna.className}
-          style={{ display: "block", width: "20vw" }}
+          style={{ display: "block", width: "20vw", borderRadius: "5%" }}
         >
           <div
-            style={{ width: "100%", textAlign: "center", cursor: "pointer" }}
+            style={{
+              width: "100%",
+              textAlign: "center",
+              cursor: "pointer",
+              display: "flex",
+              padding: "0 1vw",
+              justifyContent: "space-between"
+            }}
             onClick={(e) => {
               setShow(true);
               controls.start("hidden");
             }}
           >
-            Chat box
+            {"Chat box"}
+            <button
+            className={style.line}
+            ></button>
           </div>
           <ChatContainer>
             <MessageList>
