@@ -17,6 +17,7 @@ import { FaList } from "react-icons/fa";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProfile } from "@/libs/UserProfile";
+import ChatBox from "@/components/chatBox/ChatBox";
 
 export default function RootLayout({
   children,
@@ -99,9 +100,7 @@ export default function RootLayout({
                           <button
                             key={index}
                             className={`${
-                              pathName == value.href
-                                ? styles.active
-                                : ""
+                              pathName == value.href ? styles.active : ""
                             }`}
                             onClick={() => handleRouting(value.href)}
                           >
@@ -148,7 +147,10 @@ export default function RootLayout({
                 auth={searchParam.get("auth") == null ? false : true}
               />
             </div>
-            <div id={"mainContent"}>{children}</div>
+            <div id={"mainContent"}>
+              <ChatBox />
+              {children}
+            </div>
           </div>
         </body>
       </html>
