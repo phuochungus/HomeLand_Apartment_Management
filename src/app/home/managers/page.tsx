@@ -14,6 +14,7 @@ import {
   AddResidentIcon,
   CloseIcon,
   EditIcon,
+  GarbageIcon,
   SortIcon,
   TrashIcon,
 } from "@/components/icons";
@@ -274,7 +275,7 @@ const handleNextPage = () => {
                           onClick={() => deleleHandle(manager.id)}
                           className={residentStyles.TrashIcon}
                         > 
-                          <TrashIcon
+                          <GarbageIcon
                             className={residentStyles.trash}
                             width={16}
                             height={16}

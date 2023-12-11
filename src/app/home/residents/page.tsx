@@ -14,6 +14,7 @@ import {
   AddResidentIcon,
   CloseIcon,
   EditIcon,
+  GarbageIcon,
   SortIcon,
   TrashIcon
   
@@ -298,7 +299,7 @@ export default function Residents() {
                           onClick={() => deleleHandle(resident.id)}
                           className={residentStyles.TrashIcon}
                         >
-                          <TrashIcon
+                          <GarbageIcon
                             className={residentStyles.trash}
                             width={16}
                             height={16}

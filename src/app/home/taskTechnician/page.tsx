@@ -16,6 +16,7 @@ import {
   CloseIcon,
   DetailIcon,
   EditIcon,
+  GarbageIcon,
   OptionIcon,
   PaidIcon,
   PlusIcon,
@@ -355,7 +356,7 @@ const TaskTechnician = () => {
                     onClick={() => removeLineHandler(index)}
                     className={styles.TrashIcon}
                   >
-                    <TrashIcon width={16} height={16} />
+                    <GarbageIcon width={16} height={16} />
                   </div>
                 </div>
               );
