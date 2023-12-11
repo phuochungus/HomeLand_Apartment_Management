@@ -115,7 +115,7 @@ export default function Page() {
           .then((response) => {
             router.back();
             removeLoadingFilter(document.body!);
-            toastMessage({ type: "success", title: "Create successfully!" });
+            toastMessage({ type: "success", title: "Create contract successfully!" });
           })
           .catch((e) => {
             removeLoadingFilter(document.body!);

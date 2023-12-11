@@ -158,9 +158,9 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
                 {/* <p className="">{data.address}</p> */}
               </Col>
-              <Col className="text-end">
+              {UserProfile.getRole() == "admin" ? <Col className="text-end">
                 <Button variant="warning">Edit</Button>{" "}
-              </Col>
+              </Col> : <></>}
             </Row>
             <Row style={{ marginTop: "20px" }}>
               <Carousel>
@@ -234,6 +234,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       <ServicePackageLayout
                         servicePackage={value}
                         service={data}
+                        container={document.body!}
                         handleSuccessModification={refetch}
                       ></ServicePackageLayout>
                     </Col>

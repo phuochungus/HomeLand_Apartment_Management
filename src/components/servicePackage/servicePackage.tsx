@@ -63,19 +63,16 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
     router.push(shortLink);
     console.log(response);
   }
-  removeLoadingFilter(document.body!);
-
+  
   const handleConfirmDelete = async (id: string) => {
     console.log(id);
     setShowDeleteModal(false);
     loadingFiler(document.body!);
-
     try {
       await axios.delete(`/api/servicePackage/${id}`);
       props.handleSuccessModification();
       removeLoadingFilter(document.body!);
       toastMessage({ type: "success", title: "Delete successfully!" });
-      // setContractList(ContractList.filter((item) => item.contract_id !== id));
     } catch (err) {
       removeLoadingFilter(document.body!);
       toastMessage({ type: "error", title: "Delete fail!" });

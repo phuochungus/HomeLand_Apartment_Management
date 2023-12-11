@@ -50,6 +50,7 @@ export default function Contracts() {
     }
   };
   const deleteHandle = (id: string) => {
+    console.log(id);
     setSelectedContractId(id);
     setShowModal(true);
   };
