@@ -14,6 +14,8 @@ export async function GET(
     url: endpoint.apartment + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
+      'Authorization': "Bearer " + request.cookies.get("token")?.value,
+
     },
   };
   const response = await axios
