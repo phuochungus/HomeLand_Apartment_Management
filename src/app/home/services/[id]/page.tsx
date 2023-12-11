@@ -234,7 +234,6 @@ export default function Page({ params }: { params: { id: string } }) {
                       <ServicePackageLayout
                         servicePackage={value}
                         service={data}
-                        container={document.body!}
                         handleSuccessModification={refetch}
                       ></ServicePackageLayout>
                     </Col>
