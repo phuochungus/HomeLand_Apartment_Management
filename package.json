@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^1.10.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@tippyjs/react": "^4.2.6",
@@ -19,7 +20,7 @@
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "eyespect": "^0.1.10",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^10.16.16",
     "i18next": "^23.5.1",
     "next": "13.5.4",
     "qs": "^6.11.2",

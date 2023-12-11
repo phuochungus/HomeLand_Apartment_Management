@@ -18,7 +18,6 @@ import { changeLanguage } from "i18next";
 import { useTranslation } from "react-i18next";
 import { stringify } from "querystring";
 const CustomHeader = ({ auth }: { auth: boolean }): JSX.Element => {
-  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const handleRoute = (href: string) => {
     router.push(href);

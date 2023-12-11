@@ -7,10 +7,12 @@ export default function SearchBar({
   style,
   placeholder,
   onChange,
+  onSearch,
 }: {
   className?: string;
   style?: React.CSSProperties;
   onChange?: (params: string) => void;
+  onSearch?: (params: string) => void;
   placeholder?: string | "Search...";
 }): ReactNode {
   return (
@@ -35,11 +37,23 @@ export default function SearchBar({
             padding: "0 10px",
           }}
           onChange={(e) => {
-            e.preventDefault();
             if (onChange) onChange(e.currentTarget.value);
           }}
+          onKeyDown={(e) => {
+            if (e.key == "Enter" && onSearch) {
+              e.preventDefault();
+              onSearch(e.currentTarget.value);
+            }
+          }}
         ></input>
-        <button style={{ width: "fit-content" }}>
+        <button
+          style={{ width: "fit-content" }}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            if (onSearch) onSearch(e.currentTarget.value);
+          }}
+        >
           <FaSearch></FaSearch>
         </button>
       </form>

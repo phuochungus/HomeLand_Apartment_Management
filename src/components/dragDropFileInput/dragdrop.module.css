@@ -22,9 +22,8 @@
 .deleteImageButton {
     position: absolute;
     right: 0.2vw;
-    top: 0.1vw;
+    top: 0.3vw;
     background-color: white;
-    padding: 0.01vw;
     border-radius: 5px;
     opacity: 0.2;
 }

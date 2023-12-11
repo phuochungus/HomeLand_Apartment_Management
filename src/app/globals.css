@@ -76,3 +76,10 @@ a {
 .Toastify__toast-body {
   font-size: 1rem !important;
 }
+td {
+  cursor: pointer;
+}
+.cs-message--outgoing .cs-message__content{
+  background-color: #ffc566 !important;
+
+}
