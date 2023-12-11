@@ -139,6 +139,7 @@ export default function Page({ params }: { params: { id: string } }) {
         setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id });
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Create successfully!" });
+        window.location.reload();
       } catch (e) {
         console.log(e);
         removeLoadingFilter(document.body!);
@@ -170,7 +171,7 @@ export default function Page({ params }: { params: { id: string } }) {
     try {
       await axios.delete(`/api/feedback/${id}`);
       toastMessage({ type: "success", title: "Delete successfully!" });
-      refetch();
+      window.location.reload();
     } catch (err) {
       toastMessage({ type: "error", title: "Delete faily!" });
       console.log(err);
@@ -404,7 +405,7 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
         <ModalComponent
           show={showModalDelete}
-          title="Có chắc chắn xóa tòa này?"
+          title="Có chắc chắn xóa feedback này?"
           handleConfirm={() => handleConfirmDelete(selectedId)}
           setShow={setShowModalDelete}
         />
