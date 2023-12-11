@@ -1,5 +1,5 @@
-//export const baseUrl = "https://homeland-be.onrender.com";
-export const baseUrl = "http://localhost:8080";
+export const baseUrl = "https://homeland-be.onrender.com";
+//export const baseUrl = "http://localhost:8080";
 
 export const endpoint = {
   login: baseUrl + "/auth/signin",
