@@ -63,17 +63,18 @@ const getSortOption = async ({
       );
     }),
   ]);
-  console.log(apartmentSortOption)
+  console.log(apartmentSortOption);
   return apartmentSortOption;
 };
 // eslint-disable-next-line @next/next/no-async-client-component
 export default function Apartments() {
+  const path = usePathname();
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
   //Handle if middleware not working
   const router = useRouter();
   if (!user.id) router.push("/home");
   const loadingMore = useRef({ isLoading: false, page: 1 });
-  const searchParam = useRef('');
+  const searchParam = useRef("");
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
   const [apartmentSortOption, setApartmentSortOption] = useState<Option[]>([
     {
@@ -130,8 +131,7 @@ export default function Apartments() {
     });
   }, []);
   useEffect(() => {
-    if(!data)
-      return;
+    if (!data) return;
     let result = [...data];
     if (apartmentSortOption)
       sortOptionList.forEach((value, index) => {
@@ -141,10 +141,9 @@ export default function Apartments() {
             apartmentSortOption[index].fieldName,
             apartmentSortOption[index].data[value]
           );
-          console.log(apartmentSortOption[index].data[value])
+        console.log(apartmentSortOption[index].data[value]);
       });
-    if(searchParam.current != "")
-      result = search(result, "name", searchParam)
+    if (searchParam.current != "") result = search(result, "name", searchParam);
     setApartmentList([...result]);
   }, [sortOptionList, searchParam.current]);
 
@@ -211,7 +210,7 @@ export default function Apartments() {
       </motion.div>
     );
   function handleSearch(params: string): void {
-    searchParam.current = params
+    searchParam.current = params;
   }
 
   return (
@@ -219,11 +218,24 @@ export default function Apartments() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 40 }}
-      className={styles.main}
+      className={`${styles.main} ${futuna.className } `}
     >
+      <div style={{marginBottom: "1vw", width: '100%'}}>
+        <ButtonComponent
+          href={`${path}/add`}
+          preIcon={<AddResidentIcon width={24} height={24} />}
+          className={styles.addBtn}
+        >
+          Thêm căn hộ
+        </ButtonComponent>
+      </div>
       <div className={styles.container}>
         <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
-          <SearchBar className={styles.searchBar} placeholder="Search by name...." onSearch={handleSearch}></SearchBar>
+          <SearchBar
+            className={styles.searchBar}
+            placeholder="Search by name...."
+            onSearch={handleSearch}
+          ></SearchBar>
         </div>
         {apartmentSortOption &&
           apartmentSortOption.map((value, index) => (
