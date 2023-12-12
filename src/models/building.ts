@@ -1,3 +1,4 @@
+import { Floor } from "./floor";
 import { Manager } from "./manager";
 
 export interface Building {
@@ -7,4 +8,5 @@ export interface Building {
     max_floor:number,
     managers?: Array<Manager>
     // manager_id:string
+    floors: Array<Floor>
 }

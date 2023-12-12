@@ -10,7 +10,7 @@ export type Contract = {
   apartment_id: string;
   apartment: Apartment;
   created_at: Date;
-  expire_at: Date;
+  expire_at?: Date;
   deleted_at: Date;
   contract_with_signature_photo_URL: string;
 };

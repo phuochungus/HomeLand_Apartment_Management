@@ -7,92 +7,54 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useQuery } from "react-query";
 import SearchBar from "@/components/searchBar/searchBar";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Service } from "../../../models/service";
-import { ToastContainer } from "react-toastify";
-import { Contract } from "../../../models/contract";
-import { motion } from "framer-motion";
-import { search } from "../../../libs/utils";
-import { set } from "date-fns";
- 
 export default function Services() {
   const [ServiceList, setServiceList] = useState<Service[]>([]);
-  const loadingMore = useRef({ isLoading: false, page: 1 });
+  var loadingMore = useMemo<boolean | undefined>(() => undefined, []);
+  var page = useMemo(() => {
+    return Math.floor(ServiceList.length / 30) + 1;
+  }, [ServiceList]);
   const router = useRouter();
-  const searchParam = useRef('');
-  
+
   const { isLoading, isError, data, refetch } = useQuery(
     "service",
     () =>
-      axios.get("/api/service?page=" + loadingMore.current.page).then((res) => {
-        const temp = { ...loadingMore.current };
-        //if ((res.data as Service[]).length == 0) temp.page = -1;
-        temp.isLoading = false;
-        loadingMore.current = temp;
-        let result = [...ServiceList, ...(res.data as Service[])];
-        console.log(loadingMore.current.page);
-        console.log(result);
-        return result;
+      axios.get("/api/service?page=" + page).then((res) => {
+        setServiceList([...ServiceList, ...(res.data as Service[])]);
       }),
     {
       refetchOnWindowFocus: false,
     }
   );
   async function handleScrollEnd() {
-    if (!loadingMore.current.isLoading) {
-      const temp = { ...loadingMore.current };
-      temp.isLoading = true;
-      temp.page = temp.page + 1;
-      loadingMore.current = { ...temp };
-      refetch();
+    if (!loadingMore) {
+      loadingMore = true;
+      await refetch();
+      loadingMore = false;
     }
   }
-  window.addEventListener("scroll", (e) => {
-    const windowHeight =
-      "innerHeight" in window
-        ? window.innerHeight
-        : document.documentElement.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
-    const docHeight = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
-    const windowBottom = windowHeight + window.pageYOffset;
-    if (windowBottom + 50 >= docHeight) {
-      console.log("load more");
-      handleScrollEnd();
-    }
-  });
   useEffect(() => {
-    if(!data)
-      return;
-    let result = [...data];
-    // if (apartmentSortOption)
-    //   sortOptionList.forEach((value, index) => {
-    //     if (apartmentSortOption[index].data[value] != "all")
-    //       result = search(
-    //         result,
-    //         apartmentSortOption[index].fieldName,
-    //         apartmentSortOption[index].data[value]
-    //       );
-    //       console.log(apartmentSortOption[index].data[value])
-    //   });
-    // if(searchParam.current != "")
-    //   result = search(result, "name", searchParam)
-    // setApartmentList([...result]);
-    // if(searchParam.current != "")
-    //   result = search(result, "name", searchParam)
-   console.log(result)
-    setServiceList([...result]);
-  }, [data, searchParam.current]);
-  function handleSearch(params: string): void {
-    searchParam.current = params
-  }
-
+    window.addEventListener("scroll", (e) => {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom + 50 >= docHeight) {
+        handleScrollEnd();
+      }
+    });
+  }, []);
   if (isLoading)
     return (
       <div
@@ -124,13 +86,8 @@ export default function Services() {
       </div>
     );
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 40 }}
-      className={styles.main}
-    >
-    <div className={styles.container}>
+    <main className={`${styles.main} ${futuna.className}`}>
+      <div className={styles.container}>
         <div
           style={{ width: "85%" }}
           className={`${styles.itemContainer} ${styles.searchBarContainer}`}
@@ -138,7 +95,6 @@ export default function Services() {
           <SearchBar
             placeholder="Search service here..."
             className={styles.searchBar}
-            onSearch={handleSearch}
             style={{ width: "50%" }}
           ></SearchBar>
         </div>
@@ -172,7 +128,7 @@ export default function Services() {
       <div className={styles.grid}>
         {ServiceList.map((value, index) => ServiceCard(value))}
       </div>
-      {loadingMore.current.isLoading && loadingMore.current.page > 0 && (
+      {loadingMore ? (
         <div
           style={{
             width: "100%",
@@ -181,21 +137,13 @@ export default function Services() {
             justifyContent: "center",
             marginTop: "20px",
           }}
-        ></div>
+        >
+          <Spinner></Spinner>
+        </div>
+      ) : (
+        <></>
       )}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </motion.div>
+    </main>
   );
 }
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { endpoint } from "../../../../constraints/endpoints";
 import axios from "axios";
-import { Service } from "../../../../models/service";
+import { Invoice } from "../../../../models/invoice";
 
 export async function GET(
   request: NextRequest,
@@ -10,7 +10,7 @@ export async function GET(
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.service + "/" + params.id,
+    url: endpoint.invoice + "/" + params.id,
     headers: {
       "Content-Type": "application/json",
     },
@@ -19,7 +19,7 @@ export async function GET(
     .request(config)
     .then((response) => {
       if (response.status == 200) {
-        const result: Service = response.data;
+        const result: Invoice = response.data;
         return NextResponse.json(result, {
           status: 200,
         });
