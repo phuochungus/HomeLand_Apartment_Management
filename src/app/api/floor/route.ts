@@ -1,7 +1,6 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { endpoint } from "@/constraints/endpoints";
-import { cookies } from "next/headers";
 export async function GET(request: NextRequest) {
   let config = {
     method: "get",
@@ -16,7 +15,7 @@ export async function GET(request: NextRequest) {
     .request(config)
     .then((response) => {
       if (response.status == 200) {
-        return NextResponse.json(response.data.items);
+        return NextResponse.json(response.data);
       }
     })
     .catch((error) => {
