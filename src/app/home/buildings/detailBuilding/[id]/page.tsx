@@ -73,7 +73,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
     try {
       console.log(page, limit);
       loadingFiler(document.body!);
-      const res = await axios.get("/api/manager", {
+      const res = await axios.get("/api/manager/pagination", {
         params: {
           page,
           limit,
@@ -160,7 +160,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
     setShowModalManager(false);
   };
   const handleShowManagerModal = async () => {
-    const res = await axios.get("/api/manager");
+    const res = await axios.get("/api/manager/pagination");
     const data = res.data;
     const newData = data.items.filter((item:Manager) => item.building === null);
     setManagers(newData);
