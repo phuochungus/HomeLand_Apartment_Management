@@ -103,7 +103,7 @@ const Complain = () => {
     //handle check
    
     const handleShowTechnicianModal = async (id:string) => {
-      const res = await axios.get("/api/technician");
+      const res = await axios.get("/api/technician/pagination");
       const data = res.data;
       setTechnicians(data.items);
        setTotalPages(data.meta.totalPages);

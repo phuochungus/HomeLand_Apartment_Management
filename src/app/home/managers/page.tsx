@@ -60,7 +60,7 @@ export default function Residents() {
   const retrieveManagers = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/manager");
+      const res = await axios.get("/api/manager/pagination");
       removeLoadingFilter(document.body!);
       const data = res.data;
       setManagers(data.items);
@@ -77,7 +77,7 @@ export default function Residents() {
     try {
       console.log(page, limit);
       loadingFiler(document.body!);
-      const res = await axios.get("/api/manager", {
+      const res = await axios.get("/api/manager/pagination", {
         params: {
           page,
           limit,
