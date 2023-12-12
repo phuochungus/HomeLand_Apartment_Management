@@ -15,4 +15,5 @@ export type Apartment = {
     buildingId: string;
     residents?: Array<Resident>;
     floor?: Floor;
+    
 }

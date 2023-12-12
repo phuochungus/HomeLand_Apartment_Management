@@ -21,7 +21,7 @@ import {
   Table,
 } from "react-bootstrap";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Resident } from "@/models/resident";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -34,6 +34,7 @@ import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import SearchLayout from "../../../../components/searchLayout/searchLayout";
 import CustomTextBox from "../../../../components/textBox/textBox";
+import { Floor } from "../../../../models/floor";
 type CreateContractParams = {
   resident_id: string;
   apartment_id: string;
@@ -48,6 +49,7 @@ export default function Page() {
   const [Residents, setResidents] = useState<Resident[]>([]);
   const [Apartments, setApartments] = useState<Apartment[]>([]);
   const [Buildings, setBuildings] = useState<Building[]>([]);
+  const [Floors, setFloors] = useState<Floor[]>([]);
   const [show, setShow] = useState(false);
   const router = useRouter();
   const [errors, setErrors] = useState<any>();
@@ -99,19 +101,21 @@ export default function Page() {
       form.append("resident_id", createContractParams.resident_id);
       form.append("apartment_id", createContractParams.apartment_id);
       form.append("role", createContractParams.role);
-      form.append("status", createContractParams.status);
-      form.append(
-        "expire_at",
-        `${createContractParams.expire_at}T03:37:07.070Z`
-      );
+      if (createContractParams.role === "rent") {
+        form.append(
+          "expire_at",
+          `${createContractParams.expire_at}T03:37:07.070Z`
+        );  
+      }
       try {
+        
         loadingFiler(document.body!);
         await axios
           .post("/api/contract", form)
           .then((response) => {
             router.back();
             removeLoadingFilter(document.body!);
-            toastMessage({ type: "success", title: "Create successfully!" });
+            toastMessage({ type: "success", title: "Create contract successfully!" });
           })
           .catch((e) => {
             removeLoadingFilter(document.body!);
@@ -127,7 +131,7 @@ export default function Page() {
     if (createContractParams.apartment_id === "") {
       err.apartment_id = "Vui lòng chọn phòng!";
     }
-    if (createContractParams.expire_at === "") {
+    if (createContractParams.expire_at === "" && createContractParams.role!='buy') {
       err.expire_at = "Vui lòng chọn ngày hết hạn!";
     }
     if (createContractParams.resident_id === "") {
@@ -145,16 +149,16 @@ export default function Page() {
       refetchOnWindowFocus: false,
     }
   );
-  useQuery(
-    "apartment",
-    () =>
-      axios.get("/api/apartment").then((res) => {
-        setApartments(res.data as Apartment[]);
-      }),
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+  // useQuery(
+  //   "apartment",
+  //   () =>
+  //     axios.get("/api/apartment").then((res) => {
+  //       setApartments(res.data as Apartment[]);
+  //     }),
+  //   {
+  //     refetchOnWindowFocus: false,
+  //   }
+  // );
   useQuery(
     "building",
     () =>
@@ -183,7 +187,9 @@ export default function Page() {
         <SearchDropdown
           title={"Choose Building"}
           selections={Buildings.map((building) => building.name)}
-          onChange={(index) => {}}
+          onChange={(index) => {
+            setFloors(Buildings[index].floors);
+          }}
           style={{ width: "100%" }}
         ></SearchDropdown>
       ),
@@ -193,8 +199,10 @@ export default function Page() {
       child: (
         <SearchDropdown
           title={"Choose Floor"}
-          selections={["hello1", "hello2"]}
-          onChange={() => {}}
+          selections={Floors.map((floor) => floor.name)}
+          onChange={(index) => {
+            setApartments(Floors[index].apartments);
+          }}
           style={{ width: "100%" }}
         ></SearchDropdown>
       ),
@@ -228,7 +236,7 @@ export default function Page() {
     {
       title: t("create_at"),
       child: (
-        <Form.Group>
+        <Form.Group >
           <Form.Control
             size="lg"
             type="date"
@@ -240,7 +248,7 @@ export default function Page() {
         </Form.Group>
       ),
     },
-    {
+    createContractParams.role!='buy'? {
       title: t("expire_at"),
       required: true,
 
@@ -256,6 +264,27 @@ export default function Page() {
             <span className={styles.error}>{errors.expire_at}</span>
           )}
         </Form.Group>
+      ),
+    }:null,
+    {
+      title: t("contractRole"),
+      required: true,
+
+      child: (
+        <SearchDropdown
+          title={"rent"}
+          selections={["rent", "buy"]}
+          onChange={(index) => {
+            const newObj = {
+                ...createContractParams,
+                role:["rent", "buy"][index],
+              };
+              setCreateContractParams(newObj);
+              console.log(createContractParams.role);
+              
+          }}
+          style={{ width: "100%" }}
+        ></SearchDropdown>
       ),
     },
   ];
@@ -286,7 +315,11 @@ export default function Page() {
       <Container style={{ padding: 0 }} fluid>
         <Row>
           <Col>{ContractSortOptions.map((option) => FilterButton(option))}</Col>
-          <Col>{DateSortOptions.map((option) => FilterButton(option))}</Col>
+          <Col>
+            {DateSortOptions.map((option) =>
+              option==null ? null : FilterButton(option)
+            )}
+          </Col>
         </Row>
       </Container>
       <Container style={{ padding: 0, marginTop: "20px" }}>
@@ -295,7 +328,7 @@ export default function Page() {
             <h5 className={styles.required} style={{ width: "100px" }}>
               {t("resident")}
             </h5>
-             </Col>
+          </Col>
           <Col md="auto">
             <Button onClick={() => setShow(true)}>Choose Resident</Button>
           </Col>
@@ -494,6 +527,7 @@ const FilterButton = ({
             alignContent: "center",
             display: "flex",
             padding: 0,
+            height: "50px",
             margin: 0,
           }}
         >

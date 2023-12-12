@@ -26,75 +26,58 @@ import { useEffect, useRef, useState } from "react";
 import SearchBar from "@/components/searchBar/searchBar";
 import { useQuery } from "react-query";
 import axios from "axios";
+import toastMessage from "../../../../utils/toast";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
-function constraintOnlyNumber(str: string): boolean {
-  return !isNaN(Number(str));
-}
-function getImageList(): string[] {
-  const grid = document.getElementById("imageBlobGrid");
-  const length = grid?.children.length;
-  if (!length) return [];
-  const result: string[] = [];
-  for (let index = 0; index < length; index++) {
-    const element = grid?.children.item(index);
+import { useRouter } from "next/navigation";
 
-    result.push((element as HTMLImageElement).src);
-
-    console.log(element);
+export default function AddService() {
+  const [selectedFiles, setSelectedFiles] = useState<(File | URL)[]>([]);
+  function handleFileChange(files: (File | URL)[]): void {
+    setSelectedFiles(files);
   }
-  console.log(grid.children);
-  return result;
-}
-
-function missingField(element: HTMLElement) {
-  element.className = element.className.split("missing")[0];
-  element.className += " " + styles.missing;
-  element.onfocus = () => {
+  const router = useRouter();
+  function missingField(element: HTMLElement) {
     element.className = element.className.split("missing")[0];
-    element.onfocus = null;
-  };
-}
-function validateData() {
-  let flag: boolean = true;
-  const field = ["name", "description"];
-  const grid = document.getElementById("imageBlobGrid");
-  if (!grid) {
-    missingField(document.getElementById("label-file-upload")!);
-    flag = false;
+    element.className += " " + styles.missing;
+    element.onfocus = () => {
+      element.className = element.className.split("missing")[0];
+      element.onfocus = null;
+    };
   }
-  field.forEach((element) => {
-    const inputElement = document.getElementById(element) as HTMLInputElement;
-    if (inputElement.value.length === 0) {
-      missingField(inputElement);
+  function validateData() {
+    let flag: boolean = true;
+    const field = ["name"];
+    if (selectedFiles.length == 0) {
+      missingField(document.getElementById("label-file-upload")!);
       flag = false;
     }
-  });
-  return flag;
-}
-async function addImage(data: FormData, fileList: (File | URL)[]) {
-  for await (const iterator of fileList) {
-    if (iterator instanceof URL) data.append("images", iterator.href);
-    else data.append("images", iterator);
+  
+    field.forEach((element) => {
+      const inputElement = document.getElementById(element) as HTMLInputElement;
+      if (inputElement.value.length === 0) {
+        missingField(inputElement);
+        flag = false;
+      }
+    });
+    return flag;
   }
-  return data;
-}
-export default function AddService() {
-  const [show, setShow] = useState(false);
-  function handleClose() {
-    setShow(false);
+  async function addImage(data: FormData, fileList: (File | URL)[]) {
+    for await (const iterator of fileList) {
+      if (iterator instanceof URL) data.append("images", iterator.href);
+      else data.append("images", iterator);
+    }
+    return data;
   }
-  const fileList = useRef<(File | URL)[]>([]);
-  function handleFileChange(files: (File | URL)[]) {
-    fileList.current = files;
-  }
-
   async function handleSubmit() {
     loadingFiler(document.body!);
+    console.log("submit");
     if (!validateData()) {
       removeLoadingFilter(document.body!);
       return;
     }
     const data = new FormData();
+    
+    console.log("no error");
     data.append(
       "name",
       (document.getElementById("name") as HTMLInputElement).value
@@ -103,12 +86,13 @@ export default function AddService() {
       "description",
       (document.getElementById("description") as HTMLInputElement).value
     );
-    await addImage(data, fileList.current).then(async () => {
+    await addImage(data, selectedFiles).then(async () => {
       console.log(data.get("images"));
       await axios
         .post("/api/service", data)
         .then((response) => {
-          alert("Done create");
+          router.back();
+          toastMessage({ type: "success", title: "Create service successfully!" });
         })
         .catch((err) => {
           alert(err.response.data);
@@ -134,21 +118,25 @@ export default function AddService() {
             style={{ width: "30%" }}
           ></Form.Control>
           <div style={{ width: "100%", height: "20px" }}></div>
-          <DragDropFileInput onChange={handleFileChange}>
-            <div
-              className={styles.uploadIcon}
-              style={{
-                width: "100%",
-                height: "200px",
-                display: "flex",
-                flexWrap: "wrap",
-                alignContent: "center",
-                justifyContent: "center",
-              }}
-            >
-              <FaUpload size={"3rem"}></FaUpload>
-            </div>
-          </DragDropFileInput>
+          <DragDropFileInput
+                onChange={handleFileChange}
+                id="label-file-upload"
+                
+              >
+                <div
+                  className={styles.uploadIcon}
+                  style={{
+                    width: "50%",
+                    height: "200px",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignContent: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FaUpload size={"3rem"}></FaUpload>
+                </div>
+              </DragDropFileInput>
           <FormGroup className={styles.formGroupContainer}>
             <Form.Label
               style={{

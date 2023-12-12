@@ -65,7 +65,6 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
     } else if (!phonePattern.test(formValue.phoneNumber)) {
       err.phoneNumber = "Số điện thoại không hợp lệ!";
     }
-    
 
     return err;
   };
@@ -113,7 +112,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
         if (formValue.paymentInfo) {
           form.append("payment_info", formValue.paymentInfo);
         }
-        if(avatar){
+        if (avatar) {
           form.append("avatar_photo", avatar);
         }
         // form.append("avatar_photo", avatar);
@@ -147,21 +146,21 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
   const AvatarImage = useMemo(() => {
     return (
       <Image
-      onClick={handleAvatarClick}
-      fill
-      style={{ borderRadius: "3%" }}
-      alt=""
-      onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-      unoptimized={true}
-      src={avatar ? URL.createObjectURL(avatar) : avatar_photo }
-    />
+        onClick={handleAvatarClick}
+        fill
+        style={{ borderRadius: "3%" }}
+        alt=""
+        onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+        unoptimized={true}
+        src={avatar ? URL.createObjectURL(avatar) : avatar_photo}
+      />
     );
   }, [avatar, avatar_photo]);
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
-          Chỉnh sửa thông tin cư dân
+          Edit Resident Information
         </p>
         <div className="d-inline-flex justify-content-between">
           <div className={styles.avatarLayout}>
@@ -176,7 +175,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
           <Form method="post" className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Họ và tên
+                Name
               </Form.Label>
               <Form.Control
                 value={resident && resident.profile.name}
@@ -188,14 +187,14 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             </Form.Group>
             <Form.Group>
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Giới tính
+                Gender
               </Form.Label>
 
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
                   inline
-                  label="Nam"
-                  checked={formValue.gender === 'male'}
+                  label="Male"
+                  checked={formValue.gender === "male"}
                   style={{ fontSize: "1rem" }}
                   onChange={handleChange}
                   name="gender"
@@ -205,8 +204,8 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
                 />
                 <Form.Check
                   inline
-                  label="Nữ"
-                  checked={formValue.gender === 'female'}
+                  label="Female"
+                  checked={formValue.gender === "female"}
                   style={{ fontSize: "1rem" }}
                   onChange={handleChange}
                   name="gender"
@@ -235,7 +234,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
 
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Số điện thoại
+                Phone Number
               </Form.Label>
               <Form.Control
                 value={formValue.phoneNumber}
@@ -251,7 +250,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={styles.label}>
-                Thông tin thanh toán
+                Payment Information
               </Form.Label>
               <Form.Control
                 value={formValue.paymentInfo}
@@ -266,24 +265,20 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>
-                Số căn cước công dân
+              <Form.Label className={clsx(styles.label, styles.required)}>
+              Identification Number
               </Form.Label>
               <Form.Control
                 disabled
                 size="lg"
                 type="text"
-                  value={
-                  resident &&
-                  resident.profile.identify_number
-                }
+                value={resident && resident.profile.identify_number}
                 placeholder=""
               />
-             
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Ngày sinh
+                Date Of Birth
               </Form.Label>
               <Form.Control
                 value={
@@ -299,7 +294,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
             <div className="d-flex justify-content-around">
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
-                  Ảnh trước CCCD
+                  Front Photo Of Identification Number
                 </Form.Label>
                 <Form.Control
                   accept="image/*"
@@ -325,7 +320,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
-                  Ảnh sau CCCD
+                Back Photo Of Identification Number
                 </Form.Label>
                 <Form.Control
                   accept="image/*"
@@ -364,7 +359,7 @@ const UpdateResident = ({ params }: { params: { id: string } }) => {
               theme="light"
             />
             <ButtonComponent onClick={updateHandle} className={styles.creatBtn}>
-              Cập nhật
+              Update
             </ButtonComponent>
           </Form>
         </div>

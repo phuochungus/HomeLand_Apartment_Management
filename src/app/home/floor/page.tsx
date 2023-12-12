@@ -105,17 +105,26 @@ export default function Dashboard() {
       setFloor(res.data);
     }
   };
-  // const handleConfirmDelete = async (id: string) => {
-  //   setShowModal(false);
-  //   try {
-  //     await axios.delete(`/api/building/${id}`);
-  //     toastMessage({ type: "success", title: "Delete successfully!" });
-  //     refetch();
-  //   } catch (err) {
-  //     toastMessage({ type: "error", title: "Delete faily!" });
-  //     console.log(err);
-  //   }
-  // };
+  const handleConfirmDelete = async (id: string) => {
+    setShowModal(false);
+    try {
+      const response = await axios.get(`/api/floor/${id}`);
+      const floorData = response.data;
+  
+      if (!floorData.apartments || floorData.apartments.length === 0) {
+        await axios.delete(`/api/floor/${id}`);
+        toastMessage({ type: "success", title: "Delete successfully!" });
+        refetch();
+      } else {
+        toastMessage({ type: "error", title: "Cannot delete: There are apartments in this floor!" });
+      }
+    } catch (err) {
+      toastMessage({ type: "error", title: "Delete failed!" });
+      console.log(err);
+    }
+  };
+  
+  
   const [currentPage, setCurrentPage] = useState(1);
   const handleSetActive = (count: any) => {
     const limit: number = parseInt(count);
@@ -212,12 +221,12 @@ export default function Dashboard() {
               {floor.map((floor, index): React.ReactNode => {
                 return (
                   <tr key={index}>
-                    <td style={{ width: "30%" }}>{floor.floor_id}</td>
-                    <td style={{ width: "10%" }}>{floor.name}</td>
-                    <td style={{ width: "20%" }}>{floor.building_id}</td>
-                    <td style={{ width: "20%" }}>{floor.max_apartment}</td>
+                    <td>{floor.floor_id}</td>
+                    <td>{floor.name}</td>
+                    <td>{floor.building_id}</td>
+                    <td>{floor.max_apartment}</td>
 
-                    <td style={{ width: "17%" }}>
+                    <td style={{ width: 200 }}>
                       <div className="d-flex">
                         <ButtonComponent
                           preIcon={<EditIcon width={16} height={16} />}
@@ -227,16 +236,25 @@ export default function Dashboard() {
                           )}
                           href={`/home/floor/updateFloor/${floor.floor_id}/?auth=true`}
                         >
-                          Sửa
+                          Update
                         </ButtonComponent>
                         <ButtonComponent
                           href={`/home/floor/detailFloor/${encodeURIComponent(floor.floor_id)}/?auth=true`}
                           preIcon={<DetailIcon width={16} height={16} />}
                           className={clsx(buildingStyles.cudBtn, buildingStyles.detailBtn)}
                         >
-                          Chi tiết
+                          Detail
                         </ButtonComponent>
-
+                        <ButtonComponent
+                          onClick={() => deleleHandle(floor.floor_id)}
+                          preIcon={<CloseIcon width={16} height={16} />}
+                          className={clsx(
+                            buildingStyles.cudBtn,
+                            buildingStyles.deleteBtn
+                          )}
+                        >
+                          Delete
+                        </ButtonComponent>
 
                       </div>
                     </td>
@@ -268,12 +286,12 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      {/* <ModalComponent
+      <ModalComponent
         show={showModal}
         title="Có chắc chắn xóa tòa này?"
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
-      /> */}
+      />
       <ToastContainer
         position="top-right"
         autoClose={5000}

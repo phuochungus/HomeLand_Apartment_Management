@@ -98,6 +98,10 @@
     padding: 20px 0px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    &:hover {
+        opacity: 0.8;
+        transition: 0.2s linear opacity;
+    }
 }
 .footerModal {
     padding: 0 !important;
