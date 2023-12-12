@@ -34,7 +34,7 @@
     padding: 8px 60px;
     border-radius: 10px;
     transition: 0.1 ease;
-
+    margin-top: 100px;
     &:hover {
         background-color: #4b77e8;
     }
@@ -61,6 +61,7 @@
     &:hover {
         background-color: #0744e1;
     }
+    margin-top: 100px;
 }
 .modal {
     min-width: 80%;
@@ -110,4 +111,9 @@
 
 .footerModal {
     padding: 0 !important;
+}
+.dropdownWrapper{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: -130px;
 }

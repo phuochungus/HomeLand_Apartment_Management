@@ -32,13 +32,12 @@ import { Value } from "sass";
 import ServicePackageLayout from "../../../../components/servicePackage/servicePackage";
 import { UserProfile } from "../../../../libs/UserProfile";
 import { Invoice } from "../../../../models/invoice";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { serialize } from "v8";
 import ModalComponent from "@/components/Modal/Modal";
 import { CloseIcon } from "@/components/icons";
-import { set } from "date-fns";
+import { format, set } from "date-fns";
 import router from "next/router";
 export default function Page({ params }: { params: { id: string } }) {
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
@@ -57,7 +56,7 @@ export default function Page({ params }: { params: { id: string } }) {
     comment: "",
     service_id: params.id,
     resident_id: "",
-    created_at: "",
+    created_at: new Date().toISOString(),
   });
   const [selectedId, setSelectedId] = useState("");
   const deleleHandle = (id: string) => {
@@ -139,13 +138,15 @@ export default function Page({ params }: { params: { id: string } }) {
       form.append("resident_id", formValue.resident_id);
       try {
         loadingFiler(document.body!);
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' '); 
         await axios.post(`/api/feedback/`, form);
         addFeedback({
           rating: formValue.rating, comment: formValue.comment,
           feedback_id: "",
           resident_id: user.id,
           service_id: params.id,
-          created_at: ""
+          created_at: formattedDate,
         });
         setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id, created_at: "" });
         removeLoadingFilter(document.body!);
@@ -327,7 +328,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       ></ServicePackageLayout>
                     </Col>
                     {index == data.servicePackages.length - 1 &&
-                    index % 2 == 0 ? (
+                      index % 2 == 0 ? (
                       <Col></Col>
                     ) : (
                       <></>
@@ -392,8 +393,8 @@ export default function Page({ params }: { params: { id: string } }) {
                                   onClick={() => {
                                     router.push(
                                       "/home/invoices/" +
-                                        value.invoice_id +
-                                        "?auth=true"
+                                      value.invoice_id +
+                                      "?auth=true"
                                     );
                                   }}
                                   variant="warning"
@@ -489,6 +490,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 >
 
                   <div>
+
                     <p>Resident: {feedback.resident_id}</p>
                     <p>Time: {format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
                     <p>Rating: {feedback.rating}</p>
