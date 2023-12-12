@@ -158,7 +158,7 @@ const ServicePackageModal: React.FC<ServicePackageModalProps> = ({
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit}>
-          {servicePackage ? "Update" : "Add"}
+          Save Changes
         </Button>
       </Modal.Footer>
     </Modal>
