@@ -1,5 +1,5 @@
-
-const baseUrl = "https://homeland-be.onrender.com";
+export const baseUrl = "https://homeland-be.onrender.com";
+//export const baseUrl = "http://localhost:8080";
 
 export const endpoint = {
   login: baseUrl + "/auth/signin",
@@ -19,5 +19,6 @@ export const endpoint = {
   floor: baseUrl + "/floor",
   service: baseUrl + "/service",
   servicePackage: baseUrl + "/service-package",
+  invoice: baseUrl + "/invoice",
   feedback: baseUrl + "/feedback",
 };
