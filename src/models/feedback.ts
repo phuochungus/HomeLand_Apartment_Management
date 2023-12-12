@@ -7,5 +7,5 @@ export interface Feedback {
         comment: string,
         resident_id: string,
         service_id: string,
-     
+        created_at: string;
 }

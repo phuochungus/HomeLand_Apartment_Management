@@ -11,6 +11,8 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
+import { format } from 'date-fns';
+
 import classNames from 'classnames';
 import Furniture from "../../../../components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
@@ -42,12 +44,14 @@ export default function Page({ params }: { params: { id: string } }) {
     comment: string;
     service_id: string;
     resident_id: string;
+    created_at: string
   };
   const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
     comment: "",
     service_id: params.id,
     resident_id: "",
+    created_at: "",
   });
   const [selectedId, setSelectedId] = useState("");
   const deleleHandle = (id: string) => {
@@ -135,8 +139,9 @@ export default function Page({ params }: { params: { id: string } }) {
           feedback_id: "",
           resident_id: user.id,
           service_id: params.id,
+          created_at: ""
         });
-        setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id });
+        setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id, created_at: "" });
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Create successfully!" });
         window.location.reload();
@@ -181,6 +186,8 @@ export default function Page({ params }: { params: { id: string } }) {
     setShowModal(false);
     await refetch();
   };
+
+
   const { isLoading, data, isError, refetch } = useQuery(
     "service",
     () =>
@@ -365,6 +372,7 @@ export default function Page({ params }: { params: { id: string } }) {
             {feedbackData
               .filter(feedback => feedback.service_id === params.id)
               .map((feedback, index) => (
+
                 <Row
                   key={index}
                   style={{
@@ -375,11 +383,13 @@ export default function Page({ params }: { params: { id: string } }) {
                     paddingTop: "20px",
                   }}
                 >
+
                   <div>
                     <p>Resident: {feedback.resident_id}</p>
+                    <p>Time: {format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
                     <p>Rating: {feedback.rating}</p>
                     <p>Comment: {feedback.comment}</p>
-                    <p>Service: {feedback.service_id}</p>
+
                   </div>
                   <Col md="auto">
                     {(UserProfile.getRole() === "resident" && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === "admin" ? (
