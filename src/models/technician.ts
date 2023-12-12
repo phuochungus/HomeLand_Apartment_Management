@@ -1,3 +1,4 @@
+import { Task } from "./task";
 
 export interface Technician {
     role: string;
@@ -5,6 +6,7 @@ export interface Technician {
     profile: Profile;
     account: Account,
     stay_at: any;
+    tasks: Array<Task>;
     created_at: Date;
     deleted_at?: Date;
   }

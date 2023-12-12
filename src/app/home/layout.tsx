@@ -78,14 +78,14 @@ export default function RootLayout({
                       <Button
                         className={`${
                           pathName.includes(
-                            "/home/" + value.title.toLowerCase()
+                            "/home/" + value.path
                           )
                             ? styles.current
                             : ""
                         } ${styles.sidebarButton} `}
                         onClick={() =>
                           handleRouting(
-                            "/home/" + value.title.toLowerCase() + "?auth=true"
+                            "/home/" + value.path + "?auth=true"
                           )
                         }
                         style={futuna.style}

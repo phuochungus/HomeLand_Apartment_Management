@@ -5,10 +5,14 @@
     cursor: pointer;
 }
 .preIcon {
+    display: flex;
+    align-items: center;
     margin-right: 8px;
     display: flex;
     align-self: center;
 }
 .sufIcon {
+    display: flex;
+    align-items: center;
     margin-left: 8px;
 }

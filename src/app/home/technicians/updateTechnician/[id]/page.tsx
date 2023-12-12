@@ -46,17 +46,17 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
     const phonePattern =
       /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
     if (formValue.gender === "") {
-      err.gender = "Trường giới tính là bắt buộc!";
+      err.gender = "Field gender is required!";
     }
     if (formValue.email === "") {
-      err.email = "Trường email là bắt buộc!";
+      err.email = "Field email is required!";
     } else if (!emailPattern.test(formValue.email)) {
-      err.email = "Email không hợp lệ!";
+      err.email = "Email is invalid!";
     }
     if (formValue.phoneNumber === "") {
-      err.phoneNumber = "Trường số điện thoại là bắt buộc!";
+      err.phoneNumber = "Field phone number is required!";
     } else if (!phonePattern.test(formValue.phoneNumber)) {
-      err.phoneNumber = "Số điện thoại không hợp lệ!";
+      err.phoneNumber = "Phone number is invalid!";
     }
 
     return err;
@@ -150,7 +150,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
-          Chỉnh sửa thông tin nhân viên kĩ thuật
+          Edit Technician Information
         </p>
         <div className="d-inline-flex justify-content-between">
           <div className={styles.avatarLayout}>
@@ -165,7 +165,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
           <Form method="post" className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Họ và tên
+                Name
               </Form.Label>
               <Form.Control
                 value={technician && technician.profile.name}
@@ -177,15 +177,15 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
             </Form.Group>
             <Form.Group>
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Giới tính
+                Gender
               </Form.Label>
 
               <div key={`inline-radio`} className="mb-3">
                 <Form.Check
-                  checked={formValue.gender === 'male'}
+                  checked={formValue.gender === "male"}
                   inline
                   onChange={handleChange}
-                  label="Nam"
+                  label="Male"
                   style={{ fontSize: "1rem" }}
                   name="gender"
                   type="radio"
@@ -194,9 +194,9 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
                 />
                 <Form.Check
                   inline
-                  label="Nữ"
+                  label="Female"
                   style={{ fontSize: "1rem" }}
-                  checked={formValue.gender === 'female'}
+                  checked={formValue.gender === "female"}
                   onChange={handleChange}
                   name="gender"
                   type="radio"
@@ -224,7 +224,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
 
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Số điện thoại
+                Phone Number
               </Form.Label>
               <Form.Control
                 value={formValue.phoneNumber}
@@ -240,28 +240,27 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={styles.label}>
-                Số căn cước công dân
+                Identification Number
               </Form.Label>
               <Form.Control
                 disabled
                 size="lg"
                 type="text"
-                  value={
-                  technician &&
-                  technician.profile.identify_number
-                }
+                value={technician && technician.profile.identify_number}
                 placeholder=""
               />
-             
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label className={clsx(styles.label, styles.required)}>
-                Ngày sinh
+                Date Of Birth
               </Form.Label>
               <Form.Control
                 value={
                   technician &&
-                  format(new Date(technician.profile.date_of_birth), "yyyy-MM-dd")
+                  format(
+                    new Date(technician.profile.date_of_birth),
+                    "yyyy-MM-dd"
+                  )
                 }
                 size="lg"
                 type="date"
@@ -272,7 +271,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
             <div className="d-flex justify-content-around">
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
-                  Ảnh trước CCCD
+                  Front Photo Of Identification Number
                 </Form.Label>
                 <Form.Control
                   accept="image/*"
@@ -290,13 +289,15 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
                   unoptimized={true}
                   alt=""
                   src={
-                    technician ? technician.profile.front_identify_card_photo_URL : ""
+                    technician
+                      ? technician.profile.front_identify_card_photo_URL
+                      : ""
                   }
                 />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
-                  Ảnh sau CCCD
+                  Back Photo Of Identification Number
                 </Form.Label>
                 <Form.Control
                   accept="image/*"
@@ -314,7 +315,9 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
                   alt=""
                   unoptimized={true}
                   src={
-                    technician ? technician.profile.back_identify_card_photo_URL : ""
+                    technician
+                      ? technician.profile.back_identify_card_photo_URL
+                      : ""
                   }
                 />
               </Form.Group>
@@ -332,7 +335,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
               theme="light"
             />
             <ButtonComponent onClick={updateHandle} className={styles.creatBtn}>
-              Cập nhật
+              Update
             </ButtonComponent>
           </Form>
         </div>
