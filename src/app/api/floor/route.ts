@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     .request(config)
     .then((response) => {
       if (response.status == 200) {
-        return NextResponse.json(response.data);
+        return NextResponse.json(response.data.items);
       }
     })
     .catch((error) => {
