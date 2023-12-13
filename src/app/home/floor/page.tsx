@@ -30,7 +30,7 @@ export default function Dashboard() {
   const [floor, setFloor] = useState<Array<Floor>>([]);
   const [selectedId, setSelectedId] = useState("");
   const searchRef = createRef<HTMLInputElement>();
-  const titleTable = ["ID", "Tầng", "Tòa", "Số phòng"];
+  const titleTable = ["ID", " Tên Tầng", "Tòa nhà", "Số phòng tối đa"];
   const [totalPages, setTotalPages] = useState(0);
   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const listOptions = [

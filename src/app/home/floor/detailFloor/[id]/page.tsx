@@ -155,17 +155,17 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
                 <span className="col-10 "> {floor?.floor_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-2">Tên:</label>{" "}
+                <label className="col-2">Tên Tầng:</label>{" "}
                 <span className="col-10">{floor?.name}</span>
               </td>
             </tr>
             <tr>
               <td className="col-6">
-                <label className="col-2">Toàn nhà:</label>
+                <label className="col-2">Toà nhà:</label>
                 <span className="col-10">{" " + floor?.building_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-2 ">Số phòng:</label>
+                <label className="col-3 ">Số phòng tối đa:</label>
                 <span className="col-10">{" " + floor?.max_apartment}</span>
               </td>
 

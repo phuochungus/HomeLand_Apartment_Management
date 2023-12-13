@@ -16,13 +16,17 @@ import { useQuery } from "react-query";
 import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { ToastContainer } from "react-toastify";
+import SearchDropdown from "@/components/searchDropdown/searchDropdown";
+import { t } from "i18next";
+import { Col, Container, Row } from "react-bootstrap";
 type FormValue = {
   name: string;
   building_id: string;
   maxApartment: string;
 };
-const UpdateBuilding = ({ params }: { params: { id: string } }) => {
-  const [formValue, setFormValue] = useState({
+export default function UpdateBuilding({ params }: { params: { id: string } }) {
+
+  const [formValue, setFormValue] = useState<FormValue>({
     name: "",
     building_id: "",
     maxApartment: "",
@@ -36,7 +40,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       err.name = "Trường tên là bắt buộc!";
     }
     if (formValue.building_id === "") {
-      err.building_id = "Trường địa chỉ là bắt buộc!";
+      err.building_id = "Trường tòa nhà là bắt buộc!";
     }
     if (formValue.maxApartment === "") {
       err.maxApartment = "Trường số tầng là bắt buộc!";
@@ -54,6 +58,14 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
     const err = validation();
     setErrors(err);
     if (Object.keys(err).length === 0) {
+      const selectedBuilding = Buildings.find(building => building.building_id === formValue.building_id);
+      if (selectedBuilding) {
+        if (selectedBuilding.floors.length > selectedBuilding.max_floor) {
+          toastMessage({ type: "error", title: "Số lượng tầng đã đạt tối đa trong building này" });
+          return;
+        }
+      }
+      
       const data = {
         name: formValue.name,
         building_id: formValue.building_id,
@@ -64,9 +76,9 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
         await axios.patch(`/api/floor/${params.id}`, data);
         removeLoadingFilter(document.body!);
         toastMessage({ type: "success", title: "Update successfully!" });
-
+        refetch();
       } catch (error) {
-      removeLoadingFilter(document.body!);
+        removeLoadingFilter(document.body!);
         console.log(error);
         toastMessage({ type: "error", title: "Update faily!" });
       }
@@ -80,12 +92,13 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       removeLoadingFilter(document.body!);
       const buildingData = res.data as Floor;
       setFloor(buildingData);
-   
+
       const newformValue: any = {
         name: buildingData.name,
-        building_id: buildingData.building_id,
+        building_id: buildingData.building.name,
         maxApartment: buildingData.max_apartment,
       };
+
       setFormValue(newformValue);
       console.log(res.data);
       return res.data;
@@ -101,74 +114,155 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       staleTime: Infinity,
     }
   );
-  return (
-    <main className={mainStyles.main}>
-      <div className={clsx(styles.wapper, futuna.className)}>
-        <p className={clsx(utilStyles.headingXl, styles.title)}>
-          Cập nhật thông tin tòa nhà
-        </p>
+  useQuery(
+    "building",
+    () =>
+      axios.get("/api/building").then((res) => {
+        setBuildings(res.data as Building[]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  const [Buildings, setBuildings] = useState<Building[]>([]);
+  const [Floors, setFloors] = useState<Floor[]>([]);
+  const handleBuildingIdChange = (selectedBuildingId: string) => {
+    setFormValue({
+      ...formValue,
+      building_id: selectedBuildingId,
+    });
+  };
+  const [selectedBuilding, setSelectedBuilding] = useState("");
+  if (data) {
+    const ContractSortOptions = [
+      {
+        title: t("building"),
+        child: (
+          <SearchDropdown
+            title={data.building.name?? ""}
+            selections={Buildings.map((building) => building.name)}
+            onChange={(index) => {
+              handleBuildingIdChange(Buildings[index].building_id);
+              setFloors(Buildings[index].floors);
+            }}
+            style={{ width: "100%" }}
+            className={styles.dropdownWrapper}
+          ></SearchDropdown>
+        ),
+      },
+    ];
+   
+    return (
+      <main className={mainStyles.main}>
+        <div className={clsx(styles.wapper, futuna.className)}>
+          <p className={clsx(utilStyles.headingXl, styles.title)}>
+            Cập nhật thông tin tòa nhà
+          </p>
 
-        <Form className={clsx(styles.form, futuna.className)}>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className={styles.label}>Tên</Form.Label>
-            <Form.Control
-              size="lg"
-              name="name"
-              value={formValue.name}
-              onChange={handleChange}
-              type="text"
-              placeholder="A01..."
-            />
-            {errors && errors.name && (
-              <span className={styles.error}>{errors.name}</span>
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Tòa</Form.Label>
-            <Form.Control
-              size="lg"
-              type="text"
-              name="building_id"
-              value={formValue.building_id}
-              onChange={handleChange}
-            />
-            {errors && errors.building_id && (
-              <span className={styles.error}>{errors.building_id}</span>
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Số phòng</Form.Label>
-            <Form.Control
-              size="lg"
-              type="text"
-              name="maxApartment"
-              onChange={handleChange}
-              value={formValue.maxApartment}
-              placeholder=""
-            />
-            {errors && errors.maxApartment && (
-              <span className={styles.error}>{errors.maxApartment}</span>
-            )}
-          </Form.Group>
-          <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-            Cập nhật
-          </ButtonComponent>
-        </Form>
-      </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </main>
+          <Form className={clsx(styles.form, futuna.className)}>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label className={styles.label}>Tên Tầng</Form.Label>
+              <Form.Control
+                size="lg"
+                name="name"
+                value={formValue.name}
+                onChange={handleChange}
+                type="text"
+                placeholder="A01..."
+              />
+              {errors && errors.name && (
+                <span className={styles.error}>{errors.name}</span>
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label className={styles.label}>Số phòng tối đa</Form.Label>
+              <Form.Control
+                size="lg"
+                type="number"
+                name="maxApartment"
+                onChange={handleChange}
+                value={formValue.maxApartment}
+                placeholder=""
+              />
+              {errors && errors.maxApartment && (
+                <span className={styles.error}>{errors.maxApartment}</span>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+
+              <Col>{ContractSortOptions.map((option) => FilterButton(option))}</Col>
+              {errors && errors.building_id && (
+                <span className={styles.error}>{errors.building_id}</span>
+              )}
+
+            </Form.Group>
+            <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
+              Cập nhật
+            </ButtonComponent>
+          </Form>
+        </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </main>
+    );
+  }
+}
+const FilterButton = ({
+  title,
+  child,
+  required,
+}: {
+  title: string;
+  child?: React.ReactNode;
+  required?: boolean;
+}): React.ReactNode => {
+  return (
+    <Container
+      className={` ${futuna.className}`}
+      style={{ padding: 0, margin: "10px 0" }}
+    >
+      <Row className="align-items-center">
+        <Col md="auto">
+          <p
+            style={{
+              width: "100px",
+              alignItems: "center",
+              display: "flex",
+              padding: 0,
+              margin: 0,
+              marginRight: "20px",
+            }}
+            className={required ? styles.required : styles.non}
+          >
+            {title}
+          </p>
+        </Col>
+        <Col
+          style={{
+            width: "100px",
+            alignContent: "center",
+            display: "flex",
+            padding: 0,
+            height: "50px",
+            margin: 0,
+          }}
+        >
+          {child}
+        </Col>
+        <Col></Col>
+      </Row>
+    </Container>
   );
 };
 
-export default UpdateBuilding;

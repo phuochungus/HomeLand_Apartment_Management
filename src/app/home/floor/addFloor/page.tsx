@@ -136,7 +136,7 @@ export default function AddFloor() {
               value={formValue.name}
               onChange={handleChange}
               type="text"
-              placeholder="1"
+              placeholder="Enter floor name"
             />
             {errors && errors.name && (
               <span className={styles.error}>{errors.name}</span>
@@ -147,11 +147,13 @@ export default function AddFloor() {
             <Form.Label className={styles.label}>Số phòng tối đa</Form.Label>
             <Form.Control
               size="lg"
-              type="text"
+              type="number"
               name="maxApartment"
               onChange={handleChange}
               value={formValue.maxApartment}
               placeholder=""
+              // pattern="[0-9]*" 
+              // title="Chỉ được nhập số" 
             />
             {errors && errors.maxApartment && (
               <span className={styles.error}>{errors.maxApartment}</span>
