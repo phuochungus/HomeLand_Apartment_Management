@@ -7,5 +7,5 @@ export interface Floor {
         name: string,
         max_apartment: number,
         apartments: Array<Apartment>,
-        building:Building
+        building: Building
 }
