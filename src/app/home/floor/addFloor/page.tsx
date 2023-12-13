@@ -60,7 +60,7 @@ export default function AddFloor() {
       child: (
         <SearchDropdown
           title={"Choose Building"}
-          selections={Buildings.map((building) => building.building_id)}
+          selections={Buildings.map((building) => building.name)}
           onChange={(index) => {
             handleBuildingIdChange(Buildings[index].building_id);
             setFloors(Buildings[index].floors);
@@ -129,7 +129,7 @@ export default function AddFloor() {
 
         <Form className={clsx(styles.form, futuna.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className={styles.label}>Tầng</Form.Label>
+            <Form.Label className={styles.label}> Tên Tầng</Form.Label>
             <Form.Control
               size="lg"
               name="name"
@@ -144,7 +144,7 @@ export default function AddFloor() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Số phòng</Form.Label>
+            <Form.Label className={styles.label}>Số phòng tối đa</Form.Label>
             <Form.Control
               size="lg"
               type="text"

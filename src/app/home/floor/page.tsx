@@ -54,7 +54,7 @@ export default function Dashboard() {
   const retrieveFloor = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/floor");
+      const res = await axios.get("/api/floor/pagination");
       removeLoadingFilter(document.body!);
       const floorData = res.data;
       const data = res.data;
@@ -70,7 +70,7 @@ export default function Dashboard() {
     try {
       console.log(page, limit);
       loadingFiler(document.body!);
-      const res = await axios.get("/api/floor", {
+      const res = await axios.get("/api/floor/pagination", {
         params: {
           page,
           limit,
@@ -144,6 +144,16 @@ export default function Dashboard() {
       pagination(currentPage + 1, maxPageDisplay);
     }
   };
+  useQuery(
+    "floor",
+    () =>
+      axios.get("/api/floor").then((res) => {
+        setFloor(res.data as Floor[]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const searchIconClick = async () => {
     const res = await axios.get("/api/floor/search", {
       params: {
@@ -223,9 +233,8 @@ export default function Dashboard() {
                   <tr key={index}>
                     <td>{floor.floor_id}</td>
                     <td>{floor.name}</td>
-                    <td>{floor.building_id}</td>
+                    <td>{floor.building.name}</td>
                     <td>{floor.max_apartment}</td>
-
                     <td style={{ width: 200 }}>
                       <div className="d-flex">
                         <ButtonComponent
