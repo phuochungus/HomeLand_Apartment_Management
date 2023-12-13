@@ -207,7 +207,7 @@ export const sidebarInfo = [
   },
   {
     title: "Floor",
-    path:'floor',
+    path: "floor",
     svg: (
       <svg
         width="50"

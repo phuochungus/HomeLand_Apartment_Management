@@ -70,7 +70,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
     } else setCheckAll(false);
     setListChecked(newList);
   };
-  const titleTable = ["ID", "Tên", "Mô tả"];
+  const titleTable = ["ID", "Tên", "Chiều dài","Chiều rộng","Giá thuê"];
   const deleleHandle = (id: string) => {
     setSelectedId(id);
     setShowModal(true); ``
@@ -155,17 +155,17 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
                 <span className="col-10 "> {floor?.floor_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-2">Tên:</label>{" "}
+                <label className="col-2">Tên Tầng:</label>{" "}
                 <span className="col-10">{floor?.name}</span>
               </td>
             </tr>
             <tr>
               <td className="col-6">
-                <label className="col-2">Toàn nhà:</label>
+                <label className="col-2">Toà nhà:</label>
                 <span className="col-10">{" " + floor?.building_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-2 ">Số phòng:</label>
+                <label className="col-3 ">Số phòng tối đa:</label>
                 <span className="col-10">{" " + floor?.max_apartment}</span>
               </td>
 
@@ -175,13 +175,13 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
         <div className={styles.managerList}>
           <div className="d-flex justify-content-between align-items-end">
             <span>Danh sách phòng</span>
-            <ButtonComponent
+            {/* <ButtonComponent
               onClick={handleShowManagerModal}
               preIcon={<AddResidentIcon width={24} height={24} />}
               className={clsx(styles.addBtn, futuna.className)}
             >
               Thêm phòng
-            </ButtonComponent>
+            </ButtonComponent> */}
           </div>
           {floor?.apartments && floor.apartments?.length > 0 ? (
             <Table
@@ -204,23 +204,12 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
                     <tr key={index}>
                       <td>{apartment.apartment_id}</td>
                       <td>{apartment.name}</td>
-                      <td>{apartment.description}</td>
+                      <td>{apartment.width}</td>
+                      <td>{apartment.length}</td>
+                      <td>{apartment.rent}</td>
 
 
-                      <td>
-                        <div className="d-flex justify-content-center">
-                          <ButtonComponent
-                            onClick={() => deleleHandle(apartment.apartment_id)}
-                            preIcon={<CloseIcon width={16} height={16} />}
-                            className={clsx(
-                              styles.cudBtn,
-                              buildingStyles.deleteBtn
-                            )}
-                          >
-                            Xóa
-                          </ButtonComponent>
-                        </div>
-                      </td>
+                    
                     </tr>
                   );
                 })}
@@ -228,23 +217,12 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
             </Table>
           ) : (
             <p style={{ textAlign: "center", marginTop: "100px" }}>
-              Chưa có phòng nào trong tầng!
+              Chưa có phòng nào trong tầng
             </p>
           )}
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+     
       <ModalComponent
         show={showModal}
         title="Có chắc chắn xóa phòng này khỏi tầng?"
