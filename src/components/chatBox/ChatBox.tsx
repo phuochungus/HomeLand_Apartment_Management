@@ -18,12 +18,14 @@ const wrapperVariants = {
     opacity: 0,
     x: "50",
     y: "0",
+    display: "none",
   },
   visible: {
     opacity: 1,
     x: "0",
     y: "0",
     transition: { type: "spring", delay: 0.1 },
+    display: "block",
   },
   exit: {
     y: "-100vh",
@@ -91,11 +93,11 @@ export default function ChatBox(): React.ReactNode {
         initial="hidden"
         animate={controls}
         exit="exit"
-        style={{ position: "fixed", bottom: "1vw", right: "1vw" }}
+        style={{ position: "fixed", bottom: "1vw", right: "1vw",zIndex: "9999" }}
       >
         <MainContainer
           className={futuna.className}
-          style={{ display: "block", width: "20vw", borderRadius: "5%" }}
+          style={{ display: "block", width: "20vw", borderRadius: "5%", zIndex: "9999" }}
         >
           <div
             style={{

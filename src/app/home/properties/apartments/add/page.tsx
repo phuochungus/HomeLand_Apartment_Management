@@ -26,10 +26,14 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import { Resident } from "@/models/resident";
+import { Building } from "@/models/building";
+import { Floor } from "@/models/floor";
+import { motion } from "framer-motion";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
 function missingField(element: HTMLElement) {
+  console.log(element)
   element.className = element.className.split("missing")[0];
   element.className += " " + styles.missing;
   element.onfocus = () => {
@@ -41,15 +45,21 @@ function validateData(field: string[]) {
   let flag: boolean = true;
   const grid = document.getElementById("imageBlobGrid");
   if (!grid) {
-    missingField(document.getElementById("label-file-upload")!);
+    missingField(document.getElementById("image")!);
     flag = false;
   }
   field.forEach((element) => {
-    const inputElement = document.getElementById(element) as HTMLInputElement;
-    if (inputElement.value.length === 0) {
-      missingField(inputElement);
-      flag = false;
-    }
+    const inputElement = document.getElementById(element);
+    if (inputElement)
+      if (
+        (inputElement instanceof HTMLSelectElement &&
+          inputElement.value == "null") ||
+        (inputElement instanceof HTMLInputElement &&
+          inputElement.value.length === 0)
+      ) {
+        missingField(inputElement);
+        flag = false;
+      }
   });
   return flag;
 }
@@ -66,7 +76,26 @@ export default function AddApartment() {
   }
   const [selectedResidentLists, setSelectedList] = useState<Resident[]>([]);
   const [residentLists, setResidentLists] = useState<Resident[]>([]);
-  const { isLoading, isError, data } = useQuery("resident", () =>
+  const [buildings, setBuildings] = useState<Building[]>([]);
+  const [floors, setFloors] = useState<Floor[]>([]);
+  useQuery("buildings", () => {
+    axios.get("/api/building").then((res) => {
+      setBuildings(res.data as Building[]);
+      return res.data as Building[];
+    });
+  });
+  const retrieveFloor = (building_id: string) => {
+    if (building_id == "null") {
+      setFloors([]);
+      return;
+    }
+    axios.get("/api/floor").then((res) => {
+      setFloors(res.data as Floor[]);
+      return res.data as Floor[];
+    });
+  };
+
+  const { isLoading, isError, data } = useQuery("residents", () =>
     axios.get("/api/resident").then((res) => {
       setResidentLists(res.data as Resident[]);
       return res.data as Resident[];
@@ -80,13 +109,15 @@ export default function AddApartment() {
     loadingFiler(document.body!);
     const field = [
       "name",
+      "building",
+      "floor",
       "width",
       "length",
       "bedroom",
       "bathroom",
-      "description",
     ];
     if (!validateData(field)) {
+      removeLoadingFilter(document.body!)
       return;
     }
     const data = new FormData();
@@ -102,8 +133,14 @@ export default function AddApartment() {
       "length",
       (document.getElementById("length") as HTMLInputElement).value
     );
-    data.append("building_id", "BLD0");
-    data.append("floor_id", "BLD0/FLR0");
+    data.append(
+      "building_id",
+      (document.getElementById("building") as HTMLInputElement).value
+    );
+    data.append(
+      "floor_id",
+      (document.getElementById("floor") as HTMLInputElement).value
+    );
     data.append(
       "number_of_bedroom",
       (document.getElementById("bedroom") as HTMLInputElement).value
@@ -197,14 +234,47 @@ export default function AddApartment() {
             handleSubmit();
           }}
         >
-          <Form.Control
-            id="name"
-            type="text"
-            placeholder="Apartment name..."
-            style={{ width: "30%" }}
-          ></Form.Control>
+          <Form.Group style={{ display: "flex" }}>
+            <Form.Control
+              id="name"
+              type="text"
+              placeholder="Apartment name..."
+              style={{ width: "30%", marginRight: "0.5vw" }}
+            ></Form.Control>
+            <Form.Select
+              title="Building"
+              id="building"
+              onChange={(e) => {
+                retrieveFloor(e.target.value);
+              }}
+              style={{ width: "30%", marginRight: "0.5vw" }}
+            >
+              <option value="null">{"Chọn tòa nhà"}</option>
+              {buildings.reverse().map((value, index) => (
+                <option key={index} value={value.building_id}>
+                  {value.name}
+                </option>
+              ))}
+            </Form.Select>
+            <motion.div
+              initial={{ maxWidth: "0" }}
+              animate={{ maxWidth: "30%" }}
+              style={{ overflow: "hidden", maxWidth: "30%" }}
+              exit={{ maxWidth: "0" }}
+            >
+              <Form.Select title="Floor" id="floor">
+                <option value="null">{"Chọn tầng"}</option>
+                {floors.reverse().map((value, index) => (
+                  <option key={index} value={value.floor_id}>
+                    {value.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </motion.div>
+          </Form.Group>
+
           <div style={{ width: "100%", height: "20px" }}></div>
-          <DragDropFileInput onChange={handleFileChange}>
+          <DragDropFileInput onChange={handleFileChange} id="image">
             <div
               className={styles.uploadIcon}
               style={{

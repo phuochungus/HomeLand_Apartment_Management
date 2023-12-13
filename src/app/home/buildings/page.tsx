@@ -53,7 +53,7 @@ export default function Building() {
   const retrieveBuilding = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/building");
+      const res = await axios.get("/api/building/pagination");
       removeLoadingFilter(document.body!);
       const buildingsData = res.data;
       const data = res.data;
@@ -69,7 +69,7 @@ export default function Building() {
     try {
       console.log(page, limit);
       loadingFiler(document.body!);
-      const res = await axios.get("/api/building", {
+      const res = await axios.get("/api/building/pagination", {
         params: {
           page,
           limit,

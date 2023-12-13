@@ -62,7 +62,7 @@ export default function Residents() {
   const retrieveResidents = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/resident");
+      const res = await axios.get("/api/resident/pagination");
       removeLoadingFilter(document.body!);
       const data = res.data;
       setResidents(data.items);
@@ -78,7 +78,7 @@ export default function Residents() {
     try {
       console.log(page, limit);
       loadingFiler(document.body!);
-      const res = await axios.get("/api/resident", {
+      const res = await axios.get("/api/resident/pagination", {
         params: {
           page,
           limit,

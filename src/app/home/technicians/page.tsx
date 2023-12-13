@@ -58,7 +58,7 @@ export default function Residents() {
   const retrieveTechnicians = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/technician");
+      const res = await axios.get("/api/technician/pagination");
       removeLoadingFilter(document.body!);
       const data = res.data;
       setTechnicians(data.items);
@@ -75,7 +75,7 @@ export default function Residents() {
     try {
       console.log(page, limit);
       loadingFiler(document.body!);
-      const res = await axios.get("/api/technician", {
+      const res = await axios.get("/api/technician/pagination", {
         params: {
           page,
           limit,
