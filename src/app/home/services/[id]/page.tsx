@@ -59,9 +59,9 @@ export default function Page({ params }: { params: { id: string } }) {
     const thresholdLength5 = 500;
     const topPosition1 = -150;
     const topPosition2 = -170;
-    const topPosition3 = -230;
-    const topPosition4 = -210;
-    const topPosition5 = -240;
+    const topPosition3 = -190;
+    const topPosition4 = -200;
+    const topPosition5 = -220;
     if (commentLength > thresholdLength5) {
       return topPosition5;
     } else if (commentLength > thresholdLength4) {
