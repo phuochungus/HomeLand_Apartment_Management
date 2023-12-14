@@ -302,7 +302,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
                 <ServicePackageModal
                   show={showModal}
-                  successMessage="Add service package successfully!"
+                  successMessage="Add service package successfully"
                   serviceId={params.id}
                   handleClose={handleModalClose}
                 />
