@@ -6,6 +6,7 @@ import {
   Carousel,
   Col,
   Container,
+  Dropdown,
   Form,
   Image,
   Row,
@@ -50,7 +51,11 @@ export default function Page({ params }: { params: { id: string } }) {
     created_at: string
   };
   const [t, i18n] = useTranslation();
-
+  const calculateTopPosition = (commentLength: number) => {
+    const thresholdLength = 100;
+    const topPosition = commentLength > thresholdLength ? -370 : -150;
+    return topPosition;
+  };
   const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
     comment: "",
@@ -232,7 +237,7 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   );
   const [invoices, setInvoice] = useState<Invoice[]>([]);
-
+  const commentMaxLength = 40;
   useQuery(
     "invoice",
     () =>
@@ -530,6 +535,12 @@ export default function Page({ params }: { params: { id: string } }) {
                     borderRadius: "20px",
                     margin: "20px 0px",
                     paddingTop: "20px",
+                    width: `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) * 30 : 350}px`,
+                    whiteSpace: feedback.comment.length > commentMaxLength ? "normal" : "nowrap",
+
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    position: 'relative'
                   }}
                 >
 
@@ -544,7 +555,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       />
                     </div>
                     <div className="resident-details">
-                      <p>Resident: {feedback.resident?.profile?.name}</p>
+                      <p>{feedback.resident?.profile?.name}</p>
                       <StarRatings
                         rating={parseFloat(feedback.rating)}
                         starRatedColor="gold"
@@ -552,27 +563,27 @@ export default function Page({ params }: { params: { id: string } }) {
                         starDimension="25px"
                         starSpacing="1px"
                       />
-                      <p>Comment: {feedback.comment}</p>
-                      <p>Time: {format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
+                      <p>{feedback.comment}</p>
+                      <p>{format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
                     </div>
 
                   </div>
-                  <Col md="auto">
-                    {(UserProfile.getRole() === "resident" && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === "admin" ? (
-                      <ButtonComponent
-                        onClick={() => deleleHandle(feedback.feedback_id)}
-                        className={classNames(
-                          styles.deleteBtn
-                        )}
-                      >
-                        Xóa
-                      </ButtonComponent>
-                    ) : (
-                      <></>
-                    )}
-
-
-                  </Col>
+                  <Row className="justify-content-end" style={{ position: 'relative' }}>
+                    <Col md="auto">
+                      {(UserProfile.getRole() === 'resident' && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === 'admin' ? (
+                        <Dropdown style={{ position: 'absolute', top: calculateTopPosition(feedback.comment.length), right: '0', zIndex: '999' }}>
+                          <Dropdown.Toggle variant="secondary" id="dropdown-basic" style={{ backgroundColor: "transparent", color: 'black', border: "none", fontWeight: 'normal', outline: 'none', caretColor: 'transparent' }}>
+                            ⋮
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ backgroundColor: "transparent" }}>
+                            <Dropdown.Item onClick={() => deleleHandle(feedback.feedback_id)} style={{ color: 'black' }}>Xóa</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ) : (
+                        <></>
+                      )}
+                    </Col>
+                  </Row>
 
                 </Row>
 
