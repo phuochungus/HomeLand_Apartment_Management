@@ -25,7 +25,7 @@ export const sidebarInfo = [
   },
   {
     title: "Properties",
-    path: "properties",
+    path: "properties/apartments",
     svg: (
       <svg
         width="44"
@@ -72,7 +72,7 @@ export const sidebarInfo = [
     roles: ["admin", "manager"],
   },
   {
-    title: "Service",
+    title: "Services",
     path: "services",
     svg: (
       <svg
@@ -187,6 +187,7 @@ export const sidebarInfo = [
   },
   {
     title: "Facility",
+    path: "setting",
     svg: (
       <svg
         width="30"

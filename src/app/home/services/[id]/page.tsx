@@ -248,9 +248,22 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
                 {/* <p className="">{data.address}</p> */}
               </Col>
-              {UserProfile.getRole() == "admin" ? <Col className="text-end">
-                <Button variant="warning">Edit</Button>{" "}
-              </Col> : <></>}
+              {UserProfile.getRole() == "admin" ? (
+                <Col className="text-end">
+                  <Button
+                    variant="warning"
+                    onClick={() => {
+                      router.push(
+                        "/home/services/update/" + params.id + "?auth=true"
+                      );
+                    }}
+                  >
+                    Edit
+                  </Button>{" "}
+                </Col>
+              ) : (
+                <></>
+              )}
             </Row>
             <Row style={{ marginTop: "20px" }}>
               <Carousel>

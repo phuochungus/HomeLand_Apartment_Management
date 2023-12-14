@@ -598,7 +598,7 @@ export default function Page({ params }: { params: { id: string } }) {
               }}
             >
               <Button onClick={handleCreate} style={{ width: "100px" }}>
-                Create
+                Update
               </Button>
             </Col>
           </Row>
