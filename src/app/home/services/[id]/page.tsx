@@ -52,10 +52,29 @@ export default function Page({ params }: { params: { id: string } }) {
   };
   const [t, i18n] = useTranslation();
   const calculateTopPosition = (commentLength: number) => {
-    const thresholdLength = 100;
-    const topPosition = commentLength > thresholdLength ? -370 : -150;
-    return topPosition;
+    const thresholdLength1 = 100;
+    const thresholdLength2 = 200;
+    const thresholdLength3 = 300;
+    const thresholdLength4 = 400;
+    const thresholdLength5 = 500;
+    const topPosition1 = -150;
+    const topPosition2 = -170;
+    const topPosition3 = -230;
+    const topPosition4 = -210;
+    const topPosition5 = -240;
+    if (commentLength > thresholdLength5) {
+      return topPosition5;
+    } else if (commentLength > thresholdLength4) {
+      return topPosition4;
+    } else if (commentLength > thresholdLength3) {
+      return topPosition3;
+    } else if (commentLength > thresholdLength2) {
+      return topPosition2;
+    } else {
+      return topPosition1;
+    }
   };
+
   const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
     comment: "",
@@ -563,7 +582,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         starDimension="25px"
                         starSpacing="1px"
                       />
-                      <p>{feedback.comment}</p>
+                      <p>{feedback.comment.slice(0, 500)}</p>
                       <p>{format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
                     </div>
 
