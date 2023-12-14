@@ -1,24 +1,26 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-    min-height: 100vh;
-    background-color: white;
-  }
-  
-  .furniture {
-    height: 100px;
-    border-radius: 10px;
-    border: 1px grey solid;
-    margin: 20px 0px;
-    align-items: center;
-    padding: 0;
-  }
-  .missing {
-    border-style: solid;
-    border-color: #FF4747 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  min-height: 100vh;
+  background-color: white;
 }
+
+.furniture {
+  height: 100px;
+  border-radius: 10px;
+  border: 1px grey solid;
+  margin: 20px 0px;
+  align-items: center;
+  padding: 0;
+}
+
+.missing {
+  border-style: solid;
+  border-color: #FF4747 !important;
+}
+
 .creatBtn1 {
   margin: 20px auto;
   background-color: #8faeff;
@@ -27,5 +29,29 @@
   padding: 8px 60px;
   border-radius: 10px;
   transition: 0.1s ease;
-  font-family: sans-serif; 
+  font-family: sans-serif;
+  width: 60px;
+}
+
+.deleteBtn {
+  color: white;
+  width: 140px;
+  height: 50px;
+  border-radius: 8px;
+  font-family: sans-serif;
+  font-size: 25px;
+  margin-bottom: 20px;
+  float: right;
+}
+
+.deleteBtn {
+  background-color: var(--red);
+  color: white;
+  width: 140px;
+  height: 50px;
+  border-radius: 8px;
+  font-family: sans-serif;
+  font-size: 25px;
+  margin-bottom: 20px;
+  float: right;
 }

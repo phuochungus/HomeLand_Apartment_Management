@@ -25,7 +25,7 @@ export const sidebarInfo = [
   },
   {
     title: "Properties",
-    path: "properties",
+    path: "properties/apartments",
     svg: (
       <svg
         width="44"
@@ -72,8 +72,8 @@ export const sidebarInfo = [
     roles: ["admin", "manager"],
   },
   {
-    title: "Service",
-    path: "service",
+    title: "Services",
+    path: "services",
     svg: (
       <svg
         width="40"
@@ -93,6 +93,7 @@ export const sidebarInfo = [
   },
   {
     title: "Employee",
+    path: "employee",
     svg: <StaffIcon width={30} height={30} />,
     roles: ["admin", "manager"],
   },
@@ -186,6 +187,7 @@ export const sidebarInfo = [
   },
   {
     title: "Facility",
+    path: "setting",
     svg: (
       <svg
         width="30"
@@ -205,6 +207,7 @@ export const sidebarInfo = [
   },
   {
     title: "Floor",
+    path: "floor",
     svg: (
       <svg
         width="50"
