@@ -98,6 +98,7 @@ export default function Page({ params }: { params: { id: string } }) {
       removeLoadingFilter(document.body!);
       const floorData = res.data;
       setFeedbackData(floorData);
+      console.log(floorData);
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
@@ -139,7 +140,7 @@ export default function Page({ params }: { params: { id: string } }) {
       try {
         loadingFiler(document.body!);
         const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' '); 
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
         await axios.post(`/api/feedback/`, form);
         addFeedback({
           rating: formValue.rating, comment: formValue.comment,
@@ -147,6 +148,30 @@ export default function Page({ params }: { params: { id: string } }) {
           resident_id: user.id,
           service_id: params.id,
           created_at: formattedDate,
+          service: {
+            service_id: "",
+            name: "",
+            description: "",
+            imageURLs: undefined,
+            servicePackages: []
+          },
+          resident: {
+            role: "",
+            id: "",
+            profile: {
+              name: "",
+              date_of_birth: new Date,
+              gender: "",
+              front_identify_card_photo_URL: "",
+              back_identify_card_photo_URL: "",
+              phone_number: "",
+              identify_number: "",
+              avatarURL: ""
+            },
+            contracts: undefined,
+            stay_at: undefined,
+            created_at: new Date
+          }
         });
         setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id, created_at: "" });
         removeLoadingFilter(document.body!);
@@ -441,45 +466,51 @@ export default function Page({ params }: { params: { id: string } }) {
               Commnent
             </ButtonComponent>
               </Col> */}
+            {UserProfile.getRole() === "resident" ? (
+              <Row style={{
 
-            <Row style={{
-              backgroundColor: "rgba(40, 100, 255, 0.1)",
-              border: "1px black solid",
-              borderRadius: "20px",
-              margin: "20px 0px",
-              paddingTop: "20px ",
-            }}
-            >
-              <StarRatings
-                rating={rating}
-                starRatedColor="gold"
-                starHoverColor="gold"
-                changeRating={handleRatingChange}
-                numberOfStars={5}
-                starDimension="30px"
-                starSpacing="5px"
-              />
-              <Form.Group className="mb-3">
-                <Form.Label className={styles.label}>Comment</Form.Label>
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  name="comment"
-                  onChange={handleChange}
-                  value={formValue.comment}
-                  placeholder=""
-                />
-                {errors && errors.comment && (
-                  <span className={styles.error}>{errors.comment}</span>
-                )}
-              </Form.Group>
-              <ButtonComponent
-                onClick={createHandle}
-                className={styles.creatBtn1}
+                backgroundColor: "rgba(40, 100, 255, 0.1)",
+                border: "1px black solid",
+                borderRadius: "20px",
+                margin: "20px 0px",
+                paddingTop: "20px ",
+              }}
               >
-                Tạo
-              </ButtonComponent>
-            </Row>
+                <StarRatings
+                  rating={rating}
+                  starRatedColor="gold"
+                  starHoverColor="gold"
+                  changeRating={handleRatingChange}
+                  numberOfStars={5}
+                  starDimension="30px"
+                  starSpacing="5px"
+                />
+                <Form.Group className="mb-3">
+                  <Form.Label className={styles.label}>Comment</Form.Label>
+                  <Form.Control
+                    size="lg"
+                    type="text"
+                    name="comment"
+                    onChange={handleChange}
+                    value={formValue.comment}
+                    placeholder=""
+                  />
+                  {errors && errors.comment && (
+                    <span className={styles.error}>{errors.comment}</span>
+                  )}
+                </Form.Group>
+                <ButtonComponent
+                  onClick={createHandle}
+                  className={styles.creatBtn1}
+                >
+                  Tạo
+                </ButtonComponent>
+
+              </Row>
+            ) : (
+              <></>
+            )}
+
             <Row style={{ marginTop: "20px" }}>
               <Col>
                 <h3>
@@ -502,12 +533,28 @@ export default function Page({ params }: { params: { id: string } }) {
                   }}
                 >
 
-                  <div>
-
-                    <p>Resident: {feedback.resident_id}</p>
-                    <p>Time: {format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
-                    <p>Rating: {feedback.rating}</p>
-                    <p>Comment: {feedback.comment}</p>
+                  <div className="resident-info" style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div className="avatar-container" style={{ marginRight: '20px' }}>
+                      <Image
+                        style={{ borderRadius: "60%" }}
+                        className="avatar-image"
+                        width={50}
+                        src={feedback.resident?.profile?.avatarURL}
+                        alt="Resident Avatar"
+                      />
+                    </div>
+                    <div className="resident-details">
+                      <p>Resident: {feedback.resident?.profile?.name}</p>
+                      <StarRatings
+                        rating={parseFloat(feedback.rating)}
+                        starRatedColor="gold"
+                        starEmptyColor="grey"
+                        starDimension="25px"
+                        starSpacing="1px"
+                      />
+                      <p>Comment: {feedback.comment}</p>
+                      <p>Time: {format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
+                    </div>
 
                   </div>
                   <Col md="auto">

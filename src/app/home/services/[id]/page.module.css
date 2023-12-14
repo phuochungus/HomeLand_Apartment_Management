@@ -42,6 +42,7 @@
   font-size: 25px;
   margin-bottom: 20px;
   float: right;
+  margin-left: 70px;
 }
 
 .deleteBtn {
@@ -54,4 +55,26 @@
   font-size: 25px;
   margin-bottom: 20px;
   float: right;
+}
+
+.resident-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.avatar-container {
+  flex: 0 0 auto; 
+  margin-right: 10px; 
+}
+
+.avatar-image {
+  width: 160px;
+  height: 160px;
+  margin-right: 60px;
+  position: relative;
+  margin-left: 40px;
+}
+
+.resident-details {
+  flex: 1; 
 }
