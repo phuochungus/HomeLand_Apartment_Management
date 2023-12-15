@@ -55,12 +55,15 @@ export default function Dashboard() {
     try {
       loadingFiler(document.body!);
       const res = await axios.get("/api/floor/pagination");
+      
       removeLoadingFilter(document.body!);
       const floorData = res.data;
       const data = res.data;
+      console.log(data);
       setFloor(data.items);
       setTotalPages(data.meta.totalPages);
       return res.data;
+     
     } catch (error) {
       removeLoadingFilter(document.body!);
       console.log(error);
