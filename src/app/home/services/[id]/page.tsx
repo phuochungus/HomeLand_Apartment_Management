@@ -566,7 +566,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     borderRadius: "20px",
                     margin: "20px 0px",
                     paddingTop: "20px",
-                    width: isMobile ? '100%' :is1200 ? '90%' : ismayHa ? '90%':  isSmailSceen ? '70%' :  `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) *30 : 350}px`,
+                    width: isMobile ? '100%' : is1200 ? '90%' : ismayHa ? '90%' : isSmailSceen ? '70%' : `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) * 30 : 350}px`,
                     whiteSpace: 'pre-wrap',
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -575,7 +575,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 >
 
                   <div className="resident-info" style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div className="avatar-container" style={{ marginRight: '20px' }}>
+                    <div className="avatar-container" style={{ marginRight: '20px' ,marginTop: '5px'}}>
                       <Image
                         style={{ borderRadius: "60%" }}
                         className="avatar-image"
@@ -584,26 +584,34 @@ export default function Page({ params }: { params: { id: string } }) {
                         alt="Resident Avatar"
                       />
                     </div>
-                    <div className="resident-details">
-                      <p>{feedback.resident?.profile?.name}</p>
-                      <p>{format(new Date(feedback.created_at),  "HH:mm dd/MM/yyyy")}</p>
+                    <div className="resident-details" style={{ marginTop: '-7px', padding: '10px' }}>
+                      <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>{feedback.resident?.profile?.name}</p>
+
+                      <p style={{ fontSize: '12px', marginBottom: '1px' }}>
+                        {format(new Date(feedback.created_at), "HH:mm dd/MM/yyyy")}
+                      </p>
+
                       <StarRatings
                         rating={parseFloat(feedback.rating)}
                         starRatedColor="gold"
                         starEmptyColor="grey"
-                        starDimension="25px"
+                        starDimension="20px"
                         starSpacing="1px"
+                       
                       />
-                      <p>{feedback.comment.slice(0, 500)}</p>
-                  
+
+                      <p style={{ marginBottom: '5px' }}></p>
+
+                      <p style={{ marginBottom: '5px' }}>{feedback.comment.slice(0, 500)}</p>
                     </div>
+
 
                   </div>
                   <Row className="justify-content-end" style={{ position: 'relative' }}>
                     <Col md="auto">
                       {(UserProfile.getRole() === 'resident' && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === 'admin' ? (
                         <Dropdown style={{ position: 'absolute', top: calculateTopPosition(feedback.comment.length), right: '0', zIndex: '999' }}>
-                          <Dropdown.Toggle  className = {styles.dropdownToggle } variant="secondary" id="dropdown-basic" style={{ backgroundColor: "transparent", color: 'black', border: "none", fontWeight: 'normal', outline: 'none', caretColor: 'transparent' }}>
+                          <Dropdown.Toggle className={styles.dropdownToggle} variant="secondary" id="dropdown-basic" style={{ backgroundColor: "transparent", color: 'black', border: "none", fontWeight: 'normal', outline: 'none', caretColor: 'transparent' }}>
                             ⋮
                           </Dropdown.Toggle>
                           <Dropdown.Menu style={{ backgroundColor: "transparent" }}>
