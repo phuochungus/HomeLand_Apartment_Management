@@ -24,5 +24,12 @@
   "contractRole":"Loại hợp đồng",
   "edit":"Sửa",
   "delete":"Xóa",
-  "add_service":"Thêm dịch vụ"
+  "add_service":"Thêm dịch vụ",
+  "service_name":"Tên dịch vụ",
+  "description":"Mô tả",
+  "save":"Lưu",
+  "clear":"Xóa",
+  "uploadFile":"Click để tải file lên",
+  "changeFile":"Thay đổi file tại đây",
+  "search_service":"Tìm dịch vụ bằng tên..."
 }

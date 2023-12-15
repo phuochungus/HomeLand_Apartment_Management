@@ -134,7 +134,7 @@ export default function Services() {
           className={`${styles.itemContainer} ${styles.searchBarContainer}`}
         >
           <SearchBar
-            placeholder="Search service here..."
+            placeholder={t("search_service")}
             className={styles.searchBar}
             onSearch={handleSearch}
             style={{ width: "50%" }}

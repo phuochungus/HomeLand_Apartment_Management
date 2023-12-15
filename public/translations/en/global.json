@@ -24,5 +24,12 @@
   "contractRole":"Contract Role",
   "edit": "Edit",
   "delete": "Delete",
-  "add_service": "Add service"
+  "add_service": "Add service",
+  "service_name": "Service name",
+  "description": "Description",
+  "save": "Save",
+  "clear":"Clear",
+  "uploadFile":"Click to upload file here",
+  "changeFile":"Change file here",
+  "search_service": "Search service by name..."
 }

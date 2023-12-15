@@ -15,7 +15,7 @@ import {
 import classNames from 'classnames';
 import Furniture from "../../../../components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, use, useEffect, useState } from "react";
 import { endpoint } from "@/constraints/endpoints";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -38,7 +38,6 @@ import { serialize } from "v8";
 import ModalComponent from "@/components/Modal/Modal";
 import { CloseIcon } from "@/components/icons";
 import { format, set } from "date-fns";
-import router from "next/router";
 export default function Page({ params }: { params: { id: string } }) {
   // let service:service= JSON.parse("{'id':'123', 'name':'M}");
   //console.log(service);
@@ -49,6 +48,7 @@ export default function Page({ params }: { params: { id: string } }) {
     resident_id: string;
     created_at: string
   };
+  const router =useRouter();
   const [t, i18n] = useTranslation();
 
   const [formValue, setFormValue] = useState<FormValue>({
