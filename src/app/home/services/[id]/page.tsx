@@ -6,6 +6,7 @@ import {
   Carousel,
   Col,
   Container,
+  Dropdown,
   Form,
   Image,
   Row,
@@ -50,7 +51,42 @@ export default function Page({ params }: { params: { id: string } }) {
   };
   const router =useRouter();
   const [t, i18n] = useTranslation();
+  const calculateTopPosition = (commentLength: number) => {
+    const thresholdLength1 = 100;
+    const thresholdLength2 = 200;
+    const thresholdLength3 = 300;
+    const thresholdLength4 = 400;
+    const thresholdLength5 = 500;
+    const topPosition1 = -140;
+    const topPosition2 = -160;
+    const topPosition3 = -180;
+    const topPosition4 = -190;
+    const topPosition5 = -210;
+    if (commentLength > thresholdLength5) {
+      return topPosition5;
+    } else if (commentLength > thresholdLength4) {
+      return topPosition4;
+    } else if (commentLength > thresholdLength3) {
+      return topPosition3;
+    } else if (commentLength > thresholdLength2) {
+      return topPosition2;
+    } else {
+      return topPosition1;
+    }
+  };
+  const [width, setWidth] = useState(window.innerWidth);
 
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const isSmailSceen = width <= 1000;
+  const is1200 = width <= 1300;
+  const ismayHa = width <= 1400;
+  const isMobile = width <= 480;
   const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
     comment: "",
@@ -98,6 +134,7 @@ export default function Page({ params }: { params: { id: string } }) {
       removeLoadingFilter(document.body!);
       const floorData = res.data;
       setFeedbackData(floorData);
+      console.log(floorData);
       return res.data;
     } catch (error) {
       removeLoadingFilter(document.body!);
@@ -112,7 +149,7 @@ export default function Page({ params }: { params: { id: string } }) {
       err.rating = "Trường rating là bắt buộc!";
     }
     if (formValue.comment === "") {
-      err.comment = "Trường cmt là bắt buộc!";
+      err.comment = "Trường comment là bắt buộc!";
     }
 
     return err;
@@ -137,9 +174,9 @@ export default function Page({ params }: { params: { id: string } }) {
       form.append("service_id", formValue.service_id);
       form.append("resident_id", formValue.resident_id);
       try {
-        loadingFiler(document.body!);
+    
         const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' '); 
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
         await axios.post(`/api/feedback/`, form);
         addFeedback({
           rating: formValue.rating, comment: formValue.comment,
@@ -147,6 +184,30 @@ export default function Page({ params }: { params: { id: string } }) {
           resident_id: user.id,
           service_id: params.id,
           created_at: formattedDate,
+          service: {
+            service_id: "",
+            name: "",
+            description: "",
+            imageURLs: undefined,
+            servicePackages: []
+          },
+          resident: {
+            role: "",
+            id: "",
+            profile: {
+              name: "",
+              date_of_birth: new Date,
+              gender: "",
+              front_identify_card_photo_URL: "",
+              back_identify_card_photo_URL: "",
+              phone_number: "",
+              identify_number: "",
+              avatarURL: ""
+            },
+            contracts: undefined,
+            stay_at: undefined,
+            created_at: new Date
+          }
         });
         setFormValue({ rating: "", comment: "", resident_id: user.id, service_id: params.id, created_at: "" });
         removeLoadingFilter(document.body!);
@@ -206,8 +267,13 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
+  const sortedFeedbackData = [...feedbackData].sort((a, b) => {
+    const dateA = new Date(a.created_at).getTime(); 
+    const dateB = new Date(b.created_at).getTime(); 
+    return dateB - dateA;
+  });
   const [invoices, setInvoice] = useState<Invoice[]>([]);
-
+  const commentMaxLength = 40;
   useQuery(
     "invoice",
     () =>
@@ -225,9 +291,9 @@ export default function Page({ params }: { params: { id: string } }) {
   //     staleTime: Infinity,
   //   }
   // );
-  useEffect(() => {
-    retrieveFeedback();
-  }, []);
+  // useEffect(() => {
+  //   retrieveFeedback();
+  // }, []);
   // useEffect(() => {
   //   const fetchUserProfile = async () => {
   //     const user = await UserProfile.getProfile();
@@ -315,7 +381,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
                 <ServicePackageModal
                   show={showModal}
-                  successMessage="Add service package successfully!"
+                  successMessage="Add service package successfully"
                   serviceId={params.id}
                   handleClose={handleModalClose}
                 />
@@ -441,45 +507,54 @@ export default function Page({ params }: { params: { id: string } }) {
               Commnent
             </ButtonComponent>
               </Col> */}
+            {UserProfile.getRole() === "resident" ? (
+              <Row style={{
 
-            <Row style={{
-              backgroundColor: "rgba(40, 100, 255, 0.1)",
-              border: "1px black solid",
-              borderRadius: "20px",
-              margin: "20px 0px",
-              paddingTop: "20px ",
-            }}
-            >
-              <StarRatings
-                rating={rating}
-                starRatedColor="gold"
-                starHoverColor="gold"
-                changeRating={handleRatingChange}
-                numberOfStars={5}
-                starDimension="30px"
-                starSpacing="5px"
-              />
-              <Form.Group className="mb-3">
-                <Form.Label className={styles.label}>Comment</Form.Label>
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  name="comment"
-                  onChange={handleChange}
-                  value={formValue.comment}
-                  placeholder=""
-                />
-                {errors && errors.comment && (
-                  <span className={styles.error}>{errors.comment}</span>
-                )}
-              </Form.Group>
-              <ButtonComponent
-                onClick={createHandle}
-                className={styles.creatBtn1}
+                backgroundColor: "rgba(40, 100, 255, 0.1)",
+                border: "1px black solid",
+                borderRadius: "20px",
+                margin: "20px 0px",
+                paddingTop: "20px ",
+              }}
               >
-                Tạo
-              </ButtonComponent>
-            </Row>
+                <StarRatings
+                  rating={rating}
+                  starRatedColor="gold"
+                  starHoverColor="gold"
+                  changeRating={handleRatingChange}
+                  numberOfStars={5}
+                  starDimension="30px"
+                  starSpacing="5px"
+                />
+                {errors && errors.rating && (
+                    <span className={styles.error}>{errors.rating}</span>
+                  )}
+                <Form.Group className="mb-3">
+                  <Form.Label className={styles.label}>Comment</Form.Label>
+                  <Form.Control
+                    size="lg"
+                    type="text"
+                    name="comment"
+                    onChange={handleChange}
+                    value={formValue.comment}
+                    placeholder=""
+                  />
+                  {errors && errors.comment && (
+                    <span className={styles.error}>{errors.comment}</span>
+                  )}
+                </Form.Group>
+                <ButtonComponent
+                  onClick={createHandle}
+                  className={styles.creatBtn1}
+                >
+                  Tạo
+                </ButtonComponent>
+
+              </Row>
+            ) : (
+              <></>
+            )}
+
             <Row style={{ marginTop: "20px" }}>
               <Col>
                 <h3>
@@ -487,7 +562,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
               </Col>
             </Row>
-            {feedbackData
+            
+            {sortedFeedbackData
               .filter(feedback => feedback.service_id === params.id)
               .map((feedback, index) => (
 
@@ -499,33 +575,63 @@ export default function Page({ params }: { params: { id: string } }) {
                     borderRadius: "20px",
                     margin: "20px 0px",
                     paddingTop: "20px",
+                    width: isMobile ? '100%' : is1200 ? '90%' : ismayHa ? '90%' : isSmailSceen ? '70%' : `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) * 30 : 350}px`,
+                    whiteSpace: 'pre-wrap',
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    position: 'relative'
                   }}
                 >
 
-                  <div>
+                  <div className="resident-info" style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div className="avatar-container" style={{ marginRight: '20px' ,marginTop: '5px'}}>
+                      <Image
+                        style={{ borderRadius: "60%" }}
+                        className="avatar-image"
+                        width={50}
+                        src={feedback.resident?.profile?.avatarURL}
+                        alt="Resident Avatar"
+                      />
+                    </div>
+                    <div className="resident-details" style={{ marginTop: '-7px', padding: '10px' }}>
+                      <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>{feedback.resident?.profile?.name}</p>
 
-                    <p>Resident: {feedback.resident_id}</p>
-                    <p>Time: {format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
-                    <p>Rating: {feedback.rating}</p>
-                    <p>Comment: {feedback.comment}</p>
+                      <p style={{ fontSize: '12px', marginBottom: '1px' }}>
+                        {format(new Date(feedback.created_at), "HH:mm dd/MM/yyyy")}
+                      </p>
+
+                      <StarRatings
+                        rating={parseFloat(feedback.rating)}
+                        starRatedColor="gold"
+                        starEmptyColor="grey"
+                        starDimension="20px"
+                        starSpacing="1px"
+                       
+                      />
+
+                      <p style={{ marginBottom: '5px' }}></p>
+
+                      <p style={{ marginBottom: '5px' }}>{feedback.comment.slice(0, 500)}</p>
+                    </div>
+
 
                   </div>
-                  <Col md="auto">
-                    {(UserProfile.getRole() === "resident" && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === "admin" ? (
-                      <ButtonComponent
-                        onClick={() => deleleHandle(feedback.feedback_id)}
-                        className={classNames(
-                          styles.deleteBtn
-                        )}
-                      >
-                        Xóa
-                      </ButtonComponent>
-                    ) : (
-                      <></>
-                    )}
-
-
-                  </Col>
+                  <Row className="justify-content-end" style={{ position: 'relative' }}>
+                    <Col md="auto">
+                      {(UserProfile.getRole() === 'resident' && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === 'admin' ? (
+                        <Dropdown style={{ position: 'absolute', top: calculateTopPosition(feedback.comment.length), right: '0', zIndex: '999' }}>
+                          <Dropdown.Toggle className={styles.dropdownToggle} variant="secondary" id="dropdown-basic" style={{ backgroundColor: "transparent", color: 'black', border: "none", fontWeight: 'normal', outline: 'none', caretColor: 'transparent' }}>
+                            ⋮
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu style={{ backgroundColor: "transparent" }}>
+                            <Dropdown.Item onClick={() => deleleHandle(feedback.feedback_id)} style={{ color: 'black' }}>Xóa</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ) : (
+                        <></>
+                      )}
+                    </Col>
+                  </Row>
 
                 </Row>
 

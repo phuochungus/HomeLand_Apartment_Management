@@ -8,4 +8,6 @@ export interface Feedback {
         resident_id: string,
         service_id: string,
         created_at: string;
+        service: Service;
+        resident: Resident;
 }

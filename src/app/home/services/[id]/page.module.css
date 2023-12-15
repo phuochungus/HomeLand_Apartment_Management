@@ -23,7 +23,7 @@
 
 .creatBtn1 {
   margin: 20px auto;
-  background-color: #8faeff;
+  background-color: blue;
   color: var(--white);
   font-size: 1.25rem;
   padding: 8px 60px;
@@ -42,6 +42,7 @@
   font-size: 25px;
   margin-bottom: 20px;
   float: right;
+  margin-left: 70px;
 }
 
 .deleteBtn {
@@ -54,4 +55,45 @@
   font-size: 25px;
   margin-bottom: 20px;
   float: right;
+}
+
+.resident-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.avatar-container {
+  flex: 0 0 auto; 
+  margin-right: 10px; 
+}
+
+.avatar-image {
+  width: 160px;
+  height: 160px;
+  margin-right: 60px;
+  position: relative;
+  margin-left: 40px;
+}
+
+.resident-details {
+  flex: 1; 
+}
+.dropdown-menu {
+  position: absolute;
+  top: -200px; 
+  right: 0;
+  z-index: 999;
+  background-color: #8faeff; 
+  color: white; 
+}
+.dropdownToggle::after {
+  display: none !important;
+}
+@media only screen and (max-width: 390) {
+  
+  .comment {
+   width: 80%;
+    font-size: 14px;
+    
+  }
 }
