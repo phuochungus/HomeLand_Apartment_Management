@@ -80,9 +80,12 @@
 }
 .dropdown-menu {
   position: absolute;
-  top: -200px; /* Điều chỉnh khoảng cách Dropdown hiển thị từ trên cùng của mỗi item comment */
+  top: -200px; 
   right: 0;
   z-index: 999;
-  background-color: #8faeff; /* Màu nền của Dropdown */
-  color: white; /* Màu chữ trong Dropdown */
+  background-color: #8faeff; 
+  color: white; 
+}
+.dropdownToggle::after {
+  display: none !important;
 }

@@ -274,9 +274,9 @@ export default function Page({ params }: { params: { id: string } }) {
   //     staleTime: Infinity,
   //   }
   // );
-  useEffect(() => {
-    retrieveFeedback();
-  }, []);
+  // useEffect(() => {
+  //   retrieveFeedback();
+  // }, []);
   // useEffect(() => {
   //   const fetchUserProfile = async () => {
   //     const user = await UserProfile.getProfile();
@@ -575,6 +575,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     </div>
                     <div className="resident-details">
                       <p>{feedback.resident?.profile?.name}</p>
+                      <p>{format(new Date(feedback.created_at),  "HH:mm dd/MM/yyyy")}</p>
                       <StarRatings
                         rating={parseFloat(feedback.rating)}
                         starRatedColor="gold"
@@ -583,7 +584,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         starSpacing="1px"
                       />
                       <p>{feedback.comment.slice(0, 500)}</p>
-                      <p>{format(new Date(feedback.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
+                  
                     </div>
 
                   </div>
@@ -591,7 +592,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     <Col md="auto">
                       {(UserProfile.getRole() === 'resident' && UserProfile.getProfile().id === feedback.resident_id) || UserProfile.getRole() === 'admin' ? (
                         <Dropdown style={{ position: 'absolute', top: calculateTopPosition(feedback.comment.length), right: '0', zIndex: '999' }}>
-                          <Dropdown.Toggle variant="secondary" id="dropdown-basic" style={{ backgroundColor: "transparent", color: 'black', border: "none", fontWeight: 'normal', outline: 'none', caretColor: 'transparent' }}>
+                          <Dropdown.Toggle  className = {styles.dropdownToggle } variant="secondary" id="dropdown-basic" style={{ backgroundColor: "transparent", color: 'black', border: "none", fontWeight: 'normal', outline: 'none', caretColor: 'transparent' }}>
                             ⋮
                           </Dropdown.Toggle>
                           <Dropdown.Menu style={{ backgroundColor: "transparent" }}>
