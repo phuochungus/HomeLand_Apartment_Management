@@ -8,6 +8,7 @@ import axios from "axios";
 import { set } from "date-fns";
 import toastMessage from "../../../../utils/toast";
 import { ServicePackage } from "../../../../models/servicePackage";
+import { useTranslation } from "react-i18next";
 
 interface ServicePackageModalProps {
   show: boolean;
@@ -27,6 +28,8 @@ const ServicePackageModal: React.FC<ServicePackageModalProps> = ({
   const [name, setName] = useState("");
   const [expiredDate, setExpiredDate] = useState("");
   const [perUnitPrice, setPerUnitPrice] = useState("");
+  const [t, i18n] = useTranslation();
+
   const [loading, setLoading] = useState(false); // New loading state
   useEffect(() => {
     if (servicePackage) {
@@ -104,7 +107,7 @@ const ServicePackageModal: React.FC<ServicePackageModalProps> = ({
   return (
     <Modal style={futuna.style} show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Service Package Details</Modal.Title>
+        <Modal.Title>{servicePackage? t("update_service_package"):t("add_service_package")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {loading ? (
@@ -124,28 +127,28 @@ const ServicePackageModal: React.FC<ServicePackageModalProps> = ({
         ) : (
           <Form>
             <Form.Group style={{ marginTop: "20px" }} controlId="serviceName">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>{t("name")}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter service name"
+                placeholder={t("enter_service_name")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group style={{ marginTop: "20px" }} controlId="expiredDate">
-              <Form.Label>Expired Date</Form.Label>
+              <Form.Label>{t("expired_date_number")}</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Enter expired date"
+                placeholder={t("enter_expired_date_number")}
                 value={expiredDate}
                 onChange={(e) => setExpiredDate(e.target.value)}
               />
             </Form.Group>
             <Form.Group style={{ marginTop: "20px" }} controlId="perUnitPrice">
-              <Form.Label>Per Unit Price (VND)</Form.Label>
+              <Form.Label>{t("per_unit_price")}</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Enter per unit price (VND)"
+                placeholder={t("enter_per_unit_price")}
                 value={perUnitPrice}
                 onChange={(e) => setPerUnitPrice(e.target.value)}
               />
@@ -155,10 +158,10 @@ const ServicePackageModal: React.FC<ServicePackageModalProps> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+          {t("close")}
         </Button>
         <Button variant="primary" onClick={handleSubmit}>
-          {servicePackage ? "Update" : "Add"}
+          {t("save")}
         </Button>
       </Modal.Footer>
     </Modal>

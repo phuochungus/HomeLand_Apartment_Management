@@ -8,6 +8,7 @@
   "apartment": "Apartment",
   "phone_number": "Phone Number",
   "name": "Name",
+  "create":"Create",
   "create_at": "Create At",
   "expire_at": "Expire At",
   "search_contract": "Search contract with resident name...",
@@ -31,5 +32,19 @@
   "clear":"Clear",
   "uploadFile":"Click to upload file here",
   "changeFile":"Change file here",
-  "search_service": "Search service by name..."
+  "search_service": "Search service by name...",
+  "service_package": "Service packages",
+  "feedback": "Feedback",
+  "add_service_package": "Add service package",
+  "enter_service_name": "Enter service name",
+  "expired_date_number": "Expired date number",
+  "enter_expired_date_number": "Enter expired date number",
+  "per_unit_price":"Per Unit Price (VND)",
+  "enter_per_unit_price":"Enter per unit price (VND)",
+  "close":"Close",
+  "days":"Days",
+  "update":"Update",
+  "choose_resident":"Choose Resident",
+  
+  "update_contract":"Update Contract"
 }

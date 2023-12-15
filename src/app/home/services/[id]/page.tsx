@@ -50,7 +50,6 @@ export default function Page({ params }: { params: { id: string } }) {
     created_at: string
   };
   const router =useRouter();
-  const [t, i18n] = useTranslation();
   const calculateTopPosition = (commentLength: number) => {
     const thresholdLength1 = 100;
     const thresholdLength2 = 200;
@@ -232,6 +231,8 @@ export default function Page({ params }: { params: { id: string } }) {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [t, i18n] = useTranslation();
+
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
     setFormValue((prevState) => ({
@@ -362,19 +363,19 @@ export default function Page({ params }: { params: { id: string } }) {
             </Row>
             <Row>
               <h3 style={{ marginTop: "20px" }}>
-                <b>Description</b>
+                <b>{t("description")}</b>
               </h3>
               <p style={{ marginTop: "20px" }}>{data.description}</p>
             </Row>
             <Row style={{ marginTop: "20px" }}>
               <Col>
                 <h3>
-                  <b>Service Packages</b>
+                  <b>{t("service_package")}</b>
                 </h3>
               </Col>
               <Col md="auto">
                 {UserProfile.getRole() != "resident" ? (
-                  <Button onClick={handleModalOpen}>Add</Button>
+                  <Button onClick={handleModalOpen}>{t("add_service_package")}</Button>
                 ) : (
                   <></>
                 )}
@@ -498,7 +499,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <Row style={{ marginTop: "20px" }}>
               <Col>
                 <h3>
-                  <b>Feedback</b>
+                  <b>{t("feedback")}</b>
                 </h3>
               </Col>
             </Row>
@@ -555,13 +556,6 @@ export default function Page({ params }: { params: { id: string } }) {
               <></>
             )}
 
-            <Row style={{ marginTop: "20px" }}>
-              <Col>
-                <h3>
-                  <b>Comment</b>
-                </h3>
-              </Col>
-            </Row>
             
             {sortedFeedbackData
               .filter(feedback => feedback.service_id === params.id)

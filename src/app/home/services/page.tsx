@@ -48,6 +48,7 @@ export default function Services() {
       refetch();
     }
   }
+ 
   window.addEventListener("scroll", (e) => {
     const windowHeight =
       "innerHeight" in window
