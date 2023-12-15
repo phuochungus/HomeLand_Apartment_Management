@@ -74,7 +74,18 @@ export default function Page({ params }: { params: { id: string } }) {
       return topPosition1;
     }
   };
+  const [width, setWidth] = useState(window.innerWidth);
 
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const isSmailSceen = width <= 1000;
+  const is1200 = width <= 1300;
+  const isMobile = width <= 480;
   const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
     comment: "",
@@ -554,9 +565,8 @@ export default function Page({ params }: { params: { id: string } }) {
                     borderRadius: "20px",
                     margin: "20px 0px",
                     paddingTop: "20px",
-                    width: `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) * 30 : 350}px`,
-                    whiteSpace: feedback.comment.length > commentMaxLength ? "normal" : "nowrap",
-
+                    width: isMobile ? '100%' :is1200 ? '100%' :  isSmailSceen ? '70%' :  `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) *30 : 350}px`,
+                    whiteSpace: 'pre-wrap',
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     position: 'relative'
