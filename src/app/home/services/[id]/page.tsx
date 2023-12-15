@@ -85,6 +85,7 @@ export default function Page({ params }: { params: { id: string } }) {
   }, []);
   const isSmailSceen = width <= 1000;
   const is1200 = width <= 1300;
+  const ismayHa = width <= 1400;
   const isMobile = width <= 480;
   const [formValue, setFormValue] = useState<FormValue>({
     rating: "",
@@ -565,7 +566,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     borderRadius: "20px",
                     margin: "20px 0px",
                     paddingTop: "20px",
-                    width: isMobile ? '100%' :is1200 ? '90%' :  isSmailSceen ? '70%' :  `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) *30 : 350}px`,
+                    width: isMobile ? '100%' :is1200 ? '90%' : ismayHa ? '90%':  isSmailSceen ? '70%' :  `${feedback.comment.length > 10 ? Math.min(feedback.comment.length, commentMaxLength) *30 : 350}px`,
                     whiteSpace: 'pre-wrap',
                     overflow: "hidden",
                     textOverflow: "ellipsis",
