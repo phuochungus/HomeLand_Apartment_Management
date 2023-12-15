@@ -11,7 +11,7 @@
   "name": "Tên",
   "create_at": "Ngày tạo",
   "expire_at": "Ngày hết hạn",
-  "search_contract": "Tìm hợp đồng của cư dân",
+  "search_contract": "Tìm hợp đồng bằng tên cư dân",
   "status":"Trạng thái",
   "add_contract":"Tạo hợp đồng",
   "resident":"Cư dân",
@@ -21,5 +21,8 @@
   "gender":"Giới tính",
   "male":"Nam",
   "female":"Nữ",
-  "contractRole":"Loại hợp đồng"
+  "contractRole":"Loại hợp đồng",
+  "edit":"Sửa",
+  "delete":"Xóa",
+  "add_service":"Thêm dịch vụ"
 }

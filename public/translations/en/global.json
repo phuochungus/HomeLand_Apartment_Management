@@ -21,5 +21,8 @@
   "gender": "Gender",
   "male": "Male",
   "female": "Female",
-  "contractRole":"Contract Role"
+  "contractRole":"Contract Role",
+  "edit": "Edit",
+  "delete": "Delete",
+  "add_service": "Add service"
 }
