@@ -57,11 +57,11 @@ export default function Page({ params }: { params: { id: string } }) {
     const thresholdLength3 = 300;
     const thresholdLength4 = 400;
     const thresholdLength5 = 500;
-    const topPosition1 = -150;
-    const topPosition2 = -170;
-    const topPosition3 = -190;
-    const topPosition4 = -200;
-    const topPosition5 = -220;
+    const topPosition1 = -140;
+    const topPosition2 = -160;
+    const topPosition3 = -180;
+    const topPosition4 = -190;
+    const topPosition5 = -210;
     if (commentLength > thresholdLength5) {
       return topPosition5;
     } else if (commentLength > thresholdLength4) {
@@ -149,7 +149,7 @@ export default function Page({ params }: { params: { id: string } }) {
       err.rating = "Trường rating là bắt buộc!";
     }
     if (formValue.comment === "") {
-      err.comment = "Trường cmt là bắt buộc!";
+      err.comment = "Trường comment là bắt buộc!";
     }
 
     return err;
@@ -174,7 +174,7 @@ export default function Page({ params }: { params: { id: string } }) {
       form.append("service_id", formValue.service_id);
       form.append("resident_id", formValue.resident_id);
       try {
-        loadingFiler(document.body!);
+    
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
         await axios.post(`/api/feedback/`, form);
@@ -267,6 +267,11 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
+  const sortedFeedbackData = [...feedbackData].sort((a, b) => {
+    const dateA = new Date(a.created_at).getTime(); 
+    const dateB = new Date(b.created_at).getTime(); 
+    return dateB - dateA;
+  });
   const [invoices, setInvoice] = useState<Invoice[]>([]);
   const commentMaxLength = 40;
   useQuery(
@@ -521,6 +526,9 @@ export default function Page({ params }: { params: { id: string } }) {
                   starDimension="30px"
                   starSpacing="5px"
                 />
+                {errors && errors.rating && (
+                    <span className={styles.error}>{errors.rating}</span>
+                  )}
                 <Form.Group className="mb-3">
                   <Form.Label className={styles.label}>Comment</Form.Label>
                   <Form.Control
@@ -554,7 +562,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
               </Col>
             </Row>
-            {feedbackData
+            
+            {sortedFeedbackData
               .filter(feedback => feedback.service_id === params.id)
               .map((feedback, index) => (
 
