@@ -20,5 +20,6 @@
   "birthday": "Birthday",
   "gender": "Gender",
   "male": "Male",
-  "female": "Female"
+  "female": "Female",
+  "contractRole":"Contract Role"
 }

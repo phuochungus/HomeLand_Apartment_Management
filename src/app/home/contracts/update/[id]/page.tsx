@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   createRef,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import styles from "./addContract.module.css";
@@ -201,7 +202,8 @@ export default function Page({ params }: { params: { id: string } }) {
   function handleFileChange(files: (File | URL)[]): void {
     setSelectedFiles(files);
   }
-
+  const [expire_at, setExpire_at] = useState<Date>();
+ 
   useQuery(
     "building",
     () =>
@@ -212,7 +214,11 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
-
+  useEffect(() => {
+    if (data&&data.expire_at)
+    setExpire_at(new Date(data.expire_at));
+  },[data]);
+  
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const newObj = {
@@ -306,7 +312,6 @@ export default function Page({ params }: { params: { id: string } }) {
         ),
       },
     ];
-
     const DateSortOptions = [
       {
         title: t("create_at"),
@@ -337,9 +342,12 @@ export default function Page({ params }: { params: { id: string } }) {
                       type="date"
                       name="expire_at"
                       value={
-                        new Date(data?.expire_at).toISOString().split("T")[0]
+                        (expire_at??new Date()).toISOString().split("T")[0]
                       }
-                      onChange={handleChange}
+                      onChange={(e)=>{
+                        handleChange(e as ChangeEvent<HTMLInputElement>);
+                        setExpire_at(new Date(e.target.value));
+                      }}
                     />
                     {errors && errors.expire_at && (
                       <span className={styles.error}>{errors.expire_at}</span>

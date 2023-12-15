@@ -20,5 +20,6 @@
   "birthday":"Ngày sinh",
   "gender":"Giới tính",
   "male":"Nam",
-  "female":"Nữ"
+  "female":"Nữ",
+  "contractRole":"Loại hợp đồng"
 }
