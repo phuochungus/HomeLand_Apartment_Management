@@ -122,8 +122,8 @@ export default function RootLayout({
           <div
             style={{
               width: "100%",
-              backgroundColor: "#E8EAEC",
-              height: "fit-content",
+              backgroundColor: "var(--background-color)",
+              
             }}
           >
             <div style={{ display: "flex" }}>

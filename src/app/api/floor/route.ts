@@ -2,15 +2,8 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { endpoint } from "@/constraints/endpoints";
 export async function GET(request: NextRequest) {
-  const limit = request.nextUrl.searchParams.get("limit");
-  const page = request.nextUrl.searchParams.get("page");
   const response = await axios
-    .get(endpoint.floor, {
-      params: {
-        limit,
-        page
-      }
-    })
+    .get(endpoint.floor)
     .then((response) => {
       if (response.status == 200) {
         return NextResponse.json(response.data);
@@ -33,11 +26,11 @@ export async function POST(request: NextRequest) {
     url: endpoint.floor,
     headers: {
       "Content-Type": "multipart/form-data",
-      'Authorization': "Bearer " + request.cookies.get("token")?.value,
+      Authorization: "Bearer " + request.cookies.get("token")?.value,
     },
     data: data,
   };
-  console.log(endpoint.floor)
+  console.log(endpoint.floor);
   const response = await axios
     .request(config)
     .then((response) => {

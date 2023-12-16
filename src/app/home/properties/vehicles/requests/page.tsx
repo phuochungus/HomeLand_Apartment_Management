@@ -189,7 +189,7 @@ export default function Vehicles() {
       .then((res) => {
         toastMessage({
           type: "Success",
-          title: "Chấp nhận yêu cầu thành công.",
+          title: "Từ chối yêu cầu thành công.",
         });
         setSelectedVehicle(undefined);
         handleMoreInfo(undefined);

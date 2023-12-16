@@ -4,7 +4,7 @@ import styles from "../page.module.css";
 import residentStyles from "./resident.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
 import tableStyles from "../../../styles/table.module.scss";
-import pageStyles from '@/styles/page.module.scss'
+import pageStyles from "@/styles/page.module.scss";
 import { clsx } from "clsx";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
@@ -16,8 +16,7 @@ import {
   EditIcon,
   GarbageIcon,
   SortIcon,
-  TrashIcon
-  
+  TrashIcon,
 } from "@/components/icons";
 import { useState, useEffect, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
@@ -227,7 +226,9 @@ export default function Residents() {
         <div className={pageStyles.pageContainer}>
           <ButtonComponent
             onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === 1,
+            })}
           >
             Previous
           </ButtonComponent>
@@ -236,7 +237,9 @@ export default function Residents() {
           </p>
           <ButtonComponent
             onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === totalPages,
+            })}
           >
             Next
           </ButtonComponent>
@@ -326,7 +329,7 @@ export default function Residents() {
       </div>
       <ModalComponent
         show={showModal}
-        title="Có chắc chắn xóa cư dân này?"
+        title="Are you sure to delete this resident?"
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
       />

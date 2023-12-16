@@ -31,7 +31,7 @@ export default function Dashboard() {
             labels: labelsConfig,
             datasets: [
               {
-                label: "binh",
+                label: "%resident",
                 data: data,
               },
             ],

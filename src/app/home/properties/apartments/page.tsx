@@ -58,7 +58,7 @@ const getSortOption = async ({
       });
     }),
     axios.get("/api/floor").then((res) => {
-      (res.data.items as Floor[]).map((value, index) =>
+      (res.data as Floor[]).map((value, index) =>
         apartmentSortOption[1].selections.push(value.name)
       );
     }),

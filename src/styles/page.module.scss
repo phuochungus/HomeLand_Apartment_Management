@@ -13,7 +13,18 @@
     padding: 9px 15px;
     color: #666;
     display: inline-block;
-    border-radius: 2px;
-    font-weight: 600;
+    border-radius: 24px;
+    &:not(.disableBtn):hover {
+      background-color: #dcd6d6;
+      transition: 0.3s ease-out background-color;
+    }
+    &:not(.disableBtn):active {
+      background-color: #bab6b6;
+      transition: 0.3s ease-out background-color;
+    }
+
   }
-  
+  .disableBtn {
+      color: white;
+      cursor: not-allowed !important;
+  }
