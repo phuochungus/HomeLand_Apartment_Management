@@ -217,7 +217,9 @@ export default function Residents() {
         <div className={pageStyles.pageContainer}>
           <ButtonComponent
             onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === 1,
+            })}
           >
             Previous
           </ButtonComponent>
@@ -226,7 +228,9 @@ export default function Residents() {
           </p>
           <ButtonComponent
             onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === totalPages,
+            })}
           >
             Next
           </ButtonComponent>

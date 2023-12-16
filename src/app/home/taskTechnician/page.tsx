@@ -184,6 +184,7 @@ const TaskTechnician = () => {
       const res = await axios.get(`/api/task/technician/${user.id}`);
       removeLoadingFilter(document.body!);
       const tasksData: Array<Task> = res.data;
+      console.log(tasksData);
       setTasks(tasksData);
       return tasksData;
     } catch (error) {
@@ -214,11 +215,12 @@ const TaskTechnician = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks.map((task, index): React.ReactNode => {
+              {tasks.length > 0 && tasks.map((task, index): React.ReactNode => {
                 const time = new Date(task.complain.created_at);
                 const status = task.status.toLowerCase();
                 const createAt = format(time, "dd-MM-yyyy HH:mm");
                 const resident: Resident = task.complain.resident;
+              
                 return (
                   <tr key={index}>
                     <td width="20%">{createAt}</td>

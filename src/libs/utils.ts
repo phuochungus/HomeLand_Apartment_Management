@@ -27,7 +27,7 @@ export function loadingFiler(container: HTMLElement | null) {
     div.style.width = "100%";
     div.style.height = "100%";
     div.style.opacity = "0.2";
-    div.style.position = "absolute";
+    div.style.position = "fixed";
     div.style.display = "flex";
     div.style.justifyContent = "center";
     div.style.alignContent = "center";
