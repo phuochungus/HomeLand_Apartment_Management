@@ -29,12 +29,15 @@ import axios from "axios";
 import toastMessage from "../../../../utils/toast";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function AddService() {
   const [selectedFiles, setSelectedFiles] = useState<(File | URL)[]>([]);
   function handleFileChange(files: (File | URL)[]): void {
     setSelectedFiles(files);
   }
+  const [t, i18n] = useTranslation();
+  
   const router = useRouter();
   function missingField(element: HTMLElement) {
     element.className = element.className.split("missing")[0];
@@ -51,7 +54,7 @@ export default function AddService() {
       missingField(document.getElementById("label-file-upload")!);
       flag = false;
     }
-  
+
     field.forEach((element) => {
       const inputElement = document.getElementById(element) as HTMLInputElement;
       if (inputElement.value.length === 0) {
@@ -76,7 +79,7 @@ export default function AddService() {
       return;
     }
     const data = new FormData();
-    
+
     console.log("no error");
     data.append(
       "name",
@@ -92,7 +95,10 @@ export default function AddService() {
         .post("/api/service", data)
         .then((response) => {
           router.back();
-          toastMessage({ type: "success", title: "Create service successfully!" });
+          toastMessage({
+            type: "success",
+            title: "Create service successfully!",
+          });
         })
         .catch((err) => {
           alert(err.response.data);
@@ -114,29 +120,25 @@ export default function AddService() {
           <Form.Control
             id="name"
             type="text"
-            placeholder="Service Name..."
+            placeholder={t("service_name") + "..."}
             style={{ width: "30%" }}
           ></Form.Control>
           <div style={{ width: "100%", height: "20px" }}></div>
-          <DragDropFileInput
-                onChange={handleFileChange}
-                id="label-file-upload"
-                
-              >
-                <div
-                  className={styles.uploadIcon}
-                  style={{
-                    width: "50%",
-                    height: "200px",
-                    display: "flex",
-                    flexWrap: "wrap",
-                    alignContent: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <FaUpload size={"3rem"}></FaUpload>
-                </div>
-              </DragDropFileInput>
+          <DragDropFileInput onChange={handleFileChange} id="label-file-upload">
+            <div
+              className={styles.uploadIcon}
+              style={{
+                width: "50%",
+                height: "200px",
+                display: "flex",
+                flexWrap: "wrap",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FaUpload size={"3rem"}></FaUpload>
+            </div>
+          </DragDropFileInput>
           <FormGroup className={styles.formGroupContainer}>
             <Form.Label
               style={{
@@ -145,7 +147,7 @@ export default function AddService() {
                 marginLeft: "20px",
               }}
             >
-              Description
+              {t("description")}
             </Form.Label>
             <Form.Control
               id={"description"}
@@ -169,25 +171,30 @@ export default function AddService() {
                 fontSize: "2rem",
                 paddingLeft: "3rem",
                 paddingRight: "3rem",
+                paddingBottom: "1rem",
                 borderRadius: "1rem",
               }}
               type="reset"
-              // onClick={() => router.refresh()}
+              onClick={() => router.refresh()}
             >
-              Clear
+              {t("clear")}
             </Button>
             <Button
               type="submit"
+              className="align-center"
               style={{
                 backgroundColor: "#2A9928",
                 borderColor: "#2A9928",
                 fontSize: "2rem",
                 paddingLeft: "3rem",
                 paddingRight: "3rem",
+                paddingBottom: "1rem",
+                alignItems: "center",
+                alignContent: "center",
                 borderRadius: "1rem",
               }}
             >
-              Save
+              {t("save")}
             </Button>
           </FormGroup>
         </Form>

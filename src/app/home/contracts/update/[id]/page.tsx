@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   createRef,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import styles from "./addContract.module.css";
@@ -201,6 +202,7 @@ export default function Page({ params }: { params: { id: string } }) {
   function handleFileChange(files: (File | URL)[]): void {
     setSelectedFiles(files);
   }
+  const [expire_at, setExpire_at] = useState<Date>();
 
   useQuery(
     "building",
@@ -212,6 +214,9 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
+  useEffect(() => {
+    if (data && data.expire_at) setExpire_at(new Date(data.expire_at));
+  }, [data]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -306,60 +311,7 @@ export default function Page({ params }: { params: { id: string } }) {
         ),
       },
     ];
-
     const DateSortOptions = [
-      {
-        title: t("create_at"),
-        child: (
-          <Form.Group>
-            <Form.Control
-              size="lg"
-              type="date"
-              name="create_at"
-              disabled
-              value={new Date(data.created_at).toISOString().split("T")[0]}
-              onChange={handleChange}
-            />
-          </Form.Group>
-        ),
-      },
-      createContractParams.role != "buy"
-        ? {
-            title: t("expire_at"),
-            required: true,
-
-            child: (
-              <Form.Group>
-                {data.expire_at ? (
-                  <>
-                    <Form.Control
-                      size="lg"
-                      type="date"
-                      name="expire_at"
-                      value={
-                        new Date(data?.expire_at).toISOString().split("T")[0]
-                      }
-                      onChange={handleChange}
-                    />
-                    {errors && errors.expire_at && (
-                      <span className={styles.error}>{errors.expire_at}</span>
-                    )}
-                  </>
-                ) :  <>
-                <Form.Control
-                  size="lg"
-                  type="date"
-                  name="expire_at"
-                  onChange={handleChange}
-                />
-                {errors && errors.expire_at && (
-                  <span className={styles.error}>{errors.expire_at}</span>
-                )}
-              </>}
-              </Form.Group>
-            ),
-          }
-        : null,
       {
         title: t("contractRole"),
         required: true,
@@ -379,6 +331,63 @@ export default function Page({ params }: { params: { id: string } }) {
           ></SearchDropdown>
         ),
       },
+      {
+        title: t("create_at"),
+        child: (
+          <Form.Group style={{ width: "100%" }}>
+            <Form.Control
+              size="lg"
+              type="date"
+              name="create_at"
+              disabled
+              value={new Date(data.created_at).toISOString().split("T")[0]}
+              onChange={handleChange}
+            />
+          </Form.Group>
+        ),
+      },
+      createContractParams.role != "buy"
+        ? {
+            title: t("expire_at"),
+            required: true,
+
+            child: (
+              <Form.Group style={{ width: "100%" }}>
+                {data.expire_at ? (
+                  <>
+                    <Form.Control
+                      size="lg"
+                      type="date"
+                      name="expire_at"
+                      value={
+                        (expire_at ?? new Date()).toISOString().split("T")[0]
+                      }
+                      onChange={(e) => {
+                        handleChange(e as ChangeEvent<HTMLInputElement>);
+                        setExpire_at(new Date(e.target.value));
+                      }}
+                    />
+                    {errors && errors.expire_at && (
+                      <span className={styles.error}>{errors.expire_at}</span>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Form.Control
+                      size="lg"
+                      type="date"
+                      name="expire_at"
+                      onChange={handleChange}
+                    />
+                    {errors && errors.expire_at && (
+                      <span className={styles.error}>{errors.expire_at}</span>
+                    )}
+                  </>
+                )}
+              </Form.Group>
+            ),
+          }
+        : null,
     ];
     const residentDetails = selectedResident
       ? [
@@ -403,19 +412,24 @@ export default function Page({ params }: { params: { id: string } }) {
       : [];
     return (
       <main className={styles.main} style={futuna.style}>
-        <h1>{t("add_contract")}</h1>
-        <Container style={{ padding: 0 }} fluid>
+        <h1 style={{ width: "100%", margin: "0 auto", textAlign: "center" }}>
+          {t("update_contract")}
+        </h1>
+        <Container style={{ padding: 0, marginTop: "50px" }}>
           <Row>
             <Col>
               {ContractSortOptions.map((option) => FilterButton(option))}
             </Col>
-            <Col>
+            <Col style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div>
               {DateSortOptions.map((option) =>
                 option != null ? FilterButton(option) : null
               )}
+              </div>
             </Col>
           </Row>
         </Container>
+
         <Container style={{ padding: 0, marginTop: "20px" }}>
           <Row>
             <Col>
@@ -424,7 +438,9 @@ export default function Page({ params }: { params: { id: string } }) {
               </h5>
             </Col>
             <Col md="auto">
-              <Button onClick={() => setShow(true)}>Choose Resident</Button>
+              <Button onClick={() => setShow(true)}>
+                {t("choose_resident")}
+              </Button>
             </Col>
 
             <Modal
@@ -531,7 +547,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   </Row>
                 ))}
               </Col>
-              <Col className="d-flex flex-column justify-content-between">
+              <Col className="d-flex flex-column justify-content-between" md="auto">
                 <Image
                   src={selectedResident.profile.front_identify_card_photo_URL}
                   width={400}
@@ -585,10 +601,10 @@ export default function Page({ params }: { params: { id: string } }) {
           <Row
             style={{
               display: "flex",
-              marginTop: selectedResident ? "0px" : "200px",
+              marginTop: selectedResident ? "30px" : "220px",
               justifyContent: "center",
               position: "relative",
-              left: "40%",
+              left: "45%",
               marginBottom: "50px",
             }}
           >
@@ -598,7 +614,7 @@ export default function Page({ params }: { params: { id: string } }) {
               }}
             >
               <Button onClick={handleCreate} style={{ width: "100px" }}>
-                Update
+                {t("update")}
               </Button>
             </Col>
           </Row>
@@ -632,10 +648,10 @@ const FilterButton = ({
   return (
     <Container
       className={` ${futuna.className}`}
-      style={{ padding: 0, margin: "10px 0" }}
+      style={{ padding: 0, margin: "10px 0", width: "100%" }}
     >
       <Row className="align-items-center">
-        <Col md="auto">
+        <Col >
           <p
             style={{
               width: "100px",
@@ -650,9 +666,9 @@ const FilterButton = ({
             {title}
           </p>
         </Col>
-        <Col
+        <Col md="auto"
           style={{
-            width: "100px",
+            width: "400px",
             alignContent: "center",
             display: "flex",
             padding: 0,

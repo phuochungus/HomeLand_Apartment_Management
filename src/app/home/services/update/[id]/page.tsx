@@ -30,6 +30,7 @@ import toastMessage from "../../../../../utils/toast";
 import { loadingFiler, removeLoadingFilter, search } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 import { Service } from "../../../../../models/service";
+import { useTranslation } from "react-i18next";
 
 export default function UpdateService({ params }: { params: { id: string } }) {
   const [selectedFiles, setSelectedFiles] = useState<(File | URL)[]>([]);
@@ -53,6 +54,7 @@ export default function UpdateService({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
+  const [t, i18n] = useTranslation();
 
   function validateData() {
     let flag: boolean = true;
@@ -163,7 +165,7 @@ export default function UpdateService({ params }: { params: { id: string } }) {
             <Form.Control
               id="name"
               type="text"
-              placeholder="Service Name..."
+              placeholder={t("service_name") + "..."}
               defaultValue={data.name}
               style={{ width: "30%" }}
             ></Form.Control>
@@ -197,7 +199,7 @@ export default function UpdateService({ params }: { params: { id: string } }) {
                   marginLeft: "20px",
                 }}
               >
-                Description
+                 {t("description")}
               </Form.Label>
               <Form.Control
                 id={"description"}
@@ -223,12 +225,13 @@ export default function UpdateService({ params }: { params: { id: string } }) {
                   fontSize: "2rem",
                   paddingLeft: "3rem",
                   paddingRight: "3rem",
+                  paddingBottom: "1rem",
                   borderRadius: "1rem",
                 }}
                 type="reset"
                 // onClick={() => router.refresh()}
               >
-                Clear
+                {t("clear")}
               </Button>
               <Button
                 type="submit"
@@ -237,11 +240,12 @@ export default function UpdateService({ params }: { params: { id: string } }) {
                   borderColor: "#2A9928",
                   fontSize: "2rem",
                   paddingLeft: "3rem",
+                  paddingBottom: "1rem",
                   paddingRight: "3rem",
                   borderRadius: "1rem",
                 }}
               >
-                Save
+                {t("save")}
               </Button>
             </FormGroup>
           </Form>
