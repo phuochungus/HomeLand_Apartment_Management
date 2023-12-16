@@ -18,15 +18,24 @@ export async function PATCH(request: NextRequest, { params }: { params: any }) {
     .request(config)
     .then((response) => {
       if (response.status == 200) {
-        return NextResponse.json(response.data);
+        console.log(response.data);
+        return NextResponse.json(response.data, {
+          status: 200,
+        });
       }
     })
     .catch((error) => {
       console.log(error);
-      return NextResponse.json(error.response.data.message, {
-        status: error.response.status,
-        statusText: error.response.statusText,
-      });
+      return NextResponse.json(
+        {
+          message: error.response.data.message,
+          constraints: error.response.data.constraints,
+        },
+        {
+          status: error.response.status,
+          statusText: error.response.statusText,
+        }
+      );
     });
   return response;
 }

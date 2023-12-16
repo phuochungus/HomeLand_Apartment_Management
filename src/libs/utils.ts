@@ -20,7 +20,7 @@ export function loadingFiler(container: HTMLElement | null) {
     //container: The HTML element to put the loading inside,
     if(!container)
         container = document.body!
-    window.scroll({ top: 0 })
+    
     var div = document.createElement("div");
     div.className = "loadingFilter";
     div.style.backgroundColor = "black";

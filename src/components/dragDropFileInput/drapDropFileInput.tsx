@@ -11,6 +11,7 @@ import { Image, Stack } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import image from "react-bootstrap";
 import { TrashIcon } from "../icons";
+import { useTranslation } from "react-i18next";
 export default function DragDropFileInput({
   id,
   imageid,
@@ -36,6 +37,8 @@ export default function DragDropFileInput({
   const [fileLists, setFileLists] = useState<(File | URL)[]>(
     [...initFileList]
   );
+  const [t, i18n] = useTranslation();
+  
   useEffect(() => {
     setFileLists([...initFileList])
   },[])
@@ -226,13 +229,13 @@ export default function DragDropFileInput({
                 className={styles.activeText}
                 onClick={onButtonClick}
               >
-                {multiFile ? "Click to upload file here" : "Change file here"}
+                {multiFile ? t("uploadFile") : t("changeFile")}
               </p>
               <div className={`${styles.dragDrop}`}>{ImageGrid()}</div>
             </>
           ) : (
             <>
-              <p style={{ textAlign: "center" }}>Click to upload file here</p>
+              <p style={{ textAlign: "center" }}>{ t("uploadFile")}</p>
               <button
                 type="button"
                 className={`upload-button ${styles.dragDrop}`}
