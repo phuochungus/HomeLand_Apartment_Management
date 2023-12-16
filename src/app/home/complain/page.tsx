@@ -326,7 +326,9 @@ const Complain = () => {
           <div style={{marginTop: 0}} className={pageStyles.pageContainer}>
           <ButtonComponent
             onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === 1,
+            })}
           >
             Previous
           </ButtonComponent>
@@ -335,7 +337,9 @@ const Complain = () => {
           </p>
           <ButtonComponent
             onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === totalPages,
+            })}
           >
             Next
           </ButtonComponent>

@@ -278,7 +278,9 @@ export default function Dashboard() {
             <div className={classNames(pageStyles.pageContainer, styles.changePageBtn)}>
               <ButtonComponent
                 onClick={handlePrevPage}
-                className={pageStyles.changePageBtn}
+                className={clsx(pageStyles.changePageBtn, {
+                  [pageStyles.disableBtn]: currentPage === 1,
+                })}
               >
                 Previous
               </ButtonComponent>
@@ -287,7 +289,9 @@ export default function Dashboard() {
               </p>
               <ButtonComponent
                 onClick={handleNextPage}
-                className={pageStyles.changePageBtn}
+                className={clsx(pageStyles.changePageBtn, {
+                  [pageStyles.disableBtn]: currentPage === totalPages,
+                })}
               >
                 Next
               </ButtonComponent>
