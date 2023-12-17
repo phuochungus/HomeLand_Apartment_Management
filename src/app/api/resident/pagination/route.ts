@@ -5,11 +5,14 @@ import { cookies } from "next/headers";
 export async function GET(request: NextRequest) {
   const limit = request.nextUrl.searchParams.get("limit");
   const page = request.nextUrl.searchParams.get("page");
+  const buildingId = request.nextUrl.searchParams.get("buildingId");
+  console.log(buildingId)
   const response = await axios
     .get(`${endpoint.resident}/pagination`, {
       params: {
         limit,
-        page
+        page,
+        buildingId
       }
     })
     .then((response) => {

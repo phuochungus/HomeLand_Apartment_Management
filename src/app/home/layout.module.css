@@ -9,8 +9,8 @@
     display: flex;
     flex-direction: column;
     align-content: center;
-    padding: 0 5rem;
     font-size: 1rem;
+    margin-top: 10px;
 }
 
 .sidebarButtonMenu button {
@@ -19,8 +19,9 @@
 }
 
 .sidebarButtonMenu button.active {
-    color: blue;
-    text-decoration: underline;
+    color: var(--white);
+    background-color: #5980e2;
+   
 }
 
 @media screen and (max-width: 1200px) {
@@ -40,7 +41,8 @@
 }
 button.sidebarButton{
     position: relative;
-    height: 4rem;
+    height: fit-content;
+    padding: 10px 8px;
     width: 100%;
     border-radius: 0 2rem 2rem 0;
     transition: all ease .5s;
@@ -49,7 +51,7 @@ button.sidebarButton{
     border-color: transparent;
     font-size: 1.4rem;
     display: flex;
-    align-content: center;
+    align-items: center;
     flex-wrap: wrap;
     padding-left: 1.5rem;
     font-weight: 400;
@@ -62,7 +64,10 @@ button.sidebarButton svg {
 button.sidebarButton img {
     margin-right: 10px;
 }
-
+button.sidebarButton span {
+    flex: 1;
+    text-align: left;
+}
 button.sidebarButton svg path {
     fill: black;
 }
@@ -135,4 +140,14 @@ button.drawerButton {
     .sidebarButtonMenu{
         padding: 0 3rem
     }
+}
+.subMenu {
+    padding: 12px 10% 12px 30%;
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
+}
+.subMenu:hover {
+    background-color: var(--white);
+    color: var(--primary);
+    transition: 0.2s linear background-color;
 }
