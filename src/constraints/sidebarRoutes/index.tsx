@@ -25,7 +25,7 @@ export const sidebarInfo = [
       </svg>
     ),
     menu: [],
-    roles: [],
+    roles: ["admin"],
   },
   {
     title: "Properties",
