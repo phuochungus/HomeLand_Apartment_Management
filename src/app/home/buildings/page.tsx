@@ -216,7 +216,7 @@ export default function Building() {
           </ButtonComponent>
         </div>
 
-        <div className="w-100 mt-5">
+        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>

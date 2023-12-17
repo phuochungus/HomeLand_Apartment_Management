@@ -197,7 +197,7 @@ const Complain = () => {
         <div className={clsx(styles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>Complain List</h1>
         </div>
-        <div className="w-100 mt-5">
+        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
