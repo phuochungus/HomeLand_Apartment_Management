@@ -234,39 +234,6 @@ export default function Page() {
   ];
   const DateSortOptions = [
     {
-      title: t("create_at"),
-      child: (
-        <Form.Group >
-          <Form.Control
-            size="lg"
-            type="date"
-            name="create_at"
-            disabled
-            value={new Date().toISOString().split("T")[0]}
-            onChange={handleChange}
-          />
-        </Form.Group>
-      ),
-    },
-    createContractParams.role!='buy'? {
-      title: t("expire_at"),
-      required: true,
-
-      child: (
-        <Form.Group>
-          <Form.Control
-            size="lg"
-            type="date"
-            name="expire_at"
-            onChange={handleChange}
-          />
-          {errors && errors.expire_at && (
-            <span className={styles.error}>{errors.expire_at}</span>
-          )}
-        </Form.Group>
-      ),
-    }:null,
-    {
       title: t("contractRole"),
       required: true,
 
@@ -286,7 +253,40 @@ export default function Page() {
           style={{ width: "100%" }}
         ></SearchDropdown>
       ),
+    }, {
+      title: t("create_at"),
+      child: (
+        <Form.Group style={{width:"100%"}} >
+          <Form.Control
+            size="lg"
+            type="date"
+            name="create_at"
+            disabled
+            value={new Date().toISOString().split("T")[0]}
+            onChange={handleChange}
+          />
+        </Form.Group>
+      ),
     },
+    createContractParams.role!='buy'? {
+      title: t("expire_at"),
+      required: true,
+
+      child: (
+       <Form.Group style={{width:"100%"}} >
+            <Form.Control
+            size="lg"
+            type="date"
+            name="expire_at"
+            onChange={handleChange}
+          />
+          {errors && errors.expire_at && (
+            <span className={styles.error}>{errors.expire_at}</span>
+          )}
+        </Form.Group>
+      ),
+    }:null,
+    
   ];
   const residentDetails = selectedResident
     ? [
@@ -309,187 +309,202 @@ export default function Page() {
         },
       ]
     : [];
-  return (
-    <main className={styles.main} style={futuna.style}>
-      <h1>{t("add_contract")}</h1>
-      <Container style={{ padding: 0 }} fluid>
-        <Row>
-          <Col>{ContractSortOptions.map((option) => FilterButton(option))}</Col>
-          <Col>
-            {DateSortOptions.map((option) =>
-              option==null ? null : FilterButton(option)
-            )}
-          </Col>
-        </Row>
-      </Container>
-      <Container style={{ padding: 0, marginTop: "20px" }}>
-        <Row>
-          <Col>
-            <h5 className={styles.required} style={{ width: "100px" }}>
-              {t("resident")}
-            </h5>
-          </Col>
-          <Col md="auto">
-            <Button onClick={() => setShow(true)}>Choose Resident</Button>
-          </Col>
-
-          <Modal
-            dialogClassName={styles.modal}
-            show={show}
-            style={futuna.style}
-            onHide={() => setShow(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{t("residentsList")}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div
-                className={styles.itemContainer}
-                style={{
-                  position: "absolute",
-                  height: "40px",
-                  width: "40%",
-                  borderStyle: "none",
-                  margin: 0,
-                  right: "5%",
-                }}
-              >
-                <SearchLayout
-                  onKeydown={handleSearch}
-                  iconClick={searchIconClick}
-                  placeHolder={t("search_resident")}
-                  ref={searchRef}
-                />
+    return (
+      <main className={styles.main} style={futuna.style}>
+        <h1 style={{ width: "100%", margin: "0 auto", textAlign: "center" }}>
+          {t("add_contract")}
+        </h1>
+        <Container style={{ padding: 0, marginTop: "50px" }}>
+          <Row>
+            <Col>
+              {ContractSortOptions.map((option) => FilterButton(option))}
+            </Col>
+            <Col style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div>
+              {DateSortOptions.map((option) =>
+                option != null ? FilterButton(option) : null
+              )}
               </div>
-
-              <Table style={{ width: "100%", marginTop: "50px" }} striped hover>
-                <thead>
-                  <tr>
-                    <th style={{ width: "20%" }}>{t("ID")}</th>
-                    <th style={{ width: "23%" }}>{t("name")}</th>
-                    <th style={{ width: "25%" }}>{t("phone_number")} </th>
-                    <th style={{ width: "10%" }}>{t("apartment")}</th>
-                    <th style={{ width: "22%" }}>{t("create_at")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Residents.map((resident, index): ReactNode => {
-                    const time = new Date(resident.created_at);
-                    const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
-                    const handleRowClick = () => {
-                      setSelectedResident(resident);
-                      setCreateContractParams({
-                        ...createContractParams,
-                        resident_id: resident.id,
-                      });
-                      setShow(false);
-                    };
-
-                    return (
-                      <tr
-                        key={index}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleRowClick()}
-                      >
-                        <td>{resident.id}</td>
-                        <td>{resident.profile && resident.profile.name}</td>
-                        <td>{resident.profile.phone_number}</td>
-                        <td>{resident.stay_at && resident.stay_at.name}</td>
-                        <td>{createAt}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </Modal.Body>
-          </Modal>
-        </Row>
-      </Container>
-      <Container style={{ padding: 0, marginTop: "20px" }}>
-        {selectedResident && (
-          <Row className="align-items-center">
-            <Col md="auto" className="align-self-stretch">
-              <Image
-                loading="lazy"
-                width={250}
-                rounded
-                src={
-                  selectedResident.profile?.avatarURL ??
-                  "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
-                }
-              ></Image>
-              <p>{selectedResident.profile.name}</p>
-              <p>{selectedResident.id}</p>
-            </Col>
-            <Col className="align-self-stretch">
-              {residentDetails.map((detail, index) => (
-                <Row key={index} className="mb-5">
-                  <CustomTextBox
-                    title={detail.title}
-                    value={detail.value}
-                    isDisable={true}
-                  ></CustomTextBox>
-                </Row>
-              ))}
-            </Col>
-            <Col className="d-flex flex-column justify-content-between">
-              <Image
-                src={selectedResident.profile.front_identify_card_photo_URL}
-                width={400}
-                height={200}
-                loading="lazy"
-                rounded
-              ></Image>
-              <Image
-                src={selectedResident.profile.back_identify_card_photo_URL}
-                width={400}
-                height={200}
-                loading="lazy"
-                rounded
-                style={{ marginTop: "20px" }}
-              ></Image>
             </Col>
           </Row>
-        )}
-        {errors && errors.resident_id && (
-          <span className={styles.error}>{errors.resident_id}</span>
-        )}
+        </Container>
 
-        <Row
-          style={{
-            display: "flex",
-            marginTop: selectedResident ? "0px" : "200px",
-            justifyContent: "center",
-            position: "relative",
-            left: "40%",
-          }}
-        >
-          <Col
+        <Container style={{ padding: 0, marginTop: "20px" }}>
+          <Row>
+            <Col>
+              <h5 className={styles.required} style={{ width: "100px" }}>
+                {t("resident")}
+              </h5>
+            </Col>
+            <Col md="auto">
+              <Button onClick={() => setShow(true)}>
+                {t("choose_resident")}
+              </Button>
+            </Col>
+
+            <Modal
+              dialogClassName={styles.modal}
+              show={show}
+              style={futuna.style}
+              onHide={() => setShow(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{t("residentsList")}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div
+                  className={styles.itemContainer}
+                  style={{
+                    position: "absolute",
+                    height: "40px",
+                    width: "40%",
+                    borderStyle: "none",
+                    margin: 0,
+                    right: "5%",
+                  }}
+                >
+                  <SearchLayout
+                    onKeydown={handleSearch}
+                    iconClick={searchIconClick}
+                    placeHolder={t("search_resident")}
+                    ref={searchRef}
+                  />
+                </div>
+
+                <Table
+                  style={{ width: "100%", marginTop: "50px" }}
+                  striped
+                  hover
+                >
+                  <thead>
+                    <tr>
+                      <th style={{ width: "20%" }}>{t("ID")}</th>
+                      <th style={{ width: "23%" }}>{t("name")}</th>
+                      <th style={{ width: "25%" }}>{t("phone_number")} </th>
+                      <th style={{ width: "10%" }}>{t("apartment")}</th>
+                      <th style={{ width: "22%" }}>{t("create_at")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Residents.map((resident, index): ReactNode => {
+                      const time = new Date(resident.created_at);
+                      const createAt = format(time, "yyyy-MM-dd HH:mm:ss");
+                      const handleRowClick = () => {
+                        setSelectedResident(resident);
+                        setCreateContractParams({
+                          ...createContractParams,
+                          resident_id: resident.id,
+                        });
+                        setShow(false);
+                      };
+
+                      return (
+                        <tr
+                          key={index}
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleRowClick()}
+                        >
+                          <td>{resident.id}</td>
+                          <td>{resident.profile && resident.profile.name}</td>
+                          <td>{resident.profile.phone_number}</td>
+                          <td>{resident.stay_at && resident.stay_at.name}</td>
+                          <td>{createAt}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </Modal.Body>
+            </Modal>
+          </Row>
+        </Container>
+
+        <Container style={{ padding: 0, marginTop: "20px" }}>
+          {selectedResident && (
+            <Row className="align-items-center">
+              <Col md="auto" className="align-self-stretch">
+                <Image
+                  loading="lazy"
+                  width={250}
+                  rounded
+                  src={
+                    selectedResident.profile?.avatarURL ??
+                    "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
+                  }
+                ></Image>
+                <p>{selectedResident.profile.name}</p>
+                <p>{selectedResident.id}</p>
+              </Col>
+              <Col className="align-self-stretch">
+                {residentDetails.map((detail, index) => (
+                  <Row key={index} className="mb-5">
+                    <CustomTextBox
+                      title={detail.title}
+                      value={detail.value}
+                      isDisable={true}
+                    ></CustomTextBox>
+                  </Row>
+                ))}
+              </Col>
+              <Col className="d-flex flex-column justify-content-between" md="auto">
+                <Image
+                  src={selectedResident.profile.front_identify_card_photo_URL}
+                  width={400}
+                  height={200}
+                  loading="lazy"
+                  rounded
+                ></Image>
+                <Image
+                  src={selectedResident.profile.back_identify_card_photo_URL}
+                  width={400}
+                  height={200}
+                  loading="lazy"
+                  rounded
+                  style={{ marginTop: "20px" }}
+                ></Image>
+              </Col>
+            </Row>
+          )}
+          {errors && errors.resident_id && (
+            <span className={styles.error}>{errors.resident_id}</span>
+          )}
+          <Row
             style={{
-              marginTop: "20px",
+              display: "flex",
+              marginTop: selectedResident ? "30px" : "220px",
+              justifyContent: "center",
+              position: "relative",
+              left: "45%",
+              marginBottom: "50px",
             }}
           >
-            <Button onClick={handleCreate} style={{ width: "100px" }}>
-              Create
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </main>
-  );
-}
+            <Col
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              <Button onClick={handleCreate} style={{ width: "100px" }}>
+                {t("create")}
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </main>
+    );
+  }
+
 
 const FilterButton = ({
   title,
@@ -503,10 +518,10 @@ const FilterButton = ({
   return (
     <Container
       className={` ${futuna.className}`}
-      style={{ padding: 0, margin: "10px 0" }}
+      style={{ padding: 0, margin: "10px 0", width: "100%" }}
     >
       <Row className="align-items-center">
-        <Col md="auto">
+        <Col >
           <p
             style={{
               width: "100px",
@@ -521,9 +536,9 @@ const FilterButton = ({
             {title}
           </p>
         </Col>
-        <Col
+        <Col md="auto"
           style={{
-            width: "100px",
+            width: "400px",
             alignContent: "center",
             display: "flex",
             padding: 0,
