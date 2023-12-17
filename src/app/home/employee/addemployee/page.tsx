@@ -209,7 +209,7 @@ const AddEmployee = () => {
                                         .catch((e) => {
                                                 removeLoadingFilter(document.body!);
                                                 console.log(e);
-                                                toastMessage({ type: "error", title: "Create faily!" });
+                                                toastMessage({ type: "error", title: "Create fail!" });
                                         });
                         } catch (e) {
                                 console.log(e);
