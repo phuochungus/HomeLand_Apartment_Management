@@ -29,6 +29,8 @@ import { Resident } from "@/models/resident";
 import { Building } from "@/models/building";
 import { Floor } from "@/models/floor";
 import { motion } from "framer-motion";
+import { ToastContainer } from "react-toastify";
+import toastMessage from "@/utils/toast";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
@@ -168,10 +170,16 @@ export default function AddApartment() {
       axios
         .request(config)
         .then((res) => {
-          alert("Done create");
+          toastMessage({
+            type: "success",
+            title: "Thêm căn hộ thành công",
+          });
         })
         .catch((err) => {
-          alert(err.response.data);
+          toastMessage({
+            type: "error",
+            title: "Đã có lỗi xảy ra trong quá trình thực thi",
+          });
         });
     });
     removeLoadingFilter(document.body!);
@@ -669,6 +677,18 @@ const ModalResidentItem = (
       <button>
         <FaList />
       </button>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

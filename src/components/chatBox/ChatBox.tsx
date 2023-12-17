@@ -93,11 +93,21 @@ export default function ChatBox(): React.ReactNode {
         initial="hidden"
         animate={controls}
         exit="exit"
-        style={{ position: "fixed", bottom: "1vw", right: "1vw",zIndex: "9999" }}
+        style={{
+          position: "fixed",
+          bottom: "1vw",
+          right: "1vw",
+          zIndex: "9999",
+        }}
       >
         <MainContainer
           className={futuna.className}
-          style={{ display: "block", width: "20vw", borderRadius: "5%", zIndex: "9999" }}
+          style={{
+            display: "block",
+            width: "20vw",
+            borderRadius: "5%",
+            zIndex: "9999",
+          }}
         >
           <div
             style={{
@@ -106,7 +116,7 @@ export default function ChatBox(): React.ReactNode {
               cursor: "pointer",
               display: "flex",
               padding: "0 1vw",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
             onClick={(e) => {
               setShow(true);
@@ -114,9 +124,7 @@ export default function ChatBox(): React.ReactNode {
             }}
           >
             {"Chat box"}
-            <button
-            className={style.line}
-            ></button>
+            <button className={style.line}></button>
           </div>
           <ChatContainer>
             <MessageList>
@@ -154,13 +162,14 @@ export default function ChatBox(): React.ReactNode {
         </MainContainer>
       </motion.div>
       {show && (
-        <div className={style.chatBox}>
-          <button
-            onClick={() => {
-              setShow(false);
-              controls.start("visible");
-            }}
-          >
+        <div
+          className={style.chatBox}
+          onClick={() => {
+            setShow(false);
+            controls.start("visible");
+          }}
+        >
+          <button>
             <MessageIcon color={"white"} />
           </button>
         </div>
