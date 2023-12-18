@@ -233,7 +233,7 @@ export default function Apartments() {
           Thêm căn hộ
         </ButtonComponent>
       </div>
-      <div className={styles.container}>
+      <div className={styles.container} style={{borderStyle: "solid", borderColor: "grey"}}>
         <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
           <SearchBar
             className={styles.searchBar}
@@ -339,6 +339,3 @@ const ApartmentCard = (value: Apartment): React.ReactNode => {
     </Card>
   );
 };
-function setBuildings(buildingsData: any) {
-  throw new Error("Function not implemented.");
-}

@@ -1,7 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import styles from "./searchBar.module.css";
 import { futuna } from "../../../public/fonts/futura";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 export default function SearchBar({
   className,
   style,
@@ -15,6 +15,8 @@ export default function SearchBar({
   onSearch?: (params: string) => void;
   placeholder?: string | "Search...";
 }): ReactNode {
+  const searchParam = useRef(null);
+
   return (
     <div className={className} style={style}>
       <form
@@ -27,6 +29,7 @@ export default function SearchBar({
         }}
       >
         <input
+          ref={searchParam}
           type="search"
           id="search"
           placeholder={placeholder}
@@ -51,7 +54,7 @@ export default function SearchBar({
           type="button"
           onClick={(e) => {
             e.preventDefault();
-            if (onSearch) onSearch(e.currentTarget.value);
+            if (onSearch) onSearch((searchParam.current! as HTMLInputElement).value);
           }}
         >
           <FaSearch></FaSearch>
