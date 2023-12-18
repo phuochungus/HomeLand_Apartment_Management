@@ -233,16 +233,6 @@ export default function Vehicles() {
                       >
                         <div className="d-flex">
                           <ButtonComponent
-                            preIcon={<EditIcon width={16} height={16} />}
-                            className={clsx(
-                              vehicleStyles.cudBtn,
-                              vehicleStyles.editBtn
-                            )}
-                            href={`add`}
-                          >
-                            Sửa
-                          </ButtonComponent>
-                          <ButtonComponent
                             preIcon={
                               <FaFacebookMessenger width={16} height={16} />
                             }
