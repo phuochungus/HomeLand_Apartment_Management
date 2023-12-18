@@ -234,7 +234,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   preIcon={<AddResidentIcon width={24} height={24} />}
                   className={clsx(styles.addBtn, futuna.className)}
                 >
-                  Thêm cư dân
+                  Add Resident
                 </ButtonComponent>
               </div>
             </Row>
