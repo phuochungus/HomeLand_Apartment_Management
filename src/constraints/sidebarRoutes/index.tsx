@@ -201,6 +201,6 @@ export const sidebarInfo = [
     path: "floor",
     svg:<PiElevatorBold />,
     menu: [],
-    roles: ['admin', 'manager'],
+    roles: ["admin", "manager"],
   },
 ];
