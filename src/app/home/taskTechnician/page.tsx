@@ -220,12 +220,12 @@ const TaskTechnician = () => {
                 const status = task.status.toLowerCase();
                 const createAt = format(time, "dd-MM-yyyy HH:mm");
                 const resident: Resident = task.complain.resident;
-              
+                const assigner = task.admin || task.manager;
                 return (
                   <tr key={index}>
                     <td width="20%">{createAt}</td>
                     <td width="30%">{task.complain.content}</td>
-                    <td width="20%">{task.assigner.account.email}</td>
+                    <td width="20%">{assigner.account.email}</td>
 
                     <td width="5%">
                       <span

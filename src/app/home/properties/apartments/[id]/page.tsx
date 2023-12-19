@@ -33,6 +33,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [checkAll, setCheckAll] = useState(false);
   const [listChecked, setListChecked] = useState<String[]>([]);
   const [residents, setResidents] = useState<Array<ResidentType>>([]);
+
   const { isLoading, data, refetch, isError } = useQuery("apartment", () =>
     axios
       .get("/api/apartment/" + params.id)
