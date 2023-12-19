@@ -197,7 +197,9 @@ export default function Building() {
         <div className={pageStyles.pageContainer}>
           <ButtonComponent
             onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === 1,
+            })}
           >
             Previous
           </ButtonComponent>
@@ -206,18 +208,20 @@ export default function Building() {
           </p>
           <ButtonComponent
             onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === totalPages,
+            })}
           >
             Next
           </ButtonComponent>
         </div>
 
-        <div className="w-100 mt-5">
+        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
                 {titleTable.map((title: String, index) => (
-                  <th key={index}>{title}</th>
+                  <th style={{textAlign: title === 'Max Floor' ? 'center' : 'left'}} key={index}>{title}</th>
                 ))}
               </tr>
             </thead>
@@ -230,7 +234,7 @@ export default function Building() {
                     </td>
                     <td>{building.name}</td>
                     <td>{building.address}</td>
-                    <td>{building.max_floor}</td>
+                    <td align="center">{building.max_floor}</td>
                     {/* <td>{building.manager_id}</td> */}
 
                     <td style={{ width: 200 }}>

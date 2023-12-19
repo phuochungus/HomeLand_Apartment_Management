@@ -28,9 +28,13 @@
     font-size: 1.25rem;
     padding: 8px 60px;
     border-radius: 10px;
-    transition: 0.1 ease ;
     &:hover {
         background-color: #4b77e8;
+        transition: 0.3 linear background-color;
+    }
+    &:active {
+        background-color: #3d62c0;
+        transition: 0.3 linear background-color;
     }
 }
 .img {

@@ -18,6 +18,11 @@
   border-radius: 8px;
   &:hover {
     background-color: #0744e1;
+    transition: 0.3s linear background-color;
+  }
+  &:active {
+    background-color: #062983;
+    transition: 0.3s linear background-color;
   }
 }
 .searchLayout {
@@ -43,17 +48,32 @@
   background-color: var(--yellow);
   &:hover {
     background-color: #edad44;
+    transition: 0.3s linear background-color;
+  }
+  &:active {
+    background-color: #c38a30;
+    transition: 0.3s linear background-color;
   }
 }
 .deleteBtn {
   background-color: var(--red);
   &:hover {
-    background-color: #f90e0e;
+    background-color: #e01111;
+    transition: 0.3s linear background-color;
+  }
+  &:active {
+    background-color: #ad0a0a;
+    transition: 0.3s linear background-color;
   }
 }
 .detailBtn {
   background-color: var(--blue);
   &:hover {
     background-color: #4764b1;
+    transition: 0.3s linear background-color;
+  }
+  &:active {
+    background-color: #36519b;
+    transition: 0.3s linear background-color;
   }
 }

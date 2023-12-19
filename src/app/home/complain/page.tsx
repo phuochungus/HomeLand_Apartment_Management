@@ -197,7 +197,7 @@ const Complain = () => {
         <div className={clsx(styles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>Complain List</h1>
         </div>
-        <div className="w-100 mt-5">
+        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
@@ -326,7 +326,9 @@ const Complain = () => {
           <div style={{marginTop: 0}} className={pageStyles.pageContainer}>
           <ButtonComponent
             onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === 1,
+            })}
           >
             Previous
           </ButtonComponent>
@@ -335,7 +337,9 @@ const Complain = () => {
           </p>
           <ButtonComponent
             onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === totalPages,
+            })}
           >
             Next
           </ButtonComponent>
