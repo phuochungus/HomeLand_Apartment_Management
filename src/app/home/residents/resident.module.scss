@@ -18,6 +18,10 @@
     background-color: #0744e1;
     transition: 0.3s linear background-color;
   }
+  &:active {
+    background-color: #062983;
+    transition: 0.3s linear background-color;
+  }
 }
 //per page
 .perPage {

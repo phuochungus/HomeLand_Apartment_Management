@@ -4,7 +4,7 @@ import styles from "../page.module.css";
 import residentStyles from "./resident.module.scss";
 import utilStyles from "@/styles/utils.module.scss";
 import tableStyles from "../../../styles/table.module.scss";
-import pageStyles from '@/styles/page.module.scss'
+import pageStyles from "@/styles/page.module.scss";
 import { clsx } from "clsx";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
@@ -16,8 +16,7 @@ import {
   EditIcon,
   GarbageIcon,
   SortIcon,
-  TrashIcon
-  
+  TrashIcon,
 } from "@/components/icons";
 import { useState, useEffect, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
@@ -32,11 +31,14 @@ import { ToastContainer } from "react-toastify";
 import toastMessage from "@/utils/toast";
 import { FaCheck } from "react-icons/fa";
 import { parse } from "path";
+import { UserProfile } from "@/libs/UserProfile";
+import { Manager } from "@/models/manager";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
   const [residents, setResidents] = useState<Array<Resident>>([]);
   const [selectedId, setSelectedId] = useState("");
+  
   //pagination
   const [totalPages, setTotalPages] = useState(0);
   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
@@ -62,7 +64,20 @@ export default function Residents() {
   const retrieveResidents = async () => {
     try {
       loadingFiler(document.body!);
-      const res = await axios.get("/api/resident/pagination");
+      const user = UserProfile.getProfile();
+      let buildingId;
+      if(user.role === 'manager') {
+        const res = await axios.get(`/api/manager/${user.id}`);
+        const managerData:Manager = res.data;
+        if(managerData.building) {
+          buildingId = managerData.building.building_id;
+        }
+      } 
+      const res = await axios.get("/api/resident/pagination", {
+        params: {
+          buildingId: buildingId,
+        }
+      });
       removeLoadingFilter(document.body!);
       const data = res.data;
       setResidents(data.items);
@@ -76,12 +91,21 @@ export default function Residents() {
   };
   const pagination = async (page?: number, limit?: number) => {
     try {
-      console.log(page, limit);
       loadingFiler(document.body!);
+      const user = UserProfile.getProfile();
+      let buildingId;
+      if(user.role === 'manager') {
+        const res = await axios.get(`/api/manager/${user.id}`);
+        const managerData:Manager = res.data;
+        if(managerData.building) {
+          buildingId = managerData.building.building_id;
+        }
+      } 
       const res = await axios.get("/api/resident/pagination", {
         params: {
           page,
           limit,
+          buildingId
         },
       });
       removeLoadingFilter(document.body!);
@@ -227,7 +251,9 @@ export default function Residents() {
         <div className={pageStyles.pageContainer}>
           <ButtonComponent
             onClick={handlePrevPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === 1,
+            })}
           >
             Previous
           </ButtonComponent>
@@ -236,12 +262,14 @@ export default function Residents() {
           </p>
           <ButtonComponent
             onClick={handleNextPage}
-            className={pageStyles.changePageBtn}
+            className={clsx(pageStyles.changePageBtn, {
+              [pageStyles.disableBtn]: currentPage === totalPages,
+            })}
           >
             Next
           </ButtonComponent>
         </div>
-        <div className="w-100 mt-5">
+        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
@@ -326,7 +354,7 @@ export default function Residents() {
       </div>
       <ModalComponent
         show={showModal}
-        title="Có chắc chắn xóa cư dân này?"
+        title="Are you sure to delete this resident?"
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
       />

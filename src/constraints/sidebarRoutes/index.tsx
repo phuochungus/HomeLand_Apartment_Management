@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
 import { BuildingIcon, ManagerIcon, StaffIcon, TechnicianIcon } from "@/components/icons";
-
+import { GrUserManager, GrUserWorker } from "react-icons/gr";
+import { FaUserGroup } from "react-icons/fa6";
+import { FaFileContract, FaBuilding } from "react-icons/fa";
+import { GiAutoRepair } from "react-icons/gi";  
+import { PiElevatorBold } from "react-icons/pi";
 export const sidebarInfo = [
   {
     title: "Dashboard",
@@ -21,7 +25,7 @@ export const sidebarInfo = [
       </svg>
     ),
     menu: [],
-    roles: [],
+    roles: ["admin"],
   },
   {
     title: "Properties",
@@ -94,24 +98,24 @@ export const sidebarInfo = [
   {
     title: "Employee",
     path: "employee",
-    svg: <StaffIcon width={30} height={30} />,
+    svg: <GrUserWorker/>,
     roles: ["admin", "manager"],
   },
   {
     title: "Contracts",
     path: "contracts",
-    svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
+    svg: <FaFileContract />,
     roles: ["admin", "manager"],
   },
   {
     title: "Residents",
     path: "residents",
-    svg: <Image src={Images.Residents} alt="icon" width={30} height={30} />,
+    svg: <FaUserGroup/>,
     roles: ["admin", "manager"],
   },{
     title: "Managers",
     path: "managers",
-    svg: <ManagerIcon width={30} height={30} />,
+    svg: <GrUserManager/>,
     roles: ["admin"],
   },{
     title: "Technicians",
@@ -122,26 +126,13 @@ export const sidebarInfo = [
   {
     title: "Buildings",
     path: "buildings",
-    svg: <BuildingIcon width={30} height={30} />,
+    svg: <FaBuilding/>,
     roles: ["admin"],
   },
   {
     title: "Complain & repair requests",
     path: "complain",
-    svg: (
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 39 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M14.8691 0L13.8965 5.04688C12.2612 5.66851 10.7596 6.53986 9.44386 7.62891L4.63474 5.95703L0 14.043L3.85195 17.418C3.70387 18.3344 3.62719 19.1837 3.62719 20C3.62719 20.8175 3.70617 21.6653 3.85195 22.582V22.5859L0 25.9609L4.63474 34.043L9.43998 32.375C10.7559 33.4646 12.2609 34.3311 13.8965 34.9531L14.8691 40H24.1309L25.1035 34.9531C26.7398 34.3311 28.2398 33.4611 29.5561 32.3711L34.3653 34.043L38.9961 25.9609L35.1481 22.582C35.2961 21.6656 35.3728 20.8163 35.3728 20C35.3728 19.1849 35.2957 18.3367 35.1481 17.4219V17.418L39 14.0391L34.3653 5.95703L29.56 7.625C28.2441 6.53536 26.7391 5.66887 25.1035 5.04688L24.1309 0H14.8691ZM18.1398 4H20.8602L21.6314 8L23.7007 8.78906C24.9481 9.26294 26.0687 9.91351 27.0411 10.7188L28.754 12.1328L32.5672 10.8125L33.9274 13.1836L30.8815 15.8555L31.2302 18.0547V18.0586C31.3516 18.8085 31.4046 19.4375 31.4046 20C31.4046 20.5625 31.3516 21.1914 31.2302 21.9414L30.8776 24.1406L33.9235 26.8125L32.5633 29.1875L28.754 27.8633L27.0373 29.2812C26.0648 30.0865 24.9481 30.7371 23.7007 31.2109H23.6968L21.6275 32L20.8563 36H18.1398L17.3686 32L15.2993 31.2109C14.0519 30.7371 12.9313 30.0865 11.9589 29.2812L10.246 27.8672L6.43283 29.1875L5.07264 26.8164L8.12242 24.1406L7.76977 21.9492V21.9453C7.65019 21.1922 7.59539 20.5613 7.59539 20C7.59539 19.4375 7.64845 18.8086 7.76977 18.0586L8.12242 15.8594L5.07264 13.1875L6.43283 10.8125L10.246 12.1367L11.9589 10.7188C12.9313 9.91351 14.0519 9.26294 15.2993 8.78906L17.3686 8L18.1398 4ZM19.5 12C15.1419 12 11.5636 15.607 11.5636 20C11.5636 24.393 15.1419 28 19.5 28C23.8581 28 27.4364 24.393 27.4364 20C27.4364 15.607 23.8581 12 19.5 12ZM19.5 16C21.7053 16 23.4682 17.777 23.4682 20C23.4682 22.223 21.7053 24 19.5 24C17.2947 24 15.5318 22.223 15.5318 20C15.5318 17.777 17.2947 16 19.5 16Z"
-          fill="black"
-        />
-      </svg>
-    ),
+    svg: <GiAutoRepair />,  
     menu: [],
     roles: ["admin", "manager"],
   },
@@ -208,24 +199,8 @@ export const sidebarInfo = [
   {
     title: "Floor",
     path: "floor",
-    svg: (
-      <svg
-        width="50"
-        height="50"
-        viewBox="0 -10 40 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M2 2v18h3v-1H3v-6h3V9h5V8H6V3h15v5h-6v1h6v5h-4v1h4v6H11v-7h-1v5H8v1h2v2h12V2zm3 4H3V5h2zm-2 6v-1h2v1zm2-2H3V9h2zM3 8V7h2v1zm2-4H3V3h2z"
-          fill="black"
-          stroke="black" 
-          stroke-width="1" 
-        />
-        
-      </svg>
-    ),
+    svg:<PiElevatorBold />,
     menu: [],
-    roles: ['admin', 'manager'],
+    roles: ["admin", "manager"],
   },
 ];

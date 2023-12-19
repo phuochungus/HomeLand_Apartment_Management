@@ -82,7 +82,7 @@ const UpdateBuilding = ({ params }: { params: { id: string } }) => {
       const newformValue: any = {
         name: buildingData.name,
         address: buildingData.address,
-        maxFloor: buildingData.max_floor,
+        maxFloor: buildingData.max_floor.toString(),
       };
       setFormValue(newformValue);
       return res.data;

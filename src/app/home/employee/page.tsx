@@ -2,7 +2,7 @@
 import { useTranslation } from "react-i18next";
 import styles from "../page.module.css";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
-import dashboardStyles from "./dashboard.module.css";
+import dashboardStyles from "./dashboard.module.scss";
 import Link from "next/link";
 import Form from 'react-bootstrap/Form';
 import classNames from 'classnames';
@@ -26,10 +26,11 @@ import { useQuery } from "react-query";
 import { profile } from "console";
 import SearchLayout from "@/components/searchLayout1/searchLayout";
 import { useRouter } from "next/router";
+import { AddResidentIcon } from "@/components/icons";
 
 export default function Employee() {
   const [isSearchResult, setIsSearchResult] = useState(false);
- 
+
   const [selectedId, setSelectedId] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -89,17 +90,17 @@ export default function Employee() {
       }
     }
   };
-  
+
   const clearSearch = () => {
     setIsSearchResult(false);
-    searchRef.current?.focus(); 
-    
+    searchRef.current?.focus();
+
     if (searchRef && searchRef.current) {
       searchRef.current.value = '';
       refetch();
     }
   };
-  
+
   const renderGender = (gender: string) => {
     return gender === 'male' ? 'Nam' : 'Nữ';
 
@@ -121,100 +122,97 @@ export default function Employee() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [t, i18n] = useTranslation();
 
-  return (<main className={dashboardStyles.main} style={whiteBackground}>
-    <Container fluid>
-      <div className={classNames(dashboardStyles.wrapper, dashboardStyles.dashboardBackground)}>
-        <h1 className={classNames(dashboardStyles.headingXl)}>Quản lí nhân viên</h1>
-        <div className={classNames(dashboardStyles.header)} style={{ display: 'flex', alignItems: 'center' }}>
-          <h1 className={classNames(dashboardStyles.headingLg)}>Danh sách nhân viên</h1>
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-
-            <ButtonComponent href="/home/employee/addemployee?auth=true" className={classNames(dashboardStyles.addBtn)}>
+  return (
+    <main className={styles.main}>
+        <div className={classNames(dashboardStyles.wrapper, futuna.className)}>
+          <h1 className={classNames(dashboardStyles.headingXl)}>Quản lí nhân viên</h1>
+          <div className={classNames(dashboardStyles.header)}>
+            <h1 className={classNames(dashboardStyles.headingLg)}>Danh sách nhân viên </h1>
+            <ButtonComponent
+              href="/home/employee/addemployee?auth=true"
+              preIcon={<AddResidentIcon width={24} height={24} />}
+              className={classNames(dashboardStyles.addBtn, futuna.className)
+              }>
               Tạo
             </ButtonComponent>
-
           </div>
-        
-          <SearchLayout
-            onKeydown={handleSearch}
-            iconClick={searchIconClick}
-            placeHolder="Nhập tên nhân viên"
-            ref={searchRef}
-            xClick={clearSearch}
-          />
-        </div>
+          <div className="d-flex w-100 mt-3 justify-content-between">
+          <div className={classNames(dashboardStyles.perPage)}>
+          </div>
+            <SearchLayout
+              onKeydown={handleSearch}
+              iconClick={searchIconClick}
+              placeHolder="Nhập tên nhân viên"
+              ref={searchRef}
+              xClick={clearSearch}
+            />
+          </div>
+          <div className={classNames(dashboardStyles.carddiv , futuna.className)}>
+            <Row xs={1} md={2} className="g-4">
+              {employee.map((employee, idx): ReactNode => {
+                const dateOfBirth = new Date(employee.profile.date_of_birth);
+                const employeeName = employee.profile.name.toLowerCase();
+                const searchTerm = searchRef.current?.value.toLowerCase();
+                if (searchTerm && employeeName.includes(searchTerm)) {
+                }
+                return (
+                  <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
+                    <Link href={`/home/employee/${employee.id}/?auth=true`} className={dashboardStyles.link}>
+                      <Card style={customCardStyle}
+                        onMouseEnter={() => setHoveredCard(idx)}
+                        onMouseLeave={() => setHoveredCard(null)}
+                        className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
+                        onClick={() => setShowDialog(true)} >
 
-
-        <div className={classNames(dashboardStyles.carddiv)}>
-          <Row xs={1} md={2} className="g-4">
-            {employee.map((employee, idx): ReactNode => {
-              const dateOfBirth = new Date(employee.profile.date_of_birth);
-              const employeeName = employee.profile.name.toLowerCase();
-              const searchTerm = searchRef.current?.value.toLowerCase();
-              if (searchTerm && employeeName.includes(searchTerm)) {
-              }
-              return (
-                <Col key={idx} sm={6} md={4} lg={3} className={dashboardStyles.col}>
-                  <Link href={`/home/employee/${employee.id}/?auth=true`} className={dashboardStyles.link}>
-                    <Card style={customCardStyle}
-                      onMouseEnter={() => setHoveredCard(idx)}
-                      onMouseLeave={() => setHoveredCard(null)}
-                      className={idx === hoveredCard ? dashboardStyles.hoveredCard : dashboardStyles.card}
-                      onClick={() => setShowDialog(true)} >
-
-                      <CardImg
-                        alt="..."
-                        onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
-                        src={
-                          employee.profile.avatarURL
-                        }
-                        // src="..\images\logos\Logo@3x.png"
-                        variant="top"
-                        height="250"
-                        className="img-fluid"
-                        style={{ objectFit: 'cover', height: '250px', borderRadius: "60%", padding: '20px' }}
-                      ></CardImg>
-                      <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                        <div className="d-flex justify-content-between">
-                        </div>
-                      </CardHeader>
-                      <CardBody className={classNames(dashboardStyles.ch)}>
-                        <Row>
-                          <div className="col">
-                            <div className="card-profile-stats d-flex justify-content-center">
-                              <div className="profile-stat">
-                                <span className="name no-underline">Tên: </span>
-                                <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
+                        <CardImg
+                          alt="..."
+                          onLoad={(e: any) => URL.revokeObjectURL(e.target.src)}
+                          src={
+                            employee.profile.avatarURL
+                          }
+                          variant="top"
+                          height="250"
+                          className="img-fluid"
+                          style={{ objectFit: 'cover', height: '250px', borderRadius: "60%", padding: '20px' }}
+                        ></CardImg>
+                        <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                          <div className="d-flex justify-content-between">
+                          </div>
+                        </CardHeader>
+                        <CardBody className={classNames(dashboardStyles.ch)}>
+                          <Row>
+                            <div className="col">
+                              <div className="card-profile-stats d-flex justify-content-center">
+                                <div className="profile-stat">
+                                  <span className="name no-underline">Tên: </span>
+                                  <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Row>
-                        <div className="text-center">
-                          <span className="birth">
-                            Ngày sinh: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('en-CA')}</span>
+                          </Row>
+                          <div className="text-center">
+                            <span className="birth">
+                              Ngày sinh: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('vi-VN')}</span>
 
-                          </span>
-                          <div className="address">
+                            </span>
+                            <div className="address">
 
-                            Giới tính: <span className="ni location_pin mr-2">{renderGender(employee.profile.gender)}</span>
-                          </div>
-                          <div className="phonenumber">
-                            Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
-                          </div>
+                              Giới tính: <span className="ni location_pin mr-2">{renderGender(employee.profile.gender)}</span>
+                            </div>
+                            <div className="phonenumber">
+                              Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
+                            </div>
 
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </Link>
-                </Col>
-              );
-            })}
-          </Row>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </Link>
+                  </Col>
+                );
+              })}
+            </Row>
+          </div>
         </div>
-
-
-      </div>
-    </Container>
-  </main >
+    </main >
   );
 }

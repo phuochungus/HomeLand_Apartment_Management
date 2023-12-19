@@ -1,7 +1,6 @@
 "use client";
 
 import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
-
 import { useEffect, useState } from "react";
 import { ringift } from "../../../public/fonts/Ringift";
 import { Sidebar } from "@/components/sidebar/sidebar";
@@ -18,15 +17,14 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "react-toastify/dist/ReactToastify.css";
 import { UserProfile } from "@/libs/UserProfile";
 import ChatBox from "@/components/chatBox/ChatBox";
+import clsx from "clsx";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    require("bootstrap/dist/js/bootstrap.bundle.min.js");
-  }, []);
+
   const ringgift_font = ringift;
   const pathName = usePathname();
   const searchParam = useSearchParams();
@@ -71,48 +69,75 @@ export default function RootLayout({
               }
             >
               <div className={styles.sidebarBody}>
-                {sidebarInfo.map((value, index) =>
-                  value.roles.length == 0 ||
-                  value.roles.includes(UserProfile.getRole()) ? (
-                    <div key={index} style={{ marginBottom: "3rem" }}>
-                      <Button
-                        className={`${
-                          pathName.includes(
-                            "/home/" + value.path
-                          )
-                            ? styles.current
-                            : ""
-                        } ${styles.sidebarButton} `}
-                        onClick={() =>
-                          handleRouting(
-                            "/home/" + value.path + "?auth=true"
-                          )
-                        }
-                        style={futuna.style}
-                      >
-                        {value.svg}
-                        <span style={{ margin: "auto 0" }}>{value.title}</span>
-                      </Button>
-                      <div
-                        className={`${styles.sidebarButtonMenu} ${futuna.className}`}
-                      >
-                        {value.menu?.map((value, index) => (
-                          <button
-                            key={index}
-                            className={`${
-                              pathName == value.href ? styles.active : ""
-                            }`}
-                            onClick={() => handleRouting(value.href)}
+                {sidebarInfo.map((value, index) => {
+                  if (
+                    value.roles.length == 0 ||
+                    value.roles.includes(UserProfile.getRole())
+                  ) {
+                    if (value.title === 'Properties') {
+                      return (
+                        <div key={index} style={{ marginBottom: "2rem" }}>
+                          
+                          <Button
+                            className={clsx(styles.sidebarButton, {
+                              [styles.current]: pathName.includes("properties"),
+                            })}
+                            onClick={() =>
+                              handleRouting(
+                                "/home/" + value.path + "?auth=true"
+                              )
+                            }
+                            style={futuna.style}
                           >
+                            {value.svg}
+                            <span style={{ margin: "auto 0" }}>
+                              {value.title}
+                            </span>
+                          </Button>
+
+                          <div
+                            className={clsx(
+                              styles.sidebarButtonMenu,
+                              futuna.className
+                            )}
+                          >
+                            {value.menu?.map((value, index) => (
+                              <button
+                                key={index}
+                                className={clsx(styles.subMenu, {
+                                  [styles.active]: pathName === value.href,
+                                })}
+                                onClick={() => handleRouting(value.href)}
+                              >
+                                {value.title}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div key={index} style={{ marginBottom: "2rem" }}>
+                        <Button
+                          className={clsx(styles.sidebarButton, {
+                            [styles.current]: pathName.includes(
+                              "/home/" + value.path
+                            ),
+                          })}
+                          onClick={() =>
+                            handleRouting("/home/" + value.path + "?auth=true")
+                          }
+                          style={futuna.style}
+                        >
+                          {value.svg}
+                          <span style={{ margin: "auto 0" }}>
                             {value.title}
-                          </button>
-                        ))}
+                          </span>
+                        </Button>
                       </div>
-                    </div>
-                  ) : (
-                    <></>
-                  )
-                )}
+                    );
+                  }
+                })}
               </div>
             </Sidebar>
           ) : (
@@ -122,8 +147,7 @@ export default function RootLayout({
           <div
             style={{
               width: "100%",
-              backgroundColor: "#E8EAEC",
-              height: "fit-content",
+              backgroundColor: "var(--background-color)",
             }}
           >
             <div style={{ display: "flex" }}>

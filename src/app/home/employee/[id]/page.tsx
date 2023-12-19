@@ -34,6 +34,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
         // const deleleHandle = () => {
         //         setShowModal(true);
         // };
+        const router = useRouter();
         const [selectedId, setSelectedId] = useState("");
         const [formValue, setFormValue] = useState<any>({
                 name: "",
@@ -58,6 +59,9 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                         toastMessage({ type: "success", title: "Delete successfully!" });
 
                         refetch();
+                        setTimeout(() => {
+                                router.push('/home/employee?auth=true');
+                        }, 2000);
                 } catch (err) {
                         toastMessage({ type: "errpr", title: "Delete faily!" });
                         console.log(err);
