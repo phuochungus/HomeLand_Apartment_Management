@@ -111,7 +111,7 @@ export default function Page() {
         
         loadingFiler(document.body!);
         await axios
-          .post("/api/contract", form).
+          .post("/api/contract", form)
           .then((response) => {
             router.back();
             removeLoadingFilter(document.body!);

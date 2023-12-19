@@ -222,7 +222,7 @@ const ServiceCard = (value: Service): React.ReactNode => {
         src={
           value.imageURLs
             ? value.imageURLs[0]
-            : "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
+            : "https://assets.website-files.com/5c10692127f39afbd1adaeed/5c10695127f39a17ebadaf20_GSS-logo.png"
         }
       />
       <Card.Body
