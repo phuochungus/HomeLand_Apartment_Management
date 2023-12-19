@@ -255,14 +255,12 @@ export default function Page({ params }: { params: { id: string } }) {
         prevFeedbackData.filter(feedback => feedback.feedback_id !== id)
       );
     } catch (err) {
-      toastMessage({ type: "error", title: "Delete faily!" });
+      toastMessage({ type: "error", title: "Delete fail!" });
       console.log(err);
     }
   };
   useEffect(() => {
-
     const deletedFeedback = JSON.parse(localStorage.getItem('deletedFeedback') || '[]');
-
     const fetchData = async () => {
       try {
         const res = await axios.get(`/api/feedback?service_id=${params.id}`);

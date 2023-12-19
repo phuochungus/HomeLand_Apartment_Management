@@ -1,5 +1,4 @@
 "use client";
-import tableStyles from "../../../styles/table.module.scss";
 import { useTranslation } from "react-i18next";
 import classNames from 'classnames';
 import residentStyles from "@/app/home/residents/resident.module.scss";
@@ -31,7 +30,7 @@ export default function Dashboard() {
   const [floor, setFloor] = useState<Array<Floor>>([]);
   const [selectedId, setSelectedId] = useState("");
   const searchRef = createRef<HTMLInputElement>();
-  const titleTable = ["ID", " Tên Tầng", "Tòa nhà", "Số phòng tối đa"];
+  const titleTable = ["ID", " Name", "Building", "Max Apartment"];
   const [totalPages, setTotalPages] = useState(0);
   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const listOptions = [
@@ -56,7 +55,7 @@ export default function Dashboard() {
     try {
       loadingFiler(document.body!);
       const res = await axios.get("/api/floor/pagination");
-
+      
       removeLoadingFilter(document.body!);
       const floorData = res.data;
       const data = res.data;
@@ -64,7 +63,7 @@ export default function Dashboard() {
       setFloor(data.items);
       setTotalPages(data.meta.totalPages);
       return res.data;
-
+     
     } catch (error) {
       removeLoadingFilter(document.body!);
       console.log(error);
@@ -114,7 +113,7 @@ export default function Dashboard() {
     try {
       const response = await axios.get(`/api/floor/${id}`);
       const floorData = response.data;
-
+  
       if (!floorData.apartments || floorData.apartments.length === 0) {
         await axios.delete(`/api/floor/${id}`);
         toastMessage({ type: "success", title: "Delete successfully!" });
@@ -127,8 +126,8 @@ export default function Dashboard() {
       console.log(err);
     }
   };
-
-
+  
+  
   const [currentPage, setCurrentPage] = useState(1);
   const handleSetActive = (count: any) => {
     const limit: number = parseInt(count);
@@ -218,7 +217,12 @@ export default function Dashboard() {
         </div>
 
         <div className="w-100 mt-5">
-          <table className={clsx(tableStyles.table, futuna.className)}>
+          <Table
+            className={clsx(buildingStyles.tableBuilding, futuna.className)}
+            striped
+            bordered
+            hover
+          >
             <thead>
               <tr>
                 {titleTable.map((title: String, index) => (
@@ -272,12 +276,14 @@ export default function Dashboard() {
 
               })}
             </tbody>
-          </table>
+          </Table>
           <div className="d-flex w-100 mt-3 justify-content-center align-items-center">
             <div className={classNames(pageStyles.pageContainer, styles.changePageBtn)}>
               <ButtonComponent
                 onClick={handlePrevPage}
-                className={pageStyles.changePageBtn}
+                className={clsx(pageStyles.changePageBtn, {
+                  [pageStyles.disableBtn]: currentPage === 1,
+                })}
               >
                 Previous
               </ButtonComponent>
@@ -286,7 +292,9 @@ export default function Dashboard() {
               </p>
               <ButtonComponent
                 onClick={handleNextPage}
-                className={pageStyles.changePageBtn}
+                className={clsx(pageStyles.changePageBtn, {
+                  [pageStyles.disableBtn]: currentPage === totalPages,
+                })}
               >
                 Next
               </ButtonComponent>
