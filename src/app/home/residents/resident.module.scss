@@ -69,10 +69,8 @@
 }
 .editIcon {
   stroke: var(--text-color);
-
-
 }
-.TrashIcon {  
+.TrashIcon {
   background-color: var(--red);
   display: flex;
   width: 36px;
@@ -82,11 +80,11 @@
   border-radius: 50%;
   cursor: pointer;
   &:hover {
-      background-color: #c92e2e;
-      transition: 0.2s linear background-color;
-      .trash {
-        animation: shake 1s ease-in-out infinite;
-      }
+    background-color: #c92e2e;
+    transition: 0.2s linear background-color;
+    .trash {
+      animation: shake 1s ease-in-out infinite;
+    }
   }
 }
 .deleteBtn {
@@ -114,7 +112,7 @@
 }
 
 .shake-element {
-  animation: shake 0.1s ease-in-out ;
+  animation: shake 0.1s ease-in-out;
 }
 
 //pagination
@@ -136,3 +134,13 @@
   font-weight: 600;
 }
 
+//select
+.buildingSelect {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  background: #eeeeee;
+  border-radius: 4px;
+}

@@ -33,12 +33,15 @@ import { FaCheck } from "react-icons/fa";
 import { parse } from "path";
 import { UserProfile } from "@/libs/UserProfile";
 import { Manager } from "@/models/manager";
+import { Building } from "@/models/building";
 
 export default function Residents() {
   const [showModal, setShowModal] = useState(false);
   const [residents, setResidents] = useState<Array<Resident>>([]);
+  const [buildings, setBuildings] = useState<Array<Building>>([]);
+  const [buildingId, setBuildingId] = useState<string>();
   const [selectedId, setSelectedId] = useState("");
-  
+
   //pagination
   const [totalPages, setTotalPages] = useState(0);
   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
@@ -66,17 +69,17 @@ export default function Residents() {
       loadingFiler(document.body!);
       const user = UserProfile.getProfile();
       let buildingId;
-      if(user.role === 'manager') {
+      if (user.role === "manager") {
         const res = await axios.get(`/api/manager/${user.id}`);
-        const managerData:Manager = res.data;
-        if(managerData.building) {
+        const managerData: Manager = res.data;
+        if (managerData.building) {
           buildingId = managerData.building.building_id;
         }
-      } 
+      }
       const res = await axios.get("/api/resident/pagination", {
         params: {
           buildingId: buildingId,
-        }
+        },
       });
       removeLoadingFilter(document.body!);
       const data = res.data;
@@ -89,23 +92,27 @@ export default function Residents() {
       console.log(error);
     }
   };
-  const pagination = async (page?: number, limit?: number) => {
+  const pagination = async (
+    page?: number,
+    limit?: number,
+    building_id?: string
+  ) => {
     try {
       loadingFiler(document.body!);
       const user = UserProfile.getProfile();
-      let buildingId;
-      if(user.role === 'manager') {
+      let buildingId = building_id;
+      if (user.role === "manager") {
         const res = await axios.get(`/api/manager/${user.id}`);
-        const managerData:Manager = res.data;
-        if(managerData.building) {
+        const managerData: Manager = res.data;
+        if (managerData.building) {
           buildingId = managerData.building.building_id;
         }
-      } 
+      }
       const res = await axios.get("/api/resident/pagination", {
         params: {
           page,
           limit,
-          buildingId
+          buildingId,
         },
       });
       removeLoadingFilter(document.body!);
@@ -129,6 +136,13 @@ export default function Residents() {
       retry: false,
     }
   );
+  useEffect(() => {
+    const fetchAPI = async () => {
+      const res = await axios.get("/api/building");
+      setBuildings(res.data);
+    };
+    fetchAPI();
+  }, []);
   const titleTable = [
     "Name",
     "Account",
@@ -191,13 +205,13 @@ export default function Residents() {
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
-      pagination(currentPage - 1, maxPageDisplay);
+      pagination(currentPage - 1, maxPageDisplay, buildingId);
     }
   };
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
-      pagination(currentPage + 1, maxPageDisplay);
+      pagination(currentPage + 1, maxPageDisplay, buildingId);
     }
   };
 
@@ -241,12 +255,32 @@ export default function Residents() {
             </span>
             <span>Entries</span>
           </div>
-          <SearchLayout
-            onKeydown={handleSearch}
-            iconClick={searchIconClick}
-            placeHolder="Search resident..."
-            ref={searchRef}
-          />
+          <div className="d-flex">
+            {UserProfile.getRole() === "admin" && (
+              <select
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  if (e.target.value === "") pagination(1, maxPageDisplay);
+                  else pagination(1, maxPageDisplay, e.target.value);
+                  setBuildingId(e.target.value);
+                }}
+                className={residentStyles.buildingSelect}
+              >
+                <option value="">---All Buildings---</option>
+                {buildings.map((building, index) => (
+                  <option key={index} value={building.building_id}>
+                    {building.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            <SearchLayout
+              onKeydown={handleSearch}
+              iconClick={searchIconClick}
+              placeHolder="Search resident..."
+              ref={searchRef}
+            />
+          </div>
         </div>
         <div className={pageStyles.pageContainer}>
           <ButtonComponent
@@ -269,7 +303,7 @@ export default function Residents() {
             Next
           </ButtonComponent>
         </div>
-        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
+        <div style={{ overflowX: "auto" }} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
