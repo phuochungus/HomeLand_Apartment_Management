@@ -46,7 +46,7 @@ const TaskTechnician = () => {
   const titleTable = [
     "Create Date",
     "Content",
-    "Assigner email",
+    // "Assigner email",
     "Status",
     "Invoice",
     "Action",
@@ -225,7 +225,7 @@ const TaskTechnician = () => {
                   <tr key={index}>
                     <td width="20%">{createAt}</td>
                     <td width="30%">{task.complain.content}</td>
-                    <td width="20%">{task.assigner.account.email}</td>
+                    {/* <td width="20%">{task.assigner.account.email}</td> */}
 
                     <td width="5%">
                       <span
