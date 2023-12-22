@@ -178,7 +178,7 @@ const AddResident = () => {
       form.append("front_identify_card_photo", frontImg);
       form.append("back_identify_card_photo", backImg);
       if (avatar) {
-        form.append("avatarURL", avatar);
+        form.append("avatar_photo", avatar);
       }
       try {
         loadingFiler(document.body!);

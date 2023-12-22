@@ -263,6 +263,7 @@ export default function Residents() {
                   if (e.target.value === "") pagination(1, maxPageDisplay);
                   else pagination(1, maxPageDisplay, e.target.value);
                   setBuildingId(e.target.value);
+                  setCurrentPage(1);
                 }}
                 className={residentStyles.buildingSelect}
               >
