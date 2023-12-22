@@ -181,13 +181,13 @@ export default function Contracts() {
             }}
             style={{ alignItems: "center", fontWeight: 600 }}
           >
-            Add Contract
+            {t("add_contract")}
           </Button>
         </div>
       </div>
       <Table responsive="sm">
         <thead>
-          <tr style={{ width: "100%" }}>
+          <tr style={{ width: "100%"}} className=" text-center">
             <th>{t("ID")}</th>
             <th>{t("name")}</th>
             <th>{t("phone_number")}</th>
@@ -201,17 +201,22 @@ export default function Contracts() {
         <tbody>
           {ContractList.map((value, index): ReactNode => {
             return (
-              <tr key={index} style={{ cursor: "pointer" }}>
+              <tr
+                key={index} className="align-middle text-center"
+                style={{ cursor: "pointer"  }}
+              >
                 <td>{value.contract_id}</td>
                 <td>{value.resident.profile.name}</td>
                 <td>{value.resident.profile.phone_number}</td>
                 <td>{value.apartment.name}</td>
                 <td>{value.status}</td>
                 <td>
-                  {format(new Date(value.created_at), "HH:mm:ss dd-MM-yyyy")}
+                  {format(new Date(value.created_at), "dd-MM-yyyy")}
                 </td>
                 <td>
-                  {value.expire_at?format(new Date(value.expire_at), "HH:mm:ss dd-MM-yyyy"):null}
+                  {value.expire_at
+                    ? format(new Date(value.expire_at), "dd-MM-yyyy")
+                    : null}
                 </td>{" "}
                 <td style={{ width: 20 }}>
                   <div className="d-flex">
@@ -225,7 +230,7 @@ export default function Contracts() {
                       }}
                       variant="warning"
                     >
-                      Sửa
+                      {t("edit")}
                     </Button>
 
                     <Button
@@ -233,7 +238,7 @@ export default function Contracts() {
                       variant="danger"
                       style={{ marginLeft: "20px" }}
                     >
-                      Xóa
+                      {t("delete")}
                     </Button>
                   </div>
                 </td>

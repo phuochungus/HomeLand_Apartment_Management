@@ -11,6 +11,7 @@ import ServicePackageModal from "../../app/home/services/[id]/addServicePackage"
 import ConfirmBillModal from "./ComfirmBill";
 import { baseUrl, endpoint } from "../../constraints/endpoints";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 export interface IServicePackageProps {
   service: Service;
   servicePackage: ServicePackage;
@@ -83,6 +84,7 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
     props.handleSuccessModification();
     setShowUpdateModal(false);
   };
+  const [t, i18n] = useTranslation();
 
   return (
     <Container
@@ -101,7 +103,7 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
           <h4>{props.servicePackage.name}</h4>
           <h4>
             {props.servicePackage.per_unit_price} VND /{" "}
-            {props.servicePackage.expired_date} Days
+            {props.servicePackage.expired_date} {t('days')}
           </h4>
         </Col>
         <Col md="auto">

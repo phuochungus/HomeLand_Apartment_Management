@@ -1,7 +1,6 @@
 "use client";
 
 import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
-
 import { useEffect, useState } from "react";
 import { ringift } from "../../../public/fonts/Ringift";
 import { Sidebar } from "@/components/sidebar/sidebar";
@@ -25,9 +24,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    require("bootstrap/dist/js/bootstrap.bundle.min.js");
-  }, []);
+
   const ringgift_font = ringift;
   const pathName = usePathname();
   const searchParam = useSearchParams();

@@ -14,13 +14,15 @@ import { Contract } from "../../../models/contract";
 import { motion } from "framer-motion";
 import { search } from "../../../libs/utils";
 import { set } from "date-fns";
- 
+import { useTranslation } from "react-i18next";
+import { UserProfile } from "../../../libs/UserProfile";
 export default function Services() {
   const [ServiceList, setServiceList] = useState<Service[]>([]);
   const loadingMore = useRef({ isLoading: false, page: 1 });
   const router = useRouter();
-  const searchParam = useRef('');
-  
+  const searchParam = useRef("");
+  const [t, i18n] = useTranslation();
+
   const { isLoading, isError, data, refetch } = useQuery(
     "service",
     () =>
@@ -30,8 +32,6 @@ export default function Services() {
         temp.isLoading = false;
         loadingMore.current = temp;
         let result = [...ServiceList, ...(res.data as Service[])];
-        console.log(loadingMore.current.page);
-        console.log(result);
         return result;
       }),
     {
@@ -47,6 +47,7 @@ export default function Services() {
       refetch();
     }
   }
+ 
   window.addEventListener("scroll", (e) => {
     const windowHeight =
       "innerHeight" in window
@@ -63,13 +64,11 @@ export default function Services() {
     );
     const windowBottom = windowHeight + window.pageYOffset;
     if (windowBottom + 50 >= docHeight) {
-      console.log("load more");
       handleScrollEnd();
     }
   });
   useEffect(() => {
-    if(!data)
-      return;
+    if (!data) return;
     let result = [...data];
     // if (apartmentSortOption)
     //   sortOptionList.forEach((value, index) => {
@@ -86,11 +85,10 @@ export default function Services() {
     // setApartmentList([...result]);
     // if(searchParam.current != "")
     //   result = search(result, "name", searchParam)
-   console.log(result)
     setServiceList([...result]);
   }, [data, searchParam.current]);
   function handleSearch(params: string): void {
-    searchParam.current = params
+    searchParam.current = params;
   }
 
   if (isLoading)
@@ -130,44 +128,48 @@ export default function Services() {
       exit={{ opacity: 0, y: 40 }}
       className={styles.main}
     >
-    <div className={styles.container}>
+      <div className={styles.container}>
         <div
           style={{ width: "85%" }}
           className={`${styles.itemContainer} ${styles.searchBarContainer}`}
         >
           <SearchBar
-            placeholder="Search service here..."
+            placeholder={t("search_service")}
             className={styles.searchBar}
             onSearch={handleSearch}
             style={{ width: "50%" }}
           ></SearchBar>
         </div>
-        <div
-          className={styles.itemContainer}
-          style={{
-            height: "100%",
-            width: "20%",
-            padding: "0 1rem",
-            alignItems: "center",
-            alignContent: "center",
-            margin: "auto",
-            justifyContent: "center",
-            display: "flex",
-          }}
-        >
-          <Button
-            onClick={() => {
-              router.push("/home/services/add?auth=true");
-            }}
+        {UserProfile.getRole() == "admin" ? (
+          <div
+            className={styles.itemContainer}
             style={{
+              height: "100%",
+              width: "20%",
+              padding: "0 1rem",
               alignItems: "center",
+              alignContent: "center",
+              margin: "auto",
               justifyContent: "center",
-              fontWeight: 600,
+              display: "flex",
             }}
           >
-            Add Service
-          </Button>
-        </div>
+            <Button
+              onClick={() => {
+                router.push("/home/services/add?auth=true");
+              }}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 600,
+              }}
+            >
+              {t("add_service")}
+            </Button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className={styles.grid}>
         {ServiceList.map((value, index) => ServiceCard(value))}

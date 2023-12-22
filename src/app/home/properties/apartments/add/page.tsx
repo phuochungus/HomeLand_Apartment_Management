@@ -29,6 +29,8 @@ import { Resident } from "@/models/resident";
 import { Building } from "@/models/building";
 import { Floor } from "@/models/floor";
 import { motion } from "framer-motion";
+import { ToastContainer } from "react-toastify";
+import toastMessage from "@/utils/toast";
 function constraintOnlyNumber(str: string): boolean {
   return !isNaN(Number(str));
 }
@@ -158,23 +160,30 @@ export default function AddApartment() {
     selectedResidentLists.forEach((element) => {
       data.append("residentIds", element.id);
     });
-    await addImage(data, fileList.current).then(() => {
+    await addImage(data, fileList.current).then( async () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
         url: "/api/apartment",
         data: data,
       };
-      axios
+      await axios
         .request(config)
         .then((res) => {
-          alert("Done create");
+          toastMessage({
+            type: "success",
+            title: "Thêm căn hộ thành công",
+          });
         })
         .catch((err) => {
-          alert(err.response.data);
+          toastMessage({
+            type: "error",
+            title: "Đã có lỗi xảy ra trong quá trình thực thi",
+          });
         });
     });
     removeLoadingFilter(document.body!);
+    window.location.reload();
   }
   function searchtest(params: string) {
     setResidentLists(search(data!, "name", params));
@@ -554,7 +563,6 @@ export default function AddApartment() {
                 borderRadius: "1rem",
               }}
               type="reset"
-              // onClick={() => router.refresh()}
             >
               Clear
             </Button>
@@ -606,6 +614,18 @@ export default function AddApartment() {
           </Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 }
