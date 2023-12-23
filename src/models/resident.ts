@@ -8,7 +8,7 @@ export interface Resident {
     account_id?: string,
     payment_info?: string,
     contracts: any,
-    stay_at: Apartment  ;
+    stay_at: any;
     created_at: Date;
     deleted_at?: Date;
     stay_at_apartment_id?: string,
