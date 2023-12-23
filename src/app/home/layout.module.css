@@ -2,7 +2,7 @@
     width: 23%;
     background-color: #d7e2ff;
     padding-top: 1rem;
-    height: auto;
+    height: fit-content;
 }
 
 .sidebarButtonMenu {
