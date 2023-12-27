@@ -11,7 +11,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { Building } from "@/models/building";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import { AddResidentIcon } from "@/components/icons";
-import { search } from "@/libs/utils";
+import { loadingFiler, search } from "@/libs/utils";
 import { motion } from "framer-motion";
 import { Floor } from "@/models/floor";
 interface Option {
@@ -52,25 +52,41 @@ const getSortOption = async ({
 
   await Promise.all([
     axios.get("/api/building").then((res) => {
-      (res.data as Building[]).map((value, index) => {
+      (res.data as Building[]).map(async (value, index) => {
         apartmentSortOption[0].selections.push(value.name);
         apartmentSortOption[0].data.push(value.building_id);
       });
-    }),
-    axios.get("/api/floor").then((res) => {
-      apartmentSortOption[1].selections.splice(
-        0,
-        apartmentSortOption[1].selections.length
-      );
-      (res.data as Floor[]).map((value, index) => {
-
-        apartmentSortOption[1].selections.push(value.name);
-      });
+      apartmentSortOption[0].onChange = async (value: number) => {
+        if (value != 0) {
+          apartmentSortOption[1] = await retriveFloor(
+            apartmentSortOption[0].data[value],
+            (value: number) => onChange(1, value)
+          );
+        }
+        onChange(0, value);
+      };
     }),
   ]);
   return apartmentSortOption;
 };
-// eslint-disable-next-line @next/next/no-async-client-component
+const retriveFloor = async (
+  building_id: string,
+  onChange: (index: number, value: number) => void
+) => {
+  let result = {
+    title: "Floor",
+    selections: ["Tất cả"],
+    data: ["all"],
+    fieldName: "floorId",
+    onChange: (value: number) => onChange(1, value),
+  };
+  await axios.get("/api/building/" + building_id).then((res) => {
+    (res.data.floors as Floor[]).map((value, index) => {
+      result.selections.push(value.name);
+    });
+  });
+  return result;
+};
 export default function Apartments() {
   const path = usePathname();
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
@@ -80,6 +96,7 @@ export default function Apartments() {
   const loadingMore = useRef({ isLoading: false, page: 1 });
   const [searchParam, setSearchParam] = useState("");
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
+  const [data, setData] = useState<Apartment[]>([]);
   const [apartmentSortOption, setApartmentSortOption] = useState<Option[]>([
     {
       title: "Building",
@@ -104,9 +121,14 @@ export default function Apartments() {
     },
   ]);
   const [sortOptionList, setSortOptionList] = useState<number[]>([0, 0, 0]);
-  const { isLoading, isError, data, refetch } = useQuery(
+  const { isLoading, isError, refetch } = useQuery(
     "apartment",
     async () => {
+      if (loadingMore.current.page == -1) {
+        const temp = { ...loadingMore.current };
+        temp.isLoading = false;
+        loadingMore.current = temp;
+      }
       return await axios
         .get("/api/apartment?page=" + loadingMore.current.page)
         .then((res) => {
@@ -114,9 +136,8 @@ export default function Apartments() {
           if ((res.data as Apartment[]).length == 0) temp.page = -1;
           temp.isLoading = false;
           loadingMore.current = temp;
-          let result = [...apartmentList, ...(res.data as Apartment[])];
-          setSortOptionList([...sortOptionList]);
-          return result;
+          let result = [...data, ...(res.data as Apartment[])];
+          setData(result);
         });
     },
 
@@ -125,9 +146,12 @@ export default function Apartments() {
     }
   );
   function handleChange(index: number, value: number): void {
+    let temp1 = { ...loadingMore.current };
+    temp1.isLoading = false;
+    loadingMore.current = temp1;
     let temp = [...sortOptionList];
     temp[index] = value;
-    setSortOptionList([...temp]);
+    setSortOptionList(temp)
   }
   useEffect(() => {
     getSortOption({ onChange: handleChange }).then((res) => {
@@ -139,7 +163,10 @@ export default function Apartments() {
     let result = [...data];
     if (apartmentSortOption)
       sortOptionList.forEach((value, index) => {
-        if (apartmentSortOption[index].data[value] != "all")
+        if (
+          apartmentSortOption[index].data[value] &&
+          apartmentSortOption[index].data[value] != "all"
+        )
           result = search(
             result,
             apartmentSortOption[index].fieldName,
@@ -148,8 +175,15 @@ export default function Apartments() {
         console.log(apartmentSortOption[index].data[value]);
       });
     if (searchParam != "") result = search(result, "name", searchParam);
+    console.log(result);
     setApartmentList([...result]);
-  }, [sortOptionList, searchParam]);
+    if (
+      result.length < 30 &&
+      loadingMore.current.page != -1 &&
+      !loadingMore.current.isLoading
+    )
+      handleScrollEnd();
+  }, [sortOptionList, searchParam, data]);
 
   async function handleScrollEnd() {
     if (!loadingMore.current.isLoading) {
@@ -176,7 +210,6 @@ export default function Apartments() {
     );
     const windowBottom = windowHeight + window.pageYOffset;
     if (windowBottom + 50 >= docHeight) {
-      console.log("load more");
       handleScrollEnd();
     }
   });
@@ -233,7 +266,10 @@ export default function Apartments() {
           Thêm căn hộ
         </ButtonComponent>
       </div>
-      <div className={styles.container} style={{borderStyle: "solid", borderColor: "grey"}}>
+      <div
+        className={styles.container}
+        style={{ borderStyle: "solid", borderColor: "grey" }}
+      >
         <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
           <SearchBar
             className={styles.searchBar}

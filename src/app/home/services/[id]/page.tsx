@@ -49,7 +49,7 @@ export default function Page({ params }: { params: { id: string } }) {
     resident_id: string;
     created_at: string
   };
-  const router =useRouter();
+  const router = useRouter();
   const calculateTopPosition = (commentLength: number) => {
     const thresholdLength1 = 100;
     const thresholdLength2 = 200;
@@ -248,12 +248,32 @@ export default function Page({ params }: { params: { id: string } }) {
     try {
       await axios.delete(`/api/feedback/${id}`);
       toastMessage({ type: "success", title: "Delete successfully!" });
-      window.location.reload();
+      const deletedFeedback = JSON.parse(localStorage.getItem('deletedFeedback') || '[]');
+      deletedFeedback.push(id);
+      localStorage.setItem('deletedFeedback', JSON.stringify(deletedFeedback));
+      setFeedbackData(prevFeedbackData =>
+        prevFeedbackData.filter(feedback => feedback.feedback_id !== id)
+      );
     } catch (err) {
-      toastMessage({ type: "error", title: "Delete faily!" });
+      toastMessage({ type: "error", title: "Delete fail!" });
       console.log(err);
     }
   };
+  useEffect(() => {
+    const deletedFeedback = JSON.parse(localStorage.getItem('deletedFeedback') || '[]');
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/api/feedback?service_id=${params.id}`);
+        const filteredFeedback = res.data.filter((feedback: { feedback_id: any; }) => !deletedFeedback.includes(feedback.feedback_id));
+        setFeedbackData(filteredFeedback);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [params.id]);
+
   const handleModalClose = async () => {
     await refetch();
     setShowModal(false);
@@ -269,8 +289,8 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   );
   const sortedFeedbackData = [...feedbackData].sort((a, b) => {
-    const dateA = new Date(a.created_at).getTime(); 
-    const dateB = new Date(b.created_at).getTime(); 
+    const dateA = new Date(a.created_at).getTime();
+    const dateB = new Date(b.created_at).getTime();
     return dateB - dateA;
   });
   const [invoices, setInvoice] = useState<Invoice[]>([]);
@@ -295,14 +315,14 @@ export default function Page({ params }: { params: { id: string } }) {
   // useEffect(() => {
   //   retrieveFeedback();
   // }, []);
-  // useEffect(() => {
-  //   const fetchUserProfile = async () => {
-  //     const user = await UserProfile.getProfile();
-  //     setFormValue(prevState => ({ ...prevState, resident_id: user.id }));
-  //   };
-  //   fetchUserProfile();
-  //   setFormValue(prevState => ({ ...prevState, service_id: params.id }));
-  // }, []);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const user = await UserProfile.getProfile();
+      setFormValue(prevState => ({ ...prevState, resident_id: user.id }));
+    };
+    fetchUserProfile();
+    setFormValue(prevState => ({ ...prevState, service_id: params.id }));
+  }, []);
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
@@ -503,11 +523,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 </h3>
               </Col>
             </Row>
-            {/* <Col md="auto">
-            <ButtonComponent href="/home/feedback?auth=true" className={styles.creatBtn1}>
-              Commnent
-            </ButtonComponent>
-              </Col> */}
             {UserProfile.getRole() === "resident" ? (
               <Row style={{
 
@@ -528,8 +543,8 @@ export default function Page({ params }: { params: { id: string } }) {
                   starSpacing="5px"
                 />
                 {errors && errors.rating && (
-                    <span className={styles.error}>{errors.rating}</span>
-                  )}
+                  <span className={styles.error}>{errors.rating}</span>
+                )}
                 <Form.Group className="mb-3">
                   <Form.Label className={styles.label}>Comment</Form.Label>
                   <Form.Control
@@ -556,7 +571,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <></>
             )}
 
-            
+
             {sortedFeedbackData
               .filter(feedback => feedback.service_id === params.id)
               .map((feedback, index) => (
@@ -578,7 +593,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 >
 
                   <div className="resident-info" style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div className="avatar-container" style={{ marginRight: '20px' ,marginTop: '5px'}}>
+                    <div className="avatar-container" style={{ marginRight: '20px', marginTop: '5px' }}>
                       <Image
                         style={{ borderRadius: "60%" }}
                         className="avatar-image"
@@ -600,7 +615,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         starEmptyColor="grey"
                         starDimension="20px"
                         starSpacing="1px"
-                       
+
                       />
 
                       <p style={{ marginBottom: '5px' }}></p>
