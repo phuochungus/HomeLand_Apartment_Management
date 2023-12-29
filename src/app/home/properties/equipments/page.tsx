@@ -126,8 +126,8 @@ export default function Vehicles() {
       ...vehicles.sort(
         (a, b) =>
           -order *
-          a[title as keyof Equipment]!.toString().localeCompare(
-            b[title as keyof Equipment]!.toString()
+          (a[title as keyof Equipment] ?? "").toString().localeCompare(
+            (b[title as keyof Equipment] ?? "").toString()
           )
       ),
     ]);

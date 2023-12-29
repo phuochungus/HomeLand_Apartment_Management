@@ -2,7 +2,7 @@
     width: 23%;
     background-color: #d7e2ff;
     padding-top: 1rem;
-    height: auto;
+    height: fit-content;
 }
 
 .sidebarButtonMenu {
@@ -28,6 +28,14 @@
     .sidebar {
         visibility: hidden;
         width: 0;
+    }
+
+}
+@media screen and (max-width: 2000px) {
+    .sidebar {
+     
+        width: 23%;
+        height: 200%;
     }
 
 }

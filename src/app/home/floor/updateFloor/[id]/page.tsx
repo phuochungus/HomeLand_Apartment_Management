@@ -80,7 +80,7 @@ export default function UpdateBuilding({ params }: { params: { id: string } }) {
       } catch (error) {
         removeLoadingFilter(document.body!);
         console.log(error);
-        toastMessage({ type: "error", title: "Update faily!" });
+        toastMessage({ type: "error", title: "Update fail!" });
       }
     }
   };

@@ -46,7 +46,7 @@ const TaskTechnician = () => {
   const titleTable = [
     "Create Date",
     "Content",
-    "Assigner email",
+    // "Assigner email",
     "Status",
     "Invoice",
     "Action",
