@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import styles from './adminDashboard.module.scss'
 import { ReactElement, useEffect, useState } from "react";
