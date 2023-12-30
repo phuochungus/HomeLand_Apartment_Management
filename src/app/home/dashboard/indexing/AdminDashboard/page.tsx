@@ -1,65 +1,53 @@
 import React from "react";
-import styles from "../../dashboard.module.scss";
+import styles from './adminDashboard.module.scss'
 import { ReactElement, useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
+import {
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Bar,
+  ResponsiveContainer,
+} from "recharts";
+import { useQuery } from "react-query";
+import { futuna } from "../../../../../../public/fonts/futura";
+import clsx from "clsx";
 const AdminDashboard = () => {
-  useEffect(() => {
-    const fetchAPI = async () => {
-      let chart;
-      try {
-        const res = await axios.get("/api/building/report");
+  const { data } = useQuery({
+    queryKey: "residentChart",
+    queryFn: () =>
+      axios.get("/api/building/report").then((res) => {
         const buildingsData: any[] = res.data;
-        const labelsConfig = buildingsData.map(
-          (building) => building.building_name
-        );
-        let data: any[] = [];
-        const graph: any = document.getElementById("ticket-chart");
-        let total = 0;
-        buildingsData.forEach(
-          (building) => (total += parseInt(building.count))
-        );
+        const labels = buildingsData.map((building) => building.building_name);
+        let chartData: any[] = [];
         buildingsData.forEach((building) => {
-          data.push((parseInt(building.count) * 100) / total);
+          chartData.push({
+            building: building.building_name,
+            quantity: building.count,
+          });
         });
-        const config: any = {
-          type: "doughnut",
-          data: {
-            labels: labelsConfig,
-            datasets: [
-              {
-                label: "%resident",
-                data: data,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              title: {
-                display: true,
-                text: "Population distribution by building",
-              },
-            },
-          },
-        };
-        let oldChart = Chart.getChart("ticket-chart");
-        if (oldChart) {
-          oldChart.destroy();
-          chart = new Chart(graph, config);
-        } else chart = new Chart(graph, config);
-      } catch (e) {
-        throw e;
-      }
-    };
-    fetchAPI();
-  }, []);
+        console.log(chartData);
+        return chartData;
+      }),
+  });
+  console.log(data);
+
   return (
-    <div className={styles.chart}>
-      <canvas id="ticket-chart"></canvas>
+    <div className={clsx(styles.chart, futuna.className)}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart width={730} height={250} data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="building" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="quantity" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

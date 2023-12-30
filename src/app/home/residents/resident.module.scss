@@ -144,3 +144,16 @@
   background: #eeeeee;
   border-radius: 4px;
 }
+.searchPageLayout {
+  display: flex;
+  width: 100%; 
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+  .searchPageLayout {
+    flex-direction: column;
+
+  }
+  }

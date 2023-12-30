@@ -229,7 +229,7 @@ export default function Residents() {
             Create Resident
           </ButtonComponent>
         </div>
-        <div className="d-flex w-100 mt-3 justify-content-between">
+        <div className={residentStyles.searchPageLayout}>
           <div className={clsx(residentStyles.perPage)}>
             <span>Show</span>
             <span>
@@ -255,7 +255,7 @@ export default function Residents() {
             </span>
             <span>Entries</span>
           </div>
-          <div className="d-flex">
+          <div className="d-flex flex-lg-row flex-column">
             {UserProfile.getRole() === "admin" && (
               <select
                 onChange={(e) => {

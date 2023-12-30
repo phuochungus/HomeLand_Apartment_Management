@@ -221,13 +221,14 @@ const TaskTechnician = () => {
                 const createAt = format(time, "dd-MM-yyyy HH:mm");
                 const resident: Resident = task.complain.resident;
                 const assigner = task.admin || task.manager;
+                console.log(assigner);
                 return (
                   <tr key={index}>
-                    <td width="20%">{createAt}</td>
-                    <td width="30%">{task.complain.content}</td>
-                    <td width="20%">{assigner.account.email}</td>
+                    <td >{createAt}</td>
+                    <td >{task.complain.content}</td>
+                    <td >{assigner.account.email}</td>
 
-                    <td width="5%">
+                    <td >
                       <span
                         className={clsx(styles.status, {
                           [styles.done]: status === "done",
@@ -239,7 +240,7 @@ const TaskTechnician = () => {
                         {status}
                       </span>
                     </td>
-                    <td width="20%">
+                    <td style={{display:'flex', justifyContent:'space-between'}}>
                       {task.invoice ? (
                         <ButtonComponent
                           preIcon={<BillIcon width={16} height={16} />}
@@ -260,10 +261,7 @@ const TaskTechnician = () => {
                           Create Invoice
                         </ButtonComponent>
                       )}
-                    </td>
-
-                    <td style={{ textAlign: "center" }} width="5%">
-                      <Tippy
+                       <Tippy
                         placement="right-start"
                         offset={[0, 0]}
                         interactive
@@ -294,6 +292,8 @@ const TaskTechnician = () => {
                         </div>
                       </Tippy>
                     </td>
+
+                  
                   </tr>
                 );
               })}

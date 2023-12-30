@@ -5,6 +5,7 @@ import mainStyles from "../../../page.module.css";
 import utilStyles from "@/styles/utils.module.scss";
 import residentStyles from "@/app/home/residents/resident.module.scss";
 import pageStyles from "@/styles/page.module.scss";
+import tableStyles from '@/styles/table.module.scss';
 import buildingStyles from "../../building.module.scss";
 import Form from "react-bootstrap/Form";
 import clsx from "clsx";
@@ -110,7 +111,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
     } else setCheckAll(false);
     setListChecked(newList);
   };
-  const titleTable = ["ID", "Name", "Phone Number", "Email", "Create At"];
+  const titleTable = ["Name", "Phone Number", "Email", "Create At", "Action"];
   const deleleHandle = (id: string) => {
     setSelectedId(id);
     setShowModal(true);
@@ -201,28 +202,28 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
           <table className={styles.tableInfo}>
             <tr>
               <td className="col-6">
-                <label className="col-2">Id:</label>{" "}
-                <span className="col-10 "> {building?.building_id}</span>
+                <label className="col-lg-2">Id:</label>{" "}
+                <span className="col-lg-10 col-12 "> {building?.building_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-2">Name:</label>{" "}
-                <span className="col-10">{building?.name}</span>
+                <label className="col--lg-2">Name:</label>{" "}
+                <span className="col-lg-10 col-12">{building?.name}</span>
               </td>
             </tr>
             <tr>
               <td className="col-6">
-                <label className="col-2">Address:</label>
-                <span className="col-10">{" " + building?.address}</span>
+                <label className="col-lg-2">Address:</label>
+                <span className="col-lg-10 col-12">{" " + building?.address}</span>
               </td>
               <td className="col-6">
-                <label className="col-2 ">Max floor:</label>
-                <span className="col-10">{" " + building?.max_floor}</span>
+                <label className="col-lg-2 ">Max floor:</label>
+                <span className="col-lg-10 col-12">{" " + building?.max_floor}</span>
               </td>
             </tr>
           </table>
         </div>
         <div className={styles.managerList}>
-          <div className="d-flex justify-content-between align-items-end">
+          <div className="d-flex flex-column flex-lg-row justify-content-between">
             <span>List Of Manager</span>
             <ButtonComponent
               onClick={handleShowManagerModal}
@@ -232,12 +233,10 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
               Add Manager
             </ButtonComponent>
           </div>
-          {building?.managers && building.managers?.length > 0 ? (
-            <Table
-              className={clsx(styles.tableBuilding, futuna.className)}
-              striped
-              bordered
-              hover
+          <div style={{ overflowX: "auto" }} className="w-100 mt-5">   {building?.managers && building.managers?.length > 0 ? (
+            <table
+              className={clsx(tableStyles.table, futuna.className)}
+            
             >
               <thead>
                 <tr>
@@ -252,7 +251,6 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
                   const createAt = format(time, "dd-MM-yyyy HH:mm:ss");
                   return (
                     <tr key={index}>
-                      <td>{manager.id}</td>
                       <td>{manager.profile.name}</td>
                       <td>{manager.profile.phone_number}</td>
                       <td>{manager.account.email}</td>
@@ -260,7 +258,7 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
                       {/* <td>{building.manager_id}</td> */}
 
                       <td>
-                        <div className="d-flex justify-content-center">
+                        
                           <ButtonComponent
                             onClick={() => deleleHandle(manager.id)}
                             preIcon={<CloseIcon width={16} height={16} />}
@@ -271,18 +269,19 @@ const DetailBuilding = ({ params }: { params: { id: string } }) => {
                           >
                             Delete
                           </ButtonComponent>
-                        </div>
+                        
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
-            </Table>
+            </table>
           ) : (
             <p style={{ textAlign: "center", marginTop: "100px" }}>
               There is currently no manager in the building!
             </p>
-          )}
+          )}</div>
+       
         </div>
       </div>
       <ToastContainer
