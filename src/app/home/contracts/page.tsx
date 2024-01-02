@@ -11,12 +11,30 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { Contract } from "@/models/contract";
 import { useTranslation } from "react-i18next";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import ModalComponent from "../../../components/Modal/Modal";
 import toastMessage from "../../../utils/toast";
 import { ToastContainer } from "react-toastify";
+import { search, searchingContract } from "../../../libs/utils";
+import { Apartment } from "../../../models/apartment";
+import { Floor } from "../../../models/floor";
+import { Building } from "../../../models/building";
+import FilterButton from "./filter";
 export default function Contracts() {
   const [ContractList, setContractList] = useState<Contract[]>([]);
+  const [Apartments, setApartments] = useState<Apartment[]>([]);
+  const [Buildings, setBuildings] = useState<Building[]>([]);
+  const [Floors, setFloors] = useState<Floor[]>([]);
+  const [selectedBuilding, setSelectedBuilding] = useState<Building>();
+  const [selectedFloor, setSelectedFloor] = useState<Floor>();
+  const [selectedApartment, setSelectedApartment] = useState<Apartment>();
+  const [selectedStatus, setSelectedStatus] = useState<string>();
+
+  const [resetFloorsDropdown, setResetFloorsDropdown] =
+    useState<boolean>(false);
+  const [resetApartmentsDropdown, setResetApartmentsDropdown] =
+    useState<boolean>(false);
+
   const [t, i18n] = useTranslation();
   const router = useRouter();
 
@@ -27,13 +45,16 @@ export default function Contracts() {
   const { isLoading, isError, data, refetch } = useQuery(
     "contract",
     () =>
-      axios.get("/api/contract?page=" + page).then((res) => {
+      axios.get("/api/contract").then((res) => {
         setContractList(res.data as Contract[]);
+        let result = [...(res.data as Contract[])];
+        return result;
       }),
     {
       refetchOnWindowFocus: false,
     }
   );
+  const [searchParam, setSearchParam] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [selectedContractId, setSelectedContractId] = useState("");
@@ -54,50 +75,181 @@ export default function Contracts() {
     setSelectedContractId(id);
     setShowModal(true);
   };
-  useEffect(() => {
-    window.addEventListener("scroll", (e) => {
-      const windowHeight =
-        "innerHeight" in window
-          ? window.innerHeight
-          : document.documentElement.offsetHeight;
-      const body = document.body;
-      const html = document.documentElement;
-      const docHeight = Math.max(
-        body.scrollHeight,
-        body.offsetHeight,
-        html.clientHeight,
-        html.scrollHeight,
-        html.offsetHeight
-      );
-      const windowBottom = windowHeight + window.pageYOffset;
-      if (windowBottom + 50 >= docHeight) {
-        handleScrollEnd();
-      }
-    });
-  }, []);
+  useQuery(
+    "building",
+    () =>
+      axios.get("/api/building").then((res) => {
+        setBuildings(res.data as Building[]);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+  // useEffect(() => {
+  //   window.addEventListener("scroll", (e) => {
+  //     const windowHeight =
+  //       "innerHeight" in window
+  //         ? window.innerHeight
+  //         : document.documentElement.offsetHeight;
+  //     const body = document.body;
+  //     const html = document.documentElement;
+  //     const docHeight = Math.max(
+  //       body.scrollHeight,
+  //       body.offsetHeight,
+  //       html.clientHeight,
+  //       html.scrollHeight,
+  //       html.offsetHeight
+  //     );
+  //     const windowBottom = windowHeight + window.pageYOffset;
+  //     if (windowBottom + 50 >= docHeight) {
+  //       handleScrollEnd();
+  //     }
+  //   });
+  // }, []);
+
+  // const ContractSortOptions = [
+  //   {
+  //     title: t("building"),
+  //     child: (
+  //       <SearchDropdown
+  //         title={"Choose Building"}
+  //         selections={Buildings.map((building) => building.name)}
+  //         onChange={(index) => {
+  //           setFloors(Buildings[index].floors);
+  //         }}
+  //         style={{ width: "100%" }}
+  //       ></SearchDropdown>
+  //     ),
+  //   },
+  //   {
+  //     title: t("floor"),
+  //     child: (
+  //       <SearchDropdown
+  //         title={"Choose Floor"}
+  //         selections={Floors.map((floor) => floor.name)}
+  //         onChange={(index) => {
+  //           setApartments(Floors[index].apartments);
+  //         }}
+  //         style={{ width: "100%" }}
+  //       ></SearchDropdown>
+  //     ),
+  //   },
+  //   {
+  //     title: t("apartment"),
+  //     child: (
+  //       <div style={{ width: "100%" }}>
+  //         {" "}
+  //         <SearchDropdown
+  //           title={"Choose Apartment"}
+  //           style={{ width: "100%" }}
+  //           selections={Apartments.map((apartment) => apartment.name)}
+  //           onChange={(index) => {
+  //             // const newObj = {
+  //             //   ...createContractParams,
+  //             //   ["apartment_id"]: Apartments[index].apartment_id,
+  //             // };
+  //             // setCreateContractParams(newObj);
+  //           }}
+  //         ></SearchDropdown>
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     title: t("status"),
+  //     selections: [],
+  //     onChange: () => {},
+  //   },
+  // ];
 
   const ContractSortOption = [
     {
       title: t("building"),
-      selections: ["hello1", "hello2"],
-      onChange: () => {},
+      selections: ["All", ...Buildings.map((building) => building.name)],
+      onChange: (index: number) => {
+        if (index == 0) {
+          setFloors([]);
+          setSelectedBuilding(undefined);
+        } else {
+          setFloors(Buildings[index - 1].floors);
+          setSelectedBuilding(Buildings[index - 1]);
+        }
+        ///To filter in search
+        setSelectedFloor(undefined);
+        setApartments([]);
+        setSelectedApartment(undefined);
+        setResetFloorsDropdown(true);
+        setResetApartmentsDropdown(true);
+      },
     },
     {
       title: t("floor"),
-      selections: [],
-      onChange: () => {},
+      selections: ["All", ...Floors.map((floor) => floor.name)],
+      onChange: (index: number) => {
+        if (index == 0) {
+          setApartments([]);
+          setSelectedFloor(undefined);
+        } else {
+          setApartments(Floors[index - 1].apartments);
+          setSelectedFloor(Floors[index - 1]);
+        }
+        setSelectedApartment(undefined);
+        setResetFloorsDropdown(false);
+        setResetApartmentsDropdown(true);
+      },
+      resetDropdown: resetFloorsDropdown,
     },
     {
       title: t("apartment"),
-      selections: [],
-      onChange: () => {},
+      selections: ["All", ...Apartments.map((apartment) => apartment.name)],
+      onChange: (index: number) => {
+        if (index == 0) setSelectedApartment(undefined);
+        else setSelectedApartment(Apartments[index - 1]);
+        setResetFloorsDropdown(false);
+        setResetApartmentsDropdown(false);
+      },
+      resetDropdown: resetApartmentsDropdown,
     },
     {
       title: t("status"),
-      selections: [],
-      onChange: () => {},
+      selections: ["All", "Inactive", "Active"],
+      onChange: (index: number) => {
+        if (index == 0) setSelectedStatus(undefined);
+        else setSelectedStatus(["Inactive", "Active"][index - 1]);
+      },
     },
   ];
+  useEffect(() => {
+    if (!data) return;
+    let result = [...data];
+    if (selectedBuilding)
+      result = result.filter(
+        (item) => item.apartment.building_id == selectedBuilding.building_id
+      );
+
+    if (selectedFloor)
+      result = result.filter(
+        (item) => item.apartment.floor_id == selectedFloor.floor_id
+      );
+    if (selectedApartment)
+      result = result.filter(
+        (item) => item.apartment.apartment_id == selectedApartment.apartment_id
+      );
+    if (selectedApartment)
+      result = result.filter(
+        (item) => item.apartment.apartment_id == selectedApartment.apartment_id
+      );
+    if (selectedStatus)
+      result = result.filter(
+        (item) => item.status.toLowerCase() == selectedStatus.toLowerCase()
+      );
+
+    if (searchParam != "") result = searchingContract(result, searchParam);
+    setContractList([...result]);
+  }, [data, searchParam, selectedApartment, selectedBuilding, selectedFloor]);
+  function handleSearch(params: string): void {
+    setSearchParam(params);
+  }
+
   async function handleScrollEnd() {
     if (!loadingMore) {
       loadingMore = true;
@@ -152,6 +304,7 @@ export default function Contracts() {
           <SearchBar
             className={styles.searchBar}
             placeholder={t("search_contract")}
+            onChange={handleSearch}
           ></SearchBar>
         </div>
         {ContractSortOption.map((value, index) => (
@@ -160,7 +313,12 @@ export default function Contracts() {
             className={styles.itemContainer}
             style={{ height: "100%", width: "15%", padding: "0 1rem" }}
           >
-            {FilterButton(value)}
+            <FilterButton
+              title={value.title}
+              selections={value.selections}
+              onChange={value.onChange}
+              resetDropdown={value.resetDropdown}
+            ></FilterButton>
           </div>
         ))}
         <div
@@ -187,7 +345,7 @@ export default function Contracts() {
       </div>
       <Table responsive="sm">
         <thead>
-          <tr style={{ width: "100%"}} className=" text-center">
+          <tr style={{ width: "100%" }} className=" text-center">
             <th>{t("ID")}</th>
             <th>{t("name")}</th>
             <th>{t("phone_number")}</th>
@@ -202,17 +360,16 @@ export default function Contracts() {
           {ContractList.map((value, index): ReactNode => {
             return (
               <tr
-                key={index} className="align-middle text-center"
-                style={{ cursor: "pointer"  }}
+                key={index}
+                className="align-middle text-center"
+                style={{ cursor: "pointer" }}
               >
                 <td>{value.contract_id}</td>
                 <td>{value.resident.profile.name}</td>
                 <td>{value.resident.profile.phone_number}</td>
                 <td>{value.apartment.name}</td>
                 <td>{value.status}</td>
-                <td>
-                  {format(new Date(value.created_at), "dd-MM-yyyy")}
-                </td>
+                <td>{format(new Date(value.created_at), "dd-MM-yyyy")}</td>
                 <td>
                   {value.expire_at
                     ? format(new Date(value.expire_at), "dd-MM-yyyy")
@@ -283,28 +440,3 @@ export default function Contracts() {
     </main>
   );
 }
-
-const FilterButton = ({
-  title,
-  selections,
-  onChange,
-}: {
-  title: string;
-  selections: string[];
-  onChange?: (params: number) => void;
-}): React.ReactNode => {
-  return (
-    <div
-      className={`${styles.filter} ${futuna.className}`}
-      style={{ zIndex: 2 }}
-    >
-      <p>{title}</p>
-      <SearchDropdown
-        title={"hello"}
-        selections={selections}
-        onChange={onChange}
-        style={{ width: "100%" }}
-      ></SearchDropdown>
-    </div>
-  );
-};

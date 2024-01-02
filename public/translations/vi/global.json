@@ -46,5 +46,8 @@
   "days":"Ngày",
   "update":"Cập nhật",
   "choose_resident":"Chọn cư dân", 
-  "update_contract":"Cập nhật hợp đồng"
+  "update_contract":"Cập nhật hợp đồng",
+  "rent":"Thuê",
+  "buy":"Mua",
+  "all":"Tất cả"
 }

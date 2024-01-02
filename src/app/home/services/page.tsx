@@ -20,7 +20,7 @@ export default function Services() {
   const [ServiceList, setServiceList] = useState<Service[]>([]);
   const loadingMore = useRef({ isLoading: false, page: 1 });
   const router = useRouter();
-  const searchParam = useRef("");
+  const [searchParam, setSearchParam] = useState("");
   const [t, i18n] = useTranslation();
 
   const { isLoading, isError, data, refetch } = useQuery(
@@ -83,12 +83,13 @@ export default function Services() {
     // if(searchParam.current != "")
     //   result = search(result, "name", searchParam)
     // setApartmentList([...result]);
-    // if(searchParam.current != "")
-    //   result = search(result, "name", searchParam)
+    console.log(searchParam);
+    if(searchParam != "")
+      result = search(result, "name", searchParam)
     setServiceList([...result]);
-  }, [data, searchParam.current]);
+  }, [data, searchParam]);
   function handleSearch(params: string): void {
-    searchParam.current = params;
+    setSearchParam(params);
   }
 
   if (isLoading)
@@ -136,7 +137,7 @@ export default function Services() {
           <SearchBar
             placeholder={t("search_service")}
             className={styles.searchBar}
-            onSearch={handleSearch}
+            onChange={handleSearch}
             style={{ width: "50%" }}
           ></SearchBar>
         </div>

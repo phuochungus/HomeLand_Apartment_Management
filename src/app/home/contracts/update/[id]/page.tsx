@@ -59,6 +59,11 @@ export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [errors, setErrors] = useState<any>();
   const [contract, setContract] = useState<Contract>();
+  const [resetFloorsDropdown, setResetFloorsDropdown] =
+    useState<boolean>(false);
+  const [resetApartmentsDropdown, setResetApartmentsDropdown] =
+    useState<boolean>(false);
+
   const [createContractParams, setCreateContractParams] =
     useState<CreateContractParams>({
       resident_id: "",
@@ -268,6 +273,13 @@ export default function Page({ params }: { params: { id: string } }) {
             selections={Buildings.map((building) => building.name)}
             onChange={(index) => {
               setFloors(Buildings[index].floors);
+              setResetFloorsDropdown(true);
+              setResetApartmentsDropdown(true);
+              const newObj = {
+                ...createContractParams,
+                ["apartment_id"]: "",
+              };
+              setCreateContractParams(newObj);
             }}
             style={{ width: "100%" }}
           ></SearchDropdown>
@@ -281,8 +293,16 @@ export default function Page({ params }: { params: { id: string } }) {
             selections={Floors.map((floor) => floor.name)}
             onChange={(index) => {
               setApartments(Floors[index].apartments);
+              setResetFloorsDropdown(false);
+              setResetApartmentsDropdown(true);
+              const newObj = {
+                ...createContractParams,
+                ["apartment_id"]: "",
+              };
+              setCreateContractParams(newObj);
             }}
             style={{ width: "100%" }}
+            resetDropdown={resetFloorsDropdown}
           ></SearchDropdown>
         ),
       },
@@ -297,12 +317,16 @@ export default function Page({ params }: { params: { id: string } }) {
               style={{ width: "100%" }}
               selections={Apartments.map((apartment) => apartment.name)}
               onChange={(index) => {
+                setResetFloorsDropdown(false);
+                setResetApartmentsDropdown(false);
+              
                 const newObj = {
                   ...createContractParams,
                   ["apartment_id"]: Apartments[index].apartment_id,
                 };
                 setCreateContractParams(newObj);
               }}
+              resetDropdown={resetApartmentsDropdown}
             ></SearchDropdown>
             {errors && errors.apartment_id && (
               <span className={styles.error}>{errors.apartment_id}</span>
