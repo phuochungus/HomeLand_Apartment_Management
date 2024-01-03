@@ -160,7 +160,7 @@ export default function Building() {
             Create Building
           </ButtonComponent>
         </div>
-        <div className="d-flex w-100 mt-3 justify-content-between">
+        <div className={clsx(buildingStyles.searchPageLayout)}>
           <div className={clsx(residentStyles.perPage)}>
             <span>Show</span>
             <span>

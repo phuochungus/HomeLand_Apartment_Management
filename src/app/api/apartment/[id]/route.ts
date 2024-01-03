@@ -35,7 +35,7 @@ export async function GET(
           description: response.data.description,
           floorId: response.data.floor_id,
           buildingId: response.data.building_id,
-          resident: response.data.resident as Resident[]
+          residents: response.data.residents as Resident[]
         } as Apartment;
         const result: Apartment = temp;
 

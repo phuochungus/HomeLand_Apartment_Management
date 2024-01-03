@@ -2,7 +2,7 @@ import { Resident } from "./resident";
 import { Floor } from "./floor";
 export type Apartment = {
     apartment_id: string ;
-    name:string;
+    name: string;
     rent: string;
     images:string[];
     bedroom:number;

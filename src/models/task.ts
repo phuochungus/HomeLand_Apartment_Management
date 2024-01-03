@@ -6,7 +6,8 @@ import { Technician } from "./technician";
 
 export interface Task {
     task_id: string,
-    assigner: Manager,
+    manager?: any,
+    admin?:any,
     assignee:Technician,
     invoice?: RepairInvoice,
     status:string,
