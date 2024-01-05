@@ -16,8 +16,8 @@ Resident(props: IResidentProps) {
           <div style={{ width: "80px", borderRadius: "50%" }}>{props.img}</div>
         </Col>
         <Col>
-          <h4>{props.name}</h4>
-          <h4>{props.phone_number}</h4>
+          <h4 style={{fontSize:'20px', fontWeight:600}}>{props.name}</h4>
+          <h4 style={{fontSize:'18px'}}>{props.phone_number}</h4>
         </Col>
         <Col md="auto">
           <Button variant="info" style={{ alignItems: "center" }}>

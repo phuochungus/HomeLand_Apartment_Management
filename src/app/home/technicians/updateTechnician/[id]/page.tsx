@@ -152,7 +152,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
         <p className={clsx(utilStyles.headingXl, styles.title)}>
           Edit Technician Information
         </p>
-        <div className="d-inline-flex justify-content-between">
+        <div className={styles.bodyLayout}>
           <div className={styles.avatarLayout}>
             {AvatarImage}
             <input
@@ -268,7 +268,7 @@ const UpdateTechnician = ({ params }: { params: { id: string } }) => {
                 placeholder=""
               />
             </Form.Group>
-            <div className="d-flex justify-content-around">
+            <div className={styles.imageLayout}>
               <Form.Group className="mb-3">
                 <Form.Label className={clsx(styles.label, styles.required)}>
                   Front Photo Of Identification Number

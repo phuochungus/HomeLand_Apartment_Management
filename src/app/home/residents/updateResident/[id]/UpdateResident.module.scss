@@ -63,3 +63,25 @@
   font-size: 1rem;
 }
 
+.bodyLayout {
+  display: inline-flex;
+  justify-content: space-between;
+}
+.imageLayout {
+  display: flex;
+  justify-content: space-around;
+}
+
+@media only screen and (max-width: 768px) {
+  .bodyLayout {
+    flex-direction: column;
+
+  }
+  .imageLayout {
+    flex-direction: column;
+  }
+  .avatarLayout{
+    width: 40%;
+    margin: 0px auto;
+  }
+  }
