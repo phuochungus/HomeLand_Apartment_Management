@@ -1,13 +1,28 @@
 "use client";
 import { useTranslation } from "react-i18next";
 import styles from "../page.module.css";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
 import { UserProfile } from "@/libs/UserProfile";
+import AdminDashboard from "./indexing/AdminDashboard/page";
+import TechnicianDashboard from "./indexing/technicianDashboard/page";
 import { Col, Container, Row } from "react-bootstrap";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
+  const type = UserProfile.getRole();
+
+  const options = [{
+    type:'admin',
+    component: <AdminDashboard/>
+  },
+{
+
+  type: 'technician',
+  component: <TechnicianDashboard/>
+}]
+const option = options.find(option => option.type === type);
+console.log(option);
   useEffect(() => {
     const fetchAPI = async () => {
       let chart;
@@ -133,18 +148,7 @@ export default function Dashboard() {
 
   return (
     <main className={styles.main}>
-      <Container>
-        <Row>
-          <Col md={9}>
-            <canvas style={{ width: "105%" }} id="invoice-chart"></canvas>
-          </Col>
-          <Col md={3}>
-            <div className={styles.chart}>
-              <canvas id="building-chart"></canvas>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+     {option?.component}
     </main>
   );
 }

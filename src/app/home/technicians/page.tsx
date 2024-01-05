@@ -181,7 +181,7 @@ export default function Residents() {
             Create Technician
           </ButtonComponent>
         </div>
-        <div className="d-flex w-100 mt-3 justify-content-between">
+        <div className="d-flex flex-column flex-lg-row w-100 mt-3 justify-content-between">
           <div className={clsx(residentStyles.perPage)}>
             <span>Show</span>
             <span>
