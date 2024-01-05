@@ -274,7 +274,7 @@ export default function Apartments() {
           <SearchBar
             className={styles.searchBar}
             placeholder="Search by name...."
-            onSearch={handleSearch}
+            onChange={handleSearch}
           ></SearchBar>
         </div>
         {apartmentSortOption &&

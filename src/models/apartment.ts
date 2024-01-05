@@ -1,6 +1,8 @@
 import { Resident } from "./resident";
 import { Floor } from "./floor";
 export type Apartment = {
+    building_id?: string;
+    floor_id?: string;
     apartment_id: string ;
     name: string;
     rent: string;

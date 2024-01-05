@@ -46,6 +46,7 @@ export default function SearchBar({
             if (e.key == "Enter" && onSearch) {
               e.preventDefault();
               onSearch(e.currentTarget.value);
+              if (onChange) onChange(e.currentTarget.value);
             }
           }}
         ></input>

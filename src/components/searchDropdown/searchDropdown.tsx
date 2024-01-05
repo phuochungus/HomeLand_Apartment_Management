@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 
@@ -43,14 +43,20 @@ export default function SearchDropdown({
   onChange,
   title,
   selections,
+  resetDropdown,
 }: {
   className?: string;
   style?: React.CSSProperties;
   onChange?: (params: number) => void;
   title: string;
   selections: any[];
+  resetDropdown?: boolean;
 }) {
   const [dropdownValue, setDropdownValue] = useState(title);
+  useEffect(() => {
+    if(resetDropdown)
+      setDropdownValue(title);
+  },[selections, resetDropdown]);
   async function onChangeItem(value: string, index: number) {
     await (onChange && onChange(index));
     setDropdownValue(value);

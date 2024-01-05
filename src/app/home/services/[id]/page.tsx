@@ -372,7 +372,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       loading="lazy"
                       className=" img-fluid h-100 w-100"
                       src={
-                        "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
+                        "https://assets.website-files.com/5c10692127f39afbd1adaeed/5c10695127f39a17ebadaf20_GSS-logo.png"
                       }
                       alt="images"
                       rounded
@@ -445,7 +445,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <Row style={{ marginTop: "20px" }}>
                   <Col>
                     <h3>
-                      <b>Purchase History</b>
+                      <b>{t("purchaseHistory")}</b>
                     </h3>
                   </Col>
                 </Row>
@@ -460,7 +460,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     <thead>
                       <tr style={{ width: "100%" }}>
                         <th>{t("ID")}</th>
-                        <th>{t("Service Package Name")}</th>
+                        <th>{t("servicePackageName")}</th>
                         <th>{t("price")}</th>
                         <th>{t("create_at")}</th>
                         <th>{t("expire_at")}</th>
@@ -472,19 +472,19 @@ export default function Page({ params }: { params: { id: string } }) {
                         invoices.map((value, index) => (
                           <tr key={index} style={{ cursor: "pointer" }}>
                             <td>{value.invoice_id}</td>
-                            <td>{value.servicePackage.name}</td>
-                            <td>{value.total} VND</td>
+                            <td>{t(value.servicePackage.name)}</td>
+                            <td>{value.total.toLocaleString()} VND</td>
 
                             <td>
                               {format(
                                 new Date(value.created_at),
-                                "HH:mm:ss yyyy-MM-dd"
+                                "HH:mm dd/MM/yyyy"
                               )}
                             </td>
                             <td>
                               {format(
                                 new Date(value.expired_at),
-                                "HH:mm:ss dd/MM/yyyy"
+                                "HH:mm dd/MM/yyyy"
                               )}
                             </td>
                             <td style={{ width: 100 }}>
@@ -499,7 +499,7 @@ export default function Page({ params }: { params: { id: string } }) {
                                   }}
                                   variant="warning"
                                 >
-                                  Chi tiet
+                                  {t("detail")}
                                 </Button>
                               </div>
                             </td>

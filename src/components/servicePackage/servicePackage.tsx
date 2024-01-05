@@ -100,9 +100,9 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
           <div style={{ width: "80px", borderRadius: "50%" }}>{props.img}</div>
         </Col> */}
         <Col>
-          <h4>{props.servicePackage.name}</h4>
+          <h4>{t(props.servicePackage.name)}</h4>
           <h4>
-            {props.servicePackage.per_unit_price} VND /{" "}
+            {props.servicePackage.per_unit_price.toLocaleString()} VND /{" "}
             {props.servicePackage.expired_date} {t('days')}
           </h4>
         </Col>
@@ -111,12 +111,11 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
             <Button
               onClick={() => {
                 setShowConfirmModal(true);
-                console.log(props.servicePackage);
               }}
               variant="info"
               style={{ alignItems: "center" }}
             >
-              Buy
+              {t('buy')}
             </Button>
           ) : (
             <div className="d-flex">
@@ -131,7 +130,7 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
                 onClick={() => setShowUpdateModal(true)}
                 variant="warning"
               >
-                Sửa
+                {t('edit')}
               </Button>
 
               <Button
@@ -139,7 +138,7 @@ export default function ServicePackageLayout(props: IServicePackageProps) {
                 variant="danger"
                 style={{ marginLeft: "20px" }}
               >
-                Xóa
+                {t('delete')}
               </Button>
             </div>
           )}

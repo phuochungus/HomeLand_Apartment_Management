@@ -20,7 +20,7 @@ export default function Services() {
   const [ServiceList, setServiceList] = useState<Service[]>([]);
   const loadingMore = useRef({ isLoading: false, page: 1 });
   const router = useRouter();
-  const searchParam = useRef("");
+  const [searchParam, setSearchParam] = useState("");
   const [t, i18n] = useTranslation();
 
   const { isLoading, isError, data, refetch } = useQuery(
@@ -70,25 +70,13 @@ export default function Services() {
   useEffect(() => {
     if (!data) return;
     let result = [...data];
-    // if (apartmentSortOption)
-    //   sortOptionList.forEach((value, index) => {
-    //     if (apartmentSortOption[index].data[value] != "all")
-    //       result = search(
-    //         result,
-    //         apartmentSortOption[index].fieldName,
-    //         apartmentSortOption[index].data[value]
-    //       );
-    //       console.log(apartmentSortOption[index].data[value])
-    //   });
-    // if(searchParam.current != "")
-    //   result = search(result, "name", searchParam)
-    // setApartmentList([...result]);
-    // if(searchParam.current != "")
-    //   result = search(result, "name", searchParam)
+    console.log(searchParam);
+    if(searchParam != "")
+      result = search(result, "name", searchParam)
     setServiceList([...result]);
-  }, [data, searchParam.current]);
+  }, [data, searchParam]);
   function handleSearch(params: string): void {
-    searchParam.current = params;
+    setSearchParam(params);
   }
 
   if (isLoading)
@@ -136,7 +124,7 @@ export default function Services() {
           <SearchBar
             placeholder={t("search_service")}
             className={styles.searchBar}
-            onSearch={handleSearch}
+            onChange={handleSearch}
             style={{ width: "50%" }}
           ></SearchBar>
         </div>
@@ -221,7 +209,7 @@ const ServiceCard = (value: Service): React.ReactNode => {
         src={
           value.imageURLs
             ? value.imageURLs[0]
-            : "https://imgs.search.brave.com/2ec7dbMPC48d2bieXN1dJNsWbdhSFZ3lmUSPNwScvCQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9mdW55/bGlmZS5pbi93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMy8wNC84/MF9DdXRlLUdpcmwt/UGljLVdXVy5GVU5Z/TElGRS5JTl8tMS0x/MDI0eDEwMjQuanBn"
+            : "https://assets.website-files.com/5c10692127f39afbd1adaeed/5c10695127f39a17ebadaf20_GSS-logo.png"
         }
       />
       <Card.Body
