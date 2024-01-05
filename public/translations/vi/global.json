@@ -1,8 +1,4 @@
 {
-  "header": { "message": "Chao mung den Pet Store Deluxe" },
-  "home": {
-    "body": "Mot shop ho tro ban abc"
-  },
   "building":"Toà nhà",
   "floor":"Tầng",
   "apartment": "Căn hộ",
@@ -49,5 +45,14 @@
   "update_contract":"Cập nhật hợp đồng",
   "rent":"Thuê",
   "buy":"Mua",
-  "all":"Tất cả"
+  "all":"Tất cả",
+  "day":"Ngày",
+  "week":"Tuần",
+  "month":"Tháng",
+  "year":"Năm",
+  "quarter":"Quý",
+  "purchaseHistory":"Lịch sử mua hàng",
+  "servicePackageName":"Tên gói dịch vụ",
+  "price":"Giá",
+  "detail":"Chi tiết"
 }

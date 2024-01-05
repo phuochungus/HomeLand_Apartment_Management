@@ -48,5 +48,14 @@
   "update_contract":"Update Contract",
   "rent":"Rent",
   "buy":"Buy",
-  "all":"All"
+  "all":"All",
+  "day":"Day",
+  "month":"Month",
+  "year":"Year",
+  "week":"Week",
+  "quarter":"Quarter",
+  "purchaseHistory":"Purchase History",
+  "servicePackageName":"Service Package Name",
+  "price":"Price",
+  "detail":"Detail"
 }

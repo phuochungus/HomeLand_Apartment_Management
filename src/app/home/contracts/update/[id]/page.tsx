@@ -193,16 +193,6 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   );
 
-  // useQuery(
-  //   "apartment",
-  //   () =>
-  //     axios.get("/api/apartment").then((res) => {
-  //       setApartments(res.data as Apartment[]);
-  //     }),
-  //   {
-  //     refetchOnWindowFocus: false,
-  //   }
-  // );
   const [selectedFiles, setSelectedFiles] = useState<(File | URL)[]>([]);
   function handleFileChange(files: (File | URL)[]): void {
     setSelectedFiles(files);

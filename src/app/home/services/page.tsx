@@ -70,19 +70,6 @@ export default function Services() {
   useEffect(() => {
     if (!data) return;
     let result = [...data];
-    // if (apartmentSortOption)
-    //   sortOptionList.forEach((value, index) => {
-    //     if (apartmentSortOption[index].data[value] != "all")
-    //       result = search(
-    //         result,
-    //         apartmentSortOption[index].fieldName,
-    //         apartmentSortOption[index].data[value]
-    //       );
-    //       console.log(apartmentSortOption[index].data[value])
-    //   });
-    // if(searchParam.current != "")
-    //   result = search(result, "name", searchParam)
-    // setApartmentList([...result]);
     console.log(searchParam);
     if(searchParam != "")
       result = search(result, "name", searchParam)
