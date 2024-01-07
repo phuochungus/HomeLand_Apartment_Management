@@ -10,6 +10,7 @@ import clsx from "clsx";
 import { Modal, Table } from "react-bootstrap";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import Tippy from "@tippyjs/react/headless";
+import { NumericFormat } from "react-number-format";
 import {
   AssignIcon,
   BillIcon,
@@ -38,74 +39,84 @@ import { UserProfile } from "@/libs/UserProfile";
 import { Task } from "@/models/task";
 import { type } from "os";
 import { RepairInvoice } from "@/models/repairInvoice";
+import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 type InvoiceItem = {
   content: string;
   price: number;
 };
-const TaskTechnician = () => {
-  const titleTable = [
-    "Create Date",
-    "Content",
-    // "Assigner email",
-    "Status",
-    "Invoice",
-    "Action",
-  ];
-  const titleCreateInvoice = [
-    {
-      title: "Description",
-      width: "50%",
-    },
-    {
-      title: "Price",
-      width: "40%",
-    },
-    {
-      title: "Action",
-      width: "10%",
-    },
-  ];
-  const titleInvoice = [
-    {
-      title: "Description",
-      width: "60%",
-    },
-    {
-      title: "Price",
-      width: "40%",
-    },
-  ];
 
+const TaskTechnician = () => {
+  const [t, i18n] = useTranslation();
+  const { push } = useRouter();
   const [tasks, setTasks] = useState<Array<Task>>([]);
   const [showModalCreateInvoice, setShowModalCreateInvoice] = useState(false);
   const [showModalInvoice, setShowModalInvoice] = useState(false);
   const [invoice, setInvoice] = useState<RepairInvoice>();
   const [selectedId, setSelectedId] = useState("");
+  const [lineErrors, setLineErrors] = useState<Array<Number | undefined>>([]);
   const [invoiceItems, setInvoiceItems] = useState<Array<InvoiceItem>>([
     {
       content: "",
       price: 0,
     },
   ]);
+  const titleTable = [
+    t("Create Date"),
+    t("Content"),
+    // "Assigner email",
+    t("Status"),
+    t("Invoice"),
+    t("Action"),
+  ];
+  const titleCreateInvoice = [
+    {
+      title: t("Description"),
+      width: "50%",
+    },
+    {
+      title: t("Price"),
+      width: "40%",
+    },
+    {
+      title: t("Action"),
+      width: "10%",
+    },
+  ];
+  const titleInvoice = [
+    {
+      title: t("Description"),
+      width: "60%",
+    },
+    {
+      title: t("Price"),
+      width: "40%",
+    },
+  ];
   // const [total, setTotal] = useState(0);
   let total = 0;
   invoiceItems.forEach((item) => {
     total += item.price;
   });
+
   const createInvoiceHandler = async (task_id: string) => {
+    const listErrors = invoiceItems.map((item, index) => {
+      if (item.content === "") return index;
+    });
+    setLineErrors(listErrors);
     console.log(task_id);
-    console.log(invoiceItems);
-    try {
-      await axios.post(`/api/repairInvoice/${task_id}`, invoiceItems);
-      refetch()
-      setShowModalCreateInvoice(false);
-    } catch (err) {
-      throw err;
+    if (listErrors.length === 0) {
+      try {
+        await axios.post(`/api/repairInvoice/${task_id}`, invoiceItems);
+        refetch();
+        setShowModalCreateInvoice(false);
+      } catch (err) {
+        throw err;
+      }
     }
   };
   const handleShowCreateInvoice = async (id: string) => {
     setSelectedId(id);
-
     setShowModalCreateInvoice(true);
   };
   const handleShowInvoice = async (id: string) => {
@@ -113,12 +124,12 @@ const TaskTechnician = () => {
     try {
       loadingFiler(document.body!);
       const res = await axios.get(`/api/repairInvoice/${id}`);
-      removeLoadingFilter(document.body!)
+      removeLoadingFilter(document.body!);
       const data: RepairInvoice = res.data;
       setInvoice(data);
       setShowModalInvoice(true);
     } catch (e) {
-      removeLoadingFilter(document.body!)
+      removeLoadingFilter(document.body!);
       throw e;
     }
   };
@@ -163,18 +174,17 @@ const TaskTechnician = () => {
     list[index].price = newValue;
     setInvoiceItems(list);
   };
+  const redirectDetailPage = (taskId: string) => {
+    push(`./taskTechnician/detailInvoice/${taskId}?auth=true`);
+  };
   const listOptions = [
     {
-      title: "Detail",
-      onClick: () => {},
+      title: "Print Invoice",
+      onClick: redirectDetailPage,
     },
     {
       title: "Mark Done",
       onClick: doneTaskHandler,
-    },
-    {
-      title: "Print Invoice",
-      onClick: () => {},
     },
   ];
   const retrieveTasks = async () => {
@@ -200,12 +210,12 @@ const TaskTechnician = () => {
     <main className={clsx(mainStyles.main)}>
       <div className={clsx(styles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl, styles.title)}>
-          Received Task
+          {t("Received Task")}
         </h1>
         <div className={clsx(styles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Task List</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>{t("Task List")}</h1>
         </div>
-        <div style={{overflowX: 'auto'}} className="w-100 mt-5">
+        <div style={{ overflowX: "auto" }} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
             <thead>
               <tr>
@@ -215,88 +225,110 @@ const TaskTechnician = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks.length > 0 && tasks.map((task, index): React.ReactNode => {
-                const time = new Date(task.complain.created_at);
-                const status = task.status.toLowerCase();
-                const createAt = format(time, "dd-MM-yyyy HH:mm");
-                const resident: Resident = task.complain.resident;
-                const assigner = task.admin || task.manager;
-                console.log(assigner);
-                return (
-                  <tr key={index}>
-                    <td >{createAt}</td>
-                    <td >{task.complain.content}</td>
-                    <td >{assigner.account.email}</td>
-
-                    <td >
-                      <span
-                        className={clsx(styles.status, {
-                          [styles.done]: status === "done",
-                          [styles.pending]: status === "pending",
-                          [styles.processing]: status === "processing",
-                          [styles.cancel]: status === "cancel",
-                        })}
+              {tasks.length > 0 &&
+                tasks.map((task, index): React.ReactNode => {
+                  const time = new Date(task.complain.created_at);
+                  const status = task.status.toLowerCase();
+                  const createAt = format(time, "dd-MM-yyyy HH:mm");
+                  const resident: Resident = task.complain.resident;
+                  const assigner = task.admin || task.manager;
+                  console.log(assigner);
+                  return (
+                    <tr key={index}>
+                      <td>{createAt}</td>
+                      <td>{task.complain.content}</td>
+                      <td>{assigner.account.email}</td>
+                      <td>
+                        <span
+                          className={clsx(styles.status, {
+                            [styles.done]: status === "done",
+                            [styles.pending]: status === "pending",
+                            [styles.processing]: status === "processing",
+                            [styles.cancel]: status === "cancel",
+                          })}
+                        >
+                          {t(status)}
+                        </span>
+                      </td>
+                      <td
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
                       >
-                        {status}
-                      </span>
-                    </td>
-                    <td style={{display:'flex', justifyContent:'space-between'}}>
-                      {task.invoice ? (
-                        <ButtonComponent
-                          preIcon={<BillIcon width={16} height={16} />}
-                          className={clsx(styles.cudBtn, styles.invoiceBtn)}
-                          onClick={() => handleShowInvoice(task.task_id)}
-                        >
-                          Invoice
-                        </ButtonComponent>
-                      ) : (
-                        <ButtonComponent
-                          preIcon={<BillIcon width={16} height={16} />}
-                          className={clsx(
-                            styles.cudBtn,
-                            styles.createInvoiceBtn
-                          )}
-                          onClick={() => handleShowCreateInvoice(task.task_id)}
-                        >
-                          Create Invoice
-                        </ButtonComponent>
-                      )}
-                       <Tippy
-                        placement="right-start"
-                        offset={[0, 0]}
-                        interactive
-                        render={(attrs) => (
-                          <div
-                            className={clsx(
-                              styles.tippyWrapper,
-                              futuna.className
-                            )}
-                            {...attrs}
+                        {task.invoice ? (
+                          <ButtonComponent
+                            preIcon={<BillIcon width={16} height={16} />}
+                            className={clsx(styles.cudBtn, styles.invoiceBtn)}
+                            onClick={() => handleShowInvoice(task.task_id)}
                           >
-                            {listOptions.map((option, index) => {
-                              return (
-                                <span
-                                  onClick={() => option.onClick(task.task_id)}
-                                  className={styles.optionItem}
-                                  key={index}
-                                >
-                                  {option.title}
-                                </span>
-                              );
-                            })}
-                          </div>
+                            {t("Invoice")}
+                          </ButtonComponent>
+                        ) : (
+                          <ButtonComponent
+                            preIcon={<BillIcon width={16} height={16} />}
+                            className={clsx(
+                              styles.cudBtn,
+                              styles.createInvoiceBtn
+                            )}
+                            onClick={() =>
+                              handleShowCreateInvoice(task.task_id)
+                            }
+                          >
+                            {t("Create Invoice")}
+                          </ButtonComponent>
                         )}
-                      >
-                        <div className={styles.optionBtn}>
-                          <OptionIcon width={16} height={16} />
-                        </div>
-                      </Tippy>
-                    </td>
-
-                  
-                  </tr>
-                );
-              })}
+                        <Tippy
+                          placement="right-start"
+                          offset={[0, 0]}
+                          interactive
+                          render={(attrs) => (
+                            <div
+                              className={clsx(
+                                styles.tippyWrapper,
+                                futuna.className
+                              )}
+                              {...attrs}
+                            >
+                              {listOptions.map((option, index) => {
+                                if (index === 0) {
+                                  console.log(task);
+                                  if (task.invoice)
+                                    return (
+                                      <span
+                                        onClick={() =>
+                                          option.onClick(task.task_id)
+                                        }
+                                        className={styles.optionItem}
+                                        key={index}
+                                      >
+                                        {option.title}
+                                      </span>
+                                    );
+                                } else
+                                  return (
+                                    <span
+                                      onClick={() =>
+                                        option.onClick(task.task_id)
+                                      }
+                                      className={styles.optionItem}
+                                      key={index}
+                                    >
+                                      {option.title}
+                                    </span>
+                                  );
+                              })}
+                            </div>
+                          )}
+                        >
+                          <div className={styles.optionBtn}>
+                            <OptionIcon width={16} height={16} />
+                          </div>
+                        </Tippy>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
@@ -326,7 +358,7 @@ const TaskTechnician = () => {
       >
         <Modal.Header className={modalStyles.modalHeader} closeButton>
           <Modal.Title className={modalStyles.titleModal}>
-            Create Invoice
+            {t(" Create Invoice")}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={modalStyles.bodyModal}>
@@ -340,26 +372,38 @@ const TaskTechnician = () => {
           <div className={styles.bodyInvoice}>
             {invoiceItems.map((item, index) => {
               return (
-                <div className={styles.itemLine} key={index}>
-                  <input
-                    value={item.content}
-                    className={styles.description}
-                    onChange={(e) =>
-                      contentChangeHandler(e.target.value, index)
-                    }
-                  />
-                  <input
-                    value={item.price}
-                    className={styles.price}
-                    onChange={(e) => priceChangeHandler(e.target.value, index)}
-                  />
+                <div key={index}>
+                  <div className={styles.itemLine}>
+                    <input
+                      value={item.content}
+                      className={styles.description}
+                      onChange={(e) => {
+                        setLineErrors((prev) =>
+                          prev.filter((er) => er !== index)
+                        );
+                        contentChangeHandler(e.target.value, index);
+                      }}
+                    />
+                    <input
+                      value={item.price}
+                      className={styles.price}
+                      onChange={(e) =>
+                        priceChangeHandler(e.target.value, index)
+                      }
+                    />
 
-                  <div
-                    onClick={() => removeLineHandler(index)}
-                    className={styles.TrashIcon}
-                  >
-                    <GarbageIcon width={16} height={16} />
+                    <div
+                      onClick={() => removeLineHandler(index)}
+                      className={styles.TrashIcon}
+                    >
+                      <GarbageIcon width={16} height={16} />
+                    </div>
                   </div>
+                  {lineErrors.includes(index) && (
+                    <span className={styles.errors}>
+                      {t("Content can not be empty!")}
+                    </span>
+                  )}
                 </div>
               );
             })}
@@ -369,10 +413,10 @@ const TaskTechnician = () => {
             className={styles.addLineBtn}
             preIcon={<PlusIcon width={16} height={16} />}
           >
-            Add Empty line
+            {t("Add Empty line")}
           </ButtonComponent>
           <div className={styles.total}>
-            <span>Total</span>
+            <span>{t("Total")}</span>
             <span>{total} VND</span>
           </div>
         </Modal.Body>
@@ -398,38 +442,43 @@ const TaskTechnician = () => {
         onHide={() => setShowModalInvoice(false)}
       >
         <Modal.Header className={modalStyles.modalHeader} closeButton>
-          <Modal.Title className={modalStyles.titleModal}>Invoice</Modal.Title>
+          <Modal.Title className={modalStyles.titleModal}>
+            {t("Invoice")}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className={modalStyles.bodyModal}>
-        <div className={styles.invoice}>
-          <div className={styles.titleInvoice}>
-            {titleInvoice.map((item, index) => (
-              <span style={{ width: item.width }} key={index}>
-                {item.title}
-              </span>
-            ))}
-          </div>
-          <div className={styles.bodyInvoice}>
-          
-            {invoice?.items?.map((item, index) => {
-              return (
-                <div className={styles.itemLine} key={index}>
-                  <span style={{ width: "60%" }} className={clsx(styles.line)}>
-                    {item.content}
-                  </span>
-                  <span style={{ width: "40%" }} className={clsx(styles.line)}>
-                    {item.price} VND
-                  </span>
-                </div>
-              );
-            })}
-           
-           
-          </div>
-          <div className={styles.total}>
-            <span>Total</span>
-            <span>{total} VND</span>
-          </div>
+          <div className={styles.invoice}>
+            <div className={styles.titleInvoice}>
+              {titleInvoice.map((item, index) => (
+                <span style={{ width: item.width }} key={index}>
+                  {item.title}
+                </span>
+              ))}
+            </div>
+            <div className={styles.bodyInvoice}>
+              {invoice?.items?.map((item, index) => {
+                return (
+                  <div className={styles.itemLine} key={index}>
+                    <span
+                      style={{ width: "60%" }}
+                      className={clsx(styles.line)}
+                    >
+                      {item.content}
+                    </span>
+                    <span
+                      style={{ width: "40%" }}
+                      className={clsx(styles.line)}
+                    >
+                      {item.price.toLocaleString()} VND
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.total}>
+              <span>{t("Total")}</span>
+              <span>{total} VND</span>
+            </div>
           </div>
         </Modal.Body>
       </Modal>

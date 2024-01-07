@@ -46,5 +46,25 @@
   "days":"Ngày",
   "update":"Cập nhật",
   "choose_resident":"Chọn cư dân", 
-  "update_contract":"Cập nhật hợp đồng"
+  "update_contract":"Cập nhật hợp đồng",
+  "Received Task": "Nhiệm vụ đã nhận",
+  "Task List":"Danh sách nhiệm vụ",
+  "Invoice": "Hóa đơn",
+  "Created Invoice": "Hóa đơn đã tạo",
+  "Create Invoice": "Tạo hóa đơn",
+  "Content can not be empty!": "Nội dung không thể trống!",
+  "Add Empty line":"Thêm dòng mới",
+  "Total":"Tổng cộng",
+  "Create": "Tạo",
+  "Description": "Mô tả",
+  "Price": "Giá",
+  "Action":"Hành động",
+  "Create Date": "Ngày tạo",
+  "Content": "Nội dung",
+  "Status":"Trạng thái",
+  "done": "Hoàn thành",
+  "pending":"Đang chờ",
+  "processing":"Đang xử lí",
+  "cancel":"Hủy"
+
 }
