@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import clsx from "clsx";
 import React, { useState } from "react";
 import styles from "./technicianDashboard.module.scss";
@@ -13,6 +13,11 @@ import { Task } from "@/models/task";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaTasks } from "react-icons/fa";
+import {
+  MdOutlineFileDownloadDone,
+  MdOutlineLowPriority,
+} from "react-icons/md";
 import {
   LineChart,
   Line,
@@ -87,17 +92,17 @@ const TechnicianDashboard = () => {
   return (
     <div className={clsx(styles.wrapper, futuna.className)}>
       <div className={clsx(styles.header)}>
-       
-          <div className="col-lg-3 col-sm-12">
-            <div className={clsx(styles.inforLayout)}>
-              <p className={clsx(styles.inforHeader)}>Information</p>
-              <Image
-                style={{ borderRadius: "50%", margin: "16px 0px" }}
-                src={avatar}
-                width={80}
-                height={80}
-                alt=""
-              />
+        <div style={{ textAlign: "center" }} className="col-lg-3">
+          <div className={clsx(styles.inforLayout)}>
+            <p className={clsx(styles.inforHeader)}>Information</p>
+            <Image
+              style={{ borderRadius: "50%", margin: "16px 0px" }}
+              src={avatar}
+              width={80}
+              height={80}
+              alt=""
+            />
+            <div className="d-flex flex-column">
               <span className={clsx(styles.inforItem)}>
                 Full name: {data && data.profile.name}
               </span>
@@ -110,36 +115,53 @@ const TechnicianDashboard = () => {
               </span>
             </div>
           </div>
-          <div className="col-lg-9">
-            <div className={clsx(styles.taskInfo)}>
-              <p>Statistics of tasks</p>
-              <div className={clsx(styles.taskStatistic)}>
-                <div className={clsx(styles.taskItem, styles.all)}>
-                  <span className={clsx(styles.taskItemTitle)}>All Tasks</span>
+        </div>
+        <div className="col-lg-9">
+          <div className={clsx(styles.taskInfo)}>
+            <p>Statistics of tasks</p>
+            <div className={clsx(styles.taskStatistic)}>
+              <div className={clsx(styles.taskItem)}>
+                <div className={clsx(styles.iconTask, styles.all)}>
+                  <FaTasks />
+                </div>
+                <div className="d-flex flex-column align-items-center">
                   <span className={clsx(styles.valueItem)}>
                     {tasks?.length}
                   </span>
+                  <span className={clsx(styles.taskItemTitle)}>All Tasks</span>
                 </div>
-                <div className={clsx(styles.taskItem, styles.finish)}>
-                  <span className={clsx(styles.taskItemTitle)}>Finished</span>
+              </div>
+              <div className={clsx(styles.taskItem)}>
+                <div className={clsx(styles.iconTask, styles.finish)}>
+                  <MdOutlineFileDownloadDone />
+                </div>
+                <div className="d-flex flex-column align-items-center">
                   <span className={clsx(styles.valueItem)}>
                     {tasks?.filter((task) => task.status === "DONE").length}
                   </span>
+                  <span className={clsx(styles.taskItemTitle)}>Finished</span>
                 </div>
-                <div className={clsx(styles.taskItem, styles.remain)}>
-                  <span className={clsx(styles.taskItemTitle)}>remain</span>
+              </div>
+              <div className={clsx(styles.taskItem)}>
+                <div className={clsx(styles.iconTask, styles.remain)}>
+                  <MdOutlineLowPriority />
+                </div>
+                <div className="d-flex flex-column align-items-center">
                   <span className={clsx(styles.valueItem)}>
                     {tasks?.filter((task) => task.status !== "DONE").length}
                   </span>
+                  <span className={clsx(styles.taskItemTitle)}>Remain</span>
                 </div>
               </div>
             </div>
           </div>
-        
+        </div>
       </div>
       <div className={clsx(styles.body)}>
         <div className={clsx(styles.chartLayout)}>
-          <p>Statistics on the number of tasks created by day</p>
+          <p style={{ textAlign: "center", fontSize: 20 }}>
+            Statistics on the number of created tasks by day
+          </p>
           <div className={clsx(styles.headerChartLayout)}>
             <DatePicker
               showMonthYearPicker

@@ -44,28 +44,45 @@
 }
 .taskItem {
   display: flex;
-  flex-direction: column;
-  color: var(--text-color);
+  flex-direction: row;
+
   align-items: center;
-  padding: 12px 40px;
+  justify-content: space-between;
+  padding: 12px 30px;
   border-radius: 24px;
   width: 24%;
+  background-color: var(--white);
 }
 .taskItemTitle {
-  font-weight: 600;
-  font-size: 1.2rem;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--text-color);
 }
 .valueItem {
-  font-size: 2rem;
+  font-size: 24px;
+  color: var(--black);
+  font-weight: bold;
+}
+.iconTask {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 .all {
   background-color: #feeef1;
+  color: red;
 }
 .finish {
   background-color: #d9fae7;
+  color: var(--green);
 }
 .remain {
   background-color: #fef2dc;
+  color: var(--yellow);
 }
 
 .body {
@@ -77,19 +94,22 @@
   height: 500px;
   padding: 40px;
   border-radius: 24px;
-  border: 1px solid #c7ffc7;
-  background-color: #f3fff3;
+  // border: 1px solid #c7ffc7;
+  //  background-color: #f3fff3;
+  background-color: var(--white);
 }
 .headerChartLayout {
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 .headerChartLayout > div {
   margin-right: 30px;
 }
 .applyBtn {
   color: #fff;
-  background-color: #36e246;
+  background-color: var(--primary);
   border-radius: 4px;
   margin-left: 20px;
   padding: 4px 20px;
@@ -98,16 +118,17 @@
   /* height: 100%; */
   box-shadow: 0 -3px 0 rgba(0, 0, 0, 0.25) inset;
   &:hover {
-    background-color: #2abc39;
+    background-color: #103eb3;
     transition: 0.3s ease-in background-color;
   }
   &:active {
-    background-color: #17a925;
+    background-color: #092c83;
     transition: 0.3s ease-in background-color;
   }
 }
 @media only screen and (max-width: 840px) {
   .taskInfo {
+    margin-top: 20px;
     p {
       display: none;
     }
@@ -120,25 +141,21 @@
   }
 }
 
-@media only screen and (max-width: 840px) {
-  .taskInfo {
-    p {
-      display: none;
-    }
-  }
-  .chartLayout {
-    overflow-x: auto;
-  }
-  .header {
-    flex-direction: column;
-  }
-}
 @media only screen and (max-width: 768px) {
-.taskStatistic {
-  flex-direction: column;
-  flex: 1;
+  .iconTask {
+    display: none;
+  }
 }
-.taskItem {
-  width: 100%;
-}
+
+@media only screen and (max-width: 576px) {
+  .taskStatistic {
+    flex-direction: column;
+    flex: 1;
+  }
+  .taskItem {
+    width: 100%;
+  }
+  .iconTask {
+    display: flex;
+  }
 }

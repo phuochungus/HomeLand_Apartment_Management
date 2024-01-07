@@ -139,7 +139,7 @@ const Complain = () => {
         );
         refetch();
         setChecked("");
-       // setLoading(false);
+        setLoading(false);
         toastMessage({type:'success', title:'Assign successfully'})
       } catch (e: any) {
         toastMessage({type:'error', title:'Assign failed'})
