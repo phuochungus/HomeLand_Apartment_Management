@@ -129,7 +129,6 @@ const AdminDashboard = () => {
               },
               title: {
                 display: true,
-                text: "Population distribution by building",
               },
             },
           },
