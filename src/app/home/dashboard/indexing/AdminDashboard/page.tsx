@@ -229,7 +229,7 @@ const AdminDashboard = () => {
           </Col>
           <Col md={3}>
             <div>
-              <canvas id="building-chart" width={"100%"}></canvas>
+              <canvas id="building-chart" width={"150%"}></canvas>
             </div>
           </Col>
         </Row>
