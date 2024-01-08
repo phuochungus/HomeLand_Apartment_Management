@@ -1,55 +1,240 @@
-"use client"
-import React from "react";
-import styles from './adminDashboard.module.scss'
-import { ReactElement, useEffect, useState } from "react";
+"use client";
+import { useTranslation } from "react-i18next";
+import styles from "./page.module.css";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import axios from "axios";
-import {
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  Bar,
-  ResponsiveContainer,
-} from "recharts";
-import { useQuery } from "react-query";
+import { UserProfile } from "@/libs/UserProfile";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import { futuna } from "../../../../../../public/fonts/futura";
-import clsx from "clsx";
 const AdminDashboard = () => {
-  const { data } = useQuery({
-    queryKey: "residentChart",
-    queryFn: () =>
-      axios.get("/api/building/report").then((res) => {
+  const [t, i18n] = useTranslation();
+  type FilterParams = {
+    start_at: string;
+    end_at: string;
+  };
+  const [filterParams, setFilterParams] =
+    useState<FilterParams>({
+      start_at: "",
+      end_at: "",
+    });
+  
+  useEffect(() => {
+    const fetchAPI = async () => {
+      let chart;
+      try {
+        const res = await axios.get("/api/building/report");
         const buildingsData: any[] = res.data;
-        const labels = buildingsData.map((building) => building.building_name);
-        let chartData: any[] = [];
+        const labelsConfig = buildingsData.map(
+          (building) => building.building_name
+        );
+        let data: any[] = [];
+        const graph: any = document.getElementById("building-chart");
+        let total = 0;
+        buildingsData.forEach(
+          (building) => (total += parseInt(building.count))
+        );
         buildingsData.forEach((building) => {
-          chartData.push({
-            building: building.building_name,
-            quantity: building.count,
-          });
+          data.push((parseInt(building.count) * 100) / total);
         });
-        console.log(chartData);
-        return chartData;
-      }),
-  });
-  console.log(data);
+        const config: any = {
+          type: "doughnut",
+          data: {
+            labels: labelsConfig,
+            datasets: [
+              {
+                label: "%resident",
+                data: data,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Population distribution by building",
+              },
+            },
+            zoom: {
+              pan: {
+                enabled: false,
+              },
+              zoom: {
+                enabled: false,
+              },
+            },
+          },
+        };
+        let oldChart = Chart.getChart("building-chart");
+        if (oldChart) {
+          oldChart.destroy();
+          chart = new Chart(graph, config);
+        } else chart = new Chart(graph, config);
+      } catch (e) {
+        throw e;
+      }
+    };
+    fetchAPI();
+  }, []);
+  useEffect(() => {
+    const fetchAPI = async () => {
+      let chart;
+      try {
+        const data = new FormData();
+        data.append("startDate", filterParams.start_at);
+        data.append("endDate", filterParams.end_at);
+        const res = await axios.post("/api/service/report", data);
+        console.log(res.data);
+        const statisticalData: any[] = res.data;
+        const labelsConfig = statisticalData.map((data) => data.name);
+        let chartData: any[] = [];
+        const graph: any = document.getElementById("invoice-chart");
+        statisticalData.forEach((data) => {
+          chartData.push(parseInt(data.revenue));
+        });
+        const config: any = {
+          type: "bar",
+          data: {
+            labels: labelsConfig,
+            datasets: [
+              {
+                data: chartData,
+                backgroundColor: statisticalData.map(() => {
+                  return (
+                    "#" + Math.floor(Math.random() * 16777215).toString(16)
+                  ); // Generate a random color for each bar
+                }),
+                barPercentage: 0.5,
+              },
+            ],
+          },
+          options: {
+            interaction: {
+              mode: "nearest",
+              axis: "x",
+              intersect: false,
+            },
+            plugins: {
+              zoom: {
+                pan: {
+                  enabled: false,
+                },
+                zoom: {
+                  enabled: false,
+                },
+              },
+              title: {
+                display: true,
+                text: "Population distribution by building",
+              },
+            },
+          },
+        };
+        let oldChart = Chart.getChart("invoice-chart");
+       
+        if (oldChart) {
+          oldChart.destroy();
+          chart = new Chart(graph, config);
+        } else chart = new Chart(graph, config);
+      } catch (e) {
+        throw e;
+      }
+    };
+    fetchAPI();
+  }, [filterParams]);
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const newObj = {
+        ...filterParams,
+        [e.target.name]: e.target.value,
+      };
+      setFilterParams(newObj);
+      console.log(newObj);
+    },
+    [filterParams]
+  );
 
   return (
-    <div className={clsx(styles.chart, futuna.className)}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart width={730} height={250} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="building" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="quantity" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <main style={futuna.style}>
+      <Container>
+        <Row>
+          <Col>
+            <Row className="align-items-center">
+              <Col md="auto">
+                <p 
+                  style={{
+                    width: "100px",
+                    alignItems: "center",
+                    display: "flex",
+                    padding: 0,
+                    margin: 0,
+                    marginRight: "20px",
+                  }}
+                >
+                  {"Ngày bắt đầu:"}
+                </p>
+              </Col>
+              <Col>
+                <Form.Group style={{ width: "100%" }}>
+                  <Form.Control
+                    size="lg"
+                    type="date"
+                    name="start_at"
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col></Col>
+            </Row>
+          </Col>
+          <Col>
+            <Row className="align-items-center">
+              <Col md="auto">
+                <p
+                  style={{
+                    width: "100px",
+                    alignItems: "center",
+                    display: "flex",
+                    padding: 0,
+                    margin: 0,
+                    marginRight: "20px",
+                  }}
+                >
+                  {"Ngày kết thúc:"}
+                </p>
+              </Col>
+              <Col>
+                <Form.Group style={{ width: "100%" }}>
+                  <Form.Control
+                    size="lg"
+                    type="date"
+                    name="end_at"
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col></Col>
+            </Row>
+          </Col>
+          <Col></Col>
+        </Row>
+
+        <Row style={{ marginTop: "50px" }}>
+          <Col md={9} width={"100%"}>
+            <canvas style={{ width: "105%" }} id="invoice-chart"></canvas>
+          </Col>
+          <Col md={3}>
+            <div>
+              <canvas id="building-chart" width={"100%"}></canvas>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </main>
   );
 };
 
