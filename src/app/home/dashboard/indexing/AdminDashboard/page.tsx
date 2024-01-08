@@ -13,12 +13,11 @@ const AdminDashboard = () => {
     start_at: string;
     end_at: string;
   };
-  const [filterParams, setFilterParams] =
-    useState<FilterParams>({
-      start_at: "",
-      end_at: "",
-    });
-  
+  const [filterParams, setFilterParams] = useState<FilterParams>({
+    start_at: "",
+    end_at: "",
+  });
+
   useEffect(() => {
     const fetchAPI = async () => {
       let chart;
@@ -31,6 +30,7 @@ const AdminDashboard = () => {
         let data: any[] = [];
         const graph: any = document.getElementById("building-chart");
         let total = 0;
+
         buildingsData.forEach(
           (building) => (total += parseInt(building.count))
         );
@@ -134,7 +134,7 @@ const AdminDashboard = () => {
           },
         };
         let oldChart = Chart.getChart("invoice-chart");
-       
+
         if (oldChart) {
           oldChart.destroy();
           chart = new Chart(graph, config);
@@ -164,7 +164,7 @@ const AdminDashboard = () => {
           <Col>
             <Row className="align-items-center">
               <Col md="auto">
-                <p 
+                <p
                   style={{
                     width: "100px",
                     alignItems: "center",
@@ -223,13 +223,22 @@ const AdminDashboard = () => {
         </Row>
 
         <Row style={{ marginTop: "50px" }}>
-          <Col md={9} width={"100%"}>
-            <canvas style={{ width: "105%" }} id="invoice-chart"></canvas>
+          <Col md={8} >
+            <canvas
+              style={{
+                width: "120%",
+                display: "block",
+              }}
+              id="invoice-chart"
+            ></canvas>
           </Col>
-          <Col md={3}>
-            <div>
-              <canvas id="building-chart" width={"150%"}></canvas>
-            </div>
+          <Col md={4}>
+            <Row>
+              <canvas
+                id="building-chart"
+                style={{ display: "block" }}
+              ></canvas>
+            </Row>
           </Col>
         </Row>
       </Container>
