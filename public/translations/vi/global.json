@@ -42,7 +42,6 @@
   "days":"Ngày",
   "update":"Cập nhật",
   "choose_resident":"Chọn cư dân", 
-  "update_contract":"Cập nhật hợp đồng",
   "Received Task": "Nhiệm vụ đã nhận",
   "Task List":"Danh sách nhiệm vụ",
   "Invoice": "Hóa đơn",
@@ -74,5 +73,7 @@
   "purchaseHistory":"Lịch sử mua hàng",
   "servicePackageName":"Tên gói dịch vụ",
   "price":"Giá",
-  "detail":"Chi tiết"
+  "detail":"Chi tiết",
+  "Amount":"Số lượng",
+  "total":"Tổng tiền"
 }
