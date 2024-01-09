@@ -17,6 +17,7 @@ import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { ToastContainer } from "react-toastify";
 import { Button, Modal, Table } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import {
   AddResidentIcon,
   CloseIcon,
@@ -36,7 +37,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
   const [apartment, setApartment] = useState<Array<Apartment>>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
-
+  const [t, i18n] = useTranslation();
   const retrieveFloor = async () => {
     try {
       loadingFiler(document.body!);
@@ -70,7 +71,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
     } else setCheckAll(false);
     setListChecked(newList);
   };
-  const titleTable = ["ID", "Tên", "Chiều dài","Chiều rộng","Giá thuê"];
+  const titleTable = ["ID",  t("name"), t("length"),t("width"),t("price")];
   const deleleHandle = (id: string) => {
     setSelectedId(id);
     setShowModal(true); ``
@@ -144,10 +145,10 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
         <p className={clsx(utilStyles.headingXl, styles.title)}>
-          Thông tin chi tiết tầng
+        {t("detail_floor")}
         </p>
         <div className={styles.container}>
-          <p>Thông tin cơ bản</p>
+          <p> {t("info")}</p>
           <table className={styles.tableInfo}>
             <tr>
               <td className="col-6">
@@ -155,17 +156,17 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
                 <span className="col-10 "> {floor?.floor_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-2">Tên Tầng:</label>{" "}
+                <label className="col-2"> {t("name")}:</label>{" "}
                 <span className="col-10">{floor?.name}</span>
               </td>
             </tr>
             <tr>
               <td className="col-6">
-                <label className="col-2">Toà nhà:</label>
+                <label className="col-2"> {t("building")}:</label>
                 <span className="col-10">{" " + floor?.building_id}</span>
               </td>
               <td className="col-6">
-                <label className="col-3 ">Số phòng tối đa:</label>
+                <label className="col-3 "> {t("max_apartment")}:</label>
                 <span className="col-10">{" " + floor?.max_apartment}</span>
               </td>
 
@@ -174,7 +175,7 @@ const DetailFloor = ({ params }: { params: { id: string } }) => {
         </div>
         <div className={styles.managerList}>
           <div className="d-flex justify-content-between align-items-end">
-            <span>Danh sách phòng</span>
+            <span> {t("list_apartment")}</span>
             {/* <ButtonComponent
               onClick={handleShowManagerModal}
               preIcon={<AddResidentIcon width={24} height={24} />}

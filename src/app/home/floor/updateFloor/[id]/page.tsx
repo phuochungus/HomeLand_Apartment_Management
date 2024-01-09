@@ -17,7 +17,7 @@ import toastMessage from "@/utils/toast";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import { ToastContainer } from "react-toastify";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { Col, Container, Row } from "react-bootstrap";
 type FormValue = {
   name: string;
@@ -25,7 +25,7 @@ type FormValue = {
   maxApartment: string;
 };
 export default function UpdateBuilding({ params }: { params: { id: string } }) {
-
+  const [t, i18n] = useTranslation();
   const [formValue, setFormValue] = useState<FormValue>({
     name: "",
     building_id: "",
@@ -156,12 +156,12 @@ export default function UpdateBuilding({ params }: { params: { id: string } }) {
       <main className={mainStyles.main}>
         <div className={clsx(styles.wapper, futuna.className)}>
           <p className={clsx(utilStyles.headingXl, styles.title)}>
-            Cập nhật thông tin tòa nhà
+          {t("update_floor")}
           </p>
 
           <Form className={clsx(styles.form, futuna.className)}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label className={styles.label}>Tên Tầng</Form.Label>
+              <Form.Label className={styles.label}>{t("name")}</Form.Label>
               <Form.Control
                 size="lg"
                 name="name"
@@ -176,7 +176,7 @@ export default function UpdateBuilding({ params }: { params: { id: string } }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label className={styles.label}>Số phòng tối đa</Form.Label>
+              <Form.Label className={styles.label}>{t("max_apartment")}</Form.Label>
               <Form.Control
                 size="lg"
                 type="number"
@@ -198,7 +198,7 @@ export default function UpdateBuilding({ params }: { params: { id: string } }) {
 
             </Form.Group>
             <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-              Cập nhật
+            {t("update")}
             </ButtonComponent>
           </Form>
         </div>

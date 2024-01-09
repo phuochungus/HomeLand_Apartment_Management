@@ -3,12 +3,14 @@
   "home": {
     "body": "A store designed for all your pet needs"
   },
+
   "building": "Building",
   "floor": "Floor",
   "apartment": "Apartment",
   "phone_number": "Phone Number",
   "name": "Name",
   "create":"Create",
+ 
   "create_at": "Create At",
   "expire_at": "Expire At",
   "search_contract": "Search contract with resident name...",
@@ -45,6 +47,29 @@
   "days":"Days",
   "update":"Update",
   "choose_resident":"Choose Resident",
-  
-  "update_contract":"Update Contract"
+  "update_contract":"Update Contract",
+  "placefindemployee": "Search employee by name...",
+  "Manage Employee": "Manage Employee",
+  "employeelist": "Employee List",
+  "add_employeetitle": "Add Employee",
+  "task": "Task",
+  "identyfy_number": "Identify Number",
+  "identyfy_front": "Identify Front Image",
+  "identyfy_back": "Identify Back Image",
+  "detail_employee": "Detail Employee",
+  "confirmd_delete": "Are you sure to delete this employee?",
+  "list_floor": "List Floor",
+  "floor_title": "Manage Floor",
+  "find_floor": "Find Floor",
+  "max_apartment": "Max Apartment",
+  "detail": "Detail",
+  "update_floor": "Update Floor",
+  "detail_floor": "Detail Floor",
+  "info": "Information",
+  "list_apartment": "List Apartment",
+  "length": "Length", 
+  "width": "Width",
+  "price": "Price",
+  "create_floor": "Create Floor"
+
 }

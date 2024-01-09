@@ -17,6 +17,7 @@ import ModalComponent from "@/components/Modal/Modal";
 import { Employee } from "@/models/employee";
 import { useQuery } from "react-query";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Value } from "sass";
 type FormValue = {
         name: string;
@@ -34,6 +35,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
         // const deleleHandle = () => {
         //         setShowModal(true);
         // };
+        const [t, i18n] = useTranslation();
         const router = useRouter();
         const [selectedId, setSelectedId] = useState("");
         const [formValue, setFormValue] = useState<any>({
@@ -260,7 +262,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                 <main className={styles.main} style={whiteBackground}>
 
                         <div className={styles.wapper}>
-                                <p className={styles.headingXl}>Chi tiết nhân viên</p>
+                                <p className={styles.headingXl}> {t("detail_employee")}</p>
                                 <Form className={styles.form} method="post">
                                         <Row>
                                                 <Col xs={12} md={6}>
@@ -289,11 +291,11 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                         </Row>
 
                                         <Form.Group className={styles.box} controlId="exampleForm.ControlInput1">
-                                                <Form.Label className={styles.label}>Họ và tên</Form.Label>
+                                                <Form.Label className={styles.label}>{t("name")}</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="Nguyễn Văn A..." value={formValue.name} onChange={handleChange} name="name" />
                                         </Form.Group>
                                         <Form.Group className={styles.box}>
-                                                <Form.Label className={styles.label}>Giới tính</Form.Label>
+                                                <Form.Label className={styles.label}>{t("gender")}</Form.Label>
 
                                         </Form.Group>
                                         <div key={`inline-radio`} className={styles.box}>
@@ -301,7 +303,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                 <Form.Check
                                                         checked={employee && employee.profile.gender === "male"}
                                                         inline
-                                                        label="Nam"
+                                                        label={t("male")}
                                                         name="gender"
                                                         value="male"
                                                         type='radio'
@@ -310,7 +312,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                                 />
                                                 <Form.Check
                                                         inline
-                                                        label="Nữ"
+                                                        label={t("female")}
                                                         name="gender"
                                                         type='radio'
                                                         checked={employee && employee.profile.gender === "female"}
@@ -322,19 +324,19 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                         </div>
 
                                         <Form.Group className={styles.box} controlId="exampleForm.ControlTextarea1">
-                                                <Form.Label className={styles.label}>Ngày sinh</Form.Label>
+                                                <Form.Label className={styles.label}> {t("birthday")}</Form.Label>
                                                 <Form.Control size="lg" type="date" placeholder="" value={employee &&
                                                         format(new Date(employee.profile.date_of_birth), "yyyy-MM-dd")
                                                 } onChange={handleChange} name="dateOfBirth" disabled />
                                         </Form.Group>
 
                                         <Form.Group className={styles.box} >
-                                                <Form.Label className={styles.label}>Số điện thoại</Form.Label>
+                                                <Form.Label className={styles.label}> {t("phone_number")}</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" value={formValue.phoneNumber} onChange={handleChange} name="phoneNumber" />
                                         </Form.Group>
                                         <Form.Group className={styles.box} >
                                                 <Form.Label className={styles.label}>
-                                                        Công việc
+                                                {t("task")}
                                                 </Form.Label>
                                                 <Form.Control
                                                         value={formValue.taskInfo}
@@ -348,7 +350,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                         </Form.Group>
                                         <Form.Group className={styles.box} >
                                                 <Form.Label className={styles.label}>
-                                                        Số căn cước công dân
+                                                {t("identyfy_number")}
                                                 </Form.Label>
                                                 <Form.Control
                                                         disabled
@@ -365,7 +367,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                         <div className={styles.box}>
                                                 <Form.Group className="mb-3">
                                                         <Form.Label className={classNames(styles.label, styles.required)}>
-                                                                Ảnh trước CCCD
+                                                        {t("identyfy_front")}
                                                         </Form.Label>
 
                                                         <Form.Control
@@ -397,7 +399,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                         <div className={styles.box}>
                                                 <Form.Group className="mb-3">
                                                         <Form.Label className={classNames(styles.label, styles.required)}>
-                                                                Ảnh sau CCCD
+                                                        {t("identyfy_back")}
                                                         </Form.Label>
                                                         <Form.Control
                                                                 accept="image/*"
@@ -430,8 +432,8 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                                 </Form>
                         </div>
                         <div className={styles.Buttondiv}>
-                                <ButtonComponent onClick={() => deleleHandle(employee?.id || "")} className={styles.creatBtn1}>Xóa</ButtonComponent>
-                                <ButtonComponent onClick={updateHandle} className={styles.creatBtn2}>Sửa</ButtonComponent>
+                                <ButtonComponent onClick={() => deleleHandle(employee?.id || "")} className={styles.creatBtn1}>  {t("delete")}</ButtonComponent>
+                                <ButtonComponent onClick={updateHandle} className={styles.creatBtn2}>  {t("edit")}</ButtonComponent>
                         </div>
                         {/* <ModalComponent
                                 show={showModal}
@@ -441,7 +443,7 @@ const DetailEmployee = ({ params }: { params: { id: string } }) => {
                         /> */}
                         <ModalComponent
                                 show={showModal}
-                                title="Có chắc chắn xóa cư dân này?"
+                                title=  {t("confirmd_delete")}
                                 handleConfirm={() => handleConfirmDelete(selectedId)}
                                 setShow={setShowModal}
                         />
