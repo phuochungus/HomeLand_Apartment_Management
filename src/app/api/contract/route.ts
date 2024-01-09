@@ -38,11 +38,10 @@ export async function POST(request: NextRequest) {
   return response;
 }
 export async function GET(request: NextRequest) {
-  const page = request.nextUrl.searchParams.get("page");
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: endpoint.contract + (page != null ? "?page=" + page : ""),
+    url: endpoint.contract ,
     headers: {
       Authorization: "Bearer " + request.cookies.get("token")?.value,
       "Content-Type": "application/json",

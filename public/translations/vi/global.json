@@ -1,8 +1,4 @@
 {
-  "header": { "message": "Chao mung den Pet Store Deluxe" },
-  "home": {
-    "body": "Mot shop ho tro ban abc"
-  },
   "building":"Toà nhà",
   "floor":"Tầng",
   "apartment": "Căn hộ",
