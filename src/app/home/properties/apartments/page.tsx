@@ -249,7 +249,6 @@ export default function Apartments() {
   function handleSearch(params: string): void {
     setSearchParam(params);
   }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -258,13 +257,14 @@ export default function Apartments() {
       className={`${styles.main} ${futuna.className} `}
     >
       <div style={{ marginBottom: "1vw", width: "100%" }}>
-        <ButtonComponent
+        {user.role != "resident" ? <ButtonComponent
           href={`${path}/add`}
           preIcon={<AddResidentIcon width={24} height={24} />}
           className={styles.addBtn}
         >
           Thêm căn hộ
-        </ButtonComponent>
+        </ButtonComponent>: <></>}
+        
       </div>
       <div
         className={styles.container}

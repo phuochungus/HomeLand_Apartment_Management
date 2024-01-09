@@ -101,7 +101,7 @@ export default function RootLayout({
                               futuna.className
                             )}
                           >
-                            {value.menu?.map((value, index) => (
+                            {value.menu?.map((value, index) => ( value.roles.indexOf(UserProfile.getRole()) > -1 ? 
                               <button
                                 key={index}
                                 className={clsx(styles.subMenu, {
@@ -110,7 +110,7 @@ export default function RootLayout({
                                 onClick={() => handleRouting(value.href)}
                               >
                                 {value.title}
-                              </button>
+                              </button> : <></>
                             ))}
                           </div>
                         </div>
