@@ -1,8 +1,4 @@
 {
-  "header": { "message": "Chao mung den Pet Store Deluxe" },
-  "home": {
-    "body": "Mot shop ho tro ban abc"
-  },
   "building":"Toà nhà",
   "floor":"Tầng",
   "apartment": "Căn hộ",
@@ -53,20 +49,20 @@
   "Created Invoice": "Hóa đơn đã tạo",
   "Create Invoice": "Tạo hóa đơn",
   "Content can not be empty!": "Nội dung không thể trống!",
-  "Add Empty line":"Thêm dòng mới",
-  "Total":"Tổng cộng",
-  "Create": "Tạo",
-  "Description": "Mô tả",
-  "Price": "Giá",
-  "Action":"Hành động",
-  "Create Date": "Ngày tạo",
-  "Content": "Nội dung",
-  "Status":"Trạng thái",
-  "done": "Hoàn thành",
-  "pending":"Đang chờ",
-  "processing":"Đang xử lí",
-  "cancel":"Hủy",
-  "Name": "Tên",
+"Add Empty line":"Thêm dòng mới",
+"Total":"Tổng cộng",
+"Create": "Tạo",
+"Description": "Mô tả",
+"Price": "Giá",
+"Action":"Hành động",
+"Create Date": "Ngày tạo",
+"Content": "Nội dung",
+"Status":"Trạng thái",
+"done": "Hoàn thành",
+"pending":"Đang chờ",
+"processing":"Đang xử lí",
+"cancel":"Hủy",
+"Name": "Tên",
 "Account": "Tài khoản",
 "Apartment": "Căn hộ",
 "Phone Number": "Số điện thoại",
@@ -99,10 +95,18 @@
 "Complain details": "Chi tiết",
 "received":"Đã nhận",
 "fixing":"Đang sửa",
-"rejected":"Đã từ chối"
-
-
-
-
-
+"rejected":"Đã từ chối",
+"update_contract":"Cập nhật hợp đồng",
+"rent":"Thuê",
+"buy":"Mua",
+"all":"Tất cả",
+"day":"Ngày",
+"week":"Tuần",
+"month":"Tháng",
+"year":"Năm",
+"quarter":"Quý",
+"purchaseHistory":"Lịch sử mua hàng",
+"servicePackageName":"Tên gói dịch vụ",
+"price":"Giá",
+"detail":"Chi tiết"
 }
