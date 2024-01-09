@@ -17,6 +17,7 @@ import {
   SortIcon,
   TrashIcon,
 } from "@/components/icons";
+import { useTranslation } from "react-i18next";
 import { useState, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { futuna } from "../../../../public/fonts/futura";
@@ -30,6 +31,7 @@ import { Technician } from "@/models/technician";
 import { FaTableTennis } from "react-icons/fa";
 
 export default function Residents() {
+  const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [technicians, setTechnicians] = useState<Array<Technician>>([]);
   const [selectedId, setSelectedId] = useState("");
@@ -101,7 +103,7 @@ export default function Residents() {
       retry: false,
     }
   );
-  const titleTable = ["Name", "Email", "Phone Number", "Create At", "Action"];
+  const titleTable = [t("Name"), t("Email"), t("Phone Number"), t("Create At"), t("Action")];
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
       console.log("hah");
@@ -169,7 +171,7 @@ export default function Residents() {
     <main className={clsx(styles.main)}>
       <div className={clsx(residentStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl)}>
-          Technical staff management
+         {t("Technical staff management")} 
         </h1>
         <div className={clsx(residentStyles.header)}>
           <h1 className={clsx(utilStyles.headingLg)}>List Of Technicians</h1>
@@ -178,12 +180,12 @@ export default function Residents() {
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
-            Create Technician
+           {t("Create Technician")} 
           </ButtonComponent>
         </div>
         <div className="d-flex flex-column flex-lg-row w-100 mt-3 justify-content-between">
           <div className={clsx(residentStyles.perPage)}>
-            <span>Show</span>
+            <span>{t("Show")}</span>
             <span>
               <Form.Select
                 onChange={(e) => handleSetActive(e.target.value)}
@@ -205,14 +207,14 @@ export default function Residents() {
                 )}
               </Form.Select>
             </span>
-            <span>Entries</span>
+            <span>{t("Entries")}</span>
           </div>
           <SearchLayout
             onKeydown={handleSearch}
             iconClick={searchIconClick}
-            placeHolder="Search Technician..."
+            placeHolder={t("Search Technician") + "..."}
             ref={searchRef}
-          />
+          />  
         </div>
         <div className={pageStyles.pageContainer}>
           <ButtonComponent
@@ -221,7 +223,7 @@ export default function Residents() {
               [pageStyles.disableBtn]: currentPage === 1,
             })}
           >
-            Previous
+            {t("Previous")}
           </ButtonComponent>
           <p>
             {currentPage}/{totalPages}
@@ -232,7 +234,7 @@ export default function Residents() {
               [pageStyles.disableBtn]: currentPage === totalPages,
             })}
           >
-            Next
+            {t("Next")}
           </ButtonComponent>
         </div>
         <div style={{overflowX: 'auto'}} className="w-100 mt-5">

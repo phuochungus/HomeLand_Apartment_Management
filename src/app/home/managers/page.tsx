@@ -18,6 +18,7 @@ import {
   SortIcon,
   TrashIcon,
 } from "@/components/icons";
+import { useTranslation } from "react-i18next";
 import { useState, useEffect, ReactNode, createRef } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,7 @@ import toastMessage from "@/utils/toast";
 import { Manager } from "@/models/manager";
 
 export default function Residents() {
+  const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [managers, setManagers] = useState<Array<Manager>>([]);
   const [selectedId, setSelectedId] = useState("");
@@ -104,12 +106,12 @@ export default function Residents() {
     }
   );
   const titleTable = [
-    "Name",
-    "Email",
-    "Building",
-    "Phone Number",
-    "Create At",
-    "Action"
+    t("Name"),
+    t("Email"),
+    t("Building"),
+    t("Phone Number"),
+    t("Create At"),
+    t("Action")
   ];
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
@@ -178,20 +180,20 @@ const handleNextPage = () => {
   return (
     <main className={clsx(styles.main)}>
       <div className={clsx(residentStyles.wrapper, futuna.className)}>
-        <h1 className={clsx(utilStyles.headingXl)}>Board Of Management</h1>
+        <h1 className={clsx(utilStyles.headingXl)}>{t("Board Of Management")}</h1>
         <div className={clsx(residentStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>List Of Manager</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>{t("List Of Manager")}</h1>
           <ButtonComponent
             href="/home/managers/addManager?auth=true"
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
-            Create Manager
+            {t("Create Manager")}
           </ButtonComponent>
         </div>
         <div className="d-flex flex-column flex-lg-row w-100 mt-3 justify-content-between">
           <div className={clsx(residentStyles.perPage)}>
-            <span>Show</span>
+            <span>{t("Show")}</span>
             <span>
               <Form.Select onChange={(e) => handleSetActive(e.target.value)} aria-label="Default select example">
                 {listOptions.map(
@@ -206,12 +208,12 @@ const handleNextPage = () => {
                 )}
               </Form.Select>
             </span>
-            <span>Entries</span>
+            <span>{t("Entries")}</span>
           </div>
           <SearchLayout
             onKeydown={handleSearch}
             iconClick={searchIconClick}
-            placeHolder="Search manager..."
+            placeHolder={t("Search manager") + "..."}
             ref={searchRef}
           />
         </div>
@@ -222,7 +224,7 @@ const handleNextPage = () => {
               [pageStyles.disableBtn]: currentPage === 1,
             })}
           >
-            Previous
+            {t("Previous")}
           </ButtonComponent>
           <p>
             {currentPage}/{totalPages}
@@ -233,7 +235,7 @@ const handleNextPage = () => {
               [pageStyles.disableBtn]: currentPage === totalPages,
             })}
           >
-            Next
+            {t("Next")}
           </ButtonComponent>
         </div>
         <div style={{overflowX: 'auto'}} className="w-100 mt-5">
@@ -273,7 +275,7 @@ const handleNextPage = () => {
                           )}
                           href={`/home/managers/updateManager/${manager.id}/?auth=true`}
                         >
-                          Edit
+                          {t("Edit")}
                         </ButtonComponent>
                         <div
                           onClick={() => deleleHandle(manager.id)}
