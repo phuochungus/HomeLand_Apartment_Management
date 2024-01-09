@@ -7,6 +7,7 @@ import axios from "axios";
 import { UserProfile } from "@/libs/UserProfile";
 import AdminDashboard from "./indexing/AdminDashboard/page";
 import TechnicianDashboard from "./indexing/technicianDashboard/page";
+import { Col, Container, Row } from "react-bootstrap";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
   const type = UserProfile.getRole();
@@ -21,9 +22,8 @@ export default function Dashboard() {
   component: <TechnicianDashboard/>
 }]
 const option = options.find(option => option.type === type);
-console.log(option);
   return (
-    <main className={styles.main}>
+    <main >
      {option?.component}
     </main>
   );

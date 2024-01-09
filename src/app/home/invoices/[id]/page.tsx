@@ -2,6 +2,7 @@
 import styles from "./page.module.css";
 import {
   Button,
+  Card,
   Carousel,
   Col,
   Container,
@@ -41,32 +42,81 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
-  
+
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
         <div>
-          <Container style={{ padding:"20px"}}>
+          <Container style={{ padding: "20px" }}>
+            <Row>
+              <Col md={6} style={{background:"blue"}}>
+                <Card style={{width:"100%", height:"100%"}} >
+                  <Card.Header as="h2">Thông tin đơn hàng</Card.Header>
+                  <Card.Body>
+                    <ul>
+                      <li>Mã đơn hàng: {data.invoice_id}</li>
+                      <li>
+                        Ngày tạo:{" "}
+                        {format(
+                          new Date(data.created_at),
+                          "HH:mm:ss dd-MM-yyyy"
+                        )}
+                      </li>
+                      <li>Gói dịch vụ: {data.servicePackage.name}</li>
+                      <li>
+                        Hạn sử dụng:{" "}
+                        {format(
+                          new Date(data.expired_at),
+                          "HH:mm:ss dd-MM-yyyy"
+                        )}
+                      </li>
+                      <li>Số lượng: {data.amount}</li>
+
+                      <li>
+                        Giá mỗi đơn vị: {data.servicePackage.per_unit_price}
+                      </li>
+                      <li>Tổng tiền: {data.total}</li>
+                    </ul>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6}>
+                <Card>
+                  <Card.Header as="h2">Thông tin gói dịch vụ</Card.Header>
+                  <Card.Body>
+                    <ul>
+                      <li>
+                        Hạn sử dụng (ngày): {data.servicePackage.expired_date}
+                      </li>
+                    </ul>
+                  </Card.Body>
+                </Card>
+                <Card>
+                  <Card.Header as="h2">Thông tin người mua</Card.Header>
+                  <Card.Body>
+                    <ul>
+                      <li>ID: {data.buyer.id}</li>
+                      <li>Vai trò: {data.buyer.role}</li>
+                      <li>Tên: {data.buyer.profile.name}</li>
+                      <li>Số điện thoại: {data.buyer.profile.phone_number}</li>
+                      <li>
+                        Ngày sinh:{" "}
+                        {format(
+                          new Date(data.buyer.profile.date_of_birth),
+                          "dd-MM-yyyy"
+                        )}
+                      </li>
+                    </ul>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+
+          {/* <Container style={{ padding: "20px" }}>
             <Row>
               <Col md={6}>
                 <h2>Thông tin đơn hàng</h2>
-                <ul>
-                  <li>Mã đơn hàng: {data.invoice_id}</li>
-                  <li>
-                    Ngày tạo:{" "}
-                    {format(new Date(data.created_at), "HH:mm:ss dd-MM-yyyy")}
-                  </li>
-                  <li>Người mua: {data.buyer.profile.name}</li>
-                  <li>Gói dịch vụ: {data.servicePackage.name}</li>
-                  <li>
-                    Hạn sử dụng:{" "}
-                    {format(new Date(data.expired_at), "HH:mm:ss dd-MM-yyyy")}
-                  </li>
-                  <li>Số lượng: {data.amount}</li>
-                  
-                  <li>Giá mỗi đơn vị: {data.servicePackage.per_unit_price}</li>
-                  <li>Tổng tiền: {data.total}</li>
-                 </ul>
               </Col>
               <Col md={6}>
                 <h2>Thông tin gói dịch vụ</h2>
@@ -98,7 +148,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 </ul>
               </Col>
             </Row>
-          </Container>
+          </Container> */}
         </div>
         <ToastContainer
           position="top-right"

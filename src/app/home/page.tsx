@@ -514,14 +514,14 @@ z"
       </svg>
     ),
     title: "Pet-Friendly Paradise",
-    description: "Unleash Your Furry Fun at HomeLand"
+    description: "Unleash Your Furry Fun at HomeLand",
   },
 ];
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main className={styles.main} style={futuna.style}>
       {" "}
-      <Carousel style={{marginBottom: "2vw"}}>
+      <Carousel style={{ marginBottom: "1vw" }}>
         {bannerPathList.map((value, index) => {
           if (index % 2 == 0)
             return (
@@ -534,11 +534,11 @@ export default function Home() {
                   <Image
                     src={value.image}
                     alt={`${index}_banner`}
-                    height={500}
+                    height={600}
                   />
-                  <div style={{ marginLeft: "1vw" }}>
+                  <div style={{ marginLeft: "1vw", marginRight: "1vw" }}>
                     <h2>{value.title}</h2>
-                    <p className={futuna.className}>{value.description}</p>
+                    <p style={{ fontSize: "14px" }}>{value.description}</p>
                   </div>
                 </div>
               </Carousel.Item>
@@ -558,13 +558,13 @@ export default function Home() {
                       flexDirection: "column-reverse",
                     }}
                   >
-                    <p className={futuna.className}>{value.description}</p>
+                    <p style={{ fontSize: "14px" }}>{value.description}</p>
                     <h2>{value.title}</h2>
                   </div>
                   <Image
                     src={value.image}
                     alt={`${index}_banner`}
-                    height={500}
+                    height={600}
                   />
                 </div>
               </Carousel.Item>
@@ -575,7 +575,7 @@ export default function Home() {
         {saleList.map((value, index) => (
           <Col key={index} style={{ textAlign: "center", fontSize: "1vw" }}>
             {value.icon}
-            <h5>{value.title}</h5>
+            <h1>{value.title}</h1>
             <p>{value.description}</p>
           </Col>
         ))}
