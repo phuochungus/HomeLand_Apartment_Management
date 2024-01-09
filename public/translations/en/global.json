@@ -57,5 +57,8 @@
   "purchaseHistory":"Purchase History",
   "servicePackageName":"Service Package Name",
   "price":"Price",
-  "detail":"Detail"
+  "detail":"Detail",
+  "total":"Total",
+  "payTo":"Pay To",
+  "invoiceTo":"Invoice To"
 }
