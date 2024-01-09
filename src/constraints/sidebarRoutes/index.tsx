@@ -29,7 +29,6 @@ export const sidebarInfo = [
   },
   {
     title: "Properties",
-    path: "properties/apartments",
     svg: (
       <svg
         width="44"

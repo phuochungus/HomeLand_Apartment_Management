@@ -18,7 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserProfile } from "@/libs/UserProfile";
 import ChatBox from "@/components/chatBox/ChatBox";
 import clsx from "clsx";
-
+import ButtonComponent from "@/components/buttonComponent/buttonComponent";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 export default function RootLayout({
   children,
 }: {
@@ -30,8 +31,11 @@ export default function RootLayout({
   const searchParam = useSearchParams();
   const router = useRouter();
   function handleRouting(route: string): void {
+
     router.push(route);
   }
+  const [current, setCurrent] = useState(0);
+  const [expand, setExpand] = useState(false);
   const queryClient = new QueryClient();
   const [showDrawer, setShowDrawer] = useState(false);
   return (
@@ -75,39 +79,46 @@ export default function RootLayout({
                     value.roles.includes(UserProfile.getRole())
                   ) {
                     if (value.title === 'Properties') {
+                      
                       return (
                         <div key={index} style={{ marginBottom: "2rem" }}>
                           
-                          <Button
+                          <ButtonComponent
                             className={clsx(styles.sidebarButton, {
-                              [styles.current]: pathName.includes("properties"),
+                              [styles.current]: current === index,
                             })}
-                            onClick={() =>
-                              handleRouting(
-                                "/home/" + value.path + "?auth=true"
-                              )
+                            onClick={() => {
+                              setExpand(prev => !prev);
+                              
                             }
-                            style={futuna.style}
+                              
+                            }
+                            sufIcon= {expand ?<FaAngleUp/> :<FaAngleDown />}
                           >
                             {value.svg}
                             <span style={{ margin: "auto 0" }}>
                               {value.title}
                             </span>
-                          </Button>
+                          </ButtonComponent>
 
                           <div
                             className={clsx(
                               styles.sidebarButtonMenu,
-                              futuna.className
+                              futuna.className,
+                              {
+                                [styles.hide]: !expand
+                              }
                             )}
                           >
-                            {value.menu?.map((value, index) => (
+                            {value.menu?.map((value, id) => (
                               <button
-                                key={index}
+                                key={id}
                                 className={clsx(styles.subMenu, {
                                   [styles.active]: pathName === value.href,
                                 })}
-                                onClick={() => handleRouting(value.href)}
+                                onClick={() => {
+                                setCurrent(index);
+                                handleRouting(value.href)}}
                               >
                                 {value.title}
                               </button>
@@ -120,12 +131,13 @@ export default function RootLayout({
                       <div key={index} style={{ marginBottom: "2rem" }}>
                         <Button
                           className={clsx(styles.sidebarButton, {
-                            [styles.current]: pathName.includes(
-                              "/home/" + value.path
-                            ),
+                            [styles.current]: index === current
                           })}
-                          onClick={() =>
-                            handleRouting("/home/" + value.path + "?auth=true")
+                          onClick={() => {
+                            setCurrent(index);
+                            handleRouting("/home/" + value.path + "?auth=true");
+                          }
+                           
                           }
                           style={futuna.style}
                         >

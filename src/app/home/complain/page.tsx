@@ -28,14 +28,15 @@ import { UserProfile } from "@/libs/UserProfile";
 import { Task } from "@/models/task";
 import Spinner from 'react-bootstrap/Spinner';
 import { Manager } from "@/models/manager";
-
+import { useTranslation } from "react-i18next";
 const Complain = () => {
+  const [t, i18n] = useTranslation();
   const titleTable = [
-    "Resident",
-    "Status",
-    "Complain details",
-    "Create at",
-    "Action",
+    t("Resident"),
+    t("Status"),
+    t("Complain details"),
+    t("Create At"),
+    t("Action"),
   ];
   const listOptions = [
     {
@@ -54,7 +55,7 @@ const Complain = () => {
    //pagination
    const [totalPages, setTotalPages] = useState(0);
    const [maxPageDisplay, setMaxPageDisplay] = useState(10);
-  const titleAssign = ["ID", "Tên", "Số điện thoại", "Email", "Ngày tạo"];
+  const titleAssign = [t("ID"), t("Name"), t("Phone Number"), t("Email"), t("Create At")];
   const [complains, setComplains] = useState<Array<Complain>>([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -192,10 +193,10 @@ const Complain = () => {
     <main className={clsx(mainStyles.main)}>
       <div className={clsx(styles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl, styles.title)}>
-          Received Complain
+          {t("Received Complain")}
         </h1>
         <div className={clsx(styles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Complain List</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>{t("Complain List")}</h1>
         </div>
         <div style={{overflowX: 'auto'}} className="w-100 mt-5">
           <table className={clsx(tableStyles.table, futuna.className)}>
@@ -239,7 +240,7 @@ const Complain = () => {
                           [styles.rejected]: status === "rejected ",
                         })}
                       >
-                        {status}
+                        {t(status)}
                       </span>
                     </td>
                     <td>{complain.content}</td>
@@ -251,7 +252,7 @@ const Complain = () => {
                           preIcon={<AssignIcon width={16} height={16} />}
                           className={clsx(styles.cudBtn, styles.assignedBtn)}
                         >
-                          Assigned
+                          {t("Assigned")}
                          
                         </ButtonComponent>:<ButtonComponent
                           preIcon={<AssignIcon width={16} height={16} />}
@@ -259,7 +260,7 @@ const Complain = () => {
                           onClick={() => handleShowTechnicianModal(complain.complain_id)}
 
                         >
-                          Assign
+                          {t("Assign")}
                          
                         </ButtonComponent> }
                        
@@ -268,7 +269,7 @@ const Complain = () => {
                           preIcon={<RejectIcon width={16} height={16} />}
                           className={clsx(styles.cudBtn, styles.rejectBtn)}
                         >
-                          Reject
+                         {t("Reject")} 
                         </ButtonComponent>
                         {/* <ButtonComponent
                         onClick={() => deleleHandle(complain.complain_id)}
