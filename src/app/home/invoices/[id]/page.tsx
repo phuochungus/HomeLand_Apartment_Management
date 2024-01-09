@@ -73,10 +73,10 @@ export default function Page({ params }: { params: { id: string } }) {
               </Col>
             </Row>
           </Container>
-          <Container>
-            <Row>
-              <Card style={{ width: "100%", height: "100%" }}>
-                <Card.Header as="h2">Thông tin đơn hàng</Card.Header>
+          <Container style={{padding:0}}>
+            <Row style={{padding:0}}>
+              <Card style={{ width: "100%", height: "100%", padding:0 }}>
+                <Card.Header style={{background:"#094DF8", width:"100%", color:"white"}} as="h2">Thông tin đơn hàng</Card.Header>
                 <Card.Body>
                   <Container>
                     <Row>
@@ -94,7 +94,7 @@ export default function Page({ params }: { params: { id: string } }) {
                             <p>{t("servicePackageName")}:</p>
                           </Col>
                           <Col md={9}>
-                            <p>{data.servicePackage.name}</p>
+                            <p>{t(data.servicePackage.name)}</p>
                           </Col>
                         </Row>
 
