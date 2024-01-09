@@ -75,5 +75,7 @@
   "price":"Giá",
   "detail":"Chi tiết",
   "Amount":"Số lượng",
-  "total":"Tổng tiền"
+  "total":"Tổng tiền",
+  "payTo":"Thanh toán cho",
+  "invoiceTo":"Hóa đơn cho"
 }

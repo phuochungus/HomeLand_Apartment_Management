@@ -54,7 +54,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <Container>
             <Row>
               <Col>
-                <h2>Invoice To</h2>
+              <h2>{t('invoiceTo')}</h2>
                 <p>{data.buyer.profile.name}</p>
                 <p>
                   {format(
@@ -65,7 +65,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <p>SDT: {data.buyer.profile.phone_number}</p>
               </Col>
               <Col style={{ textAlign: "right" }}>
-                <h2>Pay To</h2>
+                <h2>{t('payTo')}</h2>
                 <p>Home Land</p>
                 <p>Thu Duc, Ho Chi Minh</p>
                 <p>Viet Nam</p>

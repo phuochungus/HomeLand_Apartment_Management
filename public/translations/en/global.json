@@ -58,5 +58,7 @@
   "servicePackageName":"Service Package Name",
   "price":"Price",
   "detail":"Detail",
-  "total":"Total"
+  "total":"Total",
+  "payTo":"Pay To",
+  "invoiceTo":"Invoice To"
 }
