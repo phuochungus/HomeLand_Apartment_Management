@@ -48,6 +48,7 @@
   "update":"Update",
   "choose_resident":"Choose Resident",
   "update_contract":"Update Contract",
+<<<<<<< HEAD
   "placefindemployee": "Search employee by name...",
   "Manage Employee": "Manage Employee",
   "employeelist": "Employee List",
@@ -73,3 +74,21 @@
   "create_floor": "Create Floor"
 
 }
+=======
+  "rent":"Rent",
+  "buy":"Buy",
+  "all":"All",
+  "day":"Day",
+  "month":"Month",
+  "year":"Year",
+  "week":"Week",
+  "quarter":"Quarter",
+  "purchaseHistory":"Purchase History",
+  "servicePackageName":"Service Package Name",
+  "price":"Price",
+  "detail":"Detail",
+  "total":"Total",
+  "payTo":"Pay To",
+  "invoiceTo":"Invoice To"
+}
+>>>>>>> 9c1364a970efcb59903ada42a966adb575a7e647

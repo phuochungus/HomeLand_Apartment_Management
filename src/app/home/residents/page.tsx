@@ -34,14 +34,15 @@ import { parse } from "path";
 import { UserProfile } from "@/libs/UserProfile";
 import { Manager } from "@/models/manager";
 import { Building } from "@/models/building";
-
+import { useTranslation } from "react-i18next";
 export default function Residents() {
+  const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [residents, setResidents] = useState<Array<Resident>>([]);
   const [buildings, setBuildings] = useState<Array<Building>>([]);
   const [buildingId, setBuildingId] = useState<string>();
   const [selectedId, setSelectedId] = useState("");
-
+  
   //pagination
   const [totalPages, setTotalPages] = useState(0);
   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
@@ -144,12 +145,11 @@ export default function Residents() {
     fetchAPI();
   }, []);
   const titleTable = [
-    "Name",
-    "Account",
-    "Apartment",
-    "Phone Number",
-    "Create At",
-    "Action",
+    t("Name"),
+    t("Apartment"),
+    t("Phone Number"),
+    t("Create At"),
+    t("Action"),
   ];
   const handleSearch = async (e: any) => {
     if (e.key === "Enter") {
@@ -218,20 +218,20 @@ export default function Residents() {
   return (
     <main className={clsx(styles.main)}>
       <div className={clsx(residentStyles.wrapper, futuna.className)}>
-        <h1 className={clsx(utilStyles.headingXl)}>Resident Management</h1>
+        <h1 className={clsx(utilStyles.headingXl)}>{t("Resident Management")}</h1>
         <div className={clsx(residentStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>List Of Residents </h1>
+          <h1 className={clsx(utilStyles.headingLg)}>{t("List Of Residents")} </h1>
           <ButtonComponent
             href="/home/residents/addResident?auth=true"
             preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(residentStyles.addBtn, futuna.className)}
           >
-            Create Resident
+            {t("Create Resident")}
           </ButtonComponent>
         </div>
         <div className={residentStyles.searchPageLayout}>
           <div className={clsx(residentStyles.perPage)}>
-            <span>Show</span>
+            <span>{t("Show")}</span>
             <span>
               <Form.Select
                 onChange={(e) => handleSetActive(e.target.value)}
@@ -253,7 +253,7 @@ export default function Residents() {
                 )}
               </Form.Select>
             </span>
-            <span>Entries</span>
+            <span>{t("Entries")}</span>
           </div>
           <div className="d-flex flex-lg-row flex-column">
             {UserProfile.getRole() === "admin" && (
@@ -267,7 +267,7 @@ export default function Residents() {
                 }}
                 className={residentStyles.buildingSelect}
               >
-                <option value="">---All Buildings---</option>
+                <option value="">---{t("All Buildings")}---</option>
                 {buildings.map((building, index) => (
                   <option key={index} value={building.building_id}>
                     {building.name}
@@ -278,7 +278,7 @@ export default function Residents() {
             <SearchLayout
               onKeydown={handleSearch}
               iconClick={searchIconClick}
-              placeHolder="Search resident..."
+              placeHolder={t("Search resident") + "..."}
               ref={searchRef}
             />
           </div>
@@ -290,7 +290,7 @@ export default function Residents() {
               [pageStyles.disableBtn]: currentPage === 1,
             })}
           >
-            Previous
+            {t("Previous")}
           </ButtonComponent>
           <p>
             {currentPage}/{totalPages}
@@ -301,7 +301,7 @@ export default function Residents() {
               [pageStyles.disableBtn]: currentPage === totalPages,
             })}
           >
-            Next
+            {t("Next")}
           </ButtonComponent>
         </div>
         <div style={{ overflowX: "auto" }} className="w-100 mt-5">
@@ -328,9 +328,7 @@ export default function Residents() {
                         {resident.profile.name}
                       </span>
                     </td>
-                    <td>
-                      <span>{resident.payment_info}</span>
-                    </td>
+                   
                     <td>
                       <span>{resident.stay_at && resident.stay_at.name}</span>
                     </td>
@@ -356,7 +354,7 @@ export default function Residents() {
                           )}
                           href={`/home/residents/updateResident/${resident.id}/?auth=true`}
                         >
-                          Edit
+                          {t("Edit")}
                         </ButtonComponent>
                         <div
                           onClick={() => deleleHandle(resident.id)}
@@ -389,7 +387,7 @@ export default function Residents() {
       </div>
       <ModalComponent
         show={showModal}
-        title="Are you sure to delete this resident?"
+        title={t("Are you sure to delete this resident?")}
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
       />
