@@ -1,3 +1,4 @@
+"use client"
 import { UserProfile } from "@/libs/UserProfile";
 import { Resident } from "@/models/resident";
 import axios from "axios";
