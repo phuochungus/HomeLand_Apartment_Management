@@ -1,11 +1,17 @@
 import Image from "next/image";
 import { Images } from "../../../public/images";
-import { BuildingIcon, ManagerIcon, StaffIcon, TechnicianIcon } from "@/components/icons";
+import {
+  BuildingIcon,
+  ManagerIcon,
+  StaffIcon,
+  TechnicianIcon,
+} from "@/components/icons";
 import { GrUserManager, GrUserWorker } from "react-icons/gr";
 import { FaUserGroup } from "react-icons/fa6";
 import { FaFileContract, FaBuilding } from "react-icons/fa";
-import { GiAutoRepair } from "react-icons/gi";  
+import { GiAutoRepair } from "react-icons/gi";
 import { PiElevatorBold } from "react-icons/pi";
+import { PiUserFocusFill } from "react-icons/pi";
 export const sidebarInfo = [
   {
     title: "Dashboard",
@@ -97,7 +103,7 @@ export const sidebarInfo = [
   {
     title: "Employee",
     path: "employee",
-    svg: <GrUserWorker/>,
+    svg: <GrUserWorker />,
     roles: ["admin", "manager"],
   },
   {
@@ -109,14 +115,16 @@ export const sidebarInfo = [
   {
     title: "Residents",
     path: "residents",
-    svg: <FaUserGroup/>,
+    svg: <FaUserGroup />,
     roles: ["admin", "manager"],
-  },{
+  },
+  {
     title: "Managers",
     path: "managers",
-    svg: <GrUserManager/>,
+    svg: <GrUserManager />,
     roles: ["admin"],
-  },{
+  },
+  {
     title: "Technicians",
     path: "technicians",
     svg: <TechnicianIcon width={30} height={30} />,
@@ -125,13 +133,13 @@ export const sidebarInfo = [
   {
     title: "Buildings",
     path: "buildings",
-    svg: <FaBuilding/>,
+    svg: <FaBuilding />,
     roles: ["admin"],
   },
   {
     title: "Complain & repair requests",
     path: "complain",
-    svg: <GiAutoRepair />,  
+    svg: <GiAutoRepair />,
     menu: [],
     roles: ["admin", "manager"],
   },
@@ -198,8 +206,15 @@ export const sidebarInfo = [
   {
     title: "Floor",
     path: "floor",
-    svg:<PiElevatorBold />,
+    svg: <PiElevatorBold />,
     menu: [],
     roles: ["admin", "manager"],
+  },
+  {
+    title: "Overview",
+    path: "overview",
+    svg: <PiUserFocusFill />,
+    menu: [],
+    roles: ["resident"],
   },
 ];
