@@ -100,11 +100,13 @@ const TaskTechnician = () => {
   });
 
   const createInvoiceHandler = async (task_id: string) => {
-    const listErrors = invoiceItems.map((item, index) => {
-      if (item.content === "") return index;
+    let listErrors:Array<Number | undefined> = [];
+    invoiceItems.forEach((item, index) => {
+      if (item.content === "") {
+      listErrors.push(index);
+      }
     });
     setLineErrors(listErrors);
-    console.log(task_id);
     if (listErrors.length === 0) {
       try {
         await axios.post(`/api/repairInvoice/${task_id}`, invoiceItems);
@@ -160,7 +162,6 @@ const TaskTechnician = () => {
     list.splice(index, 1);
     setInvoiceItems(list);
   };
-
   const contentChangeHandler = (value: string, index: number) => {
     const list = [...invoiceItems];
     list[index].content = value;
@@ -187,6 +188,9 @@ const TaskTechnician = () => {
       onClick: doneTaskHandler,
     },
   ];
+  const numberFormat = (x:number) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   const retrieveTasks = async () => {
     try {
       const user = UserProfile.getProfile();
@@ -417,7 +421,7 @@ const TaskTechnician = () => {
           </ButtonComponent>
           <div className={styles.total}>
             <span>{t("Total")}</span>
-            <span>{total} VND</span>
+            <span>{numberFormat(total)} VND</span>
           </div>
         </Modal.Body>
         <Modal.Footer className={modalStyles.footerModal}>
@@ -469,7 +473,7 @@ const TaskTechnician = () => {
                       style={{ width: "40%" }}
                       className={clsx(styles.line)}
                     >
-                      {item.price.toLocaleString()} VND
+                      {numberFormat(item.price)} VND
                     </span>
                   </div>
                 );
@@ -477,7 +481,7 @@ const TaskTechnician = () => {
             </div>
             <div className={styles.total}>
               <span>{t("Total")}</span>
-              <span>{total} VND</span>
+              <span>{numberFormat(total)} VND</span>
             </div>
           </div>
         </Modal.Body>
