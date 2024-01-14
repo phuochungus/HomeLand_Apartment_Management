@@ -246,14 +246,15 @@ export default function Page({ params }: { params: { id: string } }) {
   const handleConfirmDelete = async (id: string) => {
     setShowModalDelete(false);
     try {
-      await axios.delete(`/api/feedback/${id}`);
-      toastMessage({ type: "success", title: "Delete successfully!" });
-      const deletedFeedback = JSON.parse(localStorage.getItem('deletedFeedback') || '[]');
-      deletedFeedback.push(id);
-      localStorage.setItem('deletedFeedback', JSON.stringify(deletedFeedback));
-      setFeedbackData(prevFeedbackData =>
-        prevFeedbackData.filter(feedback => feedback.feedback_id !== id)
-      );
+      await axios.delete(`/api/feedback/${id}`).then(() => {
+        const deletedFeedback = JSON.parse(localStorage.getItem('deletedFeedback') || '[]');
+        deletedFeedback.push(id);
+        localStorage.setItem('deletedFeedback', JSON.stringify(deletedFeedback));
+        setFeedbackData(prevFeedbackData =>
+          prevFeedbackData.filter(feedback => feedback.feedback_id !== id)
+        );
+        toastMessage({ type: "success", title: "Delete successfully!" });
+      });
     } catch (err) {
       toastMessage({ type: "error", title: "Delete fail!" });
       console.log(err);
