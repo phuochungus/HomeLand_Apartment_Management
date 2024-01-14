@@ -16,6 +16,7 @@ import { search } from "../../../libs/utils";
 import { set } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { UserProfile } from "../../../libs/UserProfile";
+import clsx from "clsx";
 export default function Services() {
   const [ServiceList, setServiceList] = useState<Service[]>([]);
   const loadingMore = useRef({ isLoading: false, page: 1 });
@@ -114,7 +115,7 @@ export default function Services() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 40 }}
-      className={styles.main}
+      className={clsx(futuna.className,styles.main)}
     >
       <div className={styles.container}>
         <div
