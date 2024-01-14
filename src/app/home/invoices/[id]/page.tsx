@@ -2,12 +2,14 @@
 import styles from "./page.module.css";
 import {
   Button,
+  Card,
   Carousel,
   Col,
   Container,
   Image,
   Row,
   Spinner,
+  Table,
 } from "react-bootstrap";
 import Furniture from "../../../../components/apartmentDetail/furniture";
 import { futuna } from "../../../../../public/fonts/futura";
@@ -21,8 +23,10 @@ import toastMessage from "../../../../utils/toast";
 import { Invoice } from "../../../../models/invoice";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 export default function Page({ params }: { params: { id: string } }) {
   const [showModal, setShowModal] = useState(false);
+  const [t, i18n] = useTranslation();
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -41,62 +45,117 @@ export default function Page({ params }: { params: { id: string } }) {
       refetchOnWindowFocus: false,
     }
   );
-  
+
   if (data != null) {
     return (
       <main className={styles.main} style={futuna.style}>
-        <div>
-          <Container style={{ padding:"20px"}}>
+        <div style={{ padding: "50px" }}>
+          {/* <h1 style={{ textAlign: "right", paddingRight: "50px" }}>Invoice</h1> */}
+          <Container>
             <Row>
-              <Col md={6}>
-                <h2>Thông tin đơn hàng</h2>
-                <ul>
-                  <li>Mã đơn hàng: {data.invoice_id}</li>
-                  <li>
-                    Ngày tạo:{" "}
-                    {format(new Date(data.created_at), "HH:mm:ss dd-MM-yyyy")}
-                  </li>
-                  <li>Người mua: {data.buyer.profile.name}</li>
-                  <li>Gói dịch vụ: {data.servicePackage.name}</li>
-                  <li>
-                    Hạn sử dụng:{" "}
-                    {format(new Date(data.expired_at), "HH:mm:ss dd-MM-yyyy")}
-                  </li>
-                  <li>Số lượng: {data.amount}</li>
-                  
-                  <li>Giá mỗi đơn vị: {data.servicePackage.per_unit_price}</li>
-                  <li>Tổng tiền: {data.total}</li>
-                 </ul>
+              <Col>
+              <h2>{t('invoiceTo')}</h2>
+                <p>{data.buyer.profile.name}</p>
+                <p>
+                  {format(
+                    new Date(data.buyer.profile.date_of_birth),
+                    "dd-MM-yyyy"
+                  )}
+                </p>
+                <p>SDT: {data.buyer.profile.phone_number}</p>
               </Col>
-              <Col md={6}>
-                <h2>Thông tin gói dịch vụ</h2>
-                <ul>
-                  <li>ID: {data.servicePackage.servicePackage_id}</li>
-                  <li>Dịch vụ: {data.servicePackage.service_id}</li>
-                  <li>
-                    Ngày tạo:{" "}
-                    {format(new Date(data.created_at), "HH:mm:ss dd-MM-yyyy")}
-                  </li>
-                  <li>
-                    Hạn sử dụng (ngày): {data.servicePackage.expired_date}
-                  </li>
-                </ul>
+              <Col style={{ textAlign: "right" }}>
+                <h2>{t('payTo')}</h2>
+                <p>Home Land</p>
+                <p>Thu Duc, Ho Chi Minh</p>
+                <p>Viet Nam</p>
+                <p>homeland@gmail.com</p>
+              </Col>
+            </Row>
+          </Container>
+          <Container style={{padding:0}}>
+            <Row style={{padding:0}}>
+              <Card style={{ width: "100%", height: "100%", padding:0 }}>
+                <Card.Header style={{background:"#094DF8", width:"100%", color:"white"}} as="h2">Thông tin đơn hàng</Card.Header>
+                <Card.Body>
+                  <Container>
+                    <Row>
+                      <Col>
+                        <Row>
+                          <Col md={3}>
+                            <p>{t("ID")}:</p>
+                          </Col>
+                          <Col md={9}>
+                            <p>{data.invoice_id}</p>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={3}>
+                            <p>{t("servicePackageName")}:</p>
+                          </Col>
+                          <Col md={9}>
+                            <p>{t(data.servicePackage.name)}</p>
+                          </Col>
+                        </Row>
 
-                <h2>Thông tin người mua</h2>
-                <ul>
-                  <li>ID: {data.buyer.id}</li>
-                  <li>Vai trò: {data.buyer.role}</li>
-                  <li>Tên: {data.buyer.profile.name}</li>
-                  <li>Số điện thoại: {data.buyer.profile.phone_number}</li>
-                  <li>
-                    Ngày sinh:{" "}
-                    {format(
-                      new Date(data.buyer.profile.date_of_birth),
-                      "dd-MM-yyyy"
-                    )}
-                  </li>
-                </ul>
-              </Col>
+                        <Row>
+                          <Col md={3}>
+                            <p>{t("price")}:</p>
+                          </Col>
+                          <Col md={9}>
+                            <p>{data.servicePackage.per_unit_price}</p>
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col>
+                        <Row>
+                          <Col md={3}>
+                            <p>{t("expired_date_number")}:</p>
+                          </Col>
+                          <Col md={9}>
+                            <p>{data.servicePackage.expired_date}</p>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={3}>
+                            <p>{t("create_at")}:</p>
+                          </Col>
+                          <Col md={9}>
+                            <p>
+                              {format(new Date(data.created_at), "dd-MM-yyyy")}
+                            </p>
+                          </Col>
+                        </Row>
+
+                        <Row>
+                          <Col md={3}>
+                            <p>{t("expire_at")}:</p>
+                          </Col>
+                          <Col md={9}>
+                            <p>
+                              {format(new Date(data.expired_at), "dd-MM-yyyy")}
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                    <hr></hr>
+                    <Row>
+                      <Col>
+                        {" "}
+                        <h4>
+                          {t("Amount")}: {data.amount}
+                        </h4>
+                      </Col>
+                      <Col>
+                        <h4>
+                          {t("total")}:  {data.total.toLocaleString()} VND
+                        </h4>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Card.Body>
+              </Card>
             </Row>
           </Container>
         </div>

@@ -29,38 +29,38 @@ type FormValue = {
   avatarURL?: any;
 };
 const UpdateTechnician = ({ params }: { params: { id: string } }) => {
-  const [formValue, setFormValue] = useState({
-    gender: "",
-    phoneNumber: "",
-    email: "",
-  });
-  const [errors, setErrors] = useState<any>();
-  const [technician, setTechnician] = useState<Technician>();
-  const [avatar, setAvatar] = useState<any>();
-  const avatarRef = useRef<HTMLInputElement>(null);
-  let avatar_photo = technician?.profile.avatarURL as string;
-  const validation = () => {
-    let err = {} as FormValue;
-    const emailPattern =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const phonePattern =
-      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-    if (formValue.gender === "") {
-      err.gender = "Field gender is required!";
-    }
-    if (formValue.email === "") {
-      err.email = "Field email is required!";
-    } else if (!emailPattern.test(formValue.email)) {
-      err.email = "Email is invalid!";
-    }
-    if (formValue.phoneNumber === "") {
-      err.phoneNumber = "Field phone number is required!";
-    } else if (!phonePattern.test(formValue.phoneNumber)) {
-      err.phoneNumber = "Phone number is invalid!";
-    }
+const [formValue, setFormValue] = useState({
+  gender: "",
+  phoneNumber: "",
+  email: "",
+});
+const [errors, setErrors] = useState<any>();
+const [technician, setTechnician] = useState<Technician>();
+const [avatar, setAvatar] = useState<any>();
+const avatarRef = useRef<HTMLInputElement>(null);
+let avatar_photo = technician?.profile.avatarURL as string;
+const validation = () => {
+  let err = {} as FormValue;
+  const emailPattern =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const phonePattern =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  if (formValue.gender === "") {
+    err.gender = "Field gender is required!";
+  }
+  if (formValue.email === "") {
+    err.email = "Field email is required!";
+  } else if (!emailPattern.test(formValue.email)) {
+    err.email = "Email is invalid!";
+  }
+  if (formValue.phoneNumber === "") {
+    err.phoneNumber = "Field phone number is required!";
+  } else if (!phonePattern.test(formValue.phoneNumber)) {
+    err.phoneNumber = "Phone number is invalid!";
+  }
 
-    return err;
-  };
+  return err;
+};
   const retrieveTechnician = async () => {
     try {
       loadingFiler(document.body!);

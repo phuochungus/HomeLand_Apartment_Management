@@ -14,6 +14,7 @@ import { AddResidentIcon } from "@/components/icons";
 import { loadingFiler, search } from "@/libs/utils";
 import { motion } from "framer-motion";
 import { Floor } from "@/models/floor";
+import { useTranslation } from "react-i18next";
 interface Option {
   title: string;
   selections: string[];
@@ -93,27 +94,28 @@ export default function Apartments() {
   //Handle if middleware not working
   const router = useRouter();
   if (!user.id) router.push("/home");
+  const [t, i18n] = useTranslation();
   const loadingMore = useRef({ isLoading: false, page: 1 });
   const [searchParam, setSearchParam] = useState("");
   const [apartmentList, setApartmentList] = useState<Apartment[]>([]);
   const [data, setData] = useState<Apartment[]>([]);
   const [apartmentSortOption, setApartmentSortOption] = useState<Option[]>([
     {
-      title: "Building",
-      selections: ["Tất cả"],
+      title: t("building"),
+      selections: [t("all")],
       data: ["all"],
       fieldName: "buildingId",
       onChange: () => {},
     },
     {
-      title: "Floor",
-      selections: ["Tất cả"],
+      title: t("floor"),
+      selections: [t("all")],
       data: ["all"],
       fieldName: "floorId",
       onChange: () => {},
     },
     {
-      title: "Status",
+      title: t("status"),
       selections: ["ACTIVE", "INACTIVE"],
       data: ["active", "inactive"],
       fieldName: "status",
@@ -262,7 +264,7 @@ export default function Apartments() {
           preIcon={<AddResidentIcon width={24} height={24} />}
           className={styles.addBtn}
         >
-          Thêm căn hộ
+          {t("add_apartment")}
         </ButtonComponent>: <></>}
         
       </div>
@@ -273,8 +275,8 @@ export default function Apartments() {
         <div className={`${styles.itemContainer} ${styles.searchBarContainer}`}>
           <SearchBar
             className={styles.searchBar}
-            placeholder="Search by name...."
-            onSearch={handleSearch}
+            placeholder={t("search_apartment")}
+            onChange={handleSearch}
           ></SearchBar>
         </div>
         {apartmentSortOption &&
@@ -289,7 +291,7 @@ export default function Apartments() {
           ))}
       </div>
       <div className={styles.grid}>
-        {apartmentList.map((value, index) => ApartmentCard(value))}
+        {apartmentList.map((value, index) => ApartmentCard(value, t))}
       </div>
       {loadingMore.current.isLoading && loadingMore.current.page > 0 && (
         <div
@@ -342,7 +344,7 @@ const FilterButton = ({
   );
 };
 
-const ApartmentCard = (value: Apartment): React.ReactNode => {
+const ApartmentCard = (value: Apartment, t: Function): React.ReactNode => {
   const router = useRouter();
   const pathName = usePathname();
   function handleRouting(route: string): void {
@@ -368,7 +370,7 @@ const ApartmentCard = (value: Apartment): React.ReactNode => {
       >
         <Card.Title style={{ alignSelf: "start" }}>
           {value.rent}
-          <span style={{ color: "grey" }}>{" /month"}</span>
+          <span style={{ color: "grey" }}>{` /${t("month")}`}</span>
         </Card.Title>
         <Card.Text>{value.name}</Card.Text>
       </Card.Body>

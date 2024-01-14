@@ -21,6 +21,7 @@ import {
   KeyboardEvent,
   ChangeEventHandler,
   ChangeEvent,
+  useTransition,
 } from "react";
 import ModalComponent from "@/components/Modal/Modal";
 import { usePathname, useRouter } from "next/navigation";
@@ -34,6 +35,7 @@ import PageIndicator from "@/components/pageIndicator/PageIndicator";
 import { SortOrder } from "@/models/enums";
 import { Vehicle } from "@/models/vehicle";
 import { FaFacebookMessenger } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 const listOptions = [
   {
     value: 10,
@@ -52,7 +54,7 @@ export default function Vehicles() {
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
   const router = useRouter();
   if (!user.id) router.push("/home");
-
+  const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [vehicles, setVehicles] = useState<Array<Vehicle>>([]);
   const [showLimit, setShowLimit] = useState<number>(10);
@@ -88,9 +90,9 @@ export default function Vehicles() {
   );
   const titleTable = [
     { name: "ID", field: "id" },
-    { name: "Biển số xe", field: "licensePlate" },
-    { name: "Tình trạng", field: "status" },
-    { name: "Cư dân sở hữu", field: "residentId" },
+    { name: t("license_plate"), field: "licensePlate" },
+    { name: t("Status"), field: "status" },
+    { name: t("vehicle_owner"), field: "residentId" },
   ];
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     console.log(data);
@@ -137,17 +139,17 @@ export default function Vehicles() {
     <main className={clsx(styles.main)}>
       <div className={clsx(vehicleStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl)}>
-          Quản lí phương tiện đăng kí giữ xe
+          {t("vehicle_management")}
         </h1>
         <div className={clsx(vehicleStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách phương tiện</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>{t("vehicle_list")}</h1>
           <div style={{ display: "flex" }}>
             <ButtonComponent
               href={`${path}/add`}
               preIcon={<AddResidentIcon width={24} height={24} />}
               className={clsx(vehicleStyles.addBtn, futuna.className)}
             >
-              Đăng kí phương tiện
+              {t("add_vehicle")}
             </ButtonComponent>
             {user.role == "admin" ? (
               <ButtonComponent
@@ -155,7 +157,7 @@ export default function Vehicles() {
                 preIcon={<AddResidentIcon width={24} height={24} />}
                 className={clsx(vehicleStyles.pendingBtn, futuna.className)}
               >
-                Xác nhận đăng ký
+                {t("registration_check")}
               </ButtonComponent>
             ) : (
               <></>
@@ -183,7 +185,7 @@ export default function Vehicles() {
           </div>
           <SearchLayout
             onChange={handleSearch}
-            placeHolder="Tìm phương tiện..."
+            placeHolder={t("search_vehicle")}
             ref={searchRef}
           />
         </div>
@@ -232,7 +234,7 @@ export default function Vehicles() {
                         }}
                       >
                         <div className="d-flex">
-                          <ButtonComponent
+                          {/* <ButtonComponent
                             preIcon={
                               <FaFacebookMessenger width={16} height={16} />
                             }
@@ -242,7 +244,7 @@ export default function Vehicles() {
                             )}
                           >
                             Send notification
-                          </ButtonComponent>
+                          </ButtonComponent> */}
                           <ButtonComponent
                             onClick={() => deleleHandle(vehicle.id)}
                             preIcon={<CloseIcon width={16} height={16} />}
@@ -251,7 +253,7 @@ export default function Vehicles() {
                               vehicleStyles.deleteBtn
                             )}
                           >
-                            Xóa
+                            {t("delete")}
                           </ButtonComponent>
                         </div>
                       </td>

@@ -20,6 +20,7 @@ export async function GET(
     .then((response) => {
       if (response.status == 200) {
         const result: Invoice = response.data;
+        console.log(result);
         return NextResponse.json(result, {
           status: 200,
         });

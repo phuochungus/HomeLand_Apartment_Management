@@ -27,7 +27,7 @@
 @media screen and (max-width: 1200px) {
     .sidebar {
         visibility: hidden;
-        width: 0;
+        display: none;
     }
 
 }
@@ -43,6 +43,9 @@
 .sidebarBody {
     margin-top: 3rem;
 
+}
+.hide {
+    display: none !important;
 }
 .hideScrollbar::-webkit-scrollbar{
     display: none;

@@ -1,5 +1,4 @@
 "use client";
-import { useTranslation } from "react-i18next";
 import styles from "../page.module.css";
 import ButtonComponent from "@/components/buttonComponent/buttonComponent";
 import dashboardStyles from "./dashboard.module.scss";
@@ -27,10 +26,10 @@ import { profile } from "console";
 import SearchLayout from "@/components/searchLayout1/searchLayout";
 import { useRouter } from "next/router";
 import { AddResidentIcon } from "@/components/icons";
-
+import { useTranslation } from "react-i18next";
 export default function Employee() {
   const [isSearchResult, setIsSearchResult] = useState(false);
-
+  const [t, i18n] = useTranslation();
   const [selectedId, setSelectedId] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -102,8 +101,7 @@ export default function Employee() {
   };
 
   const renderGender = (gender: string) => {
-    return gender === 'male' ? 'Nam' : 'Nữ';
-
+    return gender === 'male' ? t("male") : t("female");
   };
   const searchIconClick = async () => {
     console.log("hah");
@@ -120,20 +118,20 @@ export default function Employee() {
     }
   };
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [t, i18n] = useTranslation();
+ 
 
   return (
     <main className={styles.main}>
         <div className={classNames(dashboardStyles.wrapper, futuna.className)}>
-          <h1 className={classNames(dashboardStyles.headingXl)}>Quản lí nhân viên</h1>
+          <h1 className={classNames(dashboardStyles.headingXl)}>{t("Manage Employee")}</h1>
           <div className={classNames(dashboardStyles.header)}>
-            <h1 className={classNames(dashboardStyles.headingLg)}>Danh sách nhân viên </h1>
+            <h1 className={classNames(dashboardStyles.headingLg)}>{t("employeelist")}</h1>
             <ButtonComponent
               href="/home/employee/addemployee?auth=true"
               preIcon={<AddResidentIcon width={24} height={24} />}
               className={classNames(dashboardStyles.addBtn, futuna.className)
               }>
-              Tạo
+            {t("create")}
             </ButtonComponent>
           </div>
           <div className="d-flex w-100 mt-3 justify-content-between">
@@ -142,7 +140,7 @@ export default function Employee() {
             <SearchLayout
               onKeydown={handleSearch}
               iconClick={searchIconClick}
-              placeHolder="Nhập tên nhân viên"
+              placeHolder={t("placefindemployee")}
               ref={searchRef}
               xClick={clearSearch}
             />
@@ -184,7 +182,7 @@ export default function Employee() {
                             <div className="col">
                               <div className="card-profile-stats d-flex justify-content-center">
                                 <div className="profile-stat">
-                                  <span className="name no-underline">Tên: </span>
+                                  <span className="name no-underline"> {t("name")}: </span>
                                   <span className="description no-underline" style={{ marginBottom: '10px' }}>{employee.profile.name}</span>
                                 </div>
                               </div>
@@ -192,15 +190,15 @@ export default function Employee() {
                           </Row>
                           <div className="text-center">
                             <span className="birth">
-                              Ngày sinh: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('vi-VN')}</span>
+                            {t("birthday")}: <span className="ni location_pin mr-2">{dateOfBirth.toLocaleDateString('vi-VN')}</span>
 
                             </span>
                             <div className="address">
 
-                              Giới tính: <span className="ni location_pin mr-2">{renderGender(employee.profile.gender)}</span>
+                            {t("gender")}: <span className="ni location_pin mr-2">{renderGender(employee.profile.gender)}</span>
                             </div>
                             <div className="phonenumber">
-                              Số điện thoại: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
+                            {t("phone_number")}: <span className="ni location_pin mr-2">{employee.profile.phone_number}</span>
                             </div>
 
                           </div>
