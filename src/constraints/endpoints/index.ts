@@ -1,4 +1,4 @@
-export const baseUrl = "https://homeland-be-eumo.onrender.com";
+ export const baseUrl = "https://homeland-be-eumo.onrender.com";
 // const baseUrl = "http://localhost:5002";
 //export const baseUrl = "http://localhost:8080";
 export const endpoint = {

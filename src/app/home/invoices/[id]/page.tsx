@@ -83,10 +83,10 @@ export default function Page({ params }: { params: { id: string } }) {
                       <Col>
                         <Row>
                           <Col md={3}>
-                            <p>{t("ID")}:</p>
+                            <p>{t("service_name")}:</p>
                           </Col>
                           <Col md={9}>
-                            <p>{data.invoice_id}</p>
+                            <p>{data.servicePackage.service.name}</p>
                           </Col>
                         </Row>
                         <Row>
