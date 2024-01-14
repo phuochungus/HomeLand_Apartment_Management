@@ -19,7 +19,7 @@ import classNames from 'classnames';
 import toastMessage from '@/utils/toast';
 import { ToastContainer } from 'react-toastify';
 import { Col, Row } from 'react-bootstrap';
-
+import { useTranslation } from "react-i18next";
 
 type FormValue = {
         name: string;
@@ -37,7 +37,7 @@ const AddEmployee = () => {
         const [imagesKeys, setImagesKeys] = useState({ avatar: "", front: "", end: "" });
         const [frontImg, setFrontImg] = useState<any>();
         const [backImg, setBackImg] = useState<any>();
-
+        const [t, i18n] = useTranslation();
         const [errors, setErrors] = useState<any>();
 
         const handleFontImg = (e: any) => {
@@ -146,7 +146,7 @@ const AddEmployee = () => {
                 }
                 if (formValue.identifyNumber === "") {
                         err.name = "Trường căn cước công dân là bắt buộc!";
-                      }
+                }
                 return err;
         };
         const handleChange = useCallback(
@@ -221,7 +221,7 @@ const AddEmployee = () => {
                 <main className={styles.main} style={whiteBackground}>
 
                         <div className={styles.wapper}>
-                                <p className={styles.headingXl}>Thêm nhân viên</p>
+                                <p className={styles.headingXl}>  {t("add_employeetitle")}</p>
                                 <Form className={styles.form}>
 
                                         <Row>
@@ -244,7 +244,7 @@ const AddEmployee = () => {
 
 
                                         <Form.Group className={styles.box} >
-                                                <Form.Label className={styles.label}>Họ và tên</Form.Label>
+                                                <Form.Label className={styles.label}> {t("name")}</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" value={formValue.name} onChange={handleChange} name="name" />
                                                 {errors && errors.name && (
                                                         <span className={styles.error}>{errors.name}</span>
@@ -252,7 +252,7 @@ const AddEmployee = () => {
                                         </Form.Group>
 
                                         <Form.Group className={styles.box} >
-                                                <Form.Label className={styles.label}>Ngày sinh</Form.Label>
+                                                <Form.Label className={styles.label}> {t("birthday")}</Form.Label>
                                                 <Form.Control
                                                         size="lg"
                                                         type="date"
@@ -266,14 +266,13 @@ const AddEmployee = () => {
                                                 )}
                                         </Form.Group>
                                         <Form.Group className={styles.box}>
-                                                <Form.Label className={styles.label}>Giới tính</Form.Label>
+                                                <Form.Label className={styles.label}> {t("gender")}</Form.Label>
 
 
                                                 <div key={`inline-radio`} className={styles.box}>
-
                                                         <Form.Check
                                                                 inline
-                                                                label="Nam"
+                                                                label={t("male")}
                                                                 name="gender"
                                                                 value="male"
                                                                 onChange={handleChange}
@@ -282,21 +281,20 @@ const AddEmployee = () => {
                                                         />
                                                         <Form.Check
                                                                 inline
-                                                                label="Nữ"
+                                                                label={t("female")}
                                                                 name="gender"
                                                                 type='radio'
                                                                 value="female"
                                                                 onChange={handleChange}
                                                                 id={`inline-radio-2`}
                                                         />
-
                                                 </div>
                                                 {errors && errors.gender && (
                                                         <span className={styles.error}>{errors.gender}</span>
                                                 )}
                                         </Form.Group>
                                         <Form.Group className={styles.box}>
-                                                <Form.Label className={styles.label}>Số điện thoại</Form.Label>
+                                                <Form.Label className={styles.label}> {t("phone_number")}</Form.Label>
                                                 <Form.Control size="lg" type="text" placeholder="" name="phoneNumber" value={formValue.phoneNumber} onChange={handleChange} />
                                                 {errors && errors.phoneNumber && (
                                                         <span className={styles.error}>{errors.phoneNumber}</span>
@@ -304,7 +302,7 @@ const AddEmployee = () => {
                                         </Form.Group>
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>
-                                                        Công việc
+                                                        {t("task")}
                                                 </Form.Label>
                                                 <Form.Control
                                                         size="lg"
@@ -318,7 +316,7 @@ const AddEmployee = () => {
                                         </Form.Group>
                                         <Form.Group className={styles.box}>
                                                 <Form.Label className={styles.label}>
-                                                        Số căn cước công dân
+                                                        {t("identyfy_number")}
                                                 </Form.Label>
                                                 <Form.Control
                                                         size="lg"
@@ -335,7 +333,7 @@ const AddEmployee = () => {
                                         <div className={styles.box}>
                                                 <Form.Group className="mb-3">
                                                         <Form.Label className={classNames(styles.label, styles.required)}>
-                                                                Ảnh trước CCCD
+                                                        {t("identyfy_front")}
                                                         </Form.Label>
                                                         <Form.Control
                                                                 accept="image/*"
@@ -357,7 +355,7 @@ const AddEmployee = () => {
                                         <div className={styles.box}>
                                                 <Form.Group className="mb-3">
                                                         <Form.Label className={classNames(styles.label, styles.required)}>
-                                                                Ảnh sau CCCD
+                                                              {t("identyfy_back")}
                                                         </Form.Label>
                                                         <Form.Control
                                                                 accept="image/*"
@@ -381,7 +379,7 @@ const AddEmployee = () => {
                                         </Form.Group> */}
 
                                         <ButtonComponent onClick={createHandle} className={styles.creatBtn1}>
-                                                Tạo
+                                        {t("create")}
                                         </ButtonComponent>
 
                                 </Form>

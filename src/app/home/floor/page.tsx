@@ -23,6 +23,7 @@ import axios from "axios";
 import { Link } from "react-bootstrap/lib/Navbar";
 import { loadingFiler, removeLoadingFilter } from "@/libs/utils";
 import toastMessage from "@/utils/toast";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from "react-toastify";
 export default function Dashboard() {
   const [t, i18n] = useTranslation();
@@ -30,7 +31,7 @@ export default function Dashboard() {
   const [floor, setFloor] = useState<Array<Floor>>([]);
   const [selectedId, setSelectedId] = useState("");
   const searchRef = createRef<HTMLInputElement>();
-  const titleTable = ["ID", " Name", "Building", "Max Apartment"];
+  const titleTable = ["ID",t("name"),   t("building"),  t("max_apartment")];
   const [totalPages, setTotalPages] = useState(0);
   const [maxPageDisplay, setMaxPageDisplay] = useState(10);
   const listOptions = [
@@ -169,16 +170,16 @@ export default function Dashboard() {
     <main className={clsx(styles.main)}>
       <div className={clsx(buildingStyles.wrapper, futuna.className)}>
         <h1 className={clsx(utilStyles.headingXl, buildingStyles.title)}>
-          Quản lí tầng
+        {t("floor_title")}
         </h1>
         <div className={clsx(buildingStyles.header)}>
-          <h1 className={clsx(utilStyles.headingLg)}>Danh sách tầng</h1>
+          <h1 className={clsx(utilStyles.headingLg)}>  {t("list_floor")}</h1>
           <ButtonComponent
             href="/home/floor/addFloor?auth=true"
             //   preIcon={<AddResidentIcon width={24} height={24} />}
             className={clsx(buildingStyles.addBtn, futuna.className)}
           >
-            Tạo tầng
+             {t("create")}
           </ButtonComponent>
         </div>
         <div className="d-flex w-100 mt-3 justify-content-between">
@@ -211,17 +212,19 @@ export default function Dashboard() {
             onKeydown={handleSearch}
             iconClick={searchIconClick}
             className={buildingStyles.searchLayout}
-            placeHolder="Tìm tầng..."
+            placeHolder=  {t("find_floor")}
             ref={searchRef}
           />
         </div>
 
         <div className="w-100 mt-5">
           <Table
+             responsive="sm"
             className={clsx(buildingStyles.tableBuilding, futuna.className)}
             striped
             bordered
             hover
+         
           >
             <thead>
               <tr>
@@ -248,14 +251,14 @@ export default function Dashboard() {
                           )}
                           href={`/home/floor/updateFloor/${floor.floor_id}/?auth=true`}
                         >
-                          Update
+                          {t("update")}
                         </ButtonComponent>
                         <ButtonComponent
                           href={`/home/floor/detailFloor/${encodeURIComponent(floor.floor_id)}/?auth=true`}
                           preIcon={<DetailIcon width={16} height={16} />}
                           className={clsx(buildingStyles.cudBtn, buildingStyles.detailBtn)}
                         >
-                          Detail
+                          {t("detail")}
                         </ButtonComponent>
                         <ButtonComponent
                           onClick={() => deleleHandle(floor.floor_id)}
@@ -265,7 +268,7 @@ export default function Dashboard() {
                             buildingStyles.deleteBtn
                           )}
                         >
-                          Delete
+                        {t("delete")}
                         </ButtonComponent>
 
                       </div>
@@ -304,7 +307,7 @@ export default function Dashboard() {
       </div>
       <ModalComponent
         show={showModal}
-        title="Có chắc chắn xóa tòa này?"
+        title= {t("confirmd_delete")}
         handleConfirm={() => handleConfirmDelete(selectedId)}
         setShow={setShowModal}
       />

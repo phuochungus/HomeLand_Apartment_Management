@@ -1,5 +1,9 @@
 .wrapper {
   width: 90%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 
@@ -8,8 +12,16 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+.form{
+  @media (max-width: 768px) {
+    text-align: right;
+  }
+}
 .addBtn {
   background-color: var(--primary);
   color: var(--white);
@@ -32,6 +44,9 @@
 .tableBuilding {
   text-align: center;
 
+  @media (max-width: 768px) {
+    text-align: left;
+  }
 }
 
 .cudBtn {
@@ -79,4 +94,8 @@
   margin-top: 40px;
   margin-bottom: 40px;
   margin-left: -130px;
+
+  @media (max-width: 768px) {
+    text-align: right;
+  }
 }

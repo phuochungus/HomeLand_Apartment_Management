@@ -17,7 +17,7 @@ import { ToastContainer } from "react-toastify";
 import { Building } from "@/models/building";
 import SearchDropdown from "@/components/searchDropdown/searchDropdown";
 import { Floor } from "@/models/floor";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { Col, Container, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
 type FormValue = {
@@ -46,6 +46,7 @@ export default function AddFloor() {
     }
     return err;
   };
+  const [t, i18n] = useTranslation();
   const [Buildings, setBuildings] = useState<Building[]>([]);
   const [Floors, setFloors] = useState<Floor[]>([]);
   const handleBuildingIdChange = (selectedBuildingId: string) => {
@@ -114,7 +115,7 @@ export default function AddFloor() {
         toastMessage({ type: "success", title: "Create successfully!" });
         setTimeout(() => {
           router.push('/home/floor?auth=true');
-  }, 2000);
+        }, 2000);
       } catch (e) {
         console.log(e);
         removeLoadingFilter(document.body!);
@@ -125,11 +126,11 @@ export default function AddFloor() {
   return (
     <main className={mainStyles.main}>
       <div className={clsx(styles.wapper, futuna.className)}>
-        <p className={clsx(utilStyles.headingXl, styles.title)}>Tạo tầng</p>
+        <p className={clsx(utilStyles.headingXl, styles.title)}> {t("create_floor")}</p>
 
         <Form className={clsx(styles.form, futuna.className)}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className={styles.label}> Tên Tầng</Form.Label>
+            <Form.Label className={styles.label}>  {t("name")}</Form.Label>
             <Form.Control
               size="lg"
               name="name"
@@ -144,7 +145,7 @@ export default function AddFloor() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label className={styles.label}>Số phòng tối đa</Form.Label>
+            <Form.Label className={styles.label}> {t("max_apartment")}</Form.Label>
             <Form.Control
               size="lg"
               type="number"
@@ -152,23 +153,27 @@ export default function AddFloor() {
               onChange={handleChange}
               value={formValue.maxApartment}
               placeholder=""
-              // pattern="[0-9]*" 
-              // title="Chỉ được nhập số" 
+            // pattern="[0-9]*" 
+            // title="Chỉ được nhập số" 
             />
             {errors && errors.maxApartment && (
               <span className={styles.error}>{errors.maxApartment}</span>
             )}
           </Form.Group>
           <Form.Group className="mb-3">
-
-            <Col>{ContractSortOptions.map((option) => FilterButton(option))}</Col>
-            {errors && errors.building_id && (
-              <span className={styles.error}>{errors.building_id}</span>
-            )}
-
+            <Row>
+              <Col xs={12} sm={8} md={6} lg={8}>
+                {ContractSortOptions.map((option) => FilterButton(option))}
+              </Col>
+              {errors && errors.building_id && (
+                <Col xs={12} sm={4} md={6} lg={8}>
+                  <span className={styles.error}>{errors.building_id}</span>
+                </Col>
+              )}
+            </Row>
           </Form.Group>
           <ButtonComponent onClick={createHandle} className={styles.creatBtn}>
-            Tạo
+          {t("create")}
           </ButtonComponent>
         </Form>
       </div>
