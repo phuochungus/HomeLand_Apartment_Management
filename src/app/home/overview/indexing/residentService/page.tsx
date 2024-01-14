@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -25,7 +26,7 @@ const ResidentService = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h4> Invoice History</h4>
+      <h4>{t("service_use")}</h4>
       <Container style={{padding:0}}>
       
       <Row

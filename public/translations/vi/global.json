@@ -132,5 +132,6 @@
   "list_apartment": "Danh sách căn hộ",
   "length": "Chiều dài", 
   "width": "Chiều rộng",
-  "create_floor": "Tạo phòng"
+  "create_floor": "Tạo phòng",
+  "service_use":"Dịch vụ đang sử dụng"
 }
