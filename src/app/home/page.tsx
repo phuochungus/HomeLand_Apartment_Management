@@ -580,6 +580,12 @@ export default function Home() {
           </Col>
         ))}
       </Row>
+      <Row style={{textAlign: "center"}}>
+        <div>Thông tin liên hệ:</div>
+          <Row style={{justifyContent: "center"}}> <div>SĐT: 03253953532 - Nguyễn Minh Pháp</div> <div>Fax Number: 499238867</div></Row>
+          <div>Văn phòng chăm sóc khách hàng - 1800 1294</div>
+          <div>Các thắc mắc khách hàng xin liên hệ zalo - 0325395352 (M.Phap)</div>
+      </Row>
     </main>
   );
 }
