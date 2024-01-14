@@ -1,7 +1,10 @@
 "use client";
-import { Carousel, Col, Image, Row } from "react-bootstrap";
+import { Button, Carousel, Col, Image, Row } from "react-bootstrap";
 import styles from "./page.module.css";
 import { futuna } from "../../../public/fonts/futura";
+import { ringift } from "../../../public/fonts/Ringift";
+import { Images } from "../../../public/images";
+import { FaFacebook } from "react-icons/fa6";
 const bannerPathList = [
   {
     image:
@@ -580,11 +583,69 @@ export default function Home() {
           </Col>
         ))}
       </Row>
-      <Row style={{textAlign: "center"}}>
-        <div>Thông tin liên hệ:</div>
-          <Row style={{justifyContent: "center"}}> <div>SĐT: 03253953532 - Nguyễn Minh Pháp</div> <div>Fax Number: 499238867</div></Row>
-          <div>Văn phòng chăm sóc khách hàng - 1800 1294</div>
-          <div>Các thắc mắc khách hàng xin liên hệ zalo - 0325395352 (M.Phap)</div>
+      <Row style={{ width: "100%", alignContent: "center" }}>
+        <Col>
+          <table>
+            <thead>
+              <tr>
+                <th style={{ width: "10vw" }}>
+                  <div>Thông tin liên hệ:</div>
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td> Địa chỉ:</td>
+                <td>
+                  <a
+                    href="https://maps.app.goo.gl/AhqCnGwSmjFKKP1M9"
+                    target="_blank"
+                  >
+                    {" "}
+                    Đại học Công nghệ thông tin Hồ Chí Minh
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Số điện thoại CSKH:</td>
+                <td>1800 1294</td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>
+                  {" "}
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=21522441@gm.uit.edu.vn"
+                    target="_blank"
+                  >
+                    21522441@gm.uit.edu.vn
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <Col style={{marginTop: "1vw"}}>
+            <Button style={{marginRight: "1vw"}} href="https://zalo.me/0325395352" target="_blank">Zalo</Button>
+            
+            <Button href="https://www.facebook.com/profile.php?id=100011497204419" target="_blank">Facebook</Button>
+          </Col>
+        </Col>
+        <Col>
+          <Row>
+            <h3 className={ringift.className}>HomeLand</h3>
+          </Row>
+          <Col>
+            HomeLand là một công ty phần mềm quản lý chung cư uy tín tại Việt
+            Nam, được thành lập vào năm 2019.Công ty chuyên cung cấp các giải
+            pháp phần mềm quản lý chung cư toàn diện, giúp các chủ đầu tư và ban
+            quản lý chung cư nâng cao hiệu quả quản lý, tạo ra môi trường sống
+            an toàn, văn minh và tiện nghi cho cư dân.
+          </Col>
+        </Col>
       </Row>
     </main>
   );
