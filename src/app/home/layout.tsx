@@ -84,7 +84,7 @@ export default function RootLayout({
                         <div key={index} style={{ marginBottom: "2rem" }}>
                           
                           <ButtonComponent
-                            className={clsx(styles.sidebarButton, {
+                            className={clsx(styles.sidebarButton, futuna.className, {
                               [styles.current]: current === index,
                             })}
                             onClick={() => {
