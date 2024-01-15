@@ -49,6 +49,7 @@ import {
 import { Button, Image, Stack } from "react-bootstrap";
 import { Resident } from "@/models/resident";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 const listOptions = [
   {
     value: 10,
@@ -67,7 +68,7 @@ export default function Vehicles() {
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
   const router = useRouter();
   if (!user.id) router.push("/home");
-
+  const [t, i18n] = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [vehicles, setVehicles] = useState<Array<Vehicle>>([]);
   const [showLimit, setShowLimit] = useState<number>(10);
@@ -103,9 +104,9 @@ export default function Vehicles() {
   );
   const titleTable = [
     { name: "ID", field: "id" },
-    { name: "Biển số xe", field: "licensePlate" },
-    { name: "Tình trạng", field: "status" },
-    { name: "Cư dân sở hữu", field: "residentId" },
+    { name: t("license_plate"), field: "licensePlate" },
+    { name: t("Status"), field: "status" },
+    { name: t("vehicle_owner"), field: "residentId" },
   ];
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     console.log(data);
@@ -304,7 +305,7 @@ export default function Vehicles() {
                                     vehicleStyles.approveBtn
                                   )}
                                 >
-                                  Đồng ý
+                                  {t("accept")}
                                 </ButtonComponent>
                                 <ButtonComponent
                                   onClick={() => handleReject(vehicle)}
@@ -314,7 +315,7 @@ export default function Vehicles() {
                                     vehicleStyles.deleteBtn
                                   )}
                                 >
-                                  Từ chối
+                                  {t("reject")}
                                 </ButtonComponent>
                                 <ButtonComponent
                                   onClick={() => handleMoreInfo(vehicle)}
@@ -324,7 +325,7 @@ export default function Vehicles() {
                                   )}
                                   sufIcon={<FaArrowRight />}
                                 >
-                                  Thông tin
+                                  {t("info")}
                                 </ButtonComponent>
                               </div>
                             </td>
@@ -390,7 +391,7 @@ export default function Vehicles() {
                     />
                   </div>
                   <div style={{ width: "50%" }}>
-                    <h3 style={{ textAlign: "center" }}>Cư dân sở hữu</h3>
+                    <h3 style={{ textAlign: "center" }}>{t("vehicle_owner")}</h3>
                     <p>Họ và tên: {selectedResident?.profile.name}</p>
                     <p>SĐT: {selectedResident?.profile.phone_number}</p>
                     <p

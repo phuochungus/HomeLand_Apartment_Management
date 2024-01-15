@@ -110,9 +110,9 @@ export default function RootLayout({
                               }
                             )}
                           >
-                            {value.menu?.map((value, id) => (
+                            {value.menu?.map((value, index) => ( value.roles.indexOf(UserProfile.getRole()) > -1 ? 
                               <button
-                                key={id}
+                                key={index}
                                 className={clsx(styles.subMenu, {
                                   [styles.active]: pathName === value.href,
                                 })}
@@ -121,7 +121,7 @@ export default function RootLayout({
                                 handleRouting(value.href)}}
                               >
                                 {value.title}
-                              </button>
+                              </button> : <></>
                             ))}
                           </div>
                         </div>

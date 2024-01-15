@@ -68,17 +68,20 @@ export const sidebarInfo = [
       {
         title: "Apartment",
         href: "/home/properties/apartments",
+        roles: ["admin", "manager"],
       },
       {
         title: "Vehicle",
         href: "/home/properties/vehicles",
+        roles: ["admin", "manager","resident"],
       },
       {
         title: "Equipment",
         href: "/home/properties/equipments",
+        roles: ["admin", "manager"],
       },
     ],
-    roles: ["admin", "manager"],
+    roles: ["admin", "manager","resident"],
   },
   {
     title: "Services",
