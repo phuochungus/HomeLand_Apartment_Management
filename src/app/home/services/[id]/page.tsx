@@ -98,13 +98,6 @@ export default function Page({ params }: { params: { id: string } }) {
     setSelectedId(id);
     setShowModalDelete(true);
   };
-  const [residentId, setResidentId] = useState(null);
-  const [serviceId, setServiceId] = useState(null);
-  const [feedback, setFeedback] = useState<Feedback>();
-  useEffect(() => {
-    const userProfile = UserProfile.getProfile();
-    setResidentId(userProfile.id);
-  }, []);
   const [feedbackData, setFeedbackData] = useState<Feedback[]>([]);
   useEffect(() => {
     const fetchUserProfile = async () => {

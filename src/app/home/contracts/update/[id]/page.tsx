@@ -102,7 +102,7 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   };
 
-  const handleCreate = async () => {
+  const handleUpdate = async () => {
     async function addImage(data: FormData, fileList: (File | URL)[]) {
       for await (const iterator of fileList) {
         if (iterator instanceof URL) data.append("imageUpdate", iterator.href);
@@ -627,7 +627,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 marginTop: "20px",
               }}
             >
-              <Button onClick={handleCreate} style={{ width: "100px" }}>
+              <Button onClick={handleUpdate} style={{ width: "100px" }}>
                 {t("update")}
               </Button>
             </Col>
