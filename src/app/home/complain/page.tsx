@@ -29,7 +29,7 @@ import { Task } from "@/models/task";
 import Spinner from 'react-bootstrap/Spinner';
 import { Manager } from "@/models/manager";
 import { useTranslation } from "react-i18next";
-const Complain = () => {
+const ComplainPage = () => {
   const [t, i18n] = useTranslation();
   const titleTable = [
     t("Resident"),
@@ -426,4 +426,4 @@ const Complain = () => {
   );
 };
 
-export default Complain;
+export default ComplainPage;
