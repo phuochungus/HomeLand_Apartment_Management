@@ -246,8 +246,8 @@ const ComplainPage = () => {
                     <td>{complain.content}</td>
                     <td>{createAt}</td>
 
-                    <td style={{ width: 200 }}>
-                      <div className="d-flex align-items-center justify-content-between">
+                    <td>
+                      <div className="d-flex align-items-center justify-content-center">
                       {complain.task?<ButtonComponent
                           preIcon={<AssignIcon width={16} height={16} />}
                           className={clsx(styles.cudBtn, styles.assignedBtn)}

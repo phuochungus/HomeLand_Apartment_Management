@@ -88,7 +88,7 @@ const DetailRepairInvoice = ({ params }: { params: { id: string } }) => {
               <tbody>
                 {task?.invoice.items.map((item, index) => (
                   <tr key={index}>
-                    <td>{index}</td>
+                    <td>{index + 1}</td>
                     <td>{item.content}</td>
                     <td>{item.price}</td>
                   </tr>
